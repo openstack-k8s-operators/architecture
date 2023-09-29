@@ -1,0 +1,80 @@
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  labels:
+    osp/interface: enp7s0
+  name: enp7s0-ostest-master-2
+spec:
+  desiredState:
+    dns-resolver:
+      config:
+        search: []
+        server:
+        - 192.168.122.1
+    routes:
+      config:
+      - destination: 0.0.0.0/0
+        next-hop-address: 192.168.122.1
+        next-hop-interface: enp7s0
+    interfaces:
+    - description: internalapi vlan interface
+      ipv4:
+        address:
+        - ip: 172.17.0.7
+          prefix-length: 24
+        enabled: true
+        dhcp: false
+      ipv6:
+        enabled: false
+      name: enp7s0.20
+      state: up
+      type: vlan
+      vlan:
+        base-iface: enp7s0
+        id: 20
+    - description: storage vlan interface
+      ipv4:
+        address:
+        - ip: 172.18.0.7
+          prefix-length: 24
+        enabled: true
+        dhcp: false
+      ipv6:
+        enabled: false
+      name: enp7s0.21
+      state: up
+      type: vlan
+      vlan:
+        base-iface: enp7s0
+        id: 21
+    - description: tenant vlan interface
+      ipv4:
+        address:
+        - ip: 172.19.0.7
+          prefix-length: 24
+        enabled: true
+        dhcp: false
+      ipv6:
+        enabled: false
+      name: enp7s0.22
+      state: up
+      type: vlan
+      vlan:
+        base-iface: enp7s0
+        id: 22
+    - description: Configuring enp7s0
+      ipv4:
+        address:
+        - ip: 192.168.122.12
+          prefix-length: 24
+        enabled: true
+        dhcp: false
+      ipv6:
+        enabled: false
+      mtu: 9000
+      name: enp7s0
+      state: up
+      type: ethernet
+  nodeSelector:
+    kubernetes.io/hostname: ostest-master-2
+    node-role.kubernetes.io/worker: ""

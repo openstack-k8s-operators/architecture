@@ -1,0 +1,8 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+  name: openstack-operator-index
+  namespace: openstack-operators
+spec:
+  image: quay.io/openstack-k8s-operators/openstack-operator-index:latest
+  sourceType: grpc
