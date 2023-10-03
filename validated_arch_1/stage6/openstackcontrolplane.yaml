@@ -29,6 +29,11 @@ spec:
         networkAttachments:
           - storage
         replicas: 1
+        customServiceConfig: |
+          [DEFAULT]
+          backup_driver=cinder.backup.drivers.ceph.CephBackupDriver
+          backup_ceph_pool=backups
+          backup_ceph_user=openstack
       cinderScheduler:
         replicas: 1
       cinderVolumes:
