@@ -31,11 +31,7 @@ spec:
         replicas: 0
       cinderScheduler:
         replicas: 1
-      cinderVolumes:
-        volume1:
-          networkAttachments:
-            - storage
-          replicas: 0
+      cinderVolumes: {}
       databaseInstance: openstack
       secret: osp-secret
   dns:
