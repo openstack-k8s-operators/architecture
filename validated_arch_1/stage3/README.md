@@ -4,6 +4,6 @@ Configure OCP cluster networking for OSP
 
 ## Notes
 
-- Create NNCPs first
-- NetAttachs second
-- MetalLB resources third
+1. Create NNCPs
+2. Create NetAttachs
+3. Create MetalLB resources

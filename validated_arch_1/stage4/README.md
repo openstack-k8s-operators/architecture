@@ -4,7 +4,7 @@ Deploy the control plane
 
 ## Notes
 
-- Create namespace first
-- NetConfig second
-- Secret third
-- OpenStackControlPlane fourth
+1. Create Namespace
+2. Create NetConfig
+3. Create Secret
+4. Create OpenStackControlPlane

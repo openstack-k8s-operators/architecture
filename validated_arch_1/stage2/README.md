@@ -4,7 +4,7 @@ Install the Red Hat OpenStack Services on OpenShift operators
 
 ## Notes
 
-- Create Namespace first
-- OperatorGroup second
-- CatalogSource third
-- Subscription fourth
+1. Create Namespace
+2. Create OperatorGroup
+3. Create CatalogSource
+4. Create Subscription

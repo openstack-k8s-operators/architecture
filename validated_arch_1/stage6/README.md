@@ -6,7 +6,7 @@ Finish deploying the data plane after Ceph is available
 
 Requires that a Ceph cluster is now available
 
-- Create Secrets first
-- Update OpenStackControlPlane second
-- Update OpenStackDataPlaneNodeSet third
-- Recreate OpenStackDataPlaneDeployment fourth
+1. Create Secrets
+2. Update OpenStackControlPlane
+3. Update OpenStackDataPlaneNodeSet
+4. Recreate OpenStackDataPlaneDeployment
