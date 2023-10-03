@@ -1,3 +1,13 @@
+#
+# CHANGEME:
+#
+# - Change "spec.cinder.template.cinderVolumes.ceph.customServiceConfig"'s "rbd_secret_uuid"
+#   to be the "fsid" from your Ceph secret,
+#   i.e. "oc get secret ceph-conf-files -o json | jq -r '.data."ceph.conf"' | base64 -d | grep fsid | sed -e 's/fsid = //'"
+# - Repeat any IP changes made to "openstackcontrolplane.yaml" in stage 4
+# - Repeat any storage class change made to "openstackcontrolplane.yaml" in stage 4
+#
+
 apiVersion: core.openstack.org/v1beta1
 kind: OpenStackControlPlane
 metadata:
@@ -37,10 +47,6 @@ spec:
       cinderScheduler:
         replicas: 1
       cinderVolumes:
-        volume1:
-          networkAttachments:
-            - storage
-          replicas: 0
         ceph:
           customServiceConfig: |
             [DEFAULT]
@@ -52,7 +58,7 @@ spec:
             rbd_user=openstack
             rbd_pool=volumes
             rbd_flatten_volume_from_snapshot=False
-            rbd_secret_uuid=	9d3b48e8-5ed4-11ee-88c7-52540085a471
+            rbd_secret_uuid=# CHANGEME
       databaseInstance: openstack
       secret: osp-secret
   dns:

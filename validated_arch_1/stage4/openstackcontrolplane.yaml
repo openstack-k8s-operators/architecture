@@ -1,3 +1,12 @@
+#
+# CHANGEME:
+#
+# - Change "spec.dns.template.options[0].values[0]" to match the IP of your upstream DNS server
+# - Change "spec.dns.template.override.service.metadata.annotations["metallb.universe.tf/loadBalancerIPs"]"
+#   to match the VIP for your ctlplane network, if necessary
+# - Change "spec.storageClass" to the storage class appropriate for your OpenShift cluster
+#
+
 apiVersion: core.openstack.org/v1beta1
 kind: OpenStackControlPlane
 metadata:
@@ -39,14 +48,14 @@ spec:
       options:
         - key: server
           values:
-            - 192.168.122.1
+            - 192.168.122.1 # CHANGEME
       override:
         service:
           metadata:
             annotations:
               metallb.universe.tf/address-pool: ctlplane
               metallb.universe.tf/allow-shared-ip: ctlplane
-              metallb.universe.tf/loadBalancerIPs: 192.168.122.80
+              metallb.universe.tf/loadBalancerIPs: 192.168.122.80 # CHANGEME
           spec:
             type: LoadBalancer
       replicas: 1
@@ -301,7 +310,7 @@ spec:
   redis:
     enabled: false
   secret: osp-secret
-  storageClass: host-nfs-storageclass
+  storageClass: host-nfs-storageclass # CHANGEME
   swift:
     enabled: false
     proxyOverride:
