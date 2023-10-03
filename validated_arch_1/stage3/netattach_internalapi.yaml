@@ -1,3 +1,10 @@
+#
+# CHANGEME: Replace the spec.config.master value with the interface name 
+#           of your environment's VLAN interface for the internalapi network
+#
+# The ranges below can be adjusted as needed for your environment
+#
+
 apiVersion: k8s.cni.cncf.io/v1
 kind: NetworkAttachmentDefinition
 metadata:
