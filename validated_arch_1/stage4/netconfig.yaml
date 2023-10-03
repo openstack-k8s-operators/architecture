@@ -1,3 +1,10 @@
+#
+# CHANGEME:
+#
+# - Change "spec.networks[*].dnsDomain" to use something more specific if desired
+# - Change "spec.networks[*].subnets[0].(allocationRanges|cidr|gateway)" to use different IPs if needed
+#
+
 apiVersion: network.openstack.org/v1beta1
 kind: NetConfig
 metadata:
@@ -9,12 +16,12 @@ spec:
       name: CtlPlane
       subnets:
         - allocationRanges:
-            - end: 192.168.122.120
-              start: 192.168.122.100
-            - end: 192.168.122.200
-              start: 192.168.122.150
-          cidr: 192.168.122.0/24
-          gateway: 192.168.122.1
+            - end: 192.168.122.120 # CHANGEME
+              start: 192.168.122.100 # CHANGEME
+            - end: 192.168.122.200 # CHANGEME
+              start: 192.168.122.150 # CHANGEME
+          cidr: 192.168.122.0/24 # CHANGEME
+          gateway: 192.168.122.1 # CHANGEME
           name: subnet1
     - dnsDomain: internalapi.example.com
       name: InternalApi
