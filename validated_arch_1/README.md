@@ -4,12 +4,12 @@
 
 This is a collection of CR templates that represent a validated Red Hat OpenStack Services on OpenShift deployment that has the following characteristics:
 
-- 3 master/worker combo-node OpenShift cluster
+- 3 master/worker combo-node OpenShift cluster with Metal3 and a provisioning network
 - 3-replica Galera database
 - RabbitMQ
 - OVN networking
 - Network isolation over a single NIC
-- 3 compute nodes
+- 3 compute nodes (available as Metal3 BaremetalHosts)
 - CephHCI installed on compute nodes and used by various OSP services
     - Cinder Volume using RBD for backend
     - Cinder Backup using RGW for backend
