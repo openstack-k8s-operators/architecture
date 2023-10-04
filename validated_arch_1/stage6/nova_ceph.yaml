@@ -1,9 +1,19 @@
+#
+# CHANGEME:
+#
+# - Change the "data['03-ceph-nova.conf']"'s "rbd_secret_uuid" to match that of your Ceph
+#   cluster's FSID, which can be acquired like so, once the "ceph_secret.yaml" has been
+#   created in this same stage:
+#   oc get secret ceph-conf-files -o json | jq -r '.data."ceph.conf"' | base64 -d | grep fsid | sed -e 's/fsid = //'
+#
+
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: ceph-nova
 data:
+  # CHANGEME (rbd_secret_uuid) ---v
   03-ceph-nova.conf: |
     [libvirt]
     images_type=rbd
