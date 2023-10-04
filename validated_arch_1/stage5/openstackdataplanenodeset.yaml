@@ -1,3 +1,20 @@
+#
+# CHANGEME:
+#
+# - Change "spec.baremetalSetTemplate.ctlplaneInterface" to be the control plane
+#   interface on your compute nodes
+# - Change "spec.baremetalSetTemplate.provisioningInterface" to be the provisioning
+#   interface used by Metal3 on your OpenShift nodes
+# - Change the interface name specified in "spec.nodeTemplate.ansible.ansibleVars.edpm_network_config_template"
+#   to be the control plane interface on your compute nodes
+#     i.e.
+#     members:
+#     - type: interface
+#       name: enp7s0    <---- change
+# - Change "spec.nodeTemplate.ansible.ansibleVars.edpm_sshd_allowed_ranges[0]" to 
+#   match the CIDR of your control plane network, if necessary
+#
+
 apiVersion: dataplane.openstack.org/v1beta1
 kind: OpenStackDataPlaneNodeSet
 metadata:
@@ -9,11 +26,11 @@ spec:
       app: openstack
     bmhNamespace: openshift-machine-api
     cloudUserName: cloud-admin
-    ctlplaneInterface: enp7s0
+    ctlplaneInterface: enp7s0 # CHANGEME
     passwordSecret:
       name: baremetalset-password-secret
       namespace: openstack
-    provisioningInterface: enp1s0
+    provisioningInterface: enp1s0 # CHANGEME
   env:
     - name: ANSIBLE_CALLBACKS_ENABLED
       value: profile_tasks
@@ -33,6 +50,7 @@ spec:
         edpm_iscsid_image: '{{ registry_url }}/openstack-iscsid:{{ image_tag }}'
         edpm_logrotate_crond_image: '{{ registry_url }}/openstack-cron:{{ image_tag }}'
         edpm_network_config_hide_sensitive_logs: false
+        # CHANGEME (network_config[0].members[0].name) ---v
         edpm_network_config_template: |
           ---
           {% set mtu_list = [ctlplane_mtu] %}
@@ -73,7 +91,7 @@ spec:
         edpm_ovn_metadata_agent_image: '{{ registry_url }}/openstack-neutron-metadata-agent-ovn:{{ image_tag }}'
         edpm_selinux_mode: enforcing
         edpm_sshd_allowed_ranges:
-          - 192.168.122.0/24
+          - 192.168.122.0/24 # CHANGEME
         edpm_sshd_configure_firewall: true
         enable_debug: false
         gather_facts: false

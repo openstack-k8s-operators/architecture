@@ -1,3 +1,9 @@
+#
+# CHANGEME:
+#
+# Make the same changes here that you made to openstackdataplanenodeset.yaml from stage 5
+#
+
 ---
 apiVersion: dataplane.openstack.org/v1beta1
 kind: OpenStackDataPlaneNodeSet
