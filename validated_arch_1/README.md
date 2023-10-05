@@ -1,6 +1,6 @@
 # Openstack K8S Validated Architecture One
 
-**Based on OpenStack K8S operators from the "main" branch of the github.com/openstack-k8s-operators/openstack-operator repo on Sept 29th, 2023**
+**Based on OpenStack K8S operators from the "main" branch of the [OpenStack Operator repo](github.com/openstack-k8s-operators/openstack-operator) on Oct 6th, 2023**
 
 This is a collection of CR templates that represent a validated Red Hat OpenStack Services on OpenShift deployment that has the following characteristics:
 
@@ -27,9 +27,11 @@ This is a collection of CR templates that represent a validated Red Hat OpenStac
 
 ## Stages
 
-1. Install dependencies for the OpenStack K8S operators
-2. Install the OpenStack K8S operators
-3. Configuring networking on the OCP nodes
-4. Configure and deploy the control plane
-5. Configure and deploy the initial data plane to prepare for CephHCI installation
-6. Update the control plane and finish deploying the data plane after CephHCI has been installed
+All stages must be executed in the order listed below.  Everything is required unless otherwise indicated.
+
+1. [Install dependencies for the OpenStack K8S operators](stage1)
+2. [Install the OpenStack K8S operators](stage2)
+3. [Configuring networking on the OCP nodes](stage3)
+4. [Configure and deploy the control plane](stage4)
+5. [Configure and deploy the initial data plane to prepare for CephHCI installation](stage5)
+6. [Update the control plane and finish deploying the data plane after CephHCI has been installed](stage6)

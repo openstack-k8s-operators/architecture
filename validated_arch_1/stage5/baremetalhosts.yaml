@@ -1,0 +1,98 @@
+#
+# CHANGEME:
+#
+# - Change each Secret's "data.username" and "data.password" to be the BMC credentials
+#   for that specific machine
+# - Change each BareMetalHost's "spec.bootMACAddress" to be the MAC address of the 
+#   provisioning interface on that machine
+# - Change each BareMetalHost's "spec.bmc.address" to be the BMC endpoint for that
+#   specific machine
+# - If your BareMetalHost machines do not use legacy BIOS boot, change "spec.bootMode"
+#   to "uefi"
+# - If your BareMetalHost machines do not use "/dev/sda" as the root disk, change
+#   "spec.rootDeviceHints.deviceName" to the appropriate device name
+#
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: openshift-worker-0-bmc-secret
+  namespace: openshift-machine-api
+type: Opaque
+data:
+  username: VVNFUklE # CHANGEME
+  password: UEFTU1cwUkQ= # CHANGEME
+
+---
+apiVersion: metal3.io/v1alpha1
+kind: BareMetalHost
+metadata:
+  name: openshift-worker-0
+  namespace: openshift-machine-api
+spec:
+  online: false
+  bootMACAddress: 3c:fd:fe:78:cd:10 # CHANGEME
+  bmc:
+    address: redfish+http://192.168.111.1:8082/redfish/v1/Systems/ba03e5a8-47a5-47f0-9494-e17c02aa854f # CHANGEME
+    credentialsName: openshift-worker-0-bmc-secret
+  hardwareProfile: unknown
+  bootMode: legacy
+  rootDeviceHints:
+    deviceName: /dev/sda
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: openshift-worker-1-bmc-secret
+  namespace: openshift-machine-api
+type: Opaque
+data:
+  username: VVNFUklE # CHANGEME
+  password: UEFTU1cwUkQ= # CHANGEME
+
+---
+apiVersion: metal3.io/v1alpha1
+kind: BareMetalHost
+metadata:
+  name: openshift-worker-1
+  namespace: openshift-machine-api
+spec:
+  online: false
+  bootMACAddress: 3c:fd:fe:78:cd:11 # CHANGEME
+  bmc:
+    address: redfish+http://192.168.111.1:8082/redfish/v1/Systems/9bef3c38-63ad-44ef-9998-5dc15db868d5 # CHANGEME
+    credentialsName: openshift-worker-1-bmc-secret
+  hardwareProfile: unknown
+  bootMode: legacy
+  rootDeviceHints:
+    deviceName: /dev/sda
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: openshift-worker-2-bmc-secret
+  namespace: openshift-machine-api
+type: Opaque
+data:
+  username: VVNFUklE # CHANGEME
+  password: UEFTU1cwUkQ= # CHANGEME
+
+---
+apiVersion: metal3.io/v1alpha1
+kind: BareMetalHost
+metadata:
+  name: openshift-worker-2
+  namespace: openshift-machine-api
+spec:
+  online: false
+  bootMACAddress: 3c:fd:fe:78:cd:12 # CHANGEME
+  bmc:
+    address: redfish+http://192.168.111.1:8082/redfish/v1/Systems/433f670f-918f-423b-b3fa-7741a7f4b5d5 # CHANGEME
+    credentialsName: openshift-worker-2-bmc-secret
+  hardwareProfile: unknown
+  bootMode: legacy
+  rootDeviceHints:
+    deviceName: /dev/sda

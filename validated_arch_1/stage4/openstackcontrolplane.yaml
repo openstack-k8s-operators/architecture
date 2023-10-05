@@ -165,7 +165,7 @@ spec:
   manila:
     apiOverride:
       route: {}
-    enabled: true
+    enabled: false
     template:
       manilaAPI:
         networkAttachments:
