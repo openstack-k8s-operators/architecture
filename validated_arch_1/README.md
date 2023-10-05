@@ -21,7 +21,7 @@ This is a collection of CR templates that represent a validated Red Hat OpenStac
 
 1. These CRs are validated for the overall functionality of the OSP cloud deployed, but they nonetheless require customization for the particular environment in which they are utilized.  In this sense they are _templates_ meant to be consumed and tweaked to fit the specific constraints of the hardware available.  
 2. The CRs are applied against an OpenShift cluster in _stages_.  That is, there is an ordering in which each grouping of CRs is fed to the cluster.  It is _not_ a case of simply taking all CRs from all stages and applying them all at once.
-3. (TODO) YAML comments are placed throughout the CRs to aid in the process of customizing the CRs.  Fields that _must_ (or most likely need to be) changed are commented with "# CHANGEME" either on the field itself or somewhere nearby.  Other comments are added to explain fields that can be changed and, sometimes, to explain additions that can be made.
+3. YAML comments are placed throughout the CRs to aid in the process of customizing the CRs.  Fields that _must_ (or most likely need to be) changed are commented with "# CHANGEME" either on the field itself or somewhere nearby.  Other comments are added to explain fields that can be changed and, sometimes, to explain additions that can be made.
 4. Each stage directory contains an overview README describing what is being accomplished by that set of CRs.
 5. Between stages 5 and 6, _it is assumed that the user installs CephHCI on the 3 OSP compute nodes._  OpenStack K8S CRDs do not provide a way to install CephHCI via any sort of combination of CRs.
 
