@@ -76,6 +76,9 @@ spec:
         dhcp: false
       ipv6:
         enabled: false
+      # MTU 9000 is used to access Ceph via the storage network
+      # If storage network is on its own NIC adjust accordingly
+      # Using >1 NIC is not currently represented in these CRs
       mtu: 9000
       name: enp7s0 # CHANGEME
       state: up
