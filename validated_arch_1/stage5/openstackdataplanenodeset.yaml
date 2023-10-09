@@ -14,6 +14,14 @@
 # - Change "spec.nodeTemplate.ansible.ansibleVars.edpm_sshd_allowed_ranges[0]" to 
 #   match the CIDR of your control plane network, if necessary
 #
+# EXTERNAL DEPENDENCIES:
+#
+# - "spec.nodes" lists 3 nodes that will require 3 metal3.io/v1alpha1 BareMetalHost resources, 
+#   which are the user's responsibility to have added to the cluster ahead of time.  They also 
+#   must be labelled "app: openstack" for the purposes of this OpenStackDataPlaneNodeSet
+#   (see "spec.baremetalSetTemplate.bmhLabelSelector", which can be changed if you wish to use
+#    a different label for BareMetalHost selection).
+#
 
 apiVersion: dataplane.openstack.org/v1beta1
 kind: OpenStackDataPlaneNodeSet
