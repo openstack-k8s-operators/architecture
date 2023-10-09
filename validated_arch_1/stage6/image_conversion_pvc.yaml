@@ -1,0 +1,19 @@
+# CHANGEME:
+#
+# - Change the storage size of the requested PVC to be as large as your largest
+#   expected image after it has been converted into RAW format with a command
+#   like `qemu-img convert -f qcow2 -O raw cirros.img cirros.raw`. When an image
+#   is uploaded, Glance will use this space to convert it to RAW so that Ceph
+#   can create volumes and VMs from the image efficiently using COW references.
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: image-import-staging
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi  # CHANGEME
+  storageClassName: local-storage
