@@ -35,6 +35,7 @@ spec:
       ansiblePort: 22
       ansibleUser: cloud-admin
       ansibleVars:
+        # CHANGEME
         edpm_chrony_ntp_servers:
           - clock.redhat.com
         edpm_iscsid_image: '{{ registry_url }}/openstack-iscsid:{{ image_tag }}'
@@ -147,7 +148,6 @@ spec:
     edpm-compute-2:
       hostName: edpm-compute-2
   services:
-    - repo-setup
     - configure-network
     - validate-network
     - download-cache
