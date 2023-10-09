@@ -13,6 +13,8 @@
 #       name: enp7s0    <---- change
 # - Change "spec.nodeTemplate.ansible.ansibleVars.edpm_sshd_allowed_ranges[0]" to 
 #   match the CIDR of your control plane network, if necessary
+# - Change "edpm_bootstrap_command" to include subscription-manager and podman login
+#   commands to register the EDPM nodes as in https://access.redhat.com/solutions/253273
 #
 # EXTERNAL DEPENDENCIES:
 #
@@ -53,8 +55,13 @@ spec:
       ansiblePort: 22
       ansibleUser: cloud-admin
       ansibleVars:
+        # CHANGEME
         edpm_chrony_ntp_servers:
           - clock.redhat.com
+        # CHANGEME -- see https://access.redhat.com/solutions/253273
+        # edpm_bootstrap_command: |
+        #       subscription-manager register --username <subscription_manager_username> --password <subscription_manager_password>
+        #       podman login -u <registry_username> -p <registry_password> registry.redhat.io
         edpm_iscsid_image: '{{ registry_url }}/openstack-iscsid:{{ image_tag }}'
         edpm_logrotate_crond_image: '{{ registry_url }}/openstack-cron:{{ image_tag }}'
         edpm_network_config_hide_sensitive_logs: false
@@ -156,7 +163,6 @@ spec:
     edpm-compute-2:
       hostName: edpm-compute-2
   services:
-    - repo-setup
     - configure-network
     - validate-network
     - download-cache
