@@ -147,15 +147,6 @@ spec:
       hostName: edpm-compute-1
     edpm-compute-2:
       hostName: edpm-compute-2
-  services:
-    - configure-network
-    - validate-network
-    - download-cache
-    - install-os
-    - ceph-hci-pre
-    - configure-os
-    - run-os
-    - ceph-client
-    - ovn
-    - libvirt
-    - nova-custom-ceph
+  # Each OpenStackDataPlaneDeployment will override
+  # the services list so it is empty.
+  services: []

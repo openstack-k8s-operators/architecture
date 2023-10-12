@@ -6,3 +6,8 @@ metadata:
 spec:
   nodeSets:
   - openstack-edpm-ipam
+  servicesOverride:
+    - ceph-client
+    - ovn
+    - libvirt
+    - nova-custom-ceph

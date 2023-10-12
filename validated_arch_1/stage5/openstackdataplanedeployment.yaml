@@ -6,3 +6,10 @@ metadata:
 spec:
   nodeSets:
   - openstack-edpm-ipam
+  servicesOverride:
+    - configure-network
+    - validate-network
+    - install-os
+    - ceph-hci-pre
+    - configure-os
+    - run-os
