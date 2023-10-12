@@ -9,5 +9,6 @@ spec:
   servicesOverride:
     - ceph-client
     - ovn
+    - neutron-metadata
     - libvirt
     - nova-custom-ceph
