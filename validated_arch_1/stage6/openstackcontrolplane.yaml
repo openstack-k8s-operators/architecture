@@ -302,10 +302,6 @@ spec:
   ovn:
     template:
       ovnController:
-        external-ids:
-          ovn-bridge: br-int
-          ovn-encap-type: geneve
-          system-id: random
         networkAttachment: tenant
       ovnDBCluster:
         ovndbcluster-nb:
