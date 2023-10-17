@@ -137,5 +137,7 @@ spec:
     edpm-compute-2:
       hostName: edpm-compute-2
   # Each OpenStackDataPlaneDeployment will override
-  # the services list so it is empty.
-  services: []
+  # the services list. When the services list is
+  # omitted from OpenStackDataPlaneNodeSet the default
+  # service list defined in the operator will be used
+  # and created.
