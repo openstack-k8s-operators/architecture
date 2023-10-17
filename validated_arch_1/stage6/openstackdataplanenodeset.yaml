@@ -136,6 +136,11 @@ spec:
       hostName: edpm-compute-1
     edpm-compute-2:
       hostName: edpm-compute-2
-  # Each OpenStackDataPlaneDeployment will override
-  # the services list so it is empty.
-  services: []
+  # The OpenStackDataPlaneServices must be declared here, otherwise the
+  # data plane controller will not create them
+  services:
+    - ceph-client
+    - ovn
+    - neutron-metadata
+    - libvirt
+    - nova-custom-ceph

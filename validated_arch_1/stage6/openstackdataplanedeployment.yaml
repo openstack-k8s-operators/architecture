@@ -6,9 +6,6 @@ metadata:
 spec:
   nodeSets:
   - openstack-edpm-ipam
-  servicesOverride:
-    - ceph-client
-    - ovn
-    - neutron-metadata
-    - libvirt
-    - nova-custom-ceph
+  # Listing the OpenStackDataPlaneServices here does work unless they
+  # have been pre-created manually by the user
+  servicesOverride: []
