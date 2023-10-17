@@ -137,7 +137,19 @@ spec:
     edpm-compute-2:
       hostName: edpm-compute-2
   # Each OpenStackDataPlaneDeployment will override
-  # the services list. When the services list is
-  # omitted from OpenStackDataPlaneNodeSet the default
-  # service list defined in the operator will be used
-  # and created.
+  # the services list so that only a subset of them
+  # are deployed during different phases. The full
+  # service list is defined here so that each service
+  # will be created by the dataplane-operator.
+  services:
+    - configure-network
+    - validate-network
+    - install-os
+    - ceph-hci-pre
+    - configure-os
+    - run-os
+    - ceph-client
+    - ovn
+    - neutron-metadata
+    - libvirt
+    - nova-custom-ceph
