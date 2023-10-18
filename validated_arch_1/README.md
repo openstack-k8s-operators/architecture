@@ -1,6 +1,6 @@
 # Openstack K8S Validated Architecture One
 
-**Based on OpenStack K8S operators from the "main" branch of the [OpenStack Operator repo](github.com/openstack-k8s-operators/openstack-operator) on Oct 6th, 2023**
+**Based on OpenStack K8S operators from the "main" branch of the [OpenStack Operator repo](https://github.com/openstack-k8s-operators/openstack-operator/tree/f35f8a5576ab47f2bb05a9ddaf539b5264337c81) on Oct 12th, 2023**
 
 This is a collection of CR templates that represent a validated Red Hat OpenStack Services on OpenShift deployment that has the following characteristics:
 
