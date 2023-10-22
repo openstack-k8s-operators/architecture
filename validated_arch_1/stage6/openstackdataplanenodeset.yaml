@@ -11,16 +11,6 @@ metadata:
   name: openstack-edpm-ipam
   namespace: openstack
 spec:
-  baremetalSetTemplate:
-    bmhLabelSelector:
-      app: openstack
-    bmhNamespace: openshift-machine-api
-    cloudUserName: cloud-admin
-    ctlplaneInterface: enp7s0
-    passwordSecret:
-      name: baremetalset-password-secret
-      namespace: openstack
-    provisioningInterface: enp1s0
   env:
     - name: ANSIBLE_CALLBACKS_ENABLED
       value: profile_tasks
@@ -35,7 +25,6 @@ spec:
       ansiblePort: 22
       ansibleUser: cloud-admin
       ansibleVars:
-        # CHANGEME
         edpm_chrony_ntp_servers:
           - clock.redhat.com
         edpm_iscsid_image: '{{ registry_url }}/openstack-iscsid:{{ image_tag }}'
@@ -131,11 +120,57 @@ spec:
               secretName: ceph-conf-files
   nodes:
     edpm-compute-0:
+      ansible:
+        ansibleHost: 192.168.122.100
       hostName: edpm-compute-0
+      networks:
+      - defaultRoute: true
+        fixedIP: 192.168.122.100
+        name: CtlPlane
+        subnetName: subnet1
+      - name: InternalApi
+        subnetName: subnet1
+      - name: Storage
+        subnetName: subnet1
+      - name: StorageMgmt
+        subnetName: subnet1
+      - name: Tenant
+        subnetName: subnet1
     edpm-compute-1:
+      ansible:
+        ansibleHost: 192.168.122.101
       hostName: edpm-compute-1
+      networks:
+      - defaultRoute: true
+        fixedIP: 192.168.122.101
+        name: CtlPlane
+        subnetName: subnet1
+      - name: InternalApi
+        subnetName: subnet1
+      - name: Storage
+        subnetName: subnet1
+      - name: StorageMgmt
+        subnetName: subnet1
+      - name: Tenant
+        subnetName: subnet1
     edpm-compute-2:
+      ansible:
+        ansibleHost: 192.168.122.102
       hostName: edpm-compute-2
+      networks:
+      - defaultRoute: true
+        fixedIP: 192.168.122.102
+        name: CtlPlane
+        subnetName: subnet1
+      - name: InternalApi
+        subnetName: subnet1
+      - name: Storage
+        subnetName: subnet1
+      - name: StorageMgmt
+        subnetName: subnet1
+      - name: Tenant
+        subnetName: subnet1
+  preProvisioned: true
   # Each OpenStackDataPlaneDeployment will override
   # the services list so that only a subset of them
   # are deployed during different phases. The full

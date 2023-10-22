@@ -1,15 +1,15 @@
 # Openstack K8S Validated Architecture One
 
-**Based on OpenStack K8S operators from the "main" branch of the [OpenStack Operator repo](https://github.com/openstack-k8s-operators/openstack-operator/tree/f35f8a5576ab47f2bb05a9ddaf539b5264337c81) on Oct 12th, 2023**
+**Based on OpenStack K8S operators from the "main" branch of the [OpenStack Operator repo](https://github.com/openstack-k8s-operators/openstack-operator/tree/78b3c876eaf9168f9d95b201997ebdc2da42fa02) on Oct 17th, 2023**
 
 This is a collection of CR templates that represent a validated Red Hat OpenStack Services on OpenShift deployment that has the following characteristics:
 
-- 3 master/worker combo-node OpenShift cluster with Metal3 and a provisioning network
+- 3 master/worker combo-node OpenShift cluster
 - 3-replica Galera database
 - RabbitMQ
 - OVN networking
 - Network isolation over a single NIC
-- 3 compute nodes (available as Metal3 BaremetalHosts)
+- 3 compute nodes
 - CephHCI installed on compute nodes and used by various OSP services
     - Cinder Volume using RBD for backend
     - Cinder Backup using RGW for backend
