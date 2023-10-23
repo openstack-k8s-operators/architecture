@@ -183,6 +183,7 @@ spec:
   # service list is defined here so that each service
   # will be created by the dataplane-operator.
   services:
+    - bootstrap
     - configure-network
     - validate-network
     - install-os
