@@ -25,11 +25,10 @@ oc wait osctlplane openstack-galera-network-isolation-3replicas --for condition=
 ```bash
 oc apply -f openstackdataplanenodeset.yaml
 ```
-5. Recreate OpenStackDataPlaneDeployment and wait for it to finish
+5. Create a post-Ceph OpenStackDataPlaneDeployment and wait for it to finish
 ```bash
-oc delete -f openstackdataplanedeployment.yaml
 oc apply -f openstackdataplanedeployment.yaml
-oc wait osdpd openstack-edpm-ipam --for condition=Ready --timeout=720s
+oc wait osdpd deployment-post-ceph --for condition=Ready --timeout=720s
 ```
 6. Force Nova to discover all compute hosts
 ```bash
