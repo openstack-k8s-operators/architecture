@@ -35,4 +35,5 @@ spec:
     - ceph-nova
   secrets:
     - nova-cell1-compute-config
+    - nova-migration-ssh-key
   playbook: osp.edpm.nova

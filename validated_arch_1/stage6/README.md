@@ -10,7 +10,7 @@ Assumes that a Ceph cluster is available
 
 1. Create Secrets
 ```bash
-oc apply -f ceph_secret.yaml -f nova_ceph.yaml
+oc apply -f ceph_secret.yaml -f nova_ceph.yaml -f nova_migration_ssh_key.yaml
 ```
 2. Create image conversion PVC
 ```bash
