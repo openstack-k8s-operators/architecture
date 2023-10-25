@@ -12,8 +12,8 @@ oc apply -f dataplanesshsecret.yaml
 ```bash
 oc apply -f openstackdataplanenodeset.yaml
 ```
-3. Create OpenStackDataPlaneDeployment and wait for it to finish
+3. Create pre-Ceph OpenStackDataPlaneDeployment and wait for it to finish
 ```bash
 oc apply -f openstackdataplanedeployment.yaml
-oc wait osdpd openstack-edpm-ipam --for condition=Ready --timeout=720s
+oc wait osdpd deployment-pre-ceph --for condition=Ready --timeout=720s
 ```

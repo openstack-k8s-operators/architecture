@@ -1,7 +1,7 @@
 apiVersion: dataplane.openstack.org/v1beta1
 kind: OpenStackDataPlaneDeployment
 metadata:
-  name: openstack-edpm-ipam
+  name: deployment-post-ceph
   namespace: openstack
 spec:
   nodeSets:
