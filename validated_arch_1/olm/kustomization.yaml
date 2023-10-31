@@ -1,0 +1,3 @@
+resources:
+- ../bases/olm-deps
+- ../bases/olm-osp

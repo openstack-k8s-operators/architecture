@@ -1,0 +1,12 @@
+resources:
+- metallb_deploy.yaml
+- metallb_ipaddresspools.yaml
+- metallb_l2advertisement.yaml
+- netattach_ctlplane.yaml
+- netattach_internalapi.yaml
+- netattach_storage.yaml
+- netattach_tenant.yaml
+- nmstate_deploy.yaml
+- ocp_node_0_nncp.yaml
+- ocp_node_1_nncp.yaml
+- ocp_node_2_nncp.yaml

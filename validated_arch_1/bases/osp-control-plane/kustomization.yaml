@@ -1,0 +1,13 @@
+namespace: openstack
+
+secretGenerator:
+- name: osp-secret
+  behavior: create
+  envs:
+  - osp-secrets.env
+  options:
+    disableNameSuffixHash: true
+
+resources:
+- netconfig.yaml
+- openstackcontrolplane.yaml
