@@ -393,14 +393,7 @@ spec:
                 sources:
                   - secret:
                       name: ceph-conf-files
-            - name: image-import-staging
-              persistentVolumeClaim:
-                claimName: image-import-staging
-                readOnly: false
           mounts:
             - name: ceph
               mountPath: /etc/ceph
               readOnly: true
-            - name: image-import-staging
-              mountPath: /var/lib/glance/os_glance_staging_store/
-              readOnly: false
