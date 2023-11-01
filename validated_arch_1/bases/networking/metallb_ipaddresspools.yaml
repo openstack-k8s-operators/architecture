@@ -10,8 +10,7 @@ metadata:
   name: ctlplane
 spec:
   addresses:
-  # Change this to define a different range of VIPs that can be allocated on the ctlplane network
-  - 192.168.122.80-192.168.122.90 # CHANGEME
+  - _replaced_
 ---
 apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
@@ -20,8 +19,7 @@ metadata:
   name: internalapi
 spec:
   addresses:
-  # Change this to define a different range of VIPs that can be allocated on the internalapi network
-  - 172.17.0.80-172.17.0.90
+  - _replaced_
 ---
 apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
@@ -30,8 +28,7 @@ metadata:
   name: storage
 spec:
   addresses:
-  # Change this to define a different range of VIPs that can be allocated on the storage network
-  - 172.18.0.80-172.18.0.90
+  - _replaced_
 ---
 apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
@@ -40,5 +37,4 @@ metadata:
   name: tenant
 spec:
   addresses:
-  # Change this to define a different range of VIPs that can be allocated on the tenant network
-  - 172.19.0.80-172.19.0.90
+  - _replaced_

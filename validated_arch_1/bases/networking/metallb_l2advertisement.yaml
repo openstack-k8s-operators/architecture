@@ -12,8 +12,7 @@ spec:
   ipAddressPools:
   - ctlplane
   interfaces:
-  # Change this interface to the appropriate OpenStack NIC for your environment
-  - enp7s0 # CHANGEME
+  - _replaced_
 ---
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
@@ -24,8 +23,7 @@ spec:
   ipAddressPools:
   - internalapi
   interfaces:
-  # Change this interface to the appropriate OpenStack VLAN NIC for your environment
-  - enp7s0.20 # CHANGEME
+  - _replaced_
 ---
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
@@ -36,8 +34,7 @@ spec:
   ipAddressPools:
   - storage
   interfaces:
-  # Change this interface to the appropriate OpenStack VLAN NIC for your environment
-  - enp7s0.21 # CHANGEME
+  - _replaced_
 ---
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
@@ -48,5 +45,4 @@ spec:
   ipAddressPools:
   - tenant
   interfaces:
-  # Change this interface to the appropriate OpenStack VLAN NIC for your environment
-  - enp7s0.22 # CHANGEME
+  - _replaced_

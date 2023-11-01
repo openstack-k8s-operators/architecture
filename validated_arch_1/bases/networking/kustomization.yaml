@@ -1,12 +1,355 @@
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
 resources:
 - metallb_deploy.yaml
 - metallb_ipaddresspools.yaml
 - metallb_l2advertisement.yaml
-- netattach_ctlplane.yaml
-- netattach_internalapi.yaml
-- netattach_storage.yaml
-- netattach_tenant.yaml
 - nmstate_deploy.yaml
-- ocp_node_0_nncp.yaml
-- ocp_node_1_nncp.yaml
-- ocp_node_2_nncp.yaml
+- ocp_nodes_nncp.yaml
+
+patches:
+- target:
+    kind: NodeNetworkConfigurationPolicy
+    labelSelector: "osp/nncm-config-type=standard"
+  path: ocp_node_template.yaml
+
+replacements:
+# Common network interfaces and vlans
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.internalapi.iface
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+    fieldPaths:
+    - spec.interfaces.[name=internalapi].vlan.base-iface
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.internalapi.vlan
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+    fieldPaths:
+    - spec.interfaces.[name=internalapi].vlan.id
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.tenant.iface
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+    fieldPaths:
+    - spec.interfaces.[name=tenant].vlan.base-iface
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.tenant.vlan
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+    fieldPaths:
+    - spec.interfaces.[name=tenant].vlan.id
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.ctlplane.iface
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+    fieldPaths:
+    - spec.interfaces.[name=ctlplane].vlan.base-iface
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.ctlplane.vlan
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+    fieldPaths:
+    - spec.interfaces.[name=ctlplane].vlan.id
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.storage.iface
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+    fieldPaths:
+    - spec.interfaces.[name=storage].vlan.base-iface
+    - spec.interfaces.[name=_storage_].name
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.storage.vlan
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+    fieldPaths:
+    - spec.interfaces.[name=storage].vlan.id
+
+# Static Node IPs: node-0
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.node_0.internalapi_ip
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+      name: node-0
+    fieldPaths:
+    - spec.interfaces.[name=internalapi].ipv4.address.0.ip
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.node_0.tenant_ip
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+      name: node-0
+    fieldPaths:
+    - spec.interfaces.[name=tenant].ipv4.address.0.ip
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.node_0.ctlplane_ip
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+      name: node-0
+    fieldPaths:
+    - spec.interfaces.[name=ctlplane].ipv4.address.0.ip
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.node_0.storage_ip
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+      name: node-0
+    fieldPaths:
+    - spec.interfaces.[name=storage].ipv4.address.0.ip
+
+# Static Node IPs: node-1
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.node_1.internalapi_ip
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+      name: node-1
+    fieldPaths:
+    - spec.interfaces.[name=internalapi].ipv4.address.0.ip
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.node_1.tenant_ip
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+      name: node-1
+    fieldPaths:
+    - spec.interfaces.[name=tenant].ipv4.address.0.ip
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.node_1.ctlplane_ip
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+      name: node-1
+    fieldPaths:
+    - spec.interfaces.[name=ctlplane].ipv4.address.0.ip
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.node_1.storage_ip
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+      name: node-1
+    fieldPaths:
+    - spec.interfaces.[name=storage].ipv4.address.0.ip
+
+# Static Node IPs: node-2
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.node_2.internalapi_ip
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+      name: node-2
+    fieldPaths:
+    - spec.interfaces.[name=internalapi].ipv4.address.0.ip
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.node_2.tenant_ip
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+      name: node-2
+    fieldPaths:
+    - spec.interfaces.[name=tenant].ipv4.address.0.ip
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.node_2.ctlplane_ip
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+      name: node-2
+    fieldPaths:
+    - spec.interfaces.[name=ctlplane].ipv4.address.0.ip
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.node_2.storage_ip
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+      name: node-2
+    fieldPaths:
+    - spec.interfaces.[name=storage].ipv4.address.0.ip
+
+# Node names
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.node_0.name
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+      name: node-0
+    fieldPaths:
+    - metadata.name
+    - spec.nodeSelector.[kubernetes.io/hostname]
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.node_1.name
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+      name: node-1
+    fieldPaths:
+    - metadata.name
+    - spec.nodeSelector.[kubernetes.io/hostname]
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.node_2.name
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+      name: node-2
+    fieldPaths:
+    - metadata.name
+    - spec.nodeSelector.[kubernetes.io/hostname]
+
+# Loadbalancer address pools
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.ctlplane.lb_addresses
+  targets:
+  - select:
+      group: metallb.io
+      kind: IPAddressPool
+      name: ctlplane
+    fieldPaths:
+    - spec.addresses
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.internalapi.lb_addresses
+  targets:
+  - select:
+      group: metallb.io
+      kind: IPAddressPool
+      name: internalapi
+    fieldPaths:
+    - spec.addresses
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.tenant.lb_addresses
+  targets:
+  - select:
+      group: metallb.io
+      kind: IPAddressPool
+      name: tenant
+    fieldPaths:
+    - spec.addresses
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.ctlplane.lb_addresses
+  targets:
+  - select:
+      group: metallb.io
+      kind: IPAddressPool
+      name: ctlplane
+    fieldPaths:
+    - spec.addresses
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.storage.lb_addresses
+  targets:
+  - select:
+      group: metallb.io
+      kind: IPAddressPool
+      name: storage
+    fieldPaths:
+    - spec.addresses
+
+# Loadbalancer interfaces
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.ctlplane.iface
+  targets:
+  - select:
+      group: metallb.io
+      kind: L2Advertisement
+      name: ctlplane
+    fieldPaths:
+    - spec.interfaces.0
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.internalapi.iface
+  targets:
+  - select:
+      group: metallb.io
+      kind: L2Advertisement
+      name: internalapi
+    fieldPaths:
+    - spec.interfaces.0
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.storage.iface
+  targets:
+  - select:
+      group: metallb.io
+      kind: L2Advertisement
+      name: storage
+    fieldPaths:
+    - spec.interfaces.0
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.tenant.iface
+  targets:
+  - select:
+      group: metallb.io
+      kind: L2Advertisement
+      name: tenant
+    fieldPaths:
+    - spec.interfaces.0

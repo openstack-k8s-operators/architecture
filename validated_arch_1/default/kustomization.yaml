@@ -1,3 +1,12 @@
-resources:
+namespace: openstack
+
+components:
 - ../bases/networking
 - ../bases/osp-control-plane
+
+resources:
+- values.yaml
+- netattach_ctlplane.yaml
+- netattach_internalapi.yaml
+- netattach_storage.yaml
+- netattach_tenant.yaml
