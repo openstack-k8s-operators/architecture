@@ -8,17 +8,14 @@
 apiVersion: k8s.cni.cncf.io/v1
 kind: NetworkAttachmentDefinition
 metadata:
-  labels:
-    osp/net: internalapi
   name: internalapi
-  namespace: openstack
 spec:
   config: |
     {
       "cniVersion": "0.3.1",
       "name": "internalapi",
       "type": "macvlan",
-      "master": "enp7s0.20",
+      "master": "internalapi",
       "ipam": {
         "type": "whereabouts",
         "range": "172.17.0.0/24",

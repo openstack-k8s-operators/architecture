@@ -1,0 +1,26 @@
+apiVersion: "local.storage.openshift.io/v1"
+kind: "LocalVolume"
+metadata:
+  name: "local-volumes"
+  namespace: "openshift-local-storage" 
+spec:
+  nodeSelector: 
+    nodeSelectorTerms:
+    - matchExpressions:
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+  storageClassDevices:
+  - storageClassName: "local" 
+    volumeMode: Filesystem 
+    fsType: xfs 
+    devicePaths: 
+    - /dev/openshift-local-storage/pv-00
+    - /dev/openshift-local-storage/pv-01
+    - /dev/openshift-local-storage/pv-02
+    - /dev/openshift-local-storage/pv-03
+    - /dev/openshift-local-storage/pv-04
+    - /dev/openshift-local-storage/pv-05
+    - /dev/openshift-local-storage/pv-06
+    - /dev/openshift-local-storage/pv-07
+    - /dev/openshift-local-storage/pv-08
+    - /dev/openshift-local-storage/pv-09

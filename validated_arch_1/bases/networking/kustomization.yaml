@@ -24,7 +24,7 @@ replacements:
   - select:
       kind: NodeNetworkConfigurationPolicy
     fieldPaths:
-    - spec.interfaces.[name=internalapi].vlan.base-iface
+    - spec.desiredState.interfaces.[name=internalapi].vlan.base-iface
 - source:
     kind: ConfigMap
     name: network-values
@@ -33,7 +33,7 @@ replacements:
   - select:
       kind: NodeNetworkConfigurationPolicy
     fieldPaths:
-    - spec.interfaces.[name=internalapi].vlan.id
+    - spec.desiredState.interfaces.[name=internalapi].vlan.id
 - source:
     kind: ConfigMap
     name: network-values
@@ -42,7 +42,7 @@ replacements:
   - select:
       kind: NodeNetworkConfigurationPolicy
     fieldPaths:
-    - spec.interfaces.[name=tenant].vlan.base-iface
+    - spec.desiredState.interfaces.[name=tenant].vlan.base-iface
 - source:
     kind: ConfigMap
     name: network-values
@@ -51,7 +51,7 @@ replacements:
   - select:
       kind: NodeNetworkConfigurationPolicy
     fieldPaths:
-    - spec.interfaces.[name=tenant].vlan.id
+    - spec.desiredState.interfaces.[name=tenant].vlan.id
 - source:
     kind: ConfigMap
     name: network-values
@@ -60,7 +60,7 @@ replacements:
   - select:
       kind: NodeNetworkConfigurationPolicy
     fieldPaths:
-    - spec.interfaces.[name=ctlplane].vlan.base-iface
+    - spec.desiredState.interfaces.[name=ctlplane].vlan.base-iface
 - source:
     kind: ConfigMap
     name: network-values
@@ -69,7 +69,7 @@ replacements:
   - select:
       kind: NodeNetworkConfigurationPolicy
     fieldPaths:
-    - spec.interfaces.[name=ctlplane].vlan.id
+    - spec.desiredState.interfaces.[name=ctlplane].vlan.id
 - source:
     kind: ConfigMap
     name: network-values
@@ -78,8 +78,8 @@ replacements:
   - select:
       kind: NodeNetworkConfigurationPolicy
     fieldPaths:
-    - spec.interfaces.[name=storage].vlan.base-iface
-    - spec.interfaces.[name=_storage_].name
+    - spec.desiredState.interfaces.[name=storage].vlan.base-iface
+    - spec.desiredState.interfaces.[name=_storage_].name
 - source:
     kind: ConfigMap
     name: network-values
@@ -88,7 +88,7 @@ replacements:
   - select:
       kind: NodeNetworkConfigurationPolicy
     fieldPaths:
-    - spec.interfaces.[name=storage].vlan.id
+    - spec.desiredState.interfaces.[name=storage].vlan.id
 
 # Static Node IPs: node-0
 - source:
@@ -100,7 +100,7 @@ replacements:
       kind: NodeNetworkConfigurationPolicy
       name: node-0
     fieldPaths:
-    - spec.interfaces.[name=internalapi].ipv4.address.0.ip
+    - spec.desiredState.interfaces.[name=internalapi].ipv4.address.0.ip
 - source:
     kind: ConfigMap
     name: network-values
@@ -110,7 +110,7 @@ replacements:
       kind: NodeNetworkConfigurationPolicy
       name: node-0
     fieldPaths:
-    - spec.interfaces.[name=tenant].ipv4.address.0.ip
+    - spec.desiredState.interfaces.[name=tenant].ipv4.address.0.ip
 - source:
     kind: ConfigMap
     name: network-values
@@ -120,7 +120,7 @@ replacements:
       kind: NodeNetworkConfigurationPolicy
       name: node-0
     fieldPaths:
-    - spec.interfaces.[name=ctlplane].ipv4.address.0.ip
+    - spec.desiredState.interfaces.[name=ctlplane].ipv4.address.0.ip
 - source:
     kind: ConfigMap
     name: network-values
@@ -130,7 +130,7 @@ replacements:
       kind: NodeNetworkConfigurationPolicy
       name: node-0
     fieldPaths:
-    - spec.interfaces.[name=storage].ipv4.address.0.ip
+    - spec.desiredState.interfaces.[name=storage].ipv4.address.0.ip
 
 # Static Node IPs: node-1
 - source:
@@ -142,7 +142,7 @@ replacements:
       kind: NodeNetworkConfigurationPolicy
       name: node-1
     fieldPaths:
-    - spec.interfaces.[name=internalapi].ipv4.address.0.ip
+    - spec.desiredState.interfaces.[name=internalapi].ipv4.address.0.ip
 - source:
     kind: ConfigMap
     name: network-values
@@ -152,7 +152,7 @@ replacements:
       kind: NodeNetworkConfigurationPolicy
       name: node-1
     fieldPaths:
-    - spec.interfaces.[name=tenant].ipv4.address.0.ip
+    - spec.desiredState.interfaces.[name=tenant].ipv4.address.0.ip
 - source:
     kind: ConfigMap
     name: network-values
@@ -162,7 +162,7 @@ replacements:
       kind: NodeNetworkConfigurationPolicy
       name: node-1
     fieldPaths:
-    - spec.interfaces.[name=ctlplane].ipv4.address.0.ip
+    - spec.desiredState.interfaces.[name=ctlplane].ipv4.address.0.ip
 - source:
     kind: ConfigMap
     name: network-values
@@ -172,7 +172,7 @@ replacements:
       kind: NodeNetworkConfigurationPolicy
       name: node-1
     fieldPaths:
-    - spec.interfaces.[name=storage].ipv4.address.0.ip
+    - spec.desiredState.interfaces.[name=storage].ipv4.address.0.ip
 
 # Static Node IPs: node-2
 - source:
@@ -184,7 +184,7 @@ replacements:
       kind: NodeNetworkConfigurationPolicy
       name: node-2
     fieldPaths:
-    - spec.interfaces.[name=internalapi].ipv4.address.0.ip
+    - spec.desiredState.interfaces.[name=internalapi].ipv4.address.0.ip
 - source:
     kind: ConfigMap
     name: network-values
@@ -194,7 +194,7 @@ replacements:
       kind: NodeNetworkConfigurationPolicy
       name: node-2
     fieldPaths:
-    - spec.interfaces.[name=tenant].ipv4.address.0.ip
+    - spec.desiredState.interfaces.[name=tenant].ipv4.address.0.ip
 - source:
     kind: ConfigMap
     name: network-values
@@ -204,7 +204,7 @@ replacements:
       kind: NodeNetworkConfigurationPolicy
       name: node-2
     fieldPaths:
-    - spec.interfaces.[name=ctlplane].ipv4.address.0.ip
+    - spec.desiredState.interfaces.[name=ctlplane].ipv4.address.0.ip
 - source:
     kind: ConfigMap
     name: network-values
@@ -214,7 +214,7 @@ replacements:
       kind: NodeNetworkConfigurationPolicy
       name: node-2
     fieldPaths:
-    - spec.interfaces.[name=storage].ipv4.address.0.ip
+    - spec.desiredState.interfaces.[name=storage].ipv4.address.0.ip
 
 # Node names
 - source:

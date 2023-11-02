@@ -3,75 +3,76 @@ kind: NodeNetworkConfigurationPolicy
 metadata:
   name: _ignored_
 spec:
-  interfaces:
-  - description: internalapi vlan interface
-    ipv4:
-      address:
-      - ip: _replaced_
-        prefix-length: 24
-      enabled: true
-      dhcp: false
-    ipv6:
-      enabled: false
-    name: internalapi
-    state: up
-    type: vlan
-    vlan:
-      base-iface: _replaced_
-      id: _replaced_
-  - description: storage vlan interface
-    ipv4:
-      address:
-      - ip: _replaced_
-        prefix-length: 24
-      enabled: true
-      dhcp: false
-    ipv6:
-      enabled: false
-    name: storage
-    state: up
-    type: vlan
-    vlan:
-      base-iface: _replaced_
-      id: _replaced_
-  - description: tenant vlan interface
-    ipv4:
-      address:
-      - ip: _replaced_
-        prefix-length: 24
-      enabled: true
-      dhcp: false
-    ipv6:
-      enabled: false
-    name: tenant
-    state: up
-    type: vlan
-    vlan:
-      base-iface: _replaced_
-      id: _replaced_
-  - description: ctlplane vlan interface
-    ipv4:
-      address:
-      - ip: _replaced_
-        prefix-length: 24
-      enabled: true
-      dhcp: false
-    ipv6:
-      enabled: false
-    name: ctlplane
-    state: up
-    type: vlan
-    vlan:
-      base-iface: _replaced_
-      id: _replaced_
-  - description: Configure storage if
-    # MTU 9000 is used to access Ceph via the storage network
-    # If storage network is on its own NIC adjust accordingly
-    # Using >1 NIC is not currently represented in these CRs
-    mtu: 9000
-    name: _storage_
-    state: up
-    type: ethernet
+  desiredState:
+    interfaces:
+    - description: internalapi vlan interface
+      ipv4:
+        address:
+        - ip: _replaced_
+          prefix-length: 24
+        enabled: true
+        dhcp: false
+      ipv6:
+        enabled: false
+      name: internalapi
+      state: up
+      type: vlan
+      vlan:
+        base-iface: _replaced_
+        id: _replaced_
+    - description: storage vlan interface
+      ipv4:
+        address:
+        - ip: _replaced_
+          prefix-length: 24
+        enabled: true
+        dhcp: false
+      ipv6:
+        enabled: false
+      name: storage
+      state: up
+      type: vlan
+      vlan:
+        base-iface: _replaced_
+        id: _replaced_
+    - description: tenant vlan interface
+      ipv4:
+        address:
+        - ip: _replaced_
+          prefix-length: 24
+        enabled: true
+        dhcp: false
+      ipv6:
+        enabled: false
+      name: tenant
+      state: up
+      type: vlan
+      vlan:
+        base-iface: _replaced_
+        id: _replaced_
+    - description: ctlplane vlan interface
+      ipv4:
+        address:
+        - ip: _replaced_
+          prefix-length: 24
+        enabled: true
+        dhcp: false
+      ipv6:
+        enabled: false
+      name: ctlplane
+      state: up
+      type: vlan
+      vlan:
+        base-iface: _replaced_
+        id: _replaced_
+    - description: Configure storage if
+      # MTU 9000 is used to access Ceph via the storage network
+      # If storage network is on its own NIC adjust accordingly
+      # Using >1 NIC is not currently represented in these CRs
+      mtu: 9000
+      name: _storage_
+      state: up
+      type: ethernet
   nodeSelector:
     kubernetes.io/hostname: _replaced_
     node-role.kubernetes.io/worker: ""
