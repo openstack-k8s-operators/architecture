@@ -24,3 +24,7 @@ spec:
     - /dev/openshift-local-storage/pv-07
     - /dev/openshift-local-storage/pv-08
     - /dev/openshift-local-storage/pv-09
+    # Add this when STOR-1377 is available in a release
+    #   https://github.com/openshift/local-storage-operator/commit/b0e8f4e2ef917f1bc49f0d1d8491fa65b9b69b25
+    # In the meantime, PVs must be scrubbed by some other means
+    #forceWipeDevicesAndDestroyAllData: true
