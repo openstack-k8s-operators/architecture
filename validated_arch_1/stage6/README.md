@@ -6,6 +6,19 @@ Finish deploying the data plane after Ceph is available
 
 Assumes that a Ceph cluster is available
 
+During stage 6 the OpenStackDataPlaneNodeSet (openstackdataplanenodeset.yaml)
+and OpenStackControlPlane (openstackcontrolplane.yaml) are updated. New instances
+of these services are not created in stage 6. Thus, if you have modified these CRs
+beyond when they were created (stage 4 for OpenStackControlPlane and stage 5 for
+OpenStackDataPlaneNodeSet), then your personal changes could be lost when you run
+`oc apply` as described below. To avoid this, `diff` the files and apply the changes
+using `oc edit` or `oc patch` during steps 3 and 4 below.
+
+```bash
+diff -u stage4/openstackcontrolplane.yaml stage6/openstackcontrolplane.yaml
+diff -u stage5/openstackdataplanenodeset.yaml stage6/openstackdataplanenodeset.yaml
+```
+
 ## Steps
 
 1. Create Secrets
