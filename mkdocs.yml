@@ -1,0 +1,51 @@
+site_name: OpenStack K8S Operators Architectures
+site_description: OpenStack K8S Operators Architectures
+site_author: OpenStack Team
+site_url: https://openstack-k8s-operators.github.io/architecture
+repo_name: openstack-k8s-operators/architecture
+repo_url: https://github.com/openstack-k8s-operators/architecture
+theme:
+  features:
+    - search.suggest
+    - search.highlight
+    - search.share
+  name: material
+  logo: images/openstack-logo.png
+  palette:
+    - scheme: default
+      media: "(prefers-color-scheme: light)"
+      primary: teal
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+    - scheme: slate
+      media: "(prefers-color-scheme: dark)"
+      primary: teal
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+nav:
+  - Overview: index.md
+  - Stages:
+    - stage1.md
+    - stage2.md
+    - stage3.md
+    - stage4.md
+    - stage5.md
+    - stage6.md
+  - Contributing:
+    - contributing/documentation.md
+markdown_extensions:
+  - toc:
+      permalink: "#"
+  - pymdownx.superfences
+  - admonition
+extra:
+  version:
+    provider: mike
+    default: latest
+plugins:
+  - git-revision-date
+  - search:
+      lang: en
+      prebuild_index: true
