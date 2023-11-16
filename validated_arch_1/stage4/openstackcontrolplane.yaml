@@ -75,10 +75,7 @@ spec:
       route: {}
     template:
       databaseInstance: openstack
-      glanceAPIExternal:
-        networkAttachments:
-          - storage
-      glanceAPIInternal:
+      glanceAPI:
         networkAttachments:
           - storage
         override:
