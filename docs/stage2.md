@@ -1,1 +1,1 @@
-../validated_arch_1/stage2/README.md
+../va/hci/stage2/README.md
