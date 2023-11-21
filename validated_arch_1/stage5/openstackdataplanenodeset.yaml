@@ -7,11 +7,11 @@
 #     members:
 #     - type: interface
 #       name: enp7s0    <---- change
-# - Change "spec.nodeTemplate.ansible.ansibleVars.edpm_sshd_allowed_ranges[0]" to 
+# - Change "spec.nodeTemplate.ansible.ansibleVars.edpm_sshd_allowed_ranges[0]" to
 #   match the CIDR of your control plane network, if necessary
 # - Change "edpm_bootstrap_command" to include subscription-manager and podman login
 #   commands to register the EDPM nodes as in https://access.redhat.com/solutions/253273
-# - Change the "spec.nodes[].ansible.ansibleHost" and "spec.nodes[].networks[0].fixedIP" values 
+# - Change the "spec.nodes[].ansible.ansibleHost" and "spec.nodes[].networks[0].fixedIP" values
 #   to match the control plane IPs of your nodes, if necessary
 #
 
@@ -25,8 +25,6 @@ spec:
     - name: ANSIBLE_CALLBACKS_ENABLED
       value: profile_tasks
     - name: ANSIBLE_FORCE_COLOR
-      value: "True"
-    - name: ANSIBLE_ENABLE_TASK_DEBUGGER
       value: "True"
   networkAttachments:
     - ctlplane
