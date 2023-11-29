@@ -455,6 +455,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Notes
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#steps" class="md-nav__link">
     <span class="md-ellipsis">
       Steps
@@ -592,6 +601,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Notes
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#steps" class="md-nav__link">
     <span class="md-ellipsis">
       Steps
@@ -620,6 +638,10 @@
 
 <h1 id="stage-5">Stage 5<a class="headerlink" href="#stage-5" title="Permanent link">#</a></h1>
 <p>Deploy the initial data plane to prepare for CephHCI installation</p>
+<h2 id="notes">Notes<a class="headerlink" href="#notes" title="Permanent link">#</a></h2>
+<p>Requires 3 pre-provisioned compute nodes that are accessible via the control plane IPs
+enumerated in step 2's <code>OpenStackDataPlaneNodeSet</code> using the SSH credentials provided
+in step 1's <code>Secret</code>.</p>
 <h2 id="steps">Steps<a class="headerlink" href="#steps" title="Permanent link">#</a></h2>
 <ol>
 <li>Create SSH Secret
