@@ -1,15 +1,1 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-    name: openstack-operators
-    labels:
-      pod-security.kubernetes.io/enforce: privileged
-      security.openshift.io/scc.podSecurityLabelSync: "false"
----
-apiVersion: v1
-kind: Namespace
-metadata:
-    name: openstack
-    labels:
-      pod-security.kubernetes.io/enforce: privileged
-      security.openshift.io/scc.podSecurityLabelSync: "false"
+../../../common/stage2/namespaces.yaml
