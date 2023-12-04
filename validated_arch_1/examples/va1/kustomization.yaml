@@ -1,0 +1,8 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+- https://github.com/shiftstack/architecture/validated_arch_1/default?ref=kustomize
+
+resources:
+- values.yaml
