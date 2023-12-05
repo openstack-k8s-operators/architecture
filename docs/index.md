@@ -1,1 +1,0 @@
-../va/hci/README.md

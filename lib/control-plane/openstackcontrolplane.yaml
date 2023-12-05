@@ -1,0 +1,182 @@
+apiVersion: core.openstack.org/v1beta1
+kind: OpenStackControlPlane
+metadata:
+  name: controlplane
+spec:
+  ceilometer:
+    template:
+      passwordSelector:
+        service: CeilometerPassword
+      secret: osp-secret
+      serviceUser: ceilometer
+  cinder:
+    apiOverride:
+      route: {}
+    template:
+      cinderBackup:
+        networkAttachments:
+          - storage
+        replicas: 0
+      cinderScheduler:
+        replicas: 1
+      cinderVolumes: {}
+      databaseInstance: openstack
+      secret: osp-secret
+  dns:
+    template:
+      options:
+        - key: server
+          values:
+            - 192.168.122.1 # CHANGEME
+      replicas: 1
+  galera:
+    enabled: true
+    templates:
+      openstack:
+        replicas: 3
+        secret: osp-secret
+        storageRequest: 500M
+      openstack-cell1:
+        replicas: 3
+        secret: osp-secret
+        storageRequest: 500M
+  glance:
+    apiOverride:
+      route: {}
+    template:
+      databaseInstance: openstack
+      glanceAPI:
+        replicas: 0
+        networkAttachments:
+          - storage
+      storageClass: ""
+      storageRequest: 10G
+  heat:
+    apiOverride:
+      route: {}
+    cnfAPIOverride:
+      route: {}
+    enabled: false
+    template:
+      databaseInstance: openstack
+      heatAPI:
+        replicas: 1
+      heatEngine:
+        replicas: 1
+      secret: osp-secret
+  horizon:
+    apiOverride:
+      route: {}
+    template:
+      replicas: 1
+      secret: osp-secret
+    enabled: true
+  ironic:
+    enabled: false
+    template:
+      databaseInstance: openstack
+      ironicAPI:
+        replicas: 1
+      ironicConductors:
+        - replicas: 1
+          storageRequest: 10G
+      ironicInspector:
+        replicas: 1
+      ironicNeutronAgent:
+        replicas: 1
+      secret: osp-secret
+  keystone:
+    apiOverride:
+      route: {}
+    template:
+      databaseInstance: openstack
+      secret: osp-secret
+  manila:
+    apiOverride:
+      route: {}
+    enabled: false
+    template:
+      manilaAPI:
+        networkAttachments:
+          - internalapi
+        replicas: 1
+      manilaScheduler:
+        replicas: 1
+      manilaShares:
+        share1:
+          networkAttachments:
+            - storage
+          replicas: 1
+  mariadb:
+    enabled: false
+    templates:
+      openstack:
+        storageRequest: 500M
+      openstack-cell1:
+        storageRequest: 500M
+  memcached:
+    templates:
+      memcached:
+        replicas: 1
+  neutron:
+    apiOverride:
+      route: {}
+    template:
+      databaseInstance: openstack
+      networkAttachments:
+        - internalapi
+      secret: osp-secret
+  nova:
+    apiOverride:
+      route: {}
+    template:
+      secret: osp-secret
+  octavia:
+    enabled: false
+    template:
+      databaseInstance: openstack
+      octaviaAPI:
+        replicas: 1
+      secret: osp-secret
+  ovn:
+    template:
+      ovnController:
+        networkAttachment: tenant
+      ovnDBCluster:
+        ovndbcluster-nb:
+          dbType: NB
+          networkAttachment: internalapi
+          storageRequest: 10G
+        ovndbcluster-sb:
+          dbType: SB
+          networkAttachment: internalapi
+          storageRequest: 10G
+      ovnNorthd:
+        networkAttachment: internalapi
+  placement:
+    apiOverride:
+      route: {}
+    template:
+      databaseInstance: openstack
+      secret: osp-secret
+  rabbitmq:
+    templates:
+      rabbitmq:
+        replicas: 3
+      rabbitmq-cell1:
+        replicas: 3
+  redis:
+    enabled: false
+  secret: osp-secret
+  storageClass: local-storage
+  swift:
+    enabled: false
+    proxyOverride:
+      route: {}
+    template:
+      swiftProxy:
+        replicas: 1
+      swiftRing:
+        ringReplicas: 1
+      swiftStorage:
+        replicas: 1
