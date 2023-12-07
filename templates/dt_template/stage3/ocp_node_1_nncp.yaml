@@ -1,0 +1,85 @@
+#
+# Change the fields below for certain interfaces and IPs to match your environment.
+# "spec.desiredState.interfaces" can be added to support additional networks.
+#
+
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  labels:
+    osp/interface: enp7s0 # CHANGEME
+  name: enp7s0-ostest-master-1 # CHANGEME
+spec:
+  desiredState:
+    dns-resolver:
+      config:
+        search: []
+        server:
+        - 192.168.122.1 # CHANGEME
+    routes:
+      config:
+      - destination: 0.0.0.0/0
+        next-hop-address: 192.168.122.1 # CHANGEME
+        next-hop-interface: enp7s0 # CHANGEME
+    interfaces:
+    - description: internalapi vlan interface
+      ipv4:
+        address:
+        - ip: 172.17.0.6
+          prefix-length: 24
+        enabled: true
+        dhcp: false
+      ipv6:
+        enabled: false
+      name: enp7s0.20 # CHANGEME
+      state: up
+      type: vlan
+      vlan:
+        base-iface: enp7s0 # CHANGEME
+        id: 20
+    - description: storage vlan interface
+      ipv4:
+        address:
+        - ip: 172.18.0.6
+          prefix-length: 24
+        enabled: true
+        dhcp: false
+      ipv6:
+        enabled: false
+      name: enp7s0.21 # CHANGEME
+      state: up
+      type: vlan
+      vlan:
+        base-iface: enp7s0 # CHANGEME
+        id: 21
+    - description: tenant vlan interface
+      ipv4:
+        address:
+        - ip: 172.19.0.6
+          prefix-length: 24
+        enabled: true
+        dhcp: false
+      ipv6:
+        enabled: false
+      name: enp7s0.22 # CHANGEME
+      state: up
+      type: vlan
+      vlan:
+        base-iface: enp7s0 # CHANGEME
+        id: 22
+    - description: Configuring enp7s0 # CHANGEME
+      ipv4:
+        address:
+        - ip: 192.168.122.11 # CHANGEME
+          prefix-length: 24
+        enabled: true
+        dhcp: false
+      ipv6:
+        enabled: false
+      mtu: 9000
+      name: enp7s0 # CHANGEME
+      state: up
+      type: ethernet
+  nodeSelector:
+    kubernetes.io/hostname: ostest-master-1 # CHANGEME
+    node-role.kubernetes.io/worker: ""

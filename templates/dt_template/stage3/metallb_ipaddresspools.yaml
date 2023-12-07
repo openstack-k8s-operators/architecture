@@ -1,0 +1,44 @@
+#
+# Additional pools of VIPs can be added here if needed for other networks
+#
+
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  namespace: metallb-system
+  name: ctlplane
+spec:
+  addresses:
+  # Change this to define a different range of VIPs that can be allocated on the ctlplane network
+  - 192.168.122.80-192.168.122.90 # CHANGEME
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  namespace: metallb-system
+  name: internalapi
+spec:
+  addresses:
+  # Change this to define a different range of VIPs that can be allocated on the internalapi network
+  - 172.17.0.80-172.17.0.90
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  namespace: metallb-system
+  name: storage
+spec:
+  addresses:
+  # Change this to define a different range of VIPs that can be allocated on the storage network
+  - 172.18.0.80-172.18.0.90
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  namespace: metallb-system
+  name: tenant
+spec:
+  addresses:
+  # Change this to define a different range of VIPs that can be allocated on the tenant network
+  - 172.19.0.80-172.19.0.90
