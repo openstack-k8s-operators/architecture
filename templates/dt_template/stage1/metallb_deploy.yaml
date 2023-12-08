@@ -1,9 +1,1 @@
-apiVersion: metallb.io/v1beta1
-kind: MetalLB
-metadata:
-  name: metallb
-  namespace: metallb-system
-spec:
-  logLevel: debug
-  nodeSelector:
-    node-role.kubernetes.io/worker: ""
+../../../common/stage1/metallb_deploy.yaml

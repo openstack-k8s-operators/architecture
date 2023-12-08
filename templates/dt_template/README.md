@@ -11,7 +11,7 @@
 ## Node topology
 | Node role                                     | bm/vm | amount |
 | --------------------------------------------- | ----- | ------ |
-| Openshift worker combo-node openshift cluster | vm    | 3      |
+| Openshift master/worker combo-node cluster    | vm    | 3      |
 | Compute nodes                                 | vm    | 3      |
 | Galera DB node, replicating                   | vm    | 3      |
 | Hardware security module                      | bm    | 1      |

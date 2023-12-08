@@ -1,11 +1,1 @@
-apiVersion: operators.coreos.com/v1
-kind: OperatorGroup
-metadata:
-  annotations:
-    olm.providedAPIs: NMState.v1.nmstate.io
-  generateName: openshift-nmstate-
-  name: openshift-nmstate-tn6k8
-  namespace: openshift-nmstate
-spec:
-  targetNamespaces:
-  - openshift-nmstate
+../../../common/stage1/nmstate_operatorgroup.yaml

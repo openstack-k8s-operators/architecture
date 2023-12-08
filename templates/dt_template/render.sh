@@ -6,7 +6,7 @@ TODAY=$(date +%b\ %d\ %Y)
 
 function help {
     echo "Usage:"
-    echo "NEW_DT_NAME=name ./render.sh "
+    echo "NEW_DT_NAME=name ./render.sh"
     echo "NEW_DT_NAME is the DTs name, will be used as the directory name"
 }
 
