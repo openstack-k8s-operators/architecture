@@ -89,22 +89,25 @@ spec:
         secret: osp-secret
         storageRequest: 500M
   glance:
-    apiOverride:
-      route: {}
+    apiOverrides:
+      default:
+        route: {}
     template:
       databaseInstance: openstack
-      glanceAPI:
-        networkAttachments:
-          - storage
-        override:
-          service:
-            metadata:
-              annotations:
-                metallb.universe.tf/address-pool: internalapi
-                metallb.universe.tf/allow-shared-ip: internalapi
-                metallb.universe.tf/loadBalancerIPs: 172.17.0.80
-            spec:
-              type: LoadBalancer
+      glanceAPIs:
+        default:
+          replicas: 1
+          networkAttachments:
+            - storage
+          override:
+            service:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: internalapi
+                  metallb.universe.tf/allow-shared-ip: internalapi
+                  metallb.universe.tf/loadBalancerIPs: 172.17.0.80
+              spec:
+                type: LoadBalancer
       storageClass: ""
       storageRequest: 10G
       customServiceConfig: |
