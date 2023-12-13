@@ -1,4 +1,4 @@
-# RHOS Deployed Topology %NEW_DT_NAME%
+# Deployed Topology 
 
 **Based on OpenStack K8S operators from the "main" branch of the [OpenStack Operator repo](https://github.com/openstack-k8s-operators/openstack-operator/tree/78b3c876eaf9168f9d95b201997ebdc2da42fa02) on Oct 17th, 2023**
 
@@ -7,6 +7,10 @@
 | Revision | Change                | Date             |
 |--------: | :-------------------- | :--------------: |
 | v0.1     | Initial publication   | %TODAY%      |
+
+## Purpose
+
+Add some information here on the purpose of this DT (Optional)
 
 ## Node topology
 | Node role                                     | bm/vm | amount |
@@ -28,7 +32,25 @@
 | Keystone                                    | Special appliance [redacted]    | Interchangable     |
 | FIPS Mode                                   | default                         | Must have/standard |
 
-## Considerations
+### Support services
+
+Additional services required for integration testing that may not be the subject of this DT
+
+| Service  | Reason             |
+| -------- | ------------------ |
+| Keystone | We always need it  |
+| FIPS     | Enabled by default |
+
+### Additional configuration
+
+Always-on, default services and features
+
+| Service  |
+| -------- |
+| FIPS     |
+| TLS-e    |
+
+## Constraints and Considerations
 
 1. Glance requirement dictates specific lab
 2. HSM access limited geographically
