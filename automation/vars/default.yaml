@@ -202,3 +202,37 @@ vas:
           - name: edpm-values
             src_file: values.yaml
         build_output: edpm.yaml
+
+  bgp:
+    stages:
+      - path: examples/dt/bgp/config/control-plane/nncp
+        wait_conditions:
+          - >-
+            oc -n openstack wait nncp
+            -l osp/nncm-config-type=standard
+            --for jsonpath='{.status.conditions[0].reason}'=SuccessfullyConfigured
+            --timeout=60s
+        values:
+          - name: network-values
+            src_file: values.yaml
+        build_output: nncp.yaml
+
+      - path: examples/dt/bgp/config/control-plane
+        wait_conditions:
+          - >-
+            oc -n openstack wait osctlplane controlplane --for condition=Ready
+            --timeout=30m
+        values:
+          - name: network-values
+            src_file: nncp/values.yaml
+        build_output: ../control-plane.yaml
+
+      - path: examples/dt/bgp/config/edpm
+        wait_conditions:
+          - >-
+            oc -n openstack wait
+            osdpd edpm-deployment --for condition=Ready --timeout=40m
+        values:
+          - name: edpm-values
+            src_file: values.yaml
+        build_output: dataplane.yaml

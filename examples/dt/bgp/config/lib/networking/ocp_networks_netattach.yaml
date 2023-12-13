@@ -1,0 +1,88 @@
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: ctlplane
+  labels:
+    osp/net: ctlplane
+    osp/net-attach-def-type: standard
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: internalapi
+  labels:
+    osp/net: internalapi
+    osp/net-attach-def-type: standard
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: storage
+  labels:
+    osp/net: storage
+    osp/net-attach-def-type: standard
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: tenant
+  labels:
+    osp/net: tenant
+    osp/net-attach-def-type: standard
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: datacentre
+  labels:
+    osp/net: datacentre
+    osp/net-attach-def-type: standard
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: bgpnet-0-0
+  labels:
+    osp/net: bgpnet-0-0
+    osp/net-attach-def-type: standard
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: bgpnet-0-1
+  labels:
+    osp/net: bgpnet-0-1
+    osp/net-attach-def-type: standard
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: bgpnet-1-0
+  labels:
+    osp/net: bgpnet-1-0
+    osp/net-attach-def-type: standard
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: bgpnet-1-1
+  labels:
+    osp/net: bgpnet-1-1
+    osp/net-attach-def-type: standard
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: bgpnet-2-0
+  labels:
+    osp/net: bgpnet-2-0
+    osp/net-attach-def-type: standard
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: bgpnet-2-1
+  labels:
+    osp/net: bgpnet-2-1
+    osp/net-attach-def-type: standard

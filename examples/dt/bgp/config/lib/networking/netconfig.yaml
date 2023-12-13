@@ -1,0 +1,52 @@
+apiVersion: network.openstack.org/v1beta1
+kind: NetConfig
+metadata:
+  name: netconfig
+  namespace: openstack
+spec:
+  networks:
+    - dnsDomain: _replaced_
+      name: CtlPlane
+      subnets:
+        - _replaced_
+      mtu: 1500
+    - dnsDomain: _replaced_
+      name: InternalApi
+      subnets:
+        - _replaced_
+      mtu: 1500
+    - dnsDomain: _replaced_
+      name: External
+      subnets:
+        - _replaced_
+      mtu: 1500
+    - dnsDomain: _replaced_
+      name: Storage
+      subnets:
+        - _replaced_
+      mtu: 1500
+    - dnsDomain: _replaced_
+      name: Tenant
+      subnets:
+        - _replaced_
+      mtu: 1500
+    - dnsDomain: bgpnet0.example.com
+      name: BgpNet0
+      subnets:
+        - _replaced_
+      mtu: 1500
+    - dnsDomain: bgpnet1.example.com
+      name: BgpNet1
+      subnets:
+        - _replaced_
+      mtu: 1500
+    - dnsDomain: bgpmainnet.example.com
+      name: BgpMainNet
+      subnets:
+        - _replaced_
+      mtu: 1500
+    - dnsDomain: bgpmainnetv6.example.com
+      name: BgpMainNetV6
+      subnets:
+        - _replaced_
+      mtu: 1500
