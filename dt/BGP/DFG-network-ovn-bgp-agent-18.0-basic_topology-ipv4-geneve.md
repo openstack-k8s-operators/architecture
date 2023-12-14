@@ -36,11 +36,11 @@
    properly configured in order to support the BGP protocol.
 
 ## Testing tree
-| Test framework   | Stage to run | Special configuration                                                 | Test case to report |
-| ---------------- | ------------ | --------------------------------------------------------------------- | :-----------------: |
-| Tempest/neutron  | stage9       | skips due to usupported features (multicast, FIP port-forwarding, etc)| ReportPortal        |
-| Tempest/octavia  | stage9       |                                                                       | ReportPortal        |
-| Tobiko/Faults    | stage10      |                                                                       | ReportPortal        |
+| Test framework   | Stage to run | Special configuration                                                 | Test case to report      |
+| ---------------- | ------------ | --------------------------------------------------------------------- | :----------------------: |
+| Tempest/neutron  | stage9       | skips due to usupported features (multicast, FIP port-forwarding, etc)| scenario                 |
+| Tempest/octavia  | stage9       |                                                                       | scenario                 |
+| Tobiko/Faults    | stage10      |                                                                       | sanity, scenario, faults |
 
 ## Stages
 All stages must be executed in the order listed below.  Everything is required unless otherwise indicated.
