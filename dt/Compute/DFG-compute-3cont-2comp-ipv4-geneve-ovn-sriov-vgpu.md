@@ -44,9 +44,8 @@ add configuration of ovn extras
 
 | Test framework   | Stage to run | Special configuration | Test case to report |
 | ---------------- | ------------ | --------------------- | :-----------------: |
-| Tempest/compute  | stage7       | Use rhel image        |      <TBD>          |
 | Tempest/whitebox | stage7       | Use rhel image        |       <TBD>         |
-| Tempest/scenario | stage7       | Use cirros image      |       <TBD>         |
+
 
 
 ## Stages
