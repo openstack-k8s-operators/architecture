@@ -48,8 +48,8 @@ add configuration of ovn extras
 | ---------------- | ------------ | --------------------- | :-----------------: |
 | Tempest/compute  | stage7       | Use rhel image        |      <TBD>          |
 | Tempest/whitebox | stage7       | Use rhel image        |       <TBD>         |
-| Tempest/scenairo | stage7       | Use cirros image      |       <TBD>         |
-| Tobiko/Faults    | stage9       | Use cirros image      |       <TBD>         |
+| Tempest/scenario | stage7       | Use cirros image      |       <TBD>         |
+
 
 ## Stages
 
