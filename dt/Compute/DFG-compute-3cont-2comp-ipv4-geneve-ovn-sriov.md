@@ -4,7 +4,7 @@
 
 | Revision | Change              |  Date   |
 | -------: | :------------------ | :-----: |
-|     v0.1 | Initial publication | 2023-12-12 |
+|     v0.1 | Initial publication | 2023-12-14 |
 
 ## Node topology
 
@@ -20,9 +20,7 @@
 | Neutron   | ML2/OVN, Geneve              | Must have          |
 | SRIOV     | SR-IOV agent with nova config| Must have          |
 | Compute   | set-nova-scheduler-filter    | Must have          |
-| Barbican  | Crypto backend               | Must have          |
 | Glance    | Ceph/RBD                     | <TBD>              |
-| Designate | <will add config>            | Must have          |
 | Cinder    | Ceph/RBD Backend             | Must have          |
 | Keystone  |                              | Must have          |
 | FIPS Mode | default                      | Must have/standard |
