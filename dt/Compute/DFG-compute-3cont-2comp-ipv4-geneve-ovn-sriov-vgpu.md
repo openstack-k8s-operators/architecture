@@ -23,8 +23,6 @@
 | Glance    | Ceph/RBD                     | <TBD>              |
 | Cinder    | Ceph/RBD Backend             | Must have          |
 | Keystone  |         Any                  | Must have          |
-| FIPS Mode | default                      | Must have/standard |
-| TLS       | default                      | Must have          |
 
 
 ### Additional information 
