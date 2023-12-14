@@ -12,6 +12,7 @@
 | ------------------------------------------ | ----- | ------ |
 | Openshift master/worker combo-node cluster | vm    | 3      |
 | Compute nodes                              | bm    | 2      |
+| Ceph                                       | vm    | 2      |
 
 ## Services, enabled features and configurations
 
