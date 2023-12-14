@@ -48,15 +48,12 @@
 _(existing sample, not necessarily relevant to ironic/hardprov)_
 All stages must be executed in the order listed below.  Everything is required unless otherwise indicated.
 
-1. [Install dependencies for the OpenStack K8S operators](stage1)
-2. [Install the OpenStack K8S operators](stage2)
-3. [Configuring networking on the OCP nodes](stage3)
-4. [Configure and deploy the control plane](stage4)
-5. [Configure and deploy the initial data plane to prepare for CephHCI installation](stage5)
-6. [Update the control plane and finish deploying the data plane after CephHCI has been installed](stage6)
-7. [Execute non destructive testing](stage7)
-8. [Execute load testing](stage8)
-9. [Destructive testing](stage9)
-
-
+1. Do we need to create/define the extra nodes for ironic-tempest before everything else?
+2. [Install dependencies for the OpenStack K8S operators](stage1)
+3. [Install the OpenStack K8S operators](stage2)
+4. [Configuring networking on the OCP nodes](stage3)
+5. [Configure and deploy the control plane](stage4)
+6. [Configure and deploy the data plane](stage5)
+7. Install and run Tempest
+8. Collect logs
 
