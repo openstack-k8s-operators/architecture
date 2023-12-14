@@ -12,7 +12,6 @@
 | ------------------------------------------ | ----- | ------ |
 | Openshift master/worker combo-node cluster | vm    | 3      |
 | Compute nodes                              | bm    | 2      |
-| Ceph                                       | vm    | 2      |
 
 ## Services, enabled features and configurations
 
@@ -37,7 +36,7 @@ add configuration of ovn extras
 
 ## Considerations/Constraints
 
-1. Requires dictates specific lab
+1. Requires GPU that supports mediated devices, example: Tesla T4
 2. Physical setups are required
 3. Specific switch configuration
 
