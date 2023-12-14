@@ -22,7 +22,7 @@
 | Compute   | set-nova-scheduler-filter    | Must have          |
 | Glance    | Ceph/RBD                     | <TBD>              |
 | Cinder    | Ceph/RBD Backend             | Must have          |
-| Keystone  |                              | Must have          |
+| Keystone  |         Any                  | Must have          |
 | FIPS Mode | default                      | Must have/standard |
 | TLS       | default                      | Must have          |
 
