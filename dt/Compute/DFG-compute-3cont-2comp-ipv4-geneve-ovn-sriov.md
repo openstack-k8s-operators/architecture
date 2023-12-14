@@ -21,10 +21,10 @@
 | SRIOV     | SR-IOV agent with nova config| Must have          |
 | Compute   | set-nova-scheduler-filter    | Must have          |
 | Barbican  | Crypto backend               | Must have          |
-| Glance    | Ceph/RBD                     | Must have          |
+| Glance    | Ceph/RBD                     | <TBD>              |
 | Designate | <will add config>            | Must have          |
 | Cinder    | Ceph/RBD Backend             | Must have          |
-| Keystone  | Special appliance [redacted] | Interchangable     |
+| Keystone  |                              | Must have          |
 | FIPS Mode | default                      | Must have/standard |
 | TLS       | default                      | Must have          |
 
