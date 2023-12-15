@@ -34,7 +34,7 @@ add configuration of ovn extras
 
 ## Considerations/Constraints
 
-1. Requires GPU that supports mediated devices, example: Tesla T4
+1. Baremetal Computes that support a GPU that supports mediated devices e.g. Tesla T4 
 2. Physical setups are required
 3. Specific switch configuration
 
