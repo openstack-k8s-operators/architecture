@@ -23,8 +23,8 @@
 | Compute   | set-nova-scheduler-filter    | Must have          |
 | Glance    | Ceph/RBD                     | <TBD>              |
 | Cinder    | Ceph/RBD Backend             | Must have          |
-| Keystone  |         Any                  | Must have          |
-
+| Keystone  |  Any                         | Must have          |
+| FIPS      | default                      | Must have          |
 
 ### Additional information 
 
@@ -38,6 +38,7 @@
 
 | Test framework   | Stage to run | Special configuration | Test case to report |
 | ---------------- | ------------ | --------------------- | :-----------------: |
+| Tempest/compute  | stage7       | Use rhel image        |       <TBD>         |
 | Tempest/whitebox | stage7       | Use rhel image        |       <TBD>         |
 
 
