@@ -646,7 +646,7 @@ of these services are not created in stage 6. Thus, if you have modified these C
 beyond when they were created (stage 4 for OpenStackControlPlane and stage 5 for
 OpenStackDataPlaneNodeSet), then your personal changes could be lost when you run
 <code>oc apply</code> as described below. To avoid this, <code>diff</code> the files and apply the changes
-using <code>oc edit</code> or <code>oc patch</code> during steps 3 and 4 below.</p>
+using <code>oc edit</code> or <code>oc patch</code> during steps 2 and 3 below.</p>
 <div class="highlight"><pre><span></span><code>diff<span class="w"> </span>-u<span class="w"> </span>stage4/openstackcontrolplane.yaml<span class="w"> </span>stage6/openstackcontrolplane.yaml
 diff<span class="w"> </span>-u<span class="w"> </span>stage5/openstackdataplanenodeset.yaml<span class="w"> </span>stage6/openstackdataplanenodeset.yaml
 </code></pre></div>
@@ -654,9 +654,6 @@ diff<span class="w"> </span>-u<span class="w"> </span>stage5/openstackdataplanen
 <ol>
 <li>Create Secrets
 <div class="highlight"><pre><span></span><code>oc<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>ceph_secret.yaml<span class="w"> </span>-f<span class="w"> </span>nova_ceph.yaml<span class="w"> </span>-f<span class="w"> </span>nova_migration_ssh_key.yaml
-</code></pre></div></li>
-<li>Create image conversion PVC
-<div class="highlight"><pre><span></span><code>oc<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>image_conversion_pvc.yaml
 </code></pre></div></li>
 <li>Update OpenStackControlPlane and wait for it to finish
 <div class="highlight"><pre><span></span><code>oc<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>openstackcontrolplane.yaml
