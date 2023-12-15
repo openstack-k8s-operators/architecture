@@ -22,7 +22,7 @@
 | Neutron   | ML2/OVN, Geneve              | Must have          |
 | Compute   | set-nova-scheduler-filter    | Must have          |
 | Glance    | Ceph/RBD                     | <TBD>              |
-| Cinder    | Ceph/RBD Backend             | Must have          |
+| Cinder    | NFS                          | Must have          |
 | Keystone  |  Any                         | Must have          |
 | FIPS      | default                      | Must have          |
 
