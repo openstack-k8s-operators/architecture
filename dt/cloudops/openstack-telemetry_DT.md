@@ -6,7 +6,7 @@
 
 | Revision | Change                | Date             |
 |--------: | :-------------------- | :--------------: |
-| v0.1     | Initial publication   | 14.12.23         |
+| v0.1     | Initial publication   | 14.12.23      |
 
 ## Node topology
 | Node role                                     | bm/vm | amount |
@@ -23,7 +23,7 @@
 | Cinder                                      | default                           | Standard           |
 | Glance                                      | default                           | Standard           |
 | Keystone                                    | default                           | Standard           |
-| Telemetry                                   | aka ceilometer, aodh & prometheus | Must have          |
+| telemetry                                   | aka ceilometer, aodh & prometheus | Must have          |
 
 ## Considerations/Constraints
 1. Telemetry should be enabled that will enable autoscaling, telemetry, prometheus deployment, grafana deployment, etc.
@@ -34,9 +34,9 @@
 
 | Test framework       | Stage to run  | Special configuration | Test case to report |
 | -------------------- | ------------  | --------------------- | :-----------------: |
-| Tempest-telemetry    | stage 10      | Use rhel image        |   TBD               |
-| Autscaling           | stage 11      | Use cirros image      |   TBD               |
-| STF Functional tests | stage 12      | Use rhel image        |   TBD               |
+| Tempest-telemetry    | stage 10      | Use rhel image        |    TBD         |
+| Autscaling           | stage 11      | Use cirros image      |    TBD         |
+| STF Functional tests | stage 12      | Use cirros image      |    TBD         |
 
 
 ## Stages
