@@ -94,7 +94,6 @@ spec:
     template:
       databaseInstance: openstack
       glanceAPI:
-        replicas: 1
         networkAttachments:
           - storage
         override:
