@@ -1,4 +1,4 @@
-# Deployed Topology 3_ocp_workers_2_compute_ipv6_geneve
+# Deployed Topology DFG-network-openstack-designate-18.0_director-rhel-virthost-3_ocp_workers_2_compute-ipv6-geneve
 
 **Based on OpenStack K8S operators from the "main" branch of the [OpenStack Operator repo](https://github.com/openstack-k8s-operators/openstack-operator/tree/78b3c876eaf9168f9d95b201997ebdc2da42fa02) on Oct 17th, 2023**
 
@@ -6,7 +6,7 @@
 
 | Revision | Change              |  Date   |
 | -------: | :------------------ | :-----: |
-|     v0.1 | Initial publication | 2023-12-12 |
+|     v0.1 | Initial publication | 2023-15-12 |
 
 ## Node topology
 
@@ -14,40 +14,25 @@
 | ------------------------------------------ | ----- | ------ |
 | Openshift master/worker combo-node cluster | vm    | 3      |
 | Compute nodes                              | vm    | 2      |
-| Networker nodes                            | vm    | 3      |
 
 ## Services, enabled features and configurations
 
 | Service   | configuration                | Lock-in coverage?  |
 |-----------|------------------------------| ------------------ |
 | Neutron   | ML2/OVN, Geneve              | Must have          |
-| Glance    | Ceph/RBD                     | Interchangable     |
-| Cinder    | Ceph/RBD Backend             | Interchangable     |
-| Keystone  | Special appliance [redacted] | Interchangable     |
-| Compute   | set-nova-scheduler-filter    | Must have          |
 | Designate | Geneve                       | Must have          |
+| Keystone  | default                      | Interchangable     |
+| Compute   | set-nova-scheduler-filter    | Must have          |
+
 ### Additional information 
-
-#### Nova
-
-#### Cinder
-
-#### OVN
-add configuration of ovn extras, ipv6
-## Considerations/Constraints
-
-1. Glance requirement dictates specific lab
-2. HSM access limited geographically
-
+We need networking protocol IPv6  
+ןפסכ
 ## Testing tree
-Tempest and Tobiko
+Tempest
 
 | Test framework   | Stage to run | Special configuration | Test case to report |
 | ---------------- | ------------ | --------------------- | :-----------------: |
-| Tempest/compute  | stage7       | Use rhel image        |      11223344       |
-| Tempest/scenairo | stage7       | Use cirros image      |      22334455       |
-| Jordan           | stage7       | None                  |      44556677       |
-| Tobiko/Faults    | stage9       | Use cirros image      |      33445566       |
+| Tempest/designate| stage7       | Use rhel image        |      Designate      |
 
 ## Stages
 
