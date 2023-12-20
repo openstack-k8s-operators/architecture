@@ -8,7 +8,7 @@ Configure OCP cluster networking for OSP
 ```bash
 oc apply -f ocp_node_0_nncp.yaml -f ocp_node_1_nncp.yaml -f ocp_node_2_nncp.yaml
 # CHANGEME: Set "osp/interface" below to the interface you are using as your OSP NIC
-oc wait nncp -l osp/interface=enp7s0 --for condition=available --timeout=300s
+oc wait nncp -l osp/interface=enp7s0 --for jsonpath='{.status.conditions[0].reason}'=SuccessfullyConfigured --timeout=300s
 ```
 2. Create NetAttachs
 ```bash
