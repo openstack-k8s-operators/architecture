@@ -20,14 +20,22 @@
 | Neutron   | ML2/OVN, Geneve              | Must have          |
 | SRIOV     | SR-IOV agent with nova config| Must have          |
 | Compute   | set-nova-scheduler-filter    | Must have          |
-| Glance    | Ceph/RBD                     | <TBD>              |
 | Cinder    | Ceph/RBD Backend             | Must have          |
-| Keystone  |         Any                  | Must have          |
 
 
-### Additional information 
+## Support services
+## Additional services required for integration testing that may not be the subject of this DT
+| Service   |  Reason                |
+| --------- | ---------------------- |
+| Glance    | Must have              |
+| Keystone  | needed by all services |
+| FIPS      | Enabled by default     |
 
 #### Nova
+| Service         | configuration |
+| ----------------| --------------|
+| Image_type      | rbd           |
+
 
 #### OVN
 add configuration of ovn extras
@@ -35,16 +43,16 @@ add configuration of ovn extras
 ## Considerations/Constraints
 
 1. Baremetal Computes that support a GPU that supports mediated devices e.g. Tesla T4 
-2. Physical setups are required
-3. Specific switch configuration
+2. Physical setups are required.
+3. PCI pass through enabled.
+4. 2M hugepage size by setting flavor property: hw:mem_page_size=2048
+5. hw:cpu_policy set for CPU pinning.
 
 ## Testing tree
 
 | Test framework   | Stage to run | Special configuration | Test case to report |
 | ---------------- | ------------ | --------------------- | :-----------------: |
 | Tempest/whitebox | stage7       | Use rhel image        |       <TBD>         |
-
-
 
 ## Stages
 
