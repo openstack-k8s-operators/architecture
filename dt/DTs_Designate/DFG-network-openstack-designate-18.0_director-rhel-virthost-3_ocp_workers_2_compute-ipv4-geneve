@@ -20,17 +20,15 @@
 | Service   | configuration                | Lock-in coverage?  |
 |-----------|------------------------------| ------------------ |
 | Designate | Geneve                       | Must have          |
-| Neutron   | ML2/OVN, Geneve              | Must have          |
 | Keystone  | Default                      | Interchangable     |
-| Compute   | set-nova-scheduler-filter    | Must have          |
 
 
 ## Testing tree
-Tempest and Tobiko
+Tempest
 
 | Test framework   | Stage to run | Special configuration | Test case to report |
 | ---------------- | ------------ | --------------------- | :-----------------: |
-| Tempest/designate| stage7       | Use rhel image        |      Designate      |
+| Tempest/designate| stage7       |                       |      Designate      |
 
 ## Stages
 
