@@ -1,0 +1,50 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+- ../../../../lib/networking/metallb
+- ../../../../lib/networking/netconfig
+- ../../../../lib/networking/nad
+- ../../../../lib/control-plane
+
+resources:
+- nncp/values.yaml
+
+# remove all the openstack components except for keystone, glance, nova
+# neutron, placement, and  deploy only the inra services needed to support
+# the deployed openstack services.
+
+patches:
+- patch: |-
+    - op: remove
+      path: /spec/ironic
+    - op: remove
+      path: /spec/ceilometer
+    - op: remove
+      path: /spec/cinder
+    - op: remove
+      path: /spec/horizon
+    - op: remove
+      path: /spec/heat
+    - op: remove
+      path: /spec/dns
+    - op: remove
+      path: /spec/manila
+    - op: remove
+      path: /spec/mariadb
+    - op: remove
+      path: /spec/octavia
+    - op: remove
+      path: /spec/redis
+    - op: remove
+      path: /spec/swift
+    # - op: remove
+    #   path: /spec/barbican
+  target:
+    kind: OpenStackControlPlane
+    name: controlplane
+    version: v1beta1
+- path: control-plane/disable.yaml
+- path: control-plane/infra.yaml
+- path: control-plane/nova.yaml
+- path: control-plane/glance.yaml

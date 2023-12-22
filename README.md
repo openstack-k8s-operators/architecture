@@ -40,3 +40,4 @@ The following VAs are available.
 - [Network Functions Virtualization with OvS DPDK](examples/va/nfv/ovs-dpdk/)
 - [Network Functions Virtualization with OvS DPDK & SRIOV](examples/va/nfv/ovs-dpdk-sriov/) [untested]
 - [OpenStack on Highly Available OpenShift Cluster](examples/va/pidone/)
+- [compute-starter-kit](examples/va/compute/compute-starter-kit)
