@@ -1,4 +1,4 @@
-# Deployed Topology 3cont-3comp-ceph-satellite
+# Deployed Topology 3cont-3comp-ceph-modify-image
 
 **Based on OpenStack K8S operators from the "main" branch of the [OpenStack Operator repo](https://github.com/openstack-k8s-operators/openstack-operator/tree/78b3c876eaf9168f9d95b201997ebdc2da42fa02) on Oct 17th, 2023**
 
