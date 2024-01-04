@@ -22,7 +22,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.2">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
     
     
       
@@ -625,7 +625,7 @@
 <li>Create NNCPs
 <div class="highlight"><pre><span></span><code>oc<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>ocp_node_0_nncp.yaml<span class="w"> </span>-f<span class="w"> </span>ocp_node_1_nncp.yaml<span class="w"> </span>-f<span class="w"> </span>ocp_node_2_nncp.yaml
 <span class="c1"># CHANGEME: Set &quot;osp/interface&quot; below to the interface you are using as your OSP NIC</span>
-oc<span class="w"> </span><span class="nb">wait</span><span class="w"> </span>nncp<span class="w"> </span>-l<span class="w"> </span>osp/interface<span class="o">=</span>enp7s0<span class="w"> </span>--for<span class="w"> </span><span class="nv">condition</span><span class="o">=</span>available<span class="w"> </span>--timeout<span class="o">=</span>300s
+oc<span class="w"> </span><span class="nb">wait</span><span class="w"> </span>nncp<span class="w"> </span>-l<span class="w"> </span>osp/interface<span class="o">=</span>enp7s0<span class="w"> </span>--for<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.status.conditions[0].reason}&#39;</span><span class="o">=</span>SuccessfullyConfigured<span class="w"> </span>--timeout<span class="o">=</span>300s
 </code></pre></div></li>
 <li>Create NetAttachs
 <div class="highlight"><pre><span></span><code>oc<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>netattach_ctlplane.yaml<span class="w"> </span>-f<span class="w"> </span>netattach_internalapi.yaml<span class="w"> </span>-f<span class="w"> </span>netattach_storage.yaml<span class="w"> </span>-f<span class="w"> </span>netattach_tenant.yaml
