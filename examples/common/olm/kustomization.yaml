@@ -1,0 +1,3 @@
+resources:
+  - ../../../lib/olm-deps
+  - ../../../lib/olm-openstack
