@@ -1,4 +1,4 @@
-# Deployed Topology DFG-upgrades-adoption-18.0-from-17.1-passed-phase2-rhev-3cont-bm-2comp-ipv4-HA-geneve-ovn-bm-3ocp
+# Deployed Topology DFG-upgrades-adoption-18.0-from-17.1-passed-phase2-rhev-3cont-2comp-ipv4-HA-geneve-ovn
 
 ## General information
 
@@ -9,9 +9,9 @@
 ## Node topology
 | Node role                                     | bm/vm | amount |
 | --------------------------------------------- | ----- | ------ |
-| Openshift master/worker combo-node cluster    | bm    | 3      |
+| Openshift master/worker combo-node cluster    | vm    | 3      |
 | Controller nodes - Source osp 17              | vm    | 3      |
-| Compute nodes    - Souce osp 17               | bm    | 2      |
+| Compute nodes    - Souce osp 17               | vm    | 2      |
 
 
 ## Services, enabled features and configurations
@@ -20,10 +20,9 @@
 
 ## Considerations/Constraints
 
-1. Source OSP controlplane on RHEV with baremetal computes.
-2. Target OCP cluster on baremetal 3 master/worker nodes.
+1. Setup on RHEV [OSP, OCP]
 2. Source openstack with HA is pre-deployed on RHEV.
-3. Native VLAN for openstack setup shared between source openstack and target openshift env.
+3. Native VLAN for openstack setup shared between source openstack and target openshift environment.
    - Nic1: RHEV network rhevm
    - Nic2: RHEV network OSP-RHV-Ctlplane
    - Nic3: RHEV network OSP-RHV-API
