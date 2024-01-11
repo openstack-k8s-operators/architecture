@@ -26,13 +26,10 @@ theme:
         name: Switch to light mode
 nav:
   - Overview: index.md
-  - Stages:
-    - stage1.md
-    - stage2.md
-    - stage3.md
-    - stage4.md
-    - stage5.md
-    - stage6.md
+  - Validated Architectures:
+    - HCI: https://github.com/openstack-k8s-operators/architecture/tree/main/examples/va/hci/README.md
+  - Deployed Topologies:
+    - None
   - Contributing:
     - contributing/documentation.md
 markdown_extensions:
