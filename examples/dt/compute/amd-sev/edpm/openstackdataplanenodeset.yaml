@@ -15,9 +15,8 @@ spec:
     - run-os
     - libvirt
     - ovn
-    - neutron-sriov
     - neutron-metadata
-    - nova-custom-sriov
+    - nova-amd
   preProvisioned: true
   nodes:
     edpm-computeamdsev-0:
@@ -70,9 +69,7 @@ spec:
         timesync_ntp_servers:
           - hostname: clock.redhat.com
         # CPU pinning settings
-        edpm_kernel_args: "default_hugepagesz=1GB hugepagesz=1G hugepages=16 intel_iommu=on iommu=pt isolcpus=4-23,28-47" # CHANGEME
-        edpm_tuned_profile: "cpu-partitioning" 
-        edpm_tuned_isolated_cores: "4-23,28-47" # CHANGEME
+        edpm_kernel_args: "hugepagesz=1GB hugepages=32 default_hugepagesz=1GB iommu=pt mem_encrypt=on kvm kvm_amd.sev=1"
         # edpm_network_config
         # These vars are edpm_network_config role vars
         edpm_network_config_hide_sensitive_logs: false
@@ -110,11 +107,6 @@ spec:
                   {{ lookup('vars', networks_lower[network] ~ '_ip') }}/{{ lookup('vars', networks_lower[network] ~ '_cidr') }}
               routes: {{ lookup('vars', networks_lower[network] ~ '_host_routes') }}
           {% endfor %}
-          - type: sriov_pf
-            name: eno4
-            numvfs: 10
-            use_dhcp: false
-            promisc: true
 
         # These vars are for the network config templates themselves and are
         # considered EDPM network defaults.

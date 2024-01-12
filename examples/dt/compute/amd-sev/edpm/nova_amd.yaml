@@ -11,3 +11,16 @@ data:
     [libvirt]
     virt_type=kvm
     hw_machine_type=x86_64=q35
+---
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneService
+metadata:
+  name: nova-amd
+spec:
+  label: dataplane-deployment-nova-amd
+  configMaps:
+    - amd-nova
+  secrets:
+    - nova-cell1-compute-config
+    - nova-migration-ssh-key
+  playbook: osp.edpm.nova
