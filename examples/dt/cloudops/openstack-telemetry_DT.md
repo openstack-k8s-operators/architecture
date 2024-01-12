@@ -23,7 +23,9 @@
 | Cinder                                      | default                           | Standard           |
 | Glance                                      | default                           | Standard           |
 | Keystone                                    | default                           | Standard           |
-| telemetry                                   | aka ceilometer, aodh & prometheus | Must have          |
+| Memcached                                   | default                           | Standard           |
+| RabbitMQ                                    | default                           | Standard           |
+| Telemetry                                   | aka ceilometer, aodh & prometheus | Must have          |
 
 ## Considerations/Constraints
 1. Telemetry should be enabled that will enable autoscaling, telemetry, prometheus deployment, grafana deployment, etc.
