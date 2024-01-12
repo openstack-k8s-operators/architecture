@@ -1,0 +1,13 @@
+#
+#test amd sev 
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: amd-sev
+data:
+  01-amd-sev.conf: |
+    [libvirt]
+    virt_type=kvm
+    hw_machine_type=x86_64=q35
