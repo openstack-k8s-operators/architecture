@@ -1,0 +1,7 @@
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneDeployment
+metadata:
+  name: openstack-edpm-ipam
+spec:
+  nodeSets:
+    - openstack-edpm-ipam

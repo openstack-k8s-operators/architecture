@@ -1,0 +1,88 @@
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneNodeSet
+metadata:
+  name: openstack-edpm-ipam
+spec:
+  services:
+    - download-cache
+    - bootstrap
+    - configure-network
+    - validate-network
+    - install-os
+    - configure-os
+    - run-os
+    - reboot-os
+    - ovn
+    - neutron-metadata
+    - libvirt
+    - nova
+    - telemetry
+    - logging
+  baremetalSetTemplate:
+    bmhLabelSelector:
+      app: openstack
+    ctlplaneInterface: enp1s0
+    cloudUserName: cloud-admin
+  nodes:
+    edpm-compute-0:
+      hostName: edpm-compute-0
+  networkAttachments:
+    - ctlplane
+  nodeTemplate:
+    ansibleSSHPrivateKeySecret: dataplane-ansible-ssh-private-key-secret
+    networks:
+      - name: CtlPlane
+        subnetName: subnet1
+        defaultRoute: true
+      - name: InternalApi
+        subnetName: subnet1
+      - name: Storage
+        subnetName: subnet1
+      - name: Tenant
+        subnetName: subnet1
+    managementNetwork: ctlplane
+    ansible:
+      ansibleVars:
+         edpm_network_config_template: |
+              ---
+              {% set mtu_list = [ctlplane_mtu] %}
+              {% for network in role_networks %}
+              {{ mtu_list.append(lookup('vars', networks_lower[network] ~ '_mtu')) }}
+              {%- endfor %}
+              {% set min_viable_mtu = mtu_list | max %}
+              network_config:
+              - type: ovs_bridge
+                name: {{ neutron_physical_bridge_name }}
+                mtu: {{ min_viable_mtu }}
+                use_dhcp: false
+                dns_servers: {{ ctlplane_dns_nameservers }}
+                domain: {{ dns_search_domains }}
+                addresses:
+                - ip_netmask: {{ ctlplane_ip }}/{{ ctlplane_subnet_cidr }}
+                routes: {{ ctlplane_host_routes }}
+                members:
+                - type: interface
+                  name: nic1
+                  mtu: {{ min_viable_mtu }}
+                  # force the MAC address of the bridge to this interface
+                  primary: true
+              {% for network in role_networks %}
+                - type: vlan
+                  mtu: {{ lookup('vars', networks_lower[network] ~ '_mtu') }}
+                  vlan_id: {{ lookup('vars', networks_lower[network] ~ '_vlan_id') }}
+                  addresses:
+                  - ip_netmask:
+                      {{ lookup('vars', networks_lower[network] ~ '_ip') }}/{{ lookup('vars', networks_lower[network] ~ '_cidr') }}
+                  routes: {{ lookup('vars', networks_lower[network] ~ '_host_routes') }}
+              {% endfor %}
+         # These vars are for the network config templates themselves and are
+         # considered EDPM network defaults.
+         neutron_physical_bridge_name: br-ex
+         neutron_public_interface_name: eth0
+         # edpm_nodes_validation
+         edpm_nodes_validation_validate_controllers_icmp: false
+         edpm_nodes_validation_validate_gateway_icmp: false
+         gather_facts: false
+         enable_debug: false
+         # edpm firewall, change the allowed CIDR if needed
+         edpm_sshd_allowed_ranges: ['192.168.111.0/24']
