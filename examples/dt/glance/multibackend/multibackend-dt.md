@@ -5,12 +5,8 @@
 | v0.1     | Initial publication   | 2024-01-11 |
 
 ## Purpose
-Glance have support for multiple backend stores.
-This DT will test Glance when running with multibackend topology on central site.
-Stores:
- Stores1(Default): CEPH 
- Stores2: Cinder
- Stores3: Swift
+Focusing on testing glance with multi backends over ceph, cinder, 
+swift and additional testing for nova.
 
 ## Node topology
 | Node role                                     | bm/vm | amount |
