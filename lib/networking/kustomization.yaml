@@ -245,15 +245,6 @@ replacements:
 - source:
     kind: ConfigMap
     name: network-values
-    fieldPath: data.storagemgmt.dnsDomain
-  targets:
-  - select:
-      kind: NetConfig
-    fieldPaths:
-    - spec.networks.[name=StorageMgmt].dnsDomain
-- source:
-    kind: ConfigMap
-    name: network-values
     fieldPath: data.tenant.dnsDomain
   targets:
   - select:
@@ -301,15 +292,6 @@ replacements:
 - source:
     kind: ConfigMap
     name: network-values
-    fieldPath: data.storagemgmt.mtu
-  targets:
-  - select:
-      kind: NetConfig
-    fieldPaths:
-    - spec.networks.[name=StorageMgmt].mtu
-- source:
-    kind: ConfigMap
-    name: network-values
     fieldPath: data.tenant.mtu
   targets:
   - select:
@@ -354,15 +336,6 @@ replacements:
       kind: NetConfig
     fieldPaths:
     - spec.networks.[name=Storage].subnets
-- source:
-    kind: ConfigMap
-    name: network-values
-    fieldPath: data.storagemgmt.subnets
-  targets:
-  - select:
-      kind: NetConfig
-    fieldPaths:
-    - spec.networks.[name=StorageMgmt].subnets
 - source:
     kind: ConfigMap
     name: network-values
