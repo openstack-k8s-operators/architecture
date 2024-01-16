@@ -9,4 +9,4 @@ It may also be used to create deployed topologies
 The following VAs are available.
 
 - [Hyperconverged OpenStack and Ceph](examples/va/hci/)
-- [Network Function Virtualization with SRIOV](examples/va/nfv/sriov/)
+- [Network Functions Virtualization with SRIOV](examples/va/nfv/sriov/)
