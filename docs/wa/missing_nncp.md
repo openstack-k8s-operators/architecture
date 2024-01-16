@@ -1,7 +1,7 @@
 # Missing NNCPs
 
-The following command defines the OpenStack control plane and its
-dependent CRs.
+The kustomize command builds and results in the OpenStack control plane definitions and its
+dependent Custom Resources (CR).
 ```bash
 kustomize build architecture/examples/va/hci > control-plane.yaml
 ```
