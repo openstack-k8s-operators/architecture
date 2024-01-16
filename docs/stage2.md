@@ -1,1 +1,0 @@
-../validated_arch_1/stage2/README.md
