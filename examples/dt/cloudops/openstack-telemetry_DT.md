@@ -36,9 +36,8 @@
 
 | Test framework       | Stage to run  | Special configuration | Test case to report |
 | -------------------- | ------------  | --------------------- | :-----------------: |
-| Tempest-telemetry    | stage 10      | Use rhel image        |    TBD         |
-| Autscaling           | stage 11      | Use cirros image      |    TBD         |
-| STF Functional tests | stage 12      | Use cirros image      |    TBD         |
+| Autoscaling          | stage 10      | Use cirros image      |    TBD         |
+| Tempest-telemetry    | stage 11      | Use rhel image        |    TBD         |
 
 
 ## Stages
