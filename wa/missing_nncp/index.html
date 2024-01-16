@@ -665,13 +665,15 @@
 
 
 <h1 id="missing-nncps">Missing NNCPs<a class="headerlink" href="#missing-nncps" title="Permanent link">#</a></h1>
-<p>The kustomize command builds and results in the OpenStack control plane definitions and its
-dependent Custom Resources (CR).
+<p>The kustomize command builds and results in the OpenStack control
+plane definitions and its dependent Custom Resources (CR).
 <div class="highlight"><pre><span></span><code>kustomize<span class="w"> </span>build<span class="w"> </span>architecture/examples/va/hci<span class="w"> </span>&gt;<span class="w"> </span>control-plane.yaml
 </code></pre></div>
 The <code>control-plane.yaml</code> file contains CRs for both <code>NMState</code> and
-<code>NodeNetworkConfigurationPolicy</code> (NNCP). When  <code>oc apply -f control-plane.yaml</code> is read, OpenShift will try to create the NNCPs while <code>NMState</code>
-Custom Resource Definitions (CRD) are still installing and produce a message noting that the resource mappings are not found:
+<code>NodeNetworkConfigurationPolicy</code> (NNCP). When  <code>oc apply -f
+control-plane.yaml</code> is read, OpenShift will try to create the NNCPs
+while <code>NMState</code> Custom Resource Definitions (CRD) are still installing
+and produce a message noting that the resource mappings are not found:
 <div class="highlight"><pre><span></span><code>nmstate.nmstate.io/nmstate created
 [resource mapping not found for name:
 &quot;ostest-master-0&quot; namespace: &quot;openstack&quot; from &quot;control-plane.yaml&quot;:
@@ -684,18 +686,49 @@ in version &quot;nmstate.io/v1&quot;
 Retrying <code>oc apply -f contol-plane.yaml</code> a few seconds later is likely to
 resolve the problem.</p>
 <h2 id="alternative-approach">Alternative Approach<a class="headerlink" href="#alternative-approach" title="Permanent link">#</a></h2>
-<p>You can create Custom Resource (CR) files with less components and wait
-before applying each CR file. For example, the file <code>nncp.yaml</code> could contain
-only <code>NodeNetworkConfigurationPolicy</code> CRs and <code>NMState</code> definitions. Other
-deployment related CRs could exist in another file such as
-<code>deploy.yaml</code>. You can generate these files using kustomize.</p>
+<p>It's also possible to create CR files with less components and wait
+before applying each CR file. E.g. the file <code>nncp.yaml</code> would contain
+only <code>NodeNetworkConfigurationPolicy</code> CRs and <code>NMState</code> and other
+deployment related CRs could exist in another file like
+<code>deploy.yaml</code>. The following process may be used to do generate these
+files using kustomize.</p>
 <ul>
-<li>Modify the <a href="https://github.com/openstack-k8s-operators/architecture/blob/main/va/hci/kustomization.yaml">va/hci/kustomization.yaml</a> file for your environment
-so that the last two lines contain the deploy component configuration:
-```yaml
-components:</li>
-<li>../../lib/deploy</li>
+<li>Modify the
+<a href="https://github.com/openstack-k8s-operators/architecture/blob/main/va/hci/kustomization.yaml">va/hci/kustomization.yaml</a>
+file so that the last two lines contain only the deploy component
+configuration:
+<div class="highlight"><pre><span></span><code><span class="nt">components</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">../../lib/deploy</span>
+</code></pre></div></li>
+<li>Generate a file with only <code>MetalLB</code> and <code>NMState</code> CRs:
+<div class="highlight"><pre><span></span><code>kustomize<span class="w"> </span>build<span class="w"> </span>architecture/examples/va/hci<span class="w"> </span>&gt;<span class="w"> </span>deploy.yaml
+</code></pre></div></li>
+<li>Modify the
+<a href="https://github.com/openstack-k8s-operators/architecture/blob/main/va/hci/kustomization.yaml">va/hci/kustomization.yaml</a>
+file so that the last two lines contain only the nncp component
+configuration:
+<div class="highlight"><pre><span></span><code><span class="nt">components</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">../../lib/nncp</span>
+</code></pre></div></li>
+<li>Generate a file with only <code>NNCP</code> CRs:
+<div class="highlight"><pre><span></span><code>kustomize<span class="w"> </span>build<span class="w"> </span>architecture/examples/va/hci<span class="w"> </span>&gt;<span class="w"> </span>nncp.yaml
+</code></pre></div>
+The above process may be continued for each component.</li>
 </ul>
+<p>Note that <a href="https://github.com/openstack-k8s-operators/architecture/blob/main/va/hci/kustomization.yaml">va/hci/kustomization.yaml</a>
+is not the same file as
+<a href="https://github.com/openstack-k8s-operators/architecture/blob/main/examples/va/hci/kustomization.yaml">examples/va/hci/kustomization.yaml</a>.
+<code>/example/va/hci</code> is a specific example of a given VA where as
+<code>/va/hci</code> is a generic HCI VA that may be customised and shared in
+multiple examples or composed to make a larger VA.</p>
+<p>This process will work for VAs (and DTs) besides HCI, but the paths
+may be different. E.g.
+<a href="https://github.com/openstack-k8s-operators/architecture/blob/main/examples/va/nfv/sriov/kustomization.yaml">examples/va/nfv/sriov/kustomization.yaml</a>
+differs from
+<a href="https://github.com/openstack-k8s-operators/architecture/blob/main/va/nfv/sriov/kustomization.yaml">va/nfv/sriov/kustomization.yaml</a>
+and the later is in an <code>nfv</code> subdirectory
+so each component is referred to using
+<code>- ../../../lib/</code> instead of <code>- ../../lib/</code>.</p>
 
 
 
