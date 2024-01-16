@@ -6,9 +6,8 @@ dependent Custom Resources (CR).
 kustomize build architecture/examples/va/hci > control-plane.yaml
 ```
 The `control-plane.yaml` file contains CRs for both `NMState` and
-`NodeNetworkConfigurationPolicy` (NNCP). When `oc apply -f` is passed
-this file, OpenShift might try to create the NNCPs while `NMState`
-CRDs are still installing and produce the following message.
+`NodeNetworkConfigurationPolicy` (NNCP). When  `oc apply -f control-plane.yaml` is read, OpenShift will try to create the NNCPs while `NMState`
+Custom Resource Definitions (CRD) are still installing and produce a message noting that the resource mappings are not found:
 ```
 nmstate.nmstate.io/nmstate created
 [resource mapping not found for name:
