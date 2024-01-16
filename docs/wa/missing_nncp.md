@@ -23,12 +23,11 @@ resolve the problem.
 
 ## Alternative Approach
 
-It's also possible to create CR files with less components and wait
-before applying each CR file. E.g. the file `nncp.yaml` would contain
-only `NodeNetworkConfigurationPolicy` CRs and `NMState` and other
-deployment related CRs could exist in another file like
-`deploy.yaml`. The following process may be used to do generate these
-files using kustomize.
+You can create Custom Resource (CR) files with less components and wait
+before applying each CR file. For example, the file `nncp.yaml` could contain
+only `NodeNetworkConfigurationPolicy` CRs and `NMState` definitions. Other
+deployment related CRs could exist in another file such as
+`deploy.yaml`. You can generate these files using kustomize.
 
 - Edit
 [va/hci/kustomization.yaml](https://github.com/openstack-k8s-operators/architecture/blob/main/va/hci/kustomization.yaml)
