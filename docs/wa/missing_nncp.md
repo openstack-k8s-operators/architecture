@@ -18,8 +18,8 @@ resource mapping not found for name: "ostest-master-1" namespace: "openstack"
 from "control-plane.yaml": no matches for kind "NodeNetworkConfigurationPolicy"
 in version "nmstate.io/v1"
 ```
-Retrying `oc apply -f contol-plane.yaml` a few seconds later should
-resolve the problem however.
+Retrying `oc apply -f contol-plane.yaml` a few seconds later is likely to
+resolve the problem.
 
 ## Alternative Approach
 
