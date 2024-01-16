@@ -28,7 +28,7 @@ nav:
   - Overview: index.md
   - Validated Architectures:
     - HCI: https://github.com/openstack-k8s-operators/architecture/tree/main/examples/va/hci/README.md
-    - SRIOV: https://github.com/openstack-k8s-operators/architecture/blob/main/examples/va/nfv/sriov/README.md
+    - NFV SRIOV: https://github.com/openstack-k8s-operators/architecture/blob/main/examples/va/nfv/sriov/README.md
   - Deployed Topologies:
     - None
   - Workarounds:
