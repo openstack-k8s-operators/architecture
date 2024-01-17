@@ -1,0 +1,123 @@
+# local-config: referenced, but not emitted by kustomize
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: network-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+data:
+  # nodes
+  node_0:
+    name: rhevsno
+    internalapi_ip: 172.15.2.105
+    tenant_ip: 172.15.0.105
+    ctlplane_ip: 192.168.23.105
+    external_ip: 10.4.0.100
+
+  # networks
+  ctlplane:
+    dnsDomain: ctlplane.redhat.local
+    subnets:
+      - allocationRanges:
+          - end: 192.168.23.15
+            start: 192.168.23.4
+        cidr: 192.168.23.0/24
+        gateway: 192.168.23.1
+        name: subnet1
+    prefix-length: 24
+    iface: enp2s0
+    mtu: 9000
+    lb_addresses:
+    - 192.168.23.80-192.168.23.90
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "ctlplane",
+        "type": "macvlan",
+        "master": "enp2s0",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "192.168.23.0/24",
+          "range_start": "192.168.23.30",
+          "range_end": "192.168.23.70"
+        }
+      }
+  internalapi:
+    dnsDomain: internalapi.redhat.local
+    subnets:
+      - allocationRanges:
+          - end: 172.15.2.15
+            start: 172.15.2.4
+        cidr: 172.15.2.0/24
+        name: subnet1
+        vlan: 20
+    mtu: 1500
+    prefix-length: 24
+    iface: enp8s0
+    vlan: 20
+    lb_addresses:
+    - 172.15.2.80-172.15.2.90
+    net-attach-def:  |
+      {
+        "cniVersion": "0.3.1",
+        "name": "internalapi",
+        "type": "macvlan",
+        "master": "enp8s0",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "172.15.2.0/24",
+          "range_start": "172.15.2.30",
+          "range_end": "172.15.2.70"
+        }
+      }
+  tenant:
+    dnsDomain: tenant.redhat.local
+    subnets:
+      - allocationRanges:
+          - end: 172.15.0.15
+            start: 172.15.0.4
+        cidr: 172.15.0.0/24
+        name: subnet1
+        vlan: 50
+    mtu: 1500
+    prefix-length: 24
+    iface: enp7s0
+    vlan: 50
+    lb_addresses:
+    - 172.15.0.80-172.15.0.90
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "tenant",
+        "type": "macvlan",
+        "master": "enp7s0",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "172.15.0.0/24",
+          "range_start": "172.15.0.30",
+          "range_end": "172.15.0.70"
+        }
+      }
+  external:
+    dnsDomain: external.redhat.local
+    subnets:
+      - allocationRanges:
+          - end: 10.4.0.15
+            start: 10.4.0.4
+        cidr: 10.4.0.0/24
+        gateway: 10.4.0.1
+        name: subnet1
+    mtu: 1500
+    prefix-length: 24
+    iface: enp9s0
+    vlan: 10
+
+  dns-resolver:
+    config:
+      server:
+        - 10.37.136.1
+      search: []
+    options:
+      - key: server
+        values:
+          - 10.37.136.1

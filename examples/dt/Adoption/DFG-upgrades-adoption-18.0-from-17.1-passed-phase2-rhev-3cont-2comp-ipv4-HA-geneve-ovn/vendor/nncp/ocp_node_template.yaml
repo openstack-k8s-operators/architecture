@@ -1,0 +1,66 @@
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: _ignored_
+spec:
+  desiredState:
+    dns-resolver:
+      config:
+        search: []
+        server: []
+    interfaces:
+    - description: internalapi interface
+      ipv4:
+        address:
+        - ip: _replaced_
+          prefix-length: _replaced_
+        enabled: true
+        dhcp: false
+      ipv6:
+        enabled: false
+      name: _replaced_
+      state: up
+      type: ethernet
+      mtu: 1500
+    - description: external interface
+      ipv4:
+        address:
+        - ip: _replaced_
+          prefix-length: _replaced_
+        enabled: true
+        dhcp: false
+      ipv6:
+        enabled: false
+      name: _replaced_
+      state: up
+      type: ethernet
+      mtu: 1500
+    - description: tenant interface
+      ipv4:
+        address:
+        - ip: _replaced_
+          prefix-length: _replaced_
+        enabled: true
+        dhcp: false
+      ipv6:
+        enabled: false
+      name: _replaced_
+      state: up
+      type: ethernet
+      mtu: 1500
+    - description: ctlplane interface
+      ipv4:
+        address:
+        - ip: _replaced_
+          prefix-length: _replaced_
+        enabled: true
+        dhcp: false
+      ipv6:
+        enabled: false
+      name: _replaced_
+      state: up
+      type: ethernet
+      mtu: 1500
+  nodeSelector:
+    kubernetes.io/hostname: _replaced_
+    node-role.kubernetes.io/worker: ""

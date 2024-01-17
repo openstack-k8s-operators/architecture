@@ -15,12 +15,19 @@
 
 
 ## Services, enabled features and configurations
-| Service                                     | configuration                                                 | Lock-in coverage?  |
-| ------------------------------------------- | -------------------------------                               | ------------------ |
+| Service                                     | configuration                   | Lock-in coverage?  |
+| ------------------------------------------- | ------------------------------- | ------------------ |
+| RabbitMQ                                    | default                         | Must have          |
+| OVN                                         | default                         | Must have          |
+| galara                                      | default                         | Must have          |
+| Keystone                                    | default                         | Must have          |
+| placement                                   | default                         | Must have          |
+| nova                                        | default                         | Must have          |
+| neutron                                     | default                         | Must have          |
 
 ## Considerations/Constraints
 
-1. Setup on RHEV [OSP, OCP]
+1. Single node openshift cluster (SNO) on RHEV.
 2. Source openstack with HA is pre-deployed on RHEV.
 3. Native VLAN for openstack setup shared between source openstack and target openshift environment.
    - Nic1: RHEV network rhevm

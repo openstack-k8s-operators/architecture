@@ -1,0 +1,196 @@
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+resources:
+- ocp_nodes_nncp.yaml
+
+patches:
+- target:
+    kind: NodeNetworkConfigurationPolicy
+    labelSelector: "osp/nncm-config-type=standard"
+  path: ocp_node_template.yaml
+
+replacements:
+# Common network interfaces and vlans
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.internalapi.mtu
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+    fieldPaths:
+    - spec.desiredState.interfaces.[type=ethernet].mtu
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.tenant.mtu
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+    fieldPaths:
+    - spec.desiredState.interfaces.[type=ethernet].mtu
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.ctlplane.mtu
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+    fieldPaths:
+    - spec.desiredState.interfaces.[type=ethernet].mtu
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.external.mtu
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+    fieldPaths:
+    - spec.desiredState.interfaces.[type=ethernet].mtu
+# Interface type is ethernet (not vlan)
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.internalapi.iface
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+    fieldPaths:
+    - spec.desiredState.interfaces.[type=ethernet].name
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.tenant.iface
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+    fieldPaths:
+    - spec.desiredState.interfaces.[type=ethernet].name
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.ctlplane.iface
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+    fieldPaths:
+    - spec.desiredState.interfaces.[type=ethernet].name
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.external.iface
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+    fieldPaths:
+    - spec.desiredState.interfaces.[type=ethernet].name
+
+# Static Node IPs: node-0
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.node_0.internalapi_ip
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+      name: node-0
+    fieldPaths:
+    - spec.desiredState.interfaces.[type=ethernet].ipv4.address.0.ip
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.node_0.tenant_ip
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+      name: node-0
+    fieldPaths:
+    - spec.desiredState.interfaces.[type=ethernet].ipv4.address.0.ip
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.node_0.ctlplane_ip
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+      name: node-0
+    fieldPaths:
+    - spec.desiredState.interfaces.[type=ethernet].ipv4.address.0.ip
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.node_0.external_ip
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+      name: node-0
+    fieldPaths:
+    - spec.desiredState.interfaces.[type=ethernet].ipv4.address.0.ip
+
+# prefix-length: node-0
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.ctlplane.prefix-length
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+      name: node-0
+    fieldPaths:
+    - spec.desiredState.interfaces.[type=ethernet].ipv4.address.0.prefix-length
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.internalapi.prefix-length
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+      name: node-0
+    fieldPaths:
+    - spec.desiredState.interfaces.[type=ethernet].ipv4.address.0.prefix-length
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.tenant.prefix-length
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+      name: node-0
+    fieldPaths:
+    - spec.desiredState.interfaces.[type=ethernet].ipv4.address.0.prefix-length
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.external.prefix-length
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+      name: node-0
+    fieldPaths:
+    - spec.desiredState.interfaces.[type=ethernet].ipv4.address.0.prefix-length
+
+# Node names
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.node_0.name
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+      name: node-0
+    fieldPaths:
+    - metadata.name
+    - spec.nodeSelector.[kubernetes.io/hostname]
+
+# DNS
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.dns-resolver.config
+  targets:
+  - select:
+      kind: NodeNetworkConfigurationPolicy
+    fieldPaths:
+    - spec.desiredState.dns-resolver.config
+
