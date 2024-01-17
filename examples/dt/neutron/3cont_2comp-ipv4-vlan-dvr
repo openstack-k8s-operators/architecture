@@ -1,10 +1,11 @@
-# Deployed Topology 3cont_2comp_1ipa-ipv4-vlan-dvr-ovn
+# Deployed Topology 3cont_2comp-ipv4-vlan-dvr-ovn
 
 ## General information
 
 | Revision | Change              |  Date      |
 | -------: | :------------------ | :-----:    |
 |     v0.1 | Initial publication | 2024-01-10 |
+|     v0.2 | Refreshed doc       | 2024-02-29 |
 
 ## Node topology
 
@@ -18,7 +19,7 @@
 
 | Service   | configuration                | Lock-in coverage?  |
 | --------- | ---------------------------- | ------------------ |
-| Neutron   | ML2/OVN, VLAN                | Must have          |
+| Neutron   | ML2/OVN                      | Must have          |
 | Glance    | default                      | Must have          |
 | Cinder    | default                      | Must have          |
 | Keystone  | default                      | Must have          |
@@ -26,15 +27,15 @@
 | Compute   | DifferentHostFilter          | Must have          |
 
 ### Additional information 
-This DT uses FreeIPA
+tenant_network = vlan
+public_network = flat
+This DT is mapped to unified job - uni-delta
 
 #### Nova
 
 #### Cinder
 
 #### OVN
-add configuration of ipv4
---network-force-compute-dvr yes
 add configuration to enable compute node to access external network via br-ex
 
 ## Considerations/Constraints
@@ -45,8 +46,8 @@ Tempest and Rally
 
 | Test framework   | Stage to run | Special configuration | Test case to report |
 | ---------------- | ------------ | --------------------- | :-----------------: |
-| Tempest/neutron  | stage7       | Use rhel image        |      11223344       |
-| Tempest/scenairo | stage7       | Use cirros image      |      22334455       |
+| Tempest/neutron  | stage6       | Use rhel image        |      11223344       |
+| Tempest/scenario | stage6       | Use cirros image      |      22334455       |
 
 ## Stages
 
@@ -56,8 +57,7 @@ All stages must be executed in the order listed below. Everything is required un
 2. [Install the OpenStack K8S operators](stage2)
 3. [Configuring networking on the OCP nodes](stage3)
 4. [Configure and deploy the control plane](stage4)
-5. [Configure and deploy the initial data plane to prepare for CephHCI installation](stage5)
-6. [Update the control plane and finish deploying the data plane after CephHCI has been installed](stage6)
-7. [Execute non destructive testing](stage7)
-8. [Execute load testing](stage8)
-9. [Destructive testing](stage9)
+5. [Post Tasks] Create necessary resources for testing (stage5)
+6. [Execute non destructive testing](stage6)
+7. [Execute load testing](stage7)
+8. [Destructive testing](stage8)
