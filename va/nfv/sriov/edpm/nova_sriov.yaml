@@ -13,20 +13,14 @@ kind: ConfigMap
 metadata:
   name: cpu-pinning-nova
 data:
-  25-cpu-pinning-nova.conf: |
-    [compute]
-    cpu_shared_set = 0-3,24-27 # CHANGEME
-    cpu_dedicated_set = 8-23,32-47 # CHANGEME
-    reserved_host_memory_mb = 4096
+  25-cpu-pinning-nova.conf: _replaced_
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: sriov-nova
 data:
-  03-sriov-nova.conf: |
-    [pci]
-    passthrough_whitelist = { "devname":"eno4", "physical_network":"sriov-phy4", "trusted":"true" } # CHANGEME
+  03-sriov-nova.conf: _replaced_
 ---
 apiVersion: dataplane.openstack.org/v1beta1
 kind: OpenStackDataPlaneService

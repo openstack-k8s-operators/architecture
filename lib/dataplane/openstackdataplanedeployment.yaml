@@ -1,8 +1,8 @@
 apiVersion: dataplane.openstack.org/v1beta1
 kind: OpenStackDataPlaneDeployment
 metadata:
-  name: edpm-sriov-deployment
+  name: edpm-deployment
   namespace: openstack
 spec:
   nodeSets:
-  - openstack-edpm-sriov
+  - openstack-edpm
