@@ -1,0 +1,66 @@
+# Deployed Topology 3cont_2comp_3net-ipv4-geneve-composable-vlan-provider-network
+
+## General information
+
+| Revision | Change              |  Date      |
+| -------: | :------------------ | :-----:    |
+|     v0.1 | Initial publication | 2024-01-16 |
+
+## Node topology
+
+| Node role                                  | bm/vm | amount |
+| ------------------------------------------ | ----- | ------ |
+| Openshift master/worker combo-node cluster | vm    | 3      |
+| Compute nodes                              | vm    | 2      |
+| Networker                                  | vm    | 3      |
+| CFME tester                                | vm    | 1      |
+
+
+## Services, enabled features and configurations
+
+| Service   | configuration                | Lock-in coverage?  |
+| --------- | ---------------------------- | ------------------ |
+| Neutron   | ML2/OVN, VLAN                | Must have          |
+|           | performance                  |                    |
+| Glance    | default                      | Must have          |
+| Cinder    | cinder_backup                | Must have          |
+| Keystone  | default                      | Must have          |
+| TLS       | default                      | Must have          |
+| Compute   | DifferentHostFilter          | Must have          |
+|           | neutron_azs_ovn              |                    |
+
+
+### Additional information 
+composable_roles
+
+#### Nova
+
+#### Cinder
+
+#### OVN
+add configuration of ipv4, OVNEncapTos=inherit
+
+## Considerations/Constraints
+
+
+## Testing tree
+Tempest and Rally
+
+| Test framework   | Stage to run | Special configuration | Test case to report |
+| ---------------- | ------------ | --------------------- | :-----------------: |
+| Tempest/neutron  | stage7       | Use rhel image        |      11223344       |
+| Tempest/scenairo | stage7       | Use cirros image      |      22334455       |
+
+## Stages
+
+All stages must be executed in the order listed below. Everything is required unless otherwise indicated.
+
+1. [Install dependencies for the OpenStack K8S operators](stage1)
+2. [Install the OpenStack K8S operators](stage2)
+3. [Configuring networking on the OCP nodes](stage3)
+4. [Configure and deploy the control plane](stage4)
+5. [Configure and deploy the initial data plane to prepare for CephHCI installation](stage5)
+6. [Update the control plane and finish deploying the data plane after CephHCI has been installed](stage6)
+7. [Execute non destructive testing](stage7)
+8. [Execute load testing](stage8)
+9. [Destructive testing](stage9)
