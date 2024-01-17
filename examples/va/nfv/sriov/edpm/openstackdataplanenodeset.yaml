@@ -41,6 +41,7 @@ spec:
     - install-os
     - configure-os
     - run-os
+    - reboot-os
     - libvirt
     - ovn
     - neutron-sriov
