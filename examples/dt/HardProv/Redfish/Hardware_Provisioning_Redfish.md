@@ -17,11 +17,13 @@
 
 
 ## Services, enabled features and configurations
-| Service                                     | configuration                   | Lock-in coverage?  |
-| ------------------------------------------- | ------------------------------- | ------------------ |
-| Nova                    |  default                  |  Must have        |
-| Keystone                |  default                  |  Must have        |
+| Service                 | configuration             | Lock-in coverage? |
+| ----------------------- | ------------------------- | ----------------- |
 | Glance                  |  default                  |  Must have        |
+| Ironic                  |  default                  |  Must have        |
+| Keystone                |  default                  |  Must have        |
+| Neutron                 |  default                  |  Must have        |
+| Nova                    |  default                  |  Must have        |
 
 
 ## Considerations/Constraints
@@ -44,8 +46,8 @@
 2. [Install the OpenStack K8S operators](stage2)
 3. [Configuring networking on the OCP nodes](stage3)
 4. [Configure and deploy the control plane](stage4)
-5. [Configure and deploy the initial data plane to prepare for CephHCI installation](stage5)
-6. [Update the control plane and finish deploying the data plane after CephHCI has been installed](stage6)
+5. ~~[Configure and deploy the initial data plane to prepare for CephHCI installation](stage5)~~
+6. ~~[Update the control plane and finish deploying the data plane after CephHCI has been installed](stage6)~~
 7. [Execute non destructive testing](stage7)
 8. [Execute load testing](stage8)
 9. [Destructive testing](stage9)
