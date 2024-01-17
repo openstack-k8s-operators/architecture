@@ -7,6 +7,8 @@
 | Revision | Change                | Date             |
 |--------: | :-------------------- | :--------------: |
 | v0.1     | Initial publication   | 2023-12-18      |
+| v0.2     | Suggested changes  frpm PR54   | 2024-01-17 |
+
 
 ## Node topology
 | Node role                                     | bm/vm | amount |
