@@ -10,6 +10,7 @@
 | Node role                                     | bm/vm | amount |
 | --------------------------------------------- | ----- | ------ |
 | Openshift master/worker combo-node cluster    | vm    | 3      |
+| Undercloud node - Source osp 17               | vm    | 1      |
 | Controller nodes - Source osp 17              | vm    | 3      |
 | Compute nodes    - Souce osp 17               | vm    | 2      |
 
@@ -19,7 +20,7 @@
 | ------------------------------------------- | ------------------------------- | ------------------ |
 | RabbitMQ                                    | default                         | Must have          |
 | OVN                                         | default                         | Must have          |
-| galara                                      | default                         | Must have          |
+| galera                                      | default                         | Must have          |
 | Keystone                                    | default                         | Must have          |
 | placement                                   | default                         | Must have          |
 | nova                                        | default                         | Must have          |
