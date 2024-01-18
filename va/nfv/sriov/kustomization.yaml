@@ -35,15 +35,3 @@ replacements:
     - spec.neutron.template.customServiceConfig
     options:
       create: true
-# Nova control plane SRIOV customization
-- source:
-    kind: ConfigMap
-    name: service-values
-    fieldPath: data.nova.scheduler.customServiceConfig
-  targets:
-  - select:
-      kind: OpenStackControlPlane
-    fieldPaths:
-    - spec.nova.template.schedulerServiceTemplate.customServiceConfig
-    options:
-      create: true

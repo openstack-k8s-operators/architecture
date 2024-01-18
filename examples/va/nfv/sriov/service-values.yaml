@@ -12,9 +12,4 @@ data:
       mechanism_drivers = ovn,sriovnicswitch
       [ml2_type_vlan]
       network_vlan_ranges = sriov-phy4
-  nova:
-    scheduler:
-      customServiceConfig: |
-        [filter_scheduler]
-        enabled_filters = AvailabilityZoneFilter, ComputeFilter, ComputeCapabilitiesFilter, ImagePropertiesFilter, ServerGroupAntiAffinityFilter, ServerGroupAffinityFilter, PciPassthroughFilter, AggregateInstanceExtraSpecsFilter
-        available_filters = nova.scheduler.filters.all_filters
+
