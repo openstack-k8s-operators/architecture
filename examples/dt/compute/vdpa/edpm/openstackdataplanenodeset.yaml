@@ -1,7 +1,9 @@
+
+
 apiVersion: dataplane.openstack.org/v1beta1
 kind: OpenStackDataPlaneNodeSet
 metadata:
-  name: openstack-edpm-amd-sev
+  name: openstack-edpm-vdpa
 spec:
   env:
     - name: ANSIBLE_FORCE_COLOR
@@ -16,13 +18,13 @@ spec:
     - libvirt
     - ovn
     - neutron-metadata
-    - nova-amd
+    - nova-custom-vdpa
   preProvisioned: true
   nodes:
-    edpm-computeamdsev-0:
+    edpm-compute-0:
       ansible:
         ansibleHost: 192.168.122.100 # CHANGEME
-      hostName: edpm-computeamdsev-0
+      hostName: edpm-compute-0
       networks:
       - defaultRoute: true
         fixedIP: 192.168.122.100 # CHANGEME
@@ -34,10 +36,10 @@ spec:
         subnetName: subnet1
       - name: Tenant
         subnetName: subnet1
-    edpm-computeamdsev-1:
+    edpm-compute-1:
       ansible:
         ansibleHost: 192.168.122.101 # CHANGEME
-      hostName: edpm-computeamdsev-1
+      hostName: edpm-compute-1
       networks:
       - defaultRoute: true
         fixedIP: 192.168.122.101 # CHANGEME
@@ -69,7 +71,9 @@ spec:
         timesync_ntp_servers:
           - hostname: clock.redhat.com
         # CPU pinning settings
-        edpm_kernel_args: "hugepagesz=1GB hugepages=32 default_hugepagesz=1GB iommu=pt mem_encrypt=on kvm kvm_amd.sev=1"
+        edpm_kernel_args: "default_hugepagesz=1GB hugepagesz=1G hugepages=16 intel_iommu=on iommu=pt isolcpus=4-23,28-47" # CHANGEME
+        edpm_tuned_profile: "cpu-partitioning"
+        edpm_tuned_isolated_cores: "4-23,28-47" # CHANGEME
         # edpm_network_config
         # These vars are edpm_network_config role vars
         edpm_network_config_hide_sensitive_logs: false

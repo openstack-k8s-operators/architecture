@@ -1,8 +1,8 @@
 apiVersion: dataplane.openstack.org/v1beta1
 kind: OpenStackDataPlaneDeployment
 metadata:
-  name: edpm-amd-sev-deployment
+  name: edpm-vdpa-deployment
   namespace: openstack
 spec:
   nodeSets:
-  - openstack-edpm-amd-sev
+  - openstack-edpm-vdpa

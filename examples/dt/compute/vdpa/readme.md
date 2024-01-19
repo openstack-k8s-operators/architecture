@@ -18,6 +18,7 @@
 | Service   | configuration                | Lock-in coverage?  |
 | --------- | ---------------------------- | ------------------ |
 | Neutron   | ML2/OVN, Geneve              | Must have          |
+| vnic_type | vdpa                         | Must have          |
 | Compute   | set-nova-scheduler-filter    | Must have          |
 
 
@@ -38,16 +39,12 @@
 #### OVN
 add configuration of ovn extras
 
-## Considerations/Constraints
-
-1. Baremetal Computes must be AMD Hardware capable of supporting SEV
-2. Physical setups are required.
 
 ## Testing tree
 
 | Test framework   | Stage to run | Special configuration | Test case to report |
 | ---------------- | ------------ | --------------------- | :-----------------: |
-| Tempest/whitebox | stage7       | Use cirros image      |       <TBD>         |
+| Tempest/whitebox | stage7       | Use rhel image        |       <TBD>         |
 
 ## Stages
 
