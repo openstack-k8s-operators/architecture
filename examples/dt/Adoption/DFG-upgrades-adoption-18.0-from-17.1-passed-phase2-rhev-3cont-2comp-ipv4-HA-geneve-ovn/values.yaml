@@ -8,11 +8,23 @@ metadata:
 data:
   # nodes
   node_0:
-    name: rhevsno
+    name: master-0
     internalapi_ip: 172.15.2.105
     tenant_ip: 172.15.0.105
     ctlplane_ip: 192.168.23.105
-    external_ip: 10.4.0.100
+    external_ip: 10.4.0.101
+  node_1:
+    name: master-1
+    internalapi_ip: 172.15.2.106
+    tenant_ip: 172.15.0.106
+    ctlplane_ip: 192.168.23.106
+    external_ip: 10.4.0.102
+  node_2:
+    name: master-2
+    internalapi_ip: 172.15.2.107
+    tenant_ip: 172.15.0.107
+    ctlplane_ip: 192.168.23.107
+    external_ip: 10.4.0.103
 
   # networks
   ctlplane:

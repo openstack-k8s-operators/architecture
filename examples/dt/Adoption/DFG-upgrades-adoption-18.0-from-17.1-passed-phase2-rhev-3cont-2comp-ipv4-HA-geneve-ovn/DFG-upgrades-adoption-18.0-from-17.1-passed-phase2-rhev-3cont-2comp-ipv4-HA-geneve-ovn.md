@@ -28,7 +28,7 @@
 
 ## Considerations/Constraints
 
-1. Single node openshift cluster (SNO) on RHEV.
+1. 3 node openshift cluster on RHEV.
 2. Source openstack with HA is pre-deployed on RHEV.
 3. Native VLAN for openstack setup shared between source openstack and target openshift environment.
    - Nic1: RHEV network rhevm

@@ -3,10 +3,7 @@ kind: Kustomization
 
 components:
   - ../../../../lib/deploy
-  # currently the lib versions is hard coded to assume 3 node openshift
-  # this dt example is for a single node openshift so we need to vendor
-  # the nncp lib and override the nodes, this is a temporary workaround
-  # until the lib is updated to support single node openshift.
+  # lib version is having storage network in place.
   # - ../../../../lib/nncp
   - vendor/nncp
   # lib version is having storage network.
