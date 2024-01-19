@@ -1,0 +1,8 @@
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneDeployment
+metadata:
+  name: edpm-deployment
+  namespace: openstack
+spec:
+  nodeSets:
+  - openstack-edpm
