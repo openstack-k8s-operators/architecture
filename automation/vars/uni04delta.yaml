@@ -1,0 +1,65 @@
+---
+vas:
+  uni04delta:
+    stages:
+      - path: examples/dt/uni04delta/control-plane/nncp
+        wait_conditions:
+          - >-
+            oc -n openstack wait nncp
+            -l osp/nncm-config-type=standard
+            --for jsonpath='{.status.conditions[0].reason}'=SuccessfullyConfigured
+            --timeout=60s
+        values:
+          - name: network-values
+            src_file: values.yaml
+        build_output: nncp.yaml
+
+      - path: examples/dt/uni04delta/control-plane
+        wait_conditions:
+          - >-
+            oc -n openstack wait openstackcontrolplane
+            controlplane
+            --for condition=Ready
+            --timeout=30m
+        values:
+          - name: network-values
+            src_file: nncp/values.yaml
+          - name: service-values
+            src_file: service-values.yaml
+        build_output: control-plane.yaml
+
+      - pre_stage_run:
+          - name: Replace resource links with files from library.
+            type: playbook
+            source: "../../hooks/playbooks/link2file.yml"
+            extra_vars:
+              # yamllint disable rule:line-length
+              cifmw_link2file_files: 
+        path: examples/dt/uni04delta/ceph
+        wait_conditions:
+          - >-
+            oc -n openstack wait openstackdataplanedeployment
+            edpm-ceph-deploy
+            --for condition=Ready
+            --timeout=1200s
+        values:
+          - name: edpm-ceph-values
+            src: values.yaml
+        build_output: edpm-ceph.yaml
+        post_stage_run:
+          - name: Deploy Ceph
+            type: playbook
+            source: "../../playbooks/ceph.yml"
+            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
+
+      - path: examples/dt/uni04delta
+        wait_conditions:
+          - >-
+            oc -n openstack wait openstackdataplanedeployment
+            edpm-deployment
+            --for condition=Ready
+            --timeout=1200s
+        values:
+          - name: edpm-values
+            src_file: values.yaml
+        build_output: edpm.yaml
