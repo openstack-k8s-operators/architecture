@@ -89,7 +89,7 @@ data:
       metallb.universe.tf/address-pool: internalapi
       metallb.universe.tf/allow-shared-ip: internalapi
       metallb.universe.tf/loadBalancerIPs: 172.17.0.80
-    net-attach-def: |
+    net-attach-def:  |
       {
         "cniVersion": "0.3.1",
         "name": "internalapi",
