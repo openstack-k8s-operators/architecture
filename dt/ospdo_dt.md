@@ -1,4 +1,4 @@
-    | vm    | 3      |
+    | vm    | 8      |
 | Galera DB node, replicating                   | vm    | 3      |
 | Hardware security module                      | bm    | 1      |
 
@@ -29,15 +29,15 @@
 
 All stages must be executed in the order listed below.  Everything is required unless otherwise indicated.
 
-1. Deploy a Director Operator env
-7. Execute OSP pre adaption sanity testing
-8. Execute OSP pre deployment per DFG specific testing
-2. Collect services' DB from OSPdO env
-3. Prepare second env for Podified Deploymnt
-4. Install dependencies for the OpenStack K8S operators
-5. Migrate DB to Podified env's Operators
-6. Install the OpenStack K8S operators
-7. Configuring networking on the OCP nodes
-8. Configure and deploy the control plane
-7. Execute OSP post adaption sanity testing
-8. Execute OSP post deployment Integrate with DFG specific testing as needed
+- Deploy a Director Operator env
+- Execute OSP pre adaption sanity testing
+- Execute OSP pre deployment per DFG specific testing
+- Collect services' DB from OSPdO env
+- Prepare second env for Podified Deploymnt
+- Install dependencies for the OpenStack K8S operators
+- Migrate DB to Podified env's Operators
+- Install the OpenStack K8S operators
+- Configuring networking on the OCP nodes
+- Configure and deploy the control plane
+- Execute OSP post adaption sanity testing
+- Execute OSP post deployment Integrate with DFG specific testing as needed
