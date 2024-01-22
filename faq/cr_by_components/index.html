@@ -12,7 +12,7 @@
         <meta name="author" content="OpenStack Team">
       
       
-        <link rel="canonical" href="https://openstack-k8s-operators.github.io/architecture/wa/missing_nncp/">
+        <link rel="canonical" href="https://openstack-k8s-operators.github.io/architecture/faq/cr_by_components/">
       
       
         <link rel="prev" href="../..">
@@ -26,7 +26,7 @@
     
     
       
-        <title>Missing NNCPs - OpenStack K8S Operators Architectures</title>
+        <title>Creating Smaller CRs - OpenStack K8S Operators Architectures</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#missing-nncps" class="md-skip">
+        <a href="#creating-smaller-crs" class="md-skip">
           Skip to content
         </a>
       
@@ -117,7 +117,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Missing NNCPs
+              Creating Smaller CRs
             
           </span>
         </div>
@@ -455,7 +455,7 @@
             
   
   <span class="md-ellipsis">
-    Workarounds
+    FAQ
   </span>
   
 
@@ -465,7 +465,7 @@
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
-            Workarounds
+            FAQ
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -489,7 +489,7 @@
           
   
   <span class="md-ellipsis">
-    Missing NNCPs
+    Creating Smaller CRs
   </span>
   
 
@@ -500,7 +500,7 @@
         
   
   <span class="md-ellipsis">
-    Missing NNCPs
+    Creating Smaller CRs
   </span>
   
 
@@ -522,9 +522,18 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#alternative-approach" class="md-nav__link">
+  <a href="#question" class="md-nav__link">
     <span class="md-ellipsis">
-      Alternative Approach
+      Question
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#answer" class="md-nav__link">
+    <span class="md-ellipsis">
+      Answer
     </span>
   </a>
   
@@ -638,9 +647,18 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#alternative-approach" class="md-nav__link">
+  <a href="#question" class="md-nav__link">
     <span class="md-ellipsis">
-      Alternative Approach
+      Question
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#answer" class="md-nav__link">
+    <span class="md-ellipsis">
+      Answer
     </span>
   </a>
   
@@ -664,57 +682,45 @@
   
 
 
-<h1 id="missing-nncps">Missing NNCPs<a class="headerlink" href="#missing-nncps" title="Permanent link">#</a></h1>
+<h1 id="creating-smaller-crs">Creating Smaller CRs<a class="headerlink" href="#creating-smaller-crs" title="Permanent link">#</a></h1>
+<h2 id="question">Question<a class="headerlink" href="#question" title="Permanent link">#</a></h2>
 <p>The kustomize command builds and results in the OpenStack control
 plane definitions and its dependent Custom Resources (CR).
 <div class="highlight"><pre><span></span><code>kustomize<span class="w"> </span>build<span class="w"> </span>architecture/examples/va/hci<span class="w"> </span>&gt;<span class="w"> </span>control-plane.yaml
 </code></pre></div>
-The <code>control-plane.yaml</code> file contains CRs for both <code>NMState</code> and
-<code>NodeNetworkConfigurationPolicy</code> (NNCP). When  <code>oc apply -f
-control-plane.yaml</code> is read, OpenShift will try to create the NNCPs
-while <code>NMState</code> Custom Resource Definitions (CRD) are still installing
-and produce a message noting that the resource mappings are not found:
-<div class="highlight"><pre><span></span><code>nmstate.nmstate.io/nmstate created
-[resource mapping not found for name:
-&quot;ostest-master-0&quot; namespace: &quot;openstack&quot; from &quot;control-plane.yaml&quot;:
-no matches for kind &quot;NodeNetworkConfigurationPolicy&quot; in version &quot;nmstate.io/v1&quot;
-ensure CRDs are installed first,
-resource mapping not found for name: &quot;ostest-master-1&quot; namespace: &quot;openstack&quot;
-from &quot;control-plane.yaml&quot;: no matches for kind &quot;NodeNetworkConfigurationPolicy&quot;
-in version &quot;nmstate.io/v1&quot;
-</code></pre></div>
-Retrying <code>oc apply -f contol-plane.yaml</code> a few seconds later is likely to
-resolve the problem.</p>
-<h2 id="alternative-approach">Alternative Approach<a class="headerlink" href="#alternative-approach" title="Permanent link">#</a></h2>
-<p>It's also possible to create CR files with less components and wait
+The <code>control-plane.yaml</code> file contains CRs for the
+<code>NodeNetworkConfigurationPolicy</code> (NNCP), the
+<code>NetworkAttachmentDefinition</code>, MetalLB resources and
+OpenStack resources. Is it possible to create a CR file with less
+custom resources?</p>
+<h2 id="answer">Answer<a class="headerlink" href="#answer" title="Permanent link">#</a></h2>
+<p>Yes, it's possible to create CR files with less components and wait
 before applying each CR file. E.g. the file <code>nncp.yaml</code> would contain
-only <code>NodeNetworkConfigurationPolicy</code> CRs and <code>NMState</code> and other
-deployment related CRs could exist in another file like
-<code>deploy.yaml</code>. The following process may be used to do generate these
-files using kustomize.</p>
+only <code>NodeNetworkConfigurationPolicy</code> CRs and
+<code>NetworkAttachmentDefinition</code> and other CRs could exist in another
+file like <code>networking.yaml</code>. The following process may be used to
+generate these files using kustomize.</p>
 <ul>
 <li>Modify the
 <a href="https://github.com/openstack-k8s-operators/architecture/blob/main/va/hci/kustomization.yaml">va/hci/kustomization.yaml</a>
-file so that the last two lines contain only the deploy component
-configuration:
-<div class="highlight"><pre><span></span><code><span class="nt">components</span><span class="p">:</span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">../../lib/deploy</span>
-</code></pre></div></li>
-<li>Generate a file with only <code>MetalLB</code> and <code>NMState</code> CRs:
-<div class="highlight"><pre><span></span><code>kustomize<span class="w"> </span>build<span class="w"> </span>architecture/examples/va/hci<span class="w"> </span>&gt;<span class="w"> </span>deploy.yaml
-</code></pre></div></li>
-<li>Modify the
-<a href="https://github.com/openstack-k8s-operators/architecture/blob/main/va/hci/kustomization.yaml">va/hci/kustomization.yaml</a>
-file so that the last two lines contain only the nncp component
-configuration:
+file so that the components list only has the nncp component:
 <div class="highlight"><pre><span></span><code><span class="nt">components</span><span class="p">:</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">../../lib/nncp</span>
 </code></pre></div></li>
-<li>Generate a file with only <code>NNCP</code> CRs:
+<li>Generate a file with only NNCP CRs:
 <div class="highlight"><pre><span></span><code>kustomize<span class="w"> </span>build<span class="w"> </span>architecture/examples/va/hci<span class="w"> </span>&gt;<span class="w"> </span>nncp.yaml
-</code></pre></div>
-The above process may be continued for each component.</li>
+</code></pre></div></li>
+<li>Modify the
+<a href="https://github.com/openstack-k8s-operators/architecture/blob/main/va/hci/kustomization.yaml">va/hci/kustomization.yaml</a>
+file so that the components list only has the networking component:
+<div class="highlight"><pre><span></span><code><span class="nt">components</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">../../lib/networking</span>
+</code></pre></div></li>
+<li>Generate a file with only Networking CRs:
+<div class="highlight"><pre><span></span><code>kustomize<span class="w"> </span>build<span class="w"> </span>architecture/examples/va/hci<span class="w"> </span>&gt;<span class="w"> </span>networking.yaml
+</code></pre></div></li>
 </ul>
+<p>The above process may be continued for each component.</p>
 <p>Note that <a href="https://github.com/openstack-k8s-operators/architecture/blob/main/va/hci/kustomization.yaml">va/hci/kustomization.yaml</a>
 is not the same file as
 <a href="https://github.com/openstack-k8s-operators/architecture/blob/main/examples/va/hci/kustomization.yaml">examples/va/hci/kustomization.yaml</a>.
@@ -749,7 +755,7 @@ so each component is referred to using
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    2024-01-15
+    2024-01-21
   </span>
 
     
