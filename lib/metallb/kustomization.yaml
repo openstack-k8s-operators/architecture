@@ -3,4 +3,3 @@ kind: Component
 
 resources:
 - metallb_deploy.yaml
-- nmstate_deploy.yaml
