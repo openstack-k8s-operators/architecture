@@ -29,6 +29,7 @@ Almost a twin of VA1/uni03gamma, focused on testing external Ceph, and manila wi
 | Manila           | NFS ganesha                     | Must have          |
 | RGW as Swift     | ---                             | Must have          |
 | Horizon          | N/A                             | Must have          |
+| Designate        | default (protocol ipv6)         | Must have          |
 
 
 ### Support services
@@ -66,3 +67,4 @@ N/A
 | relevant manila tests | tempest stage |           |
 | relevant object-storage tests  | tempest stage |           |
 | horizon integration   | own stage (post-tempest)|           |
+| relevant designate tests | tempest stage |           |

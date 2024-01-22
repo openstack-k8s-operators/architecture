@@ -27,6 +27,7 @@ Focused on components with backends using "default" backends.
 | Glance           | Swift                           | Must have          |
 | Swift            | (default)                       | Must have
 | Octavia          | (default)                       | Must have          |
+| Designate        | (default)                       | Must have          |
 | Horizon          | N/A                             | Must have          |
 
 
@@ -50,7 +51,6 @@ Always-on, default services and features
 | FIPS     |
 | TLS-e    |
 
-
 ## Considerations/Constraints
 
 N/A
@@ -64,4 +64,5 @@ N/A
 | relevant image tests  | tempest stage |           |
 | relevant object-storage tests  | tempest stage |           |
 | relevant octavia tests | tempest stage |           |
+| relevant designate tests | tempest stage |
 | horizon integration   | own stage (post-tempest)|           |
