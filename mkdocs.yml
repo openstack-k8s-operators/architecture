@@ -31,8 +31,8 @@ nav:
     - NFV SRIOV: https://github.com/openstack-k8s-operators/architecture/blob/main/examples/va/nfv/sriov/README.md
   - Deployed Topologies:
     - None
-  - Workarounds:
-    - Missing NNCPs: wa/missing_nncp.md
+  - FAQ:
+    - Creating Smaller CRs: faq/cr_by_components.md
   - Contributing:
     - contributing/documentation.md
 markdown_extensions:

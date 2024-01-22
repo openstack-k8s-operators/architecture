@@ -38,9 +38,6 @@ kustomize build > control-plane.yaml
 ```
 oc apply -f control-plane.yaml
 ```
-If the `oc apply` command  produces a `no matches for kind
-NodeNetworkConfigurationPolicy` error, then see
-[Missing NNCPs Workaround](../../../../docs/wa/missing_nncp.md).
 
 Wait for NNCPs to be available
 ```
