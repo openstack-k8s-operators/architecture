@@ -29,6 +29,8 @@ nav:
   - Validated Architectures:
     - HCI: https://github.com/openstack-k8s-operators/architecture/tree/main/examples/va/hci/README.md
     - NFV SRIOV: https://github.com/openstack-k8s-operators/architecture/blob/main/examples/va/nfv/sriov/README.md
+    - NFV OvS DPDK: https://github.com/openstack-k8s-operators/architecture/blob/main/examples/va/nfv/ovs-dpdk/README.md
+
   - Deployed Topologies:
     - None
   - FAQ:
