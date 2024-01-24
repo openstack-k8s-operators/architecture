@@ -1,4 +1,4 @@
-RHOS Deployed Topology DFG-pidone-18.0-3cont-2comp-ipv6-geneve-HA
+RHOS Deployed Topology DFG-pidone-18.0-3cont-2comp-ipv4-geneve-HA
 Based on OpenStack K8S operators from the "main" branch of the OpenStack Operator repo on Oct 17th, 2023
 
 General information:
@@ -8,20 +8,20 @@ v0.1	 	Initial		Dec 20 2023
 Node topology:
 Node role	                                bm/vm	amount
 Openshift master/worker combo-node cluster	vm	    3
-Compute node					vm	    3
-Galera DB node, replicating	                vm	    3
+Compute node					vm	    2
 
 Services, enabled features and configurations:
 Service	        configuration	    Lock-in coverage?
+Galera      default             Must have
 RabbitMQ	default	            Must have
-Redis           ?                   ?
+Redis           ?                   Must have
 Memcached       default             Must have
 TLS             default             Must have
 FIPS Mode	default	            Must have/standard
 
 Considerations:
 Highly Available deployment
-Network protocol - ipv6
+Network protocol - ipv4
 
 Testing tree:
 Test framework			Stage to run	Special configuration	Test case to report
