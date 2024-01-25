@@ -23,8 +23,8 @@ data:
         #       subscription-manager register --username <subscription_manager_username> --password <subscription_manager_password>
         #       podman login -u <registry_username> -p <registry_password> registry.redhat.io
         service_net_map:
-          nova_api_network: internal_api
-          nova_libvirt_network: internal_api
+          nova_api_network: internalapi
+          nova_libvirt_network: internalapi
         timesync_ntp_servers:
           - hostname: clock.redhat.com
         # CPU pinning settings
@@ -49,7 +49,7 @@ data:
             dns_servers: {{ ctlplane_dns_nameservers }}
             domain: {{ dns_search_domains }}
             addresses:
-            - ip_netmask: {{ ctlplane_ip }}/{{ ctlplane_subnet_cidr }}
+            - ip_netmask: {{ ctlplane_ip }}/{{ ctlplane_cidr }}
             routes: {{ ctlplane_host_routes }}
             members:
             - type: interface
