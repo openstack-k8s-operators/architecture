@@ -10,19 +10,23 @@ Switch to the "openstack" namespace
 ```
 oc project openstack
 ```
-Change to the hci directory
+Change to the nfv/sriov directory
 ```
-cd architecture/examples/va/hci
+cd architecture/examples/va/nfv/sriov
 ```
-Edit the [values.yaml](values.yaml) file to suit your environment.
+Edit the [values.yaml](values.yaml) and
+[service-values.yaml](service-values.yaml) files to suit 
+your environment.
 ```
 vi values.yaml
+vi service-values.yaml
 ```
-Alternatively use your own copy of `values.yaml` and edit 
-[kustomization.yaml](kustomization.yaml) to use that copy.
+Alternatively use your own copies of those files and edit
+[kustomization.yaml](kustomization.yaml) to use those copies.
 ```
 resources:
   - values-ci-framework.yaml
+  - service-values-ci-framework.yaml
 ```
 
 Generate the control-plane and networking CRs.

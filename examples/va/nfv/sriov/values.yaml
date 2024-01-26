@@ -40,7 +40,7 @@ data:
         name: subnet1
     prefix-length: 24
     iface: enp7s0
-    mtu: 9000
+    mtu: 1500
     lb_addresses:
     - 192.168.122.80-192.168.122.90
     endpoint_annotations:
@@ -71,7 +71,7 @@ data:
         vlan: 20
     mtu: 1500
     prefix-length: 24
-    iface: internalapi
+    iface: enp7s0.20
     vlan: 20
     base_iface: enp7s0
     lb_addresses:
@@ -102,9 +102,9 @@ data:
         cidr: 172.18.0.0/24
         name: subnet1
         vlan: 21
-    mtu: 9000
+    mtu: 1500
     prefix-length: 24
-    iface: storage
+    iface: enp7s0.21
     vlan: 21
     base_iface: enp7s0
     lb_addresses:
@@ -122,16 +122,6 @@ data:
           "range_end": "172.18.0.70"
         }
       }
-  storagemgmt:  # used on RHEL, not used on OpenShift
-    dnsDomain: storagemgmt.example.com
-    subnets:
-      - allocationRanges:
-          - end: 172.20.0.250
-            start: 172.20.0.100
-        cidr: 172.20.0.0/24
-        name: subnet1
-        vlan: 23
-    mtu: 9000
   tenant:
     dnsDomain: tenant.example.com
     subnets:
@@ -143,7 +133,7 @@ data:
         vlan: 22
     mtu: 1500
     prefix-length: 24
-    iface: tenant
+    iface: enp7s0.22
     vlan: 22
     base_iface: enp7s0
     lb_addresses:

@@ -28,8 +28,11 @@ nav:
   - Overview: index.md
   - Validated Architectures:
     - HCI: https://github.com/openstack-k8s-operators/architecture/tree/main/examples/va/hci/README.md
+    - NFV SRIOV: https://github.com/openstack-k8s-operators/architecture/blob/main/examples/va/nfv/sriov/README.md
   - Deployed Topologies:
     - None
+  - FAQ:
+    - Creating Smaller CRs: faq/cr_by_components.md
   - Contributing:
     - contributing/documentation.md
 markdown_extensions:

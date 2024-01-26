@@ -1,0 +1,37 @@
+#
+# CHANGEME:
+#
+# - Change cpu-pinning-nova ConfigMap's "data['25-cpu-pinning-nova.conf']" to use CPU sets
+#   proper for your environment
+# - Change sriov-nova ConfigMap's "data['03-sriov-nova.conf']" "devname" and "physical_network"
+#   parameters to the proper SRIOV interface and network for your environment
+#
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cpu-pinning-nova
+data:
+  25-cpu-pinning-nova.conf: _replaced_
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sriov-nova
+data:
+  03-sriov-nova.conf: _replaced_
+---
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneService
+metadata:
+  name: nova-custom-sriov
+spec:
+  label: dataplane-deployment-nova-custom-sriov
+  configMaps:
+    - cpu-pinning-nova
+    - sriov-nova
+  secrets:
+    - nova-cell1-compute-config
+    - nova-migration-ssh-key
+  playbook: osp.edpm.nova
