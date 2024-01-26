@@ -8,6 +8,14 @@ resources:
   - openstackdataplanenodeset.yaml
   - openstackdataplanedeployment.yaml
 
+secretGenerator:
+  - name: libvirt-secret
+    behavior: create
+    literals:
+      - LibvirtPassword=12345678
+    options:
+      disableNameSuffixHash: true
+
 # OpenStackDataPlaneNodeSet customizations
 replacements:
   - source:

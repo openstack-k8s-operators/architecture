@@ -137,6 +137,9 @@ spec:
       databaseInstance: openstack
       octaviaAPI:
         replicas: 1
+      octaviaHousekeeping: {}
+      octaviaWorker: {}
+      octaviaHealthManager: {}
       secret: osp-secret
   ovn:
     template:
@@ -182,3 +185,31 @@ spec:
         ringReplicas: 1
       swiftStorage:
         replicas: 1
+  telemetry:
+    enabled: false
+    template:
+      metricStorage:
+        enabled: false
+        monitoringStack:
+          alertingEnabled: true
+          scrapeInterval: 30s
+          storage:
+            strategy: persistent
+            retention: 24h
+            persistent:
+              pvcStorageRequest: 10Gi
+              pvcStorageClass: local-storage
+      autoscaling:
+        enabled: false
+        aodh:
+          passwordSelectors:
+          databaseInstance: openstack
+          memcachedInstance: memcached
+          secret: osp-secret
+        heatInstance: heat
+      ceilometer:
+        enabled: false
+        secret: osp-secret
+      logging:
+        enabled: false
+        port: 10514
