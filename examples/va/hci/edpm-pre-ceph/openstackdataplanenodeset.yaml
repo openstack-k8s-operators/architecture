@@ -59,7 +59,7 @@ spec:
             dns_servers: {{ ctlplane_dns_nameservers }}
             domain: {{ dns_search_domains }}
             addresses:
-            - ip_netmask: {{ ctlplane_ip }}/{{ ctlplane_subnet_cidr }}
+            - ip_netmask: {{ ctlplane_ip }}/{{ ctlplane_cidr }}
             routes: {{ ctlplane_host_routes }}
             members:
             - type: interface
@@ -93,8 +93,8 @@ spec:
         neutron_public_interface_name: eth0
         registry_url: quay.io/podified-antelope-centos9
         service_net_map:
-          nova_api_network: internal_api
-          nova_libvirt_network: internal_api
+          nova_api_network: internalapi
+          nova_libvirt_network: internalapi
         edpm_ceph_hci_pre_enabled_services:
           - ceph_mon
           - ceph_mgr
