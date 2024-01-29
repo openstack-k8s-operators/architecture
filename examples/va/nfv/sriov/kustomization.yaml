@@ -4,7 +4,7 @@ kind: Kustomization
 components:
   - ../../../../va/nfv/sriov/
   # - https://github.com/openstack-k8s-operators/architecture/va/nfv/sriov?ref=main
-  ## It's possible to replace ../../../va/nfv/sriov/ with a git checkout URL as per:
+  ## It's possible to replace ../../../../va/nfv/sriov/ with a git checkout URL as per:
   ## https://github.com/kubernetes-sigs/kustomize/blob/master/examples/remoteBuild.md
 
 resources:
