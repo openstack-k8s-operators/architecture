@@ -1,0 +1,270 @@
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneNodeSet
+metadata:
+  name: openstack-edpm-amd-sev
+spec:
+  env:
+    - name: ANSIBLE_FORCE_COLOR
+      value: "True"
+  services:
+    - bootstrap
+    - configure-network
+    - configure-ovs-dpdk
+    - validate-network
+    - install-os
+    - configure-os
+    - run-os
+    - libvirt
+    - ovn
+    - neutron-metadata
+    - neutron-sriov
+    - sriov-amd
+  preProvisioned: true
+  nodes:
+    edpm-computeamdsev-0:
+      ansible:
+        ansibleHost: 192.168.122.100 # CHANGEME
+      hostName: edpm-computeamdsev-0
+      networks:
+      - defaultRoute: true
+        fixedIP: 192.168.122.100 # CHANGEME
+        name: CtlPlane
+        subnetName: subnet1
+      - name: InternalApi
+        subnetName: subnet1
+      - name: Storage
+        subnetName: subnet1
+      - name: Tenant
+        subnetName: subnet1
+    edpm-computeamdsev-1:
+      ansible:
+        ansibleHost: 192.168.122.101 # CHANGEME
+      hostName: edpm-computeamdsev-1
+      networks:
+      - defaultRoute: true
+        fixedIP: 192.168.122.101 # CHANGEME
+        name: CtlPlane
+        subnetName: subnet1
+      - name: InternalApi
+        subnetName: subnet1
+      - name: Storage
+        subnetName: subnet1
+      - name: Tenant
+        subnetName: subnet1
+  networkAttachments:
+    - ctlplane
+  nodeTemplate:
+    ansibleSSHPrivateKeySecret: dataplane-ansible-ssh-private-key-secret
+    managementNetwork: ctlplane
+    ansible:
+      ansibleUser: cloud-admin
+      ansiblePort: 22
+      ansibleVars:
+        # CHANGEME -- see https://access.redhat.com/solutions/253273
+        # edpm_bootstrap_command: |
+        #       subscription-manager register --username <subscription_manager_username> --password <subscription_manager_password>
+        #       podman login -u <registry_username> -p <registry_password> registry.redhat.io
+        service_net_map:
+          nova_api_network: internal_api
+          nova_libvirt_network: internal_api
+        timesync_ntp_servers:
+          - hostname: clock.redhat.com
+        # CPU pinning settings
+        edpm_kernel_args: "hugepagesz=1GB hugepages=192 default_hugepagesz=1GB iommu=pt amd_iommu=on isolcpus=2-127,130-255 numa_balancing=disable processor.max_cstate=0 mem_encrypt=on kvm kvm_amd.sev=1"
+        # edpm_network_config
+        # These vars are edpm_network_config role vars
+        edpm_network_config_hide_sensitive_logs: false
+        edpm_tuned_isolated_cores: "2-15,18-127,130-255"
+        edpm_ovs_dpdk_pmd_core_list: "16,17,144,145"
+        edpm_ovs_dpdk_lcore_list: "0,1,128,129"
+        edpm_ovs_dpdk_socket_memory: "1024,4096,1024,1024,1024,1024,1024,1024"
+        edpm_ovs_dpdk_memory_channels: "2"
+        edpm_network_config_template: |
+          ---
+          {% set mtu_list = [ctlplane_mtu] %}
+          {% for network in role_networks %}
+          {{ mtu_list.append(lookup('vars', networks_lower[network] ~ '_mtu')) }}
+          {%- endfor %}
+          {% set min_viable_mtu = mtu_list | max %}
+          network_config:
+          - type: ovs_bridge
+            name: {{ neutron_physical_bridge_name }}
+            mtu: {{ min_viable_mtu }}
+            use_dhcp: false
+            dns_servers: {{ ctlplane_dns_nameservers }}
+            domain: {{ dns_search_domains }}
+            addresses:
+            - ip_netmask: {{ ctlplane_ip }}/{{ ctlplane_subnet_cidr }}
+            routes: {{ ctlplane_host_routes }}
+            members:
+            - type: interface
+              name: enp7s0
+              mtu: {{ min_viable_mtu }}
+              # force the MAC address of the bridge to this interface
+              primary: true
+          {% for network in role_networks %}
+            - type: vlan
+              mtu: {{ lookup('vars', networks_lower[network] ~ '_mtu') }}
+              vlan_id: {{ lookup('vars', networks_lower[network] ~ '_vlan_id') }}
+              addresses:
+              - ip_netmask:
+                  {{ lookup('vars', networks_lower[network] ~ '_ip') }}/{{ lookup('vars', networks_lower[network] ~ '_cidr') }}
+              routes: {{ lookup('vars', networks_lower[network] ~ '_host_routes') }}
+          {% endfor %}
+          - type: sriov_pf
+            name: eno4
+            numvfs: 10
+            use_dhcp: false
+            promisc: true
+          - type: sriov_pf
+            name: nic5
+            mtu: 9000
+            numvfs: 10
+            use_dhcp: false
+            defroute: false
+            nm_controlled: true
+            hotplug: true
+            promisc: false
+          - type: sriov_pf
+            name: nic6
+            mtu: 9000
+            numvfs: 10
+            use_dhcp: false
+            defroute: false
+            nm_controlled: true
+            hotplug: true
+            promisc: false
+          - type: linux_bond
+            name: bond_api
+            bonding_options: "mode=active-backup"
+            use_dhcp: false
+            dns_servers: {{ ctlplane_dns_nameservers }}
+            members:
+            - type: sriov_vf
+              device: nic5
+              driver: mlx5_core
+              spoofcheck: false
+              promisc: true
+              vfid: 0
+              vlan_id: {{ internal_api_vlan_id }}
+            - type: sriov_vf
+              device: nic6
+              driver: mlx5_core
+              spoofcheck: false
+              promisc: true
+              vfid: 0
+              vlan_id: {{ internal_api_vlan_id }}
+            addresses:
+            - ip_netmask: {{ internal_api_ip }}/{{ internal_api_cidr }}
+            routes: {{ internal_api_host_routes }}
+          - type: linux_bond
+            name: storage_bond
+            bonding_options: mode=active-backup
+            use_dhcp: false
+            members:
+            - type: sriov_vf
+              device: nic5
+              driver: mlx5_core
+              spoofcheck: false
+              promisc: true
+              vfid: 1
+              vlan_id: {{ storage_vlan_id }}
+            - type: sriov_vf
+              device: nic6
+              driver: mlx5_core
+              spoofcheck: false
+              promisc: true
+              vfid: 1
+              vlan_id: {{ storage_vlan_id }}
+            addresses:
+            - ip_netmask: {{ storage_ip }}/{{ storage_cidr }}
+            routes: {{ storage_host_routes }}
+          - type: ovs_user_bridge
+            name: br-link0
+            use_dhcp: false
+            addresses:
+            - ip_netmask: {{ tenant_ip }}/{{ tenant_cidr }}
+            members:
+              - type: ovs_dpdk_bond
+                name: dpdkbond0
+                mtu: 9000
+                rx_queue: 1
+                members:
+                - type: ovs_dpdk_port
+                  driver: mlx5_core
+                  name: dpdk0
+                  members:
+                  - type: sriov_vf
+                    device: nic5
+                    vfid: 2
+                    vlan_id: {{ tenant_vlan_id }}
+                - type: ovs_dpdk_port
+                  driver: mlx5_core
+                  name: dpdk1
+                  members:
+                  - type: sriov_vf
+                    device: nic6
+                    vfid: 2
+                    vlan_id: {{ tenant_vlan_id }}
+          - type: ovs_user_bridge
+            name: br-dpdk0
+            use_dhcp: false
+            members:
+            - type: ovs_dpdk_port
+              driver: mlx5_core
+              name: dpdk2
+              mtu: 9000
+              rx_queue: 1
+              members:
+              - type: sriov_vf
+                device: nic6
+                vfid: 3
+          - type: ovs_user_bridge
+            name: br-dpdk1
+            use_dhcp: false
+            members:
+            - type: ovs_dpdk_port
+              driver: mlx5_core
+              name: dpdk3
+              mtu: 9000
+              rx_queue: 1
+              members:
+              - type: sriov_vf
+                device: nic6
+                vfid: 4
+          - type: sriov_pf
+            name: nic3
+            mtu: 9000
+            numvfs: 4
+            use_dhcp: false
+            defroute: false
+            nm_controlled: true
+            hotplug: true
+            promisc: false
+          - type: sriov_pf
+            name: nic4
+            mtu: 9000
+            numvfs: 4
+            use_dhcp: false
+            defroute: false
+            nm_controlled: true
+            hotplug: true
+            promisc: false
+
+        # These vars are for the network config templates themselves and are
+        # considered EDPM network defaults.
+        neutron_physical_bridge_name: br-ex
+        neutron_public_interface_name: eth0
+        # edpm_nodes_validation
+        edpm_nodes_validation_validate_controllers_icmp: false
+        edpm_nodes_validation_validate_gateway_icmp: false
+        dns_search_domains: []
+        gather_facts: false
+        enable_debug: false
+        # edpm firewall, change the allowed CIDR if needed
+        edpm_sshd_configure_firewall: true
+        edpm_sshd_allowed_ranges:
+          - 192.168.122.0/24 # CHANGEME
+        # SELinux module
+        edpm_selinux_mode: enforcing
+        edpm_neutron_sriov_agent_SRIOV_NIC_physical_device_mappings: 'sriov-1:eno35,sriov-2:eno36'

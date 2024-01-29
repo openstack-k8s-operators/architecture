@@ -1,0 +1,29 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sriov_amd-sev
+data:
+  65-sriov_amd-sev.conf: |
+    [DEFAULT]
+    reserved_host_memory_mb = 4096
+    reserved_huge_pages = node:0,size:4,count:524160
+    reserved_huge_pages = node:1,size:4,count:524160
+    [compute]
+    cpu_shared_set = 0-3,24-27
+    cpu_dedicated_set = 8-23,32-47
+    [libvirt]
+    virt_type=kvm
+---
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneService
+metadata:
+  name: sriov-amd
+spec:
+  label: dataplane-deployment-sriov_amd-sev
+  configMaps:
+    - sriov_amd-sev
+  secrets:
+    - nova-cell1-compute-config
+    - nova-migration-ssh-key
+  playbook: osp.edpm.nova
