@@ -19,13 +19,6 @@ your environment.
 ```
 vi values.yaml
 ```
-Alternatively use your own copies of those files and edit
-[kustomization.yaml](kustomization.yaml) to use those copies.
-```
-resources:
-  - values-ci-framework.yaml
-```
-
 Generate the dataplane CRs.
 ```
 kustomize build > dataplane.yaml

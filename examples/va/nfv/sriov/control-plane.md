@@ -21,14 +21,6 @@ your environment.
 vi values.yaml
 vi service-values.yaml
 ```
-Alternatively use your own copies of those files and edit
-[kustomization.yaml](kustomization.yaml) to use those copies.
-```
-resources:
-  - values-ci-framework.yaml
-  - service-values-ci-framework.yaml
-```
-
 Generate the control-plane and networking CRs.
 ```
 kustomize build > control-plane.yaml

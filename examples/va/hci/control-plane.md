@@ -18,12 +18,6 @@ Edit the [values.yaml](values.yaml) file to suit your environment.
 ```
 vi values.yaml
 ```
-Alternatively use your own copy of `values.yaml` and edit 
-[kustomization.yaml](kustomization.yaml) to use that copy.
-```
-resources:
-  - values-ci-framework.yaml
-```
 
 Generate the control-plane and networking CRs.
 ```
