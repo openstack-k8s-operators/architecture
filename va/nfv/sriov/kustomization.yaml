@@ -17,7 +17,6 @@ transformers:
     create: true
 
 components:
-- ../../../lib/nncp
 - ../../../lib/networking
 - ../../../lib/control-plane
 
