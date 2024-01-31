@@ -1,0 +1,383 @@
+# TODO: Yes, this first ConfigMap is a copy-paste of ../nncp/values.yaml.
+#       We need a cleaner way to organize this to keep it DRY.  Maybe instead
+#       of including the control plane component here in edpm-post-ceph, we tell
+#       the user to go back to the base dir (examples/va/hci) and modify values.yaml
+#       to include the post-Ceph service conf customizations and then re-run
+#       "kustomize build" there and re-apply the control plane that way?
+#
+# local-config: referenced, but not emitted by kustomize
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: network-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+data:
+  # nodes
+  node_0:
+    name: ostest-master-0
+    internalapi_ip: 172.17.0.5
+    tenant_ip: 172.19.0.5
+    ctlplane_ip: 192.168.122.10
+    storage_ip: 172.18.0.5
+  node_1:
+    name: ostest-master-1
+    internalapi_ip: 172.17.0.6
+    tenant_ip: 172.19.0.6
+    ctlplane_ip: 192.168.122.11
+    storage_ip: 172.18.0.6
+  node_2:
+    name: ostest-master-2
+    internalapi_ip: 172.17.0.7
+    tenant_ip: 172.19.0.7
+    ctlplane_ip: 192.168.122.12
+    storage_ip: 172.18.0.7
+
+  # networks
+  ctlplane:
+    dnsDomain: ctlplane.example.com
+    subnets:
+      - allocationRanges:
+          - end: 192.168.122.120
+            start: 192.168.122.100
+          - end: 192.168.122.200
+            start: 192.168.122.150
+        cidr: 192.168.122.0/24
+        gateway: 192.168.122.1
+        name: subnet1
+    prefix-length: 24
+    iface: enp7s0
+    mtu: 9000
+    lb_addresses:
+    - 192.168.122.80-192.168.122.90
+    endpoint_annotations:
+      metallb.universe.tf/address-pool: ctlplane
+      metallb.universe.tf/allow-shared-ip: ctlplane
+      metallb.universe.tf/loadBalancerIPs: 192.168.122.80
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "ctlplane",
+        "type": "macvlan",
+        "master": "enp7s0",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "192.168.122.0/24",
+          "range_start": "192.168.122.30",
+          "range_end": "192.168.122.70"
+        }
+      }
+  internalapi:
+    dnsDomain: internalapi.example.com
+    subnets:
+      - allocationRanges:
+          - end: 172.17.0.250
+            start: 172.17.0.100
+        cidr: 172.17.0.0/24
+        name: subnet1
+        vlan: 20
+    mtu: 1500
+    prefix-length: 24
+    iface: internalapi
+    vlan: 20
+    base_iface: enp7s0
+    lb_addresses:
+    - 172.17.0.80-172.17.0.90
+    endpoint_annotations:
+      metallb.universe.tf/address-pool: internalapi
+      metallb.universe.tf/allow-shared-ip: internalapi
+      metallb.universe.tf/loadBalancerIPs: 172.17.0.80
+    net-attach-def:  |
+      {
+        "cniVersion": "0.3.1",
+        "name": "internalapi",
+        "type": "macvlan",
+        "master": "internalapi",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "172.17.0.0/24",
+          "range_start": "172.17.0.30",
+          "range_end": "172.17.0.70"
+        }
+      }
+  storage:
+    dnsDomain: storage.example.com
+    subnets:
+      - allocationRanges:
+          - end: 172.18.0.250
+            start: 172.18.0.100
+        cidr: 172.18.0.0/24
+        name: subnet1
+        vlan: 21
+    mtu: 9000
+    prefix-length: 24
+    iface: storage
+    vlan: 21
+    base_iface: enp7s0
+    lb_addresses:
+    - 172.18.0.80-172.18.0.90
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "storage",
+        "type": "macvlan",
+        "master": "storage",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "172.18.0.0/24",
+          "range_start": "172.18.0.30",
+          "range_end": "172.18.0.70"
+        }
+      }
+  storagemgmt:  # used on RHEL, not used on OpenShift
+    dnsDomain: storagemgmt.example.com
+    subnets:
+      - allocationRanges:
+          - end: 172.20.0.250
+            start: 172.20.0.100
+        cidr: 172.20.0.0/24
+        name: subnet1
+        vlan: 23
+    mtu: 9000
+  tenant:
+    dnsDomain: tenant.example.com
+    subnets:
+      - allocationRanges:
+          - end: 172.19.0.250
+            start: 172.19.0.100
+        cidr: 172.19.0.0/24
+        name: subnet1
+        vlan: 22
+    mtu: 1500
+    prefix-length: 24
+    iface: tenant
+    vlan: 22
+    base_iface: enp7s0
+    lb_addresses:
+    - 172.19.0.80-172.19.0.90
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "tenant",
+        "type": "macvlan",
+        "master": "tenant",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "172.19.0.0/24",
+          "range_start": "172.19.0.30",
+          "range_end": "172.19.0.70"
+        }
+      }
+  external:
+    dnsDomain: external.example.com
+    subnets:
+      - allocationRanges:
+          - end: 10.0.0.250
+            start: 10.0.0.100
+        cidr: 10.0.0.0/24
+        gateway: 10.0.0.1
+        name: subnet1
+    mtu: 1500
+
+  dns-resolver:
+    config:
+      server:
+        - 192.168.122.1
+      search: []
+    options:
+      - key: server
+        values:
+          - 192.168.122.1
+
+  routes:
+    config:
+    - destination: 0.0.0.0/0
+      next-hop-address: 192.168.122.1
+      next-hop-interface: enp7s0
+
+  rabbitmq:
+    endpoint_annotations:
+      metallb.universe.tf/address-pool: internalapi
+      metallb.universe.tf/loadBalancerIPs: 172.17.0.85
+  rabbitmq-cell1:
+    endpoint_annotations:
+      metallb.universe.tf/address-pool: internalapi
+      metallb.universe.tf/loadBalancerIPs: 172.17.0.86
+
+  lbServiceType: LoadBalancer
+  storageClass: host-nfs-storageclass
+
+---
+# local-config: referenced, but not emitted by kustomize
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: edpm-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+data:
+  ssh_keys:
+    # Authorized keys that will have access to the dataplane computes via SSH
+    authorized: CHANGEME
+    # The private key that will have access to the dataplane computes via SSH
+    private: CHANGEME2
+    # The public key that will have access to the dataplane computes via SSH
+    public: CHANGEME3
+  nodeset:
+    ansible:
+      ansibleUser: cloud-admin
+      ansiblePort: 22
+      ansibleVars:
+        edpm_chrony_ntp_servers:
+          - clock.redhat.com
+        # CHANGEME -- see https://access.redhat.com/solutions/253273
+        # edpm_bootstrap_command: |
+        #       subscription-manager register --username <subscription_manager_username> --password <subscription_manager_password>
+        #       podman login -u <registry_username> -p <registry_password> registry.redhat.io
+        edpm_iscsid_image: '{{ registry_url }}/openstack-iscsid:{{ image_tag }}'
+        edpm_logrotate_crond_image: '{{ registry_url }}/openstack-cron:{{ image_tag }}'
+        edpm_network_config_hide_sensitive_logs: false
+        edpm_network_config_template: |
+          ---
+          {% set mtu_list = [ctlplane_mtu] %}
+          {% for network in role_networks %}
+          {{ mtu_list.append(lookup('vars', networks_lower[network] ~ '_mtu')) }}
+          {%- endfor %}
+          {% set min_viable_mtu = mtu_list | max %}
+          network_config:
+          - type: ovs_bridge
+            name: {{ neutron_physical_bridge_name }}
+            mtu: {{ min_viable_mtu }}
+            use_dhcp: false
+            dns_servers: {{ ctlplane_dns_nameservers }}
+            domain: {{ dns_search_domains }}
+            addresses:
+            - ip_netmask: {{ ctlplane_ip }}/{{ ctlplane_cidr }}
+            routes: {{ ctlplane_host_routes }}
+            members:
+            - type: interface
+              name: enp7s0
+              mtu: {{ min_viable_mtu }}
+              # force the MAC address of the bridge to this interface
+              primary: true
+          {% for network in role_networks %}
+            - type: vlan
+              mtu: {{ lookup('vars', networks_lower[network] ~ '_mtu') }}
+              vlan_id: {{ lookup('vars', networks_lower[network] ~ '_vlan_id') }}
+              addresses:
+              - ip_netmask:
+                  {{ lookup('vars', networks_lower[network] ~ '_ip') }}/{{ lookup('vars', networks_lower[network] ~ '_cidr') }}
+              routes: {{ lookup('vars', networks_lower[network] ~ '_host_routes') }}
+          {% endfor %}
+        edpm_neutron_metadata_agent_image: '{{ registry_url }}/openstack-neutron-metadata-agent-ovn:{{ image_tag }}'
+        edpm_nodes_validation_validate_controllers_icmp: false
+        edpm_nodes_validation_validate_gateway_icmp: false
+        edpm_nova_compute_container_image: '{{ registry_url }}/openstack-nova-compute:{{ image_tag }}'
+        edpm_nova_libvirt_container_image: '{{ registry_url }}/openstack-nova-libvirt:{{ image_tag }}'
+        edpm_ovn_controller_agent_image: '{{ registry_url }}/openstack-ovn-controller:{{ image_tag }}'
+        edpm_selinux_mode: enforcing
+        edpm_sshd_allowed_ranges:
+          - 192.168.122.0/24
+        edpm_sshd_configure_firewall: true
+        enable_debug: false
+        gather_facts: false
+        image_tag: current-podified
+        neutron_physical_bridge_name: br-ex
+        neutron_public_interface_name: eth0
+        registry_url: quay.io/podified-antelope-centos9
+        service_net_map:
+          nova_api_network: internalapi
+          nova_libvirt_network: internalapi
+        edpm_ceph_hci_pre_enabled_services:
+          - ceph_mon
+          - ceph_mgr
+          - ceph_osd
+          - ceph_rgw
+          - ceph_nfs
+          - ceph_rgw_frontend
+          - ceph_nfs_frontend
+        storage_mtu: 9000
+        storage_mgmt_mtu: 9000
+        storage_mgmt_vlan_id: 23
+        storage_mgmt_cidr: "24"
+        storage_mgmt_host_routes: []
+    networks:
+      - defaultRoute: true
+        name: CtlPlane
+        subnetName: subnet1
+      - name: InternalApi
+        subnetName: subnet1
+      - name: Storage
+        subnetName: subnet1
+      - name: Tenant
+        subnetName: subnet1
+      - name: StorageMgmt
+        subnetName: subnet1
+    nodes:
+      edpm-compute-0:
+        ansible:
+          ansibleHost: 192.168.122.100
+        hostName: edpm-compute-0
+        networks:
+        - defaultRoute: true
+          fixedIP: 192.168.122.100
+          name: CtlPlane
+          subnetName: subnet1
+        - name: InternalApi
+          subnetName: subnet1
+        - name: Storage
+          subnetName: subnet1
+        - name: StorageMgmt
+          subnetName: subnet1
+        - name: Tenant
+          subnetName: subnet1
+      edpm-compute-1:
+        ansible:
+          ansibleHost: 192.168.122.101
+        hostName: edpm-compute-1
+        networks:
+        - defaultRoute: true
+          fixedIP: 192.168.122.101
+          name: CtlPlane
+          subnetName: subnet1
+        - name: InternalApi
+          subnetName: subnet1
+        - name: Storage
+          subnetName: subnet1
+        - name: StorageMgmt
+          subnetName: subnet1
+        - name: Tenant
+          subnetName: subnet1
+      edpm-compute-2:
+        ansible:
+          ansibleHost: 192.168.122.102
+        hostName: edpm-compute-2
+        networks:
+        - defaultRoute: true
+          fixedIP: 192.168.122.102
+          name: CtlPlane
+          subnetName: subnet1
+        - name: InternalApi
+          subnetName: subnet1
+        - name: Storage
+          subnetName: subnet1
+        - name: StorageMgmt
+          subnetName: subnet1
+        - name: Tenant
+          subnetName: subnet1
+    services:
+    - ceph-client
+    - ovn
+    - neutron-metadata
+    - libvirt
+    - nova-custom-ceph
+  ceph:
+    conf: CHANGEME_CEPH_CONF
+    keyring: CHANGEME_CEPH_KEYRING
+  nova:
+    ceph:
+      conf: CHANGEME_NOVA_CEPH_CONF
+    migration:
+      ssh_keys:
+        private: CHANGEME4
+        public: CHANGEME5

@@ -90,6 +90,16 @@ data:
         edpm_selinux_mode: enforcing
         # SRIOV settings
         edpm_neutron_sriov_agent_SRIOV_NIC_physical_device_mappings: 'sriov-phy4:eno4'
+    networks:
+      - defaultRoute: true
+        name: CtlPlane
+        subnetName: subnet1
+      - name: InternalApi
+        subnetName: subnet1
+      - name: Storage
+        subnetName: subnet1
+      - name: Tenant
+        subnetName: subnet1
     nodes:
       edpm-compute-0:
         ansible:
