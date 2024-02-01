@@ -8,4 +8,5 @@ components:
   ## https://github.com/kubernetes-sigs/kustomize/blob/master/examples/remoteBuild.md
 
 resources:
+  - values.yml
   - nncp/values.yaml
