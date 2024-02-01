@@ -10,9 +10,9 @@ Switch to the "openstack" namespace
 ```
 oc project openstack
 ```
-Change to the hci/edpm-post-ceph directory
+Change to the hci directory
 ```
-cd architecture/examples/va/hci/edpm-post-ceph
+cd architecture/examples/va/hci
 ```
 Edit the [values.yaml](values.yaml) and [service-values.yaml](service-values.yaml) 
 files to suit your environment.

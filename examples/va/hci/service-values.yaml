@@ -36,22 +36,25 @@ data:
       store_description = "RBD backend"
       rbd_store_pool = images
       rbd_store_user = openstack
+    glanceAPIs:
+      default:
+        replicas: 1
   manila:
     enabled: true
-
-  manilaShares:
-    customServiceConfig: |
-      [DEFAULT]
-      enabled_share_backends = cephfs
-      enabled_share_protocols = cephfs
-      [cephfs]
-      driver_handles_share_servers = False
-      share_backend_name = cephfs
-      share_driver = manila.share.drivers.cephfs.driver.CephFSDriver
-      cephfs_conf_path = /etc/ceph/ceph.conf
-      cephfs_cluster_name = ceph
-      cephfs_volume_mode = 0755
-      cephfs_protocol_helper_type = CEPHFS
+    manilaShares:
+      share1:
+        customServiceConfig: |
+          [DEFAULT]
+          enabled_share_backends = cephfs
+          enabled_share_protocols = cephfs
+          [cephfs]
+          driver_handles_share_servers = False
+          share_backend_name = cephfs
+          share_driver = manila.share.drivers.cephfs.driver.CephFSDriver
+          cephfs_conf_path = /etc/ceph/ceph.conf
+          cephfs_cluster_name = ceph
+          cephfs_volume_mode = 0755
+          cephfs_protocol_helper_type = CEPHFS
   extraMounts:
     - name: v1
       region: r1
@@ -67,7 +70,7 @@ data:
               projected:
                 sources:
                   - secret:
-                    name: ceph-conf-files
+                      name: ceph-conf-files
           mounts:
             - name: ceph
               mountPath: /etc/ceph

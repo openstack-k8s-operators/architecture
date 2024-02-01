@@ -23,9 +23,9 @@ This is a collection of CR templates that represent a validated Red Hat OpenStac
 
 2. The CRs are applied against an OpenShift cluster in _stages_.  That is, there is an ordering in which each grouping of CRs is fed to the cluster.  It is _not_ a case of simply taking all CRs from all stages and applying them all at once.
 
-3. In stages 1 and 2 [kustomize](https://kustomize.io/) is used to genereate the control plane CRs dynamically. The `values.yaml` file(s) must be updated to fit your environment. kustomize version 5 or newer required.
+3. In stages 1 and 2 [kustomize](https://kustomize.io/) is used to genereate the control plane CRs dynamically. The `control-plane/nncp/values.yaml` file(s) must be updated to fit your environment. kustomize version 5 or newer required.
 
-4. In stages 3 and 4 [kustomize](https://kustomize.io/) is used to generate the dataplane CRs dynamically. The `edpm-pre-ceph/values.yaml`, `edpm-post-ceph/values.yaml` and `edpm-post-ceph/service-values.yaml` files must be updated to fit your environment. kustomize version 5 or newer required.
+4. In stages 3 and 4 [kustomize](https://kustomize.io/) is used to generate the dataplane CRs dynamically. The `edpm-pre-ceph/values.yaml`, `values.yaml` and `service-values.yaml` files must be updated to fit your environment. kustomize version 5 or newer required.
 
 5. Between stages 3 and 4, _it is assumed that the user installs Ceph on the 3 OSP compute nodes._  OpenStack K8S CRDs do not provide a way to install Ceph via any sort of combination of CRs.
 

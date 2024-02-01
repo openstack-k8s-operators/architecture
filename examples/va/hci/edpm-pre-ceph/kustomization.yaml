@@ -4,7 +4,7 @@ kind: Kustomization
 components:
   - ../../../../va/hci/edpm-pre-ceph/
   # - https://github.com/openstack-k8s-operators/architecture/va/hci/edpm-pre-ceph/?ref=main
-  ## It's possible to replace ../../../va/hci/edpm-pre-ceph/ with a git checkout URL as per:
+  ## It's possible to replace ../../../../va/hci/edpm-pre-ceph/ with a git checkout URL as per:
   ## https://github.com/kubernetes-sigs/kustomize/blob/master/examples/remoteBuild.md
 
 resources:

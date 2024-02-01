@@ -18,8 +18,8 @@ data:
       ansibleUser: cloud-admin
       ansiblePort: 22
       ansibleVars:
-        edpm_chrony_ntp_servers:
-          - clock.redhat.com
+        timesync_ntp_servers:
+          - hostname: clock.redhat.com
         # CHANGEME -- see https://access.redhat.com/solutions/253273
         # edpm_bootstrap_command: |
         #       subscription-manager register --username <subscription_manager_username> --password <subscription_manager_password>

@@ -75,6 +75,17 @@ replacements:
 - source:
     kind: ConfigMap
     name: service-values
+    fieldPath: data.glance.glanceAPIs.default.replicas
+  targets:
+    - select:
+        kind: OpenStackControlPlane
+      fieldPaths:
+        - spec.glance.template.glanceAPIs.default.replicas
+      options:
+        create: true
+- source:
+    kind: ConfigMap
+    name: service-values
     fieldPath: data.manila.enabled
   targets:
     - select:
@@ -86,12 +97,12 @@ replacements:
 - source:
     kind: ConfigMap
     name: service-values
-    fieldPath: data.manilaShares.customServiceConfig
+    fieldPath: data.manila.manilaShares.share1.customServiceConfig
   targets:
     - select:
         kind: OpenStackControlPlane
       fieldPaths:
-        - spec.manila.template.manilaShares.customServiceConfig
+        - spec.manila.template.manilaShares.share1.customServiceConfig
       options:
         create: true
 - source:
@@ -108,7 +119,7 @@ replacements:
 # Ceph keyring
 - source:
     kind: ConfigMap
-    name: edpm-values
+    name: edpm-values-post-ceph
     fieldPath: data.ceph.keyring
   targets:
   - select:
@@ -121,7 +132,7 @@ replacements:
 # Ceph conf
 - source:
     kind: ConfigMap
-    name: edpm-values
+    name: edpm-values-post-ceph
     fieldPath: data.ceph.conf
   targets:
   - select:
@@ -134,7 +145,7 @@ replacements:
 # Nova Ceph conf
 - source:
     kind: ConfigMap
-    name: edpm-values
+    name: edpm-values-post-ceph
     fieldPath: data.nova.ceph.conf
   targets:
   - select:
@@ -142,5 +153,17 @@ replacements:
       name: ceph-nova
     fieldPaths:
     - data.03-ceph-nova\.conf
+    options:
+      create: true
+# Dataplane services override (overrides ../../../lib/dataplane which is using edpm-values ConfigMap)
+- source:
+    kind: ConfigMap
+    name: edpm-values-post-ceph
+    fieldPath: data.nodeset.services
+  targets:
+  - select:
+      kind: OpenStackDataPlaneNodeSet
+    fieldPaths:
+    - spec.services
     options:
       create: true

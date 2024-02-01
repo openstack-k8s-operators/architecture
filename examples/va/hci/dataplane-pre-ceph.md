@@ -10,18 +10,18 @@ Switch to the "openstack" namespace
 ```
 oc project openstack
 ```
-Change to the hci/edpm-pre-ceph directory
+Change to the hci directory
 ```
-cd architecture/examples/va/hci/edpm-pre-ceph
+cd architecture/examples/va/hci
 ```
-Edit the [values.yaml](values.yaml) file to suit 
+Edit the [edpm-pre-ceph/values.yaml](edpm-pre-ceph/values.yaml) file to suit 
 your environment.
 ```
-vi values.yaml
+vi edpm-pre-ceph/values.yaml
 ```
 Generate the pre-Ceph dataplane CRs.
 ```
-kustomize build > dataplane-pre-ceph.yaml
+kustomize build edpm-pre-ceph > dataplane-pre-ceph.yaml
 ```
 
 ## Create pre-Ceph CRs
