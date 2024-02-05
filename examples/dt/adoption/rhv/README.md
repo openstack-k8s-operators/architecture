@@ -1,10 +1,12 @@
-# Deployed Topology DFG-upgrades-adoption-18.0-from-17.1-passed-phase2-rhev-3cont-2comp-ipv4-HA-geneve-ovn
+# RHEV base adoption Topology
+
+This topology contains Director deployed Source OpenStack on RHEV that is networked together with RHEV deployed openshift cluster. This topology executes adoption test suite that verifies adoption from existing 17.1 RHEV deployment into podified openstack. The upgrade/migration to the podified OpenStack requires planning various aspectsof the environment such as node roles, planning your network topology.
 
 ## General information
 
 | Revision | Change                | Date             |
 |--------: | :-------------------- | :--------------: |
-| v0.1     | Initial publication   | 22.12.23      |
+| v0.1     | Initial publication   | 22.12.23         |
 
 ## Node topology
 | Node role                                     | bm/vm | amount |
@@ -14,6 +16,14 @@
 | Controller nodes - Source osp 17              | vm    | 3      |
 | Compute nodes    - Source osp 17              | vm    | 2      |
 
+##### Networks in RH OSP
+
+| Name         | Type        |
+| ----         | ----------- |
+| Ctlplane     | VLAN tagged |
+| Internal-api | VLAN tagged |
+| External     | VLAN tagged |
+| Tenant       | VLAN tagged |
 
 ## Services, enabled features and configurations
 | Service                                     | configuration                   | Lock-in coverage?  |
@@ -33,18 +43,21 @@
 2. Source openstack with HA is pre-deployed on RHEV.
 3. Network protocol - ipv4
 4. Native VLAN for openstack setup shared between source openstack and target openshift environment.
+<<<<<<< Updated upstream:examples/dt/Adoption/DFG-upgrades-adoption-18.0-from-17.1-passed-phase2-rhev-3cont-2comp-ipv4-HA-geneve-ovn/DFG-upgrades-adoption-18.0-from-17.1-passed-phase2-rhev-3cont-2comp-ipv4-HA-geneve-ovn.md
    - Nic1: RHEV network rhevm
    - Nic2: RHEV network OSP-RHV-Ctlplane
    - Nic3: RHEV network OSP-RHV-API
    - Nic4: RHEV network OSP-RHV-Tenant
    - Nic5: RHEV network OSP-RHV-External
+=======
+>>>>>>> Stashed changes:examples/dt/adoption/rhv/README.md
 
-## Testing tree
+## Testing
 
-| Test framework   | Stage to run | Special configuration                 | Test case to report |
-| ---------------- | ------------ | ---------------------                 | :-----------------: |
-| Tempest/Sanity   | stage5       | Use rhel image                        | ReportPortal        |
-| Workload Test    | stage5       | Use rhel/cirros image                 | ReportPortal        |
+| Test framework   | Special configuration  | Test case to report |
+| ---------------- | ---------------------  | :-----------------: |
+| Tempest/Sanity   | Use rhel image         | ReportPortal        |
+| Workload Test    | Use rhel/cirros image  | ReportPortal        |
 
 ## Stages
 
@@ -54,4 +67,3 @@ All stages must be executed in the order listed below.  Everything is required u
 2. [Install the OpenStack K8S operators](stage2)
 3. [Configuring networking on the OCP nodes](stage3)
 4. [Run Dataplane Adoption test suite](stage4)
-5. [Execute Testing](stage5)
