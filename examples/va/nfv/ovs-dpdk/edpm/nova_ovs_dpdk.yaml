@@ -1,0 +1,33 @@
+#
+# CHANGEME:
+#
+# - Change cpu-pinning-nova ConfigMap's "data['04-cpu-pinning-nova.conf']" to use CPU sets
+#   proper for your environment
+#
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ovs-dpdk-cpu-pinning-nova
+data:
+  04-cpu-pinning-nova.conf: |
+    [DEFAULT]
+    reserved_host_memory_mb = 4096
+    [compute]
+    cpu_shared_set = 0-3,24-27 # CHANGEME
+    cpu_dedicated_set = 8-23,32-47 # CHANGEME
+
+---
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneService
+metadata:
+  name: nova-custom-ovsdpdk
+spec:
+  label: nova-custom-ovsdpdk
+  configMaps:
+    - cpu-pinning-nova
+  secrets:
+    - nova-cell1-compute-config
+    - nova-migration-ssh-key
+  playbook: osp.edpm.nova

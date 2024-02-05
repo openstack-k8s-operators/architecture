@@ -32,3 +32,4 @@ The following VAs are available.
 
 - [Hyperconverged OpenStack and Ceph](examples/va/hci/)
 - [Network Functions Virtualization with SRIOV](examples/va/nfv/sriov/)
+- [Network Functions Virtualization with OvS DPDK](examples/va/nfv/ovs-dpdk/)

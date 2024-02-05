@@ -1,0 +1,201 @@
+#
+# CHANGEME:
+#
+# - Change the first interface name specified in "spec.nodeTemplate.ansible.ansibleVars.edpm_network_config_template"
+#   to be the control plane interface on your compute nodes
+#     i.e.
+#     members:
+#     - type: interface
+#       name: eno2    <---- change
+# - Change the second interface name specified in "spec.nodeTemplate.ansible.ansibleVars.edpm_network_config_template"
+#   to be the OvS DPDK interface on your compute nodes
+#     i.e.
+#     - type: ovs_dpdk_port
+#       members:
+#       - type: interface
+#         name: eno3 and eno4  <---- change
+
+# - Change "spec.nodeTemplate.ansible.ansibleVars.edpm_sshd_allowed_ranges[0]" to
+#   match the CIDR of your control plane network, if necessary
+# - Change "edpm_bootstrap_command" to include subscription-manager and podman login
+#   commands to register the EDPM nodes as in https://access.redhat.com/solutions/253273
+# - Change the "spec.nodes[].ansible.ansibleHost" and "spec.nodes[].networks[0].fixedIP" values
+#   to match the control plane IPs of your nodes, if necessary
+# - Change "spec.nodeTemplate.ansible.ansibleVars.edpm_kernel_args" to be the desired kernel
+#   args for your environment
+# - Change "spec.nodeTemplate.ansible.ansibleVars.edpm_tuned_isolated_cores" to be the desired
+#   CPU core isolation for your environment
+# - Change "spec.nodeTemplate.ansible.ansibleVars.edpm_ovs_dpdk_pmd_core_list" to be the desired
+#   OvS DPDK PMD CPU core list for your environment
+# - Change "spec.nodeTemplate.ansible.ansibleVars.edpm_ovs_dpdk_socket_memory" to be the desired
+#   OvS DPDK socket memory for your environment
+# - Change "spec.nodeTemplate.ansible.ansibleVars.edpm_ovs_dpdk_memory_channels" to be the desired
+#   OvS DPDK memory channels for your environment
+# - Change "spec.nodeTemplate.ansible.ansibleVars.edpm_ovs_dpdk_vhost_postcopy_support" to be
+#   the desired OvS DPDK vhost postcopy support enabled or not for your environment
+# - Change "spec.nodeTemplate.ansible.ansibleVars.edpm_ovn_bridge_mappings"
+#   to the desired mapping of a bridge with DPDK port name.
+#
+
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneNodeSet
+metadata:
+  name: openstack-edpm-ovsdpdk
+spec:
+  env:
+    - name: ANSIBLE_FORCE_COLOR
+      value: "True"
+  services:
+    - repo-setup
+    - download-cache
+    - bootstrap
+    - reboot-os
+    - configure-ovs-dpdk
+    - configure-network
+    - validate-network
+    - install-os
+    - configure-os
+    - run-os
+    - ovn
+    - neutron-metadata
+    - libvirt
+    - nova-custom-ovsdpdk
+    - telemetry
+  nodes:
+    edpm-compute-0:
+      ansible:
+        ansibleHost: 192.168.122.100 # CHANGEME
+      hostName: edpm-compute-0
+      networks:
+      - defaultRoute: true
+        fixedIP: 192.168.122.100 # CHANGEME
+        name: CtlPlane
+        subnetName: subnet1
+      - name: InternalApi
+        subnetName: subnet1
+      - name: Storage
+        subnetName: subnet1
+      - name: Tenant
+        subnetName: subnet1
+    edpm-compute-1:
+      ansible:
+        ansibleHost: 192.168.122.101 # CHANGEME
+      hostName: edpm-compute-1
+      networks:
+      - defaultRoute: true
+        fixedIP: 192.168.122.101 # CHANGEME
+        name: CtlPlane
+        subnetName: subnet1
+      - name: InternalApi
+        subnetName: subnet1
+      - name: Storage
+        subnetName: subnet1
+      - name: Tenant
+        subnetName: subnet1
+  networkAttachments:
+    - ctlplane
+  nodeTemplate:
+    ansibleSSHPrivateKeySecret: dataplane-ansible-ssh-private-key-secret
+    managementNetwork: ctlplane
+    ansible:
+      ansibleUser: cloud-admin
+      ansiblePort: 22
+      ansibleVars:
+        # CHANGEME -- see https://access.redhat.com/solutions/253273
+        # edpm_bootstrap_command: |
+        #       subscription-manager register --username <subscription_manager_username> --password <subscription_manager_password>
+        #       podman login -u <registry_username> -p <registry_password> registry.redhat.io
+        service_net_map:
+          nova_api_network: internalapi
+          nova_libvirt_network: internalapi
+        # CHANGEME
+        timesync_ntp_servers:
+          - hostname: clock.redhat.com
+        # CPU pinning settings
+         # edpm nfv ovs dpdk config
+         edpm_kernel_args: "default_hugepagesz=1GB hugepagesz=1G hugepages=64 iommu=pt intel_iommu=on tsx=off isolcpus=2-11,14-23"  # CHANGEME
+         edpm_tuned_profile: "cpu-partitioning-powersave"  # CHANGEME
+         edpm_tuned_isolated_cores: "2-11,14-23"  # CHANGEME
+         edpm_nova_libvirt_qemu_group: "hugetlbfs"
+         edpm_ovs_dpdk_pmd_core_list: "1,13,2,14,3,15"  # CHANGEME
+         edpm_ovs_dpdk_socket_memory: "4096"  # CHANGEME
+         edpm_ovs_dpdk_memory_channels: "4"  # CHANGEME
+         edpm_ovs_dpdk_vhost_postcopy_support: "true"  # CHANGEME
+         edpm_ovn_bridge_mappings: ['dpdk2:br-link2','dpdk1:br-link1']  # CHANGEME
+        # edpm_network_config
+        # These vars are edpm_network_config role vars
+        edpm_network_config_hide_sensitive_logs: false
+        # CHANGEME (network_config[0].members[0].name) ---v
+        # CHANGEME (network_config[1].members[0].name) ---v
+        edpm_network_config_template: |
+          ---
+          {% set mtu_list = [ctlplane_mtu] %}
+          {% for network in role_networks %}
+          {{ mtu_list.append(lookup('vars', networks_lower[network] ~ '_mtu')) }}
+          {%- endfor %}
+          {% set min_viable_mtu = mtu_list | max %}
+          network_config:
+          - type: ovs_bridge
+            name: {{ neutron_physical_bridge_name }}
+            mtu: {{ min_viable_mtu }}
+            use_dhcp: false
+            dns_servers: {{ ctlplane_dns_nameservers }}
+            domain: {{ dns_search_domains }}
+            addresses:
+            - ip_netmask: {{ ctlplane_ip }}/{{ ctlplane_cidr }}
+            routes: {{ ctlplane_host_routes }}
+            members:
+            - type: interface
+              name: eno2
+              mtu: {{ min_viable_mtu }}
+              # force the MAC address of the bridge to this interface
+              primary: true
+          {% for network in role_networks if network not in ['External', 'Tenant'] %}
+            - type: vlan
+              mtu: {{ lookup('vars', networks_lower[network] ~ '_mtu') }}
+              vlan_id: {{ lookup('vars', networks_lower[network] ~ '_vlan_id') }}
+              addresses:
+              - ip_netmask:
+                  {{ lookup('vars', networks_lower[network] ~ '_ip') }}/{{ lookup('vars', networks_lower[network] ~ '_cidr') }}
+              routes: {{ lookup('vars', networks_lower[network] ~ '_host_routes') }}
+          {% endfor %}
+          - type: ovs_user_bridge
+            name: br-link1
+            use_dhcp: false
+            ovs_extra: "set port br-link1 tag={{ lookup('vars', networks_lower['Tenant'] ~ '_vlan_id') }}"
+            addresses:
+            - ip_netmask: {{ lookup('vars', networks_lower['Tenant'] ~ '_ip') }}/{{ lookup('vars', networks_lower['Tenant'] ~ '_cidr') }}
+            mtu: {{ lookup('vars', networks_lower[network] ~ '_mtu') }}
+            members:
+            - type: ovs_dpdk_port
+              name: dpdk1
+              members:
+              - type: interface
+                name: eno3
+          - type: ovs_user_bridge
+            name: br-link2
+            use_dhcp: false
+            mtu: 9000
+            members:
+            - type: ovs_dpdk_port
+              name: dpdk2
+              members:
+              - type: interface
+                name: eno4
+
+        # These vars are for the network config templates themselves and are
+        # considered EDPM network defaults.
+        neutron_physical_bridge_name: br-ex
+        neutron_public_interface_name: eth0
+        # edpm_nodes_validation
+        edpm_nodes_validation_validate_controllers_icmp: false
+        edpm_nodes_validation_validate_gateway_icmp: false
+        dns_search_domains: []
+        gather_facts: false
+        enable_debug: false
+        # edpm firewall, change the allowed CIDR if needed
+        edpm_sshd_configure_firewall: true
+        edpm_sshd_allowed_ranges:
+          - 192.168.122.0/24 # CHANGEME
+        # SELinux module
+        edpm_selinux_mode: enforcing
