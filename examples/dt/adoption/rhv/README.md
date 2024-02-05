@@ -1,6 +1,6 @@
 # RHEV base adoption Topology
 
-This topology contains Director deployed Source OpenStack on RHEV that is networked together with RHEV deployed openshift cluster. This topology executes adoption test suite that verifies adoption from existing 17.1 RHEV deployment into podified openstack. The upgrade/migration to the podified OpenStack requires planning various aspectsof the environment such as node roles, planning your network topology.
+This topology contains Director deployed Source OpenStack on RHEV that is networked together with RHEV deployed openshift cluster. This topology executes adoption test suite that verifies adoption from existing 17.1 osp deployment into podified openstack. The upgrade/migration to the podified OpenStack requires planning various aspectsof the environment such as node roles, planning your network topology.
 
 ## General information
 
@@ -43,14 +43,6 @@ This topology contains Director deployed Source OpenStack on RHEV that is networ
 2. Source openstack with HA is pre-deployed on RHEV.
 3. Network protocol - ipv4
 4. Native VLAN for openstack setup shared between source openstack and target openshift environment.
-<<<<<<< Updated upstream:examples/dt/Adoption/DFG-upgrades-adoption-18.0-from-17.1-passed-phase2-rhev-3cont-2comp-ipv4-HA-geneve-ovn/DFG-upgrades-adoption-18.0-from-17.1-passed-phase2-rhev-3cont-2comp-ipv4-HA-geneve-ovn.md
-   - Nic1: RHEV network rhevm
-   - Nic2: RHEV network OSP-RHV-Ctlplane
-   - Nic3: RHEV network OSP-RHV-API
-   - Nic4: RHEV network OSP-RHV-Tenant
-   - Nic5: RHEV network OSP-RHV-External
-=======
->>>>>>> Stashed changes:examples/dt/adoption/rhv/README.md
 
 ## Testing
 
