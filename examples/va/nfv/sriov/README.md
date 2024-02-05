@@ -10,6 +10,7 @@ This is a collection of CR templates that represent a validated Red Hat OpenStac
 - OVN networking
 - Network isolation over a single NIC
 - 2 compute nodes with an additional SRIOV-enabled NIC
+- Swift enabled and used as Glance backend
 
 ## Considerations
 
