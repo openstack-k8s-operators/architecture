@@ -1,0 +1,21 @@
+---
+apiVersion: core.openstack.org/v1beta1
+kind: OpenStackControlPlane
+metadata:
+  name: controlplane
+spec:
+  nova:
+    template:
+      secret: osp-secret
+      cellTemplates:
+        cell0:
+          cellDatabaseInstance: openstack
+          cellMessageBusInstance: rabbitmq
+          cellDatabaseUser: nova_cell0
+          conductorServiceTemplate:
+            replicas: 1
+          hasAPIAccess: true
+          metadataServiceTemplate:
+            enabled: false
+          noVNCProxyServiceTemplate:
+            enabled: false

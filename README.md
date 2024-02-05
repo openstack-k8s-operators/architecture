@@ -32,3 +32,7 @@ The following VAs are available.
 
 - [Hyperconverged OpenStack and Ceph](examples/va/hci/)
 - [Network Functions Virtualization with SRIOV](examples/va/nfv/sriov/)
+
+The following DTs are available.
+
+- [compute-starter-kit](examples/dt/compute/compute-starter-kit)
