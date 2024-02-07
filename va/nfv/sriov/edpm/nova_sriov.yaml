@@ -1,12 +1,3 @@
-#
-# CHANGEME:
-#
-# - Change cpu-pinning-nova ConfigMap's "data['25-cpu-pinning-nova.conf']" to use CPU sets
-#   proper for your environment
-# - Change sriov-nova ConfigMap's "data['03-sriov-nova.conf']" "devname" and "physical_network"
-#   parameters to the proper SRIOV interface and network for your environment
-#
-
 ---
 apiVersion: v1
 kind: ConfigMap
