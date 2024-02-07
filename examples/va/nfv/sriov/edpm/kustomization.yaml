@@ -4,7 +4,7 @@ kind: Kustomization
 components:
   - ../../../../../va/nfv/sriov/edpm/
   # - https://github.com/openstack-k8s-operators/architecture/va/nfv/sriov/edpm/?ref=main
-  ## It's possible to replace ../../../va/nfv/sriov/edpm/ with a git checkout URL as per:
+  ## It's possible to replace ../../../../../va/nfv/sriov/edpm/ with a git checkout URL as per:
   ## https://github.com/kubernetes-sigs/kustomize/blob/master/examples/remoteBuild.md
 
 resources:
