@@ -1,0 +1,9 @@
+# local-config: referenced, but not emitted by kustomize
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: controlplane-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+data:
+  storageClass: host-nfs-storageclass
