@@ -23,6 +23,17 @@ replacements:
 - source:
     kind: ConfigMap
     name: edpm-values
+    fieldPath: data.nodeset.networks
+  targets:
+  - select:
+      kind: OpenStackDataPlaneNodeSet
+    fieldPaths:
+    - spec.nodeTemplate.networks
+    options:
+      create: true
+- source:
+    kind: ConfigMap
+    name: edpm-values
     fieldPath: data.nodeset.nodes
   targets:
   - select:

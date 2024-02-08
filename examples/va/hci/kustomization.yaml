@@ -1,11 +1,15 @@
+# This is the kustomization for the FINAL step, edpm-post-ceph
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 components:
-  - ../../../va/hci/
-  # - https://github.com/openstack-k8s-operators/architecture/va/hci?ref=main
-  ## It's possible to replace ../../../va/hci/ with a git checkout URL as per:
+  - ../../../va/hci/edpm-post-ceph/
+  # - https://github.com/openstack-k8s-operators/architecture/va/hci/edpm-post-ceph/?ref=main
+  ## It's possible to replace ../../../va/hci/edpm-post-ceph/ with a git checkout URL as per:
   ## https://github.com/kubernetes-sigs/kustomize/blob/master/examples/remoteBuild.md
 
 resources:
-  - nncp/values.yaml
+  - control-plane/nncp/values.yaml
+  - edpm-pre-ceph/values.yaml
+  - service-values.yaml
+  - values.yaml
