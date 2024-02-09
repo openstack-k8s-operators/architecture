@@ -29,11 +29,15 @@ data:
           - hostname: clock.redhat.com
         # CPU pinning settings
         edpm_kernel_args: "default_hugepagesz=1GB hugepagesz=1G hugepages=16 intel_iommu=on iommu=pt isolcpus=4-23,28-47"
-        edpm_tuned_profile: "cpu-partitioning-powersave" 
+        edpm_tuned_profile: "cpu-partitioning-powersave"
         edpm_tuned_isolated_cores: "4-23,28-47"
         # edpm_network_config
         # These vars are edpm_network_config role vars
         edpm_network_config_hide_sensitive_logs: false
+        edpm_network_config_os_net_config_mappings:
+          edpm-compute:
+            nic2: enp7s0
+            nic3: eno4
         edpm_network_config_template: |
           ---
           {% set mtu_list = [ctlplane_mtu] %}
@@ -53,7 +57,7 @@ data:
             routes: {{ ctlplane_host_routes }}
             members:
             - type: interface
-              name: enp7s0
+              name: nic2
               mtu: {{ min_viable_mtu }}
               # force the MAC address of the bridge to this interface
               primary: true
@@ -67,7 +71,7 @@ data:
               routes: {{ lookup('vars', networks_lower[network] ~ '_host_routes') }}
           {% endfor %}
           - type: sriov_pf
-            name: eno4
+            name: nic3
             numvfs: 10
             use_dhcp: false
             promisc: true
