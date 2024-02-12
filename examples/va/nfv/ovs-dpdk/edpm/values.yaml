@@ -38,7 +38,6 @@ data:
         edpm_ovs_dpdk_memory_channels: "4"
         edpm_ovs_dpdk_vhost_postcopy_support: "true"
         edpm_ovn_bridge_mappings: ['dpdk2:br-link2','dpdk1:br-link1']
-        edpm_enable_chassis_gw: true
         # edpm_network_config
         # These vars are edpm_network_config role vars
         edpm_network_config_hide_sensitive_logs: false
