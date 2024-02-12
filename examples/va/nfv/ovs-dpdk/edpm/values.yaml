@@ -29,6 +29,7 @@ data:
           - hostname: clock.redhat.com
         # CPU pinning settings
         # edpm nfv ovs dpdk config
+        # CHANGEME
         edpm_kernel_args: "default_hugepagesz=1GB hugepagesz=1G hugepages=64 iommu=pt intel_iommu=on tsx=off isolcpus=2-11,14-23"
         edpm_tuned_profile: "cpu-partitioning-powersave"
         edpm_tuned_isolated_cores: "2-11,14-23"
@@ -42,10 +43,15 @@ data:
         # These vars are edpm_network_config role vars
         edpm_network_config_hide_sensitive_logs: false
         edpm_network_config_os_net_config_mappings:
-          edpm-compute:
-            nic2: eno2
-            nic3: eno3
-            nic4: eno4
+          # Need to provide nic mapping based on system uuid or system product name
+          # here used systetm uuid
+          edpm-compute-0: # CHANGEME
+            dmiString: "system-uuid" # CHANGEME
+            id: "4c4c4544-0034-3810-8050-cac04f325432" # CHANGEME
+            nic1: eno1 # CHANGEME
+            nic2: eno2 # CHANGEME
+            nic3: eno3 # CHANGEME
+            nic4: eno4 # CHANGEME
         edpm_network_config_template: |
           ---
           {% set mtu_list = [ctlplane_mtu] %}
@@ -105,7 +111,7 @@ data:
         # These vars are for the network config templates themselves and are
         # considered EDPM network defaults.
         neutron_physical_bridge_name: br-ex
-        neutron_public_interface_name: eth0
+        neutron_public_interface_name: nic1
         # edpm_nodes_validation
         edpm_nodes_validation_validate_controllers_icmp: false
         edpm_nodes_validation_validate_gateway_icmp: false
