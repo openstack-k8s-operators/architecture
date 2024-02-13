@@ -103,6 +103,7 @@ replacements:
       kind: NodeNetworkConfigurationPolicy
     fieldPaths:
     - spec.desiredState.interfaces.[type=ethernet].name
+    - spec.desiredState.interfaces.[type=linux-bridge].bridge.port.0.name
 - source:
     kind: ConfigMap
     name: network-values
@@ -112,6 +113,7 @@ replacements:
       kind: NodeNetworkConfigurationPolicy
     fieldPaths:
     - spec.desiredState.interfaces.[type=ethernet].mtu
+    - spec.desiredState.interfaces.[type=linux-bridge].mtu
 
 # Static Node IPs: node-0
 - source:
@@ -143,7 +145,7 @@ replacements:
       kind: NodeNetworkConfigurationPolicy
       name: node-0
     fieldPaths:
-    - spec.desiredState.interfaces.[type=ethernet].ipv4.address.0.ip
+    - spec.desiredState.interfaces.[type=linux-bridge].ipv4.address.0.ip
 - source:
     kind: ConfigMap
     name: network-values
@@ -185,7 +187,7 @@ replacements:
       kind: NodeNetworkConfigurationPolicy
       name: node-1
     fieldPaths:
-    - spec.desiredState.interfaces.[type=ethernet].ipv4.address.0.ip
+    - spec.desiredState.interfaces.[type=linux-bridge].ipv4.address.0.ip
 - source:
     kind: ConfigMap
     name: network-values
@@ -227,7 +229,7 @@ replacements:
       kind: NodeNetworkConfigurationPolicy
       name: node-2
     fieldPaths:
-    - spec.desiredState.interfaces.[type=ethernet].ipv4.address.0.ip
+    - spec.desiredState.interfaces.[type=linux-bridge].ipv4.address.0.ip
 - source:
     kind: ConfigMap
     name: network-values
@@ -249,7 +251,7 @@ replacements:
       kind: NodeNetworkConfigurationPolicy
       name: node-0
     fieldPaths:
-    - spec.desiredState.interfaces.[type=ethernet].ipv4.address.0.prefix-length
+    - spec.desiredState.interfaces.[type=linux-bridge].ipv4.address.0.prefix-length
 - source:
     kind: ConfigMap
     name: network-values
@@ -291,7 +293,7 @@ replacements:
       kind: NodeNetworkConfigurationPolicy
       name: node-1
     fieldPaths:
-    - spec.desiredState.interfaces.[type=ethernet].ipv4.address.0.prefix-length
+    - spec.desiredState.interfaces.[type=linux-bridge].ipv4.address.0.prefix-length
 - source:
     kind: ConfigMap
     name: network-values
@@ -333,7 +335,7 @@ replacements:
       kind: NodeNetworkConfigurationPolicy
       name: node-2
     fieldPaths:
-    - spec.desiredState.interfaces.[type=ethernet].ipv4.address.0.prefix-length
+    - spec.desiredState.interfaces.[type=linux-bridge].ipv4.address.0.prefix-length
 - source:
     kind: ConfigMap
     name: network-values
@@ -433,9 +435,10 @@ replacements:
 - source:
     kind: ConfigMap
     name: network-values
-    fieldPath: data.routes.config.0.next-hop-interface
+    fieldPath: data.bridgeName
   targets:
   - select:
       kind: NodeNetworkConfigurationPolicy
     fieldPaths:
     - spec.desiredState.routes.config.0.next-hop-interface
+    - spec.desiredState.interfaces.[type=linux-bridge].name

@@ -141,6 +141,8 @@ spec:
     template:
       ovnController:
         networkAttachment: tenant
+        nicMappings:
+          datacentre: _replaced_
       ovnDBCluster:
         ovndbcluster-nb:
           dbType: NB

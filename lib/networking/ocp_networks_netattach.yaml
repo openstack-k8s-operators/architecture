@@ -30,3 +30,11 @@ metadata:
   labels:
     osp/net: tenant
     osp/net-attach-def-type: standard
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: datacentre
+  labels:
+    osp/net: datacentre
+    osp/net-attach-def-type: standard
