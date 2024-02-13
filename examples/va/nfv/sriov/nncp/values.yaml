@@ -188,4 +188,4 @@ data:
       metallb.universe.tf/loadBalancerIPs: 172.17.0.86
 
   lbServiceType: LoadBalancer
-  storageClass: host-nfs-storageclass
+  storageClass: local-storage
