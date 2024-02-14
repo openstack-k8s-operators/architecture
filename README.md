@@ -10,6 +10,11 @@ Deployment topologies are only to be used for testing environments. Validated
 architectures are intended to represent production-style deployment
 environments.
 
+The [automation](automation) directory contains YAML files which
+define the stages for each VA/DT including the path to the CR
+kustomization and its values as well as a shell command which may
+be used to validate that the stage is complete.
+
 ## Requirements
 
 The templating provided here requires [kustomize](https://kustomize.io/)
