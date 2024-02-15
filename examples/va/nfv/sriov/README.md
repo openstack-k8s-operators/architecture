@@ -10,6 +10,7 @@ This is a collection of CR templates that represent a validated Red Hat OpenStac
 - OVN networking
 - Network isolation over a single NIC
 - 2 compute nodes with an additional SRIOV-enabled NIC
+- Swift enabled and used as Glance backend
 
 ## Considerations
 
@@ -17,9 +18,9 @@ This is a collection of CR templates that represent a validated Red Hat OpenStac
 
 2. The CRs are applied against an OpenShift cluster in _stages_.  That is, there is an ordering in which each grouping of CRs is fed to the cluster.  It is _not_ a case of simply taking all CRs from all stages and applying them all at once.
 
-3. In stages 1 and 2 [kustomize](https://kustomize.io/) is used to genereate the CRs dynamically. The `*-values.yaml` file(s) must be updated to fit your environment. kustomize version 5 or newer required.
+3. In stages 1 and 2 [kustomize](https://kustomize.io/) is used to generate the control plane CRs dynamically. The `*-values.yaml` file(s) must be updated to fit your environment. kustomize version 5 or newer required.
 
-4. In stage 3 YAML comments are placed throughout the CRs to aid in the process of customizing the CRs.  Fields that _must_ (or most likely need to be) changed are commented with "# CHANGEME" either on the field itself or somewhere nearby.  Other comments are added to explain fields that can be changed and, sometimes, to explain additions that can be made.
+4. In stage 3 [kustomize](https://kustomize.io/) is used to generate the dataplane CRs dynamically. The `edpm/values.yaml` file must be updated to fit your environment. kustomize version 5 or newer required.
 
 ## Stages
 
@@ -27,4 +28,4 @@ All stages must be executed in the order listed below. Everything is required un
 
 1. [Install the OpenStack K8S operators and their dependencies](../../../common/)
 2. [Configuring networking and deploy the OpenStack control plane](control-plane.md)
-3. [Configure and deploy the data plane](edpm)
+3. [Configure and deploy the dataplane](dataplane.md)

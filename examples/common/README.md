@@ -40,3 +40,39 @@ oc wait pod -n metallb-system --for condition=Ready -l component=webhook-server 
 timeout 300 bash -c "while ! (oc get deployments/nmstate-operator -n openshift-nmstate); do sleep 10; done"
 oc wait deployments/nmstate-operator -n openshift-nmstate --for condition=Available --timeout=300s
 ```
+
+# MetalLB
+
+Observe CRs which will be generated.
+```
+kustomize build examples/common/metallb/
+```
+Create the CRs.
+```
+oc apply -k examples/common/metallb/
+```
+The following commands can be used to confirm that each step of this
+procedure is complete.
+```
+timeout 300 bash -c "while ! (oc get pod --no-headers=true -l component=speaker -n metallb-system | grep speaker); do sleep 10; done"
+oc wait pod -n metallb-system -l component=speaker --for condition=Ready --timeout=300s
+```
+
+# NMState
+
+Observe CRs which will be generated.
+```
+kustomize build examples/common/nmstate/
+```
+Create the CRs.
+```
+oc apply -k examples/common/nmstate/
+```
+The following commands can be used to confirm that each step of this
+procedure is complete.
+```
+timeout 300 bash -c "while ! (oc get pod --no-headers=true -l component=kubernetes-nmstate-handler -n openshift-nmstate| grep nmstate-handler); do sleep 10; done"
+oc wait pod -n openshift-nmstate -l component=kubernetes-nmstate-handler --for condition=Ready --timeout=300s
+timeout 300 bash -c "while ! (oc get deployments/nmstate-webhook -n openshift-nmstate); do sleep 10; done"
+oc wait deployments/nmstate-webhook -n openshift-nmstate --for condition=Available --timeout=300s
+```

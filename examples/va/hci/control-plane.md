@@ -14,53 +14,38 @@ Change to the hci directory
 ```
 cd architecture/examples/va/hci
 ```
-Edit the [values.yaml](values.yaml) file to suit your environment.
+Edit the [control-plane/nncp/values.yaml](control-plane/nncp/values.yaml) file to suit your environment.
 ```
-vi values.yaml
-```
-Alternatively use your own copy of `values.yaml` and edit 
-[kustomization.yaml](kustomization.yaml) to use that copy.
-```
-resources:
-  - values-ci-framework.yaml
+vi control-plane/nncp/values.yaml
 ```
 
-Generate the control-plane and networking CRs.
-```
-kustomize build > control-plane.yaml
-```
+## Apply node network configuration
 
-## Create CRs
+Generate the node network configuration
 ```
-oc apply -f control-plane.yaml
+kustomize build control-plane/nncp > nncp.yaml
 ```
-
+Apply the NNCP CRs
+```
+oc apply -f nncp.yaml
+```
 Wait for NNCPs to be available
 ```
 oc wait nncp -l osp/nncm-config-type=standard --for jsonpath='{.status.conditions[0].reason}'=SuccessfullyConfigured --timeout=300s
+```
+
+## Apply networking and control-plane configuration
+
+Generate the control-plane and networking CRs.
+```
+kustomize build control-plane > control-plane.yaml
+```
+Apply the CRs
+```
+oc apply -f control-plane.yaml
 ```
 
 Wait for control plane to be available
 ```
 oc wait osctlplane controlplane --for condition=Ready --timeout=600s
 ```
-
-## Workaround
-
-The `control-plane.yaml` file contains CRs for both `NMState` and
-`NodeNetworkConfigurationPolicy` (NNCP). When `oc apply -f` is
-passed this file, OpenShift might try to create the NNCPs while
-`NMState` CRDs are still installing and produce the following message.
-
-```
-nmstate.nmstate.io/nmstate created
-[resource mapping not found for name:
-"ostest-master-0" namespace: "openstack" from "control-plane.yaml":
-no matches for kind "NodeNetworkConfigurationPolicy" in version "nmstate.io/v1"
-ensure CRDs are installed first,
-resource mapping not found for name: "ostest-master-1" namespace: "openstack"
-from "control-plane.yaml": no matches for kind "NodeNetworkConfigurationPolicy"
-in version "nmstate.io/v1"
-```
-Retrying `oc apply -f contol-plane.yaml` a few seconds later should
-resolve the problem however.

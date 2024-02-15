@@ -1,0 +1,32 @@
+# local-config: referenced, but not emitted by kustomize
+#
+# CHANGEME:
+#
+# - Change network_vlan_ranges based on EDPM OvS DPDK environment.
+# - change numa_nodes in the neutron and neutron_tunnel section
+# based on DPDK NIC's and NUMA alignment in the OvS DPDK compute node.
+#
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: service-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+data:
+  neutron:
+    customServiceConfig: |
+      [ml2]
+      mechanism_drivers = ovn
+      [ovn]
+      vhost_sock_dir = /var/lib/vhost_sockets
+      [ml2_type_vlan]
+      network_vlan_ranges = dpdk1:206:209,dpdk2:206:209 # CHANGE
+      [neutron]
+      physnets = dpdk1, dpdk2 # CHANGE
+      [neutron_physnet_dpdk1] # CHANGE
+      numa_nodes = 0 # CHANGE
+      [neutron_physnet_dpdk2 # CHANGE
+      numa_nodes = 0 # CHANGE
+      [neutron_tunnel] # CHANGE
+      numa_nodes = 0 # CHANGE

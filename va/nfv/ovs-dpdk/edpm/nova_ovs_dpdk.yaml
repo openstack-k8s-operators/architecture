@@ -1,0 +1,20 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ovs-dpdk-cpu-pinning-nova
+data:
+  04-cpu-pinning-nova.conf: _replaced_
+---
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneService
+metadata:
+  name: nova-custom-ovsdpdk
+spec:
+  label: nova-custom-ovsdpdk
+  configMaps:
+    - ovs-dpdk-cpu-pinning-nova
+  secrets:
+    - nova-cell1-compute-config
+    - nova-migration-ssh-key
+  playbook: osp.edpm.nova

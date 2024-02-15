@@ -17,7 +17,52 @@ transformers:
     create: true
 
 components:
-- ../../../lib/deploy
-- ../../../lib/nncp
 - ../../../lib/networking
 - ../../../lib/control-plane
+
+replacements:
+# Control plane customization
+- source:
+    kind: ConfigMap
+    name: service-values
+    fieldPath: data.neutron.customServiceConfig
+  targets:
+  - select:
+      kind: OpenStackControlPlane
+    fieldPaths:
+    - spec.neutron.template.customServiceConfig
+    options:
+      create: true
+- source:
+    kind: ConfigMap
+    name: service-values
+    fieldPath: data.glance.customServiceConfig
+  targets:
+  - select:
+      kind: OpenStackControlPlane
+    fieldPaths:
+    - spec.glance.template.customServiceConfig
+    options:
+      create: true
+- source:
+    kind: ConfigMap
+    name: service-values
+    fieldPath: data.glance.default.replicas
+  targets:
+  - select:
+      kind: OpenStackControlPlane
+    fieldPaths:
+    - spec.glance.template.glanceAPIs.default.replicas
+    options:
+      create: true
+- source:
+    kind: ConfigMap
+    name: service-values
+    fieldPath: data.swift.enabled
+  targets:
+  - select:
+      kind: OpenStackControlPlane
+    fieldPaths:
+    - spec.swift.enabled
+    options:
+      create: true
