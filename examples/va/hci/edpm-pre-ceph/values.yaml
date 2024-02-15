@@ -166,6 +166,7 @@ data:
     - ceph-hci-pre
     - configure-os
     - run-os
+    - reboot-os
   nova:
     migration:
       ssh_keys:
