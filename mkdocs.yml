@@ -26,13 +26,15 @@ theme:
         name: Switch to light mode
 nav:
   - Overview: index.md
-  - Stages:
-    - stage1.md
-    - stage2.md
-    - stage3.md
-    - stage4.md
-    - stage5.md
-    - stage6.md
+  - Validated Architectures:
+    - HCI: https://github.com/openstack-k8s-operators/architecture/tree/main/examples/va/hci/README.md
+    - NFV SRIOV: https://github.com/openstack-k8s-operators/architecture/blob/main/examples/va/nfv/sriov/README.md
+    - NFV OvS DPDK: https://github.com/openstack-k8s-operators/architecture/blob/main/examples/va/nfv/ovs-dpdk/README.md
+
+  - Deployed Topologies:
+    - None
+  - FAQ:
+    - Creating Smaller CRs: faq/cr_by_components.md
   - Contributing:
     - contributing/documentation.md
 markdown_extensions:
