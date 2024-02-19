@@ -1,6 +1,6 @@
-# RHEV base adoption Topology
+# RHV base adoption Topology
 
-This topology contains Director deployed Source OpenStack on RHEV that is networked together with RHEV deployed openshift cluster. This topology executes adoption test suite that verifies adoption from existing 17.1 osp deployment into podified openstack. The upgrade/migration to the podified OpenStack requires planning various aspectsof the environment such as node roles, planning your network topology.
+This topology contains Director deployed source openStack on RHV that is networked together with RHV deployed openshift cluster. This topology executes test suite that verifies adoption from existing 17.1 osp deployment into podified openstack. The upgrade/migration to the podified OpenStack requires planning various aspects of the environment such as node roles, planning your network topology.
 
 ## General information
 
@@ -11,7 +11,7 @@ This topology contains Director deployed Source OpenStack on RHEV that is networ
 ## Node topology
 | Node role                                     | bm/vm | amount |
 | --------------------------------------------- | ----- | ------ |
-| Openshift master/worker combo-node cluster    | vm    | 3      |
+| Openshift Compact cluster                     | vm    | 3      |
 | Undercloud node - Source osp 17               | vm    | 1      |
 | Controller nodes - Source osp 17              | vm    | 3      |
 | Compute nodes    - Source osp 17              | vm    | 2      |
@@ -39,8 +39,8 @@ This topology contains Director deployed Source OpenStack on RHEV that is networ
 
 ## Considerations/Constraints
 
-1. 3 node openshift cluster on RHEV.
-2. Source openstack with HA is pre-deployed on RHEV.
+1. 3 node openshift cluster on RHV.
+2. Source openstack with HA is pre-deployed on RHV.
 3. Network protocol - ipv4
 4. Native VLAN for openstack setup shared between source openstack and target openshift environment.
 
@@ -55,7 +55,6 @@ This topology contains Director deployed Source OpenStack on RHEV that is networ
 
 All stages must be executed in the order listed below.  Everything is required unless otherwise indicated.
 
-1. [Install dependencies for the OpenStack K8S operators](stage1)
-2. [Install the OpenStack K8S operators](stage2)
-3. [Configuring networking on the OCP nodes](stage3)
-4. [Run Dataplane Adoption test suite](stage4)
+1. [Install the OpenStack K8S operators and their dependencies](../../../common/)
+2. [Configuring networking on the OCP nodes](vendor/)
+3. [Run Dataplane Adoption test suite](control-plane.md)
