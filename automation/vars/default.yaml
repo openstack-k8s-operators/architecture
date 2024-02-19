@@ -1,8 +1,6 @@
 ---
 vas:
   hci:
-    repo: https://github.com/openstack-k8s-operators/architecture.git
-    branch: main
     stages:
       - path: examples/va/hci/control-plane/nncp
         validations:
