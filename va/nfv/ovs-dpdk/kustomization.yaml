@@ -33,3 +33,15 @@ replacements:
     - spec.neutron.template.customServiceConfig
     options:
       create: true
+# OVN control plane OvS DPDK customization
+- source:
+    kind: ConfigMap
+    name: service-values
+    fieldPath: data.ovn.ovnController
+  targets:
+  - select:
+      kind: OpenStackControlPlane
+    fieldPaths:
+    - spec.ovn.template.ovnController
+    options:
+      create: true
