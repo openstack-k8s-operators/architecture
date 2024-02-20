@@ -59,6 +59,16 @@ replacements:
       name: tenant
     fieldPaths:
     - spec.config
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.datacentre.net-attach-def
+  targets:
+  - select:
+      kind: NetworkAttachmentDefinition
+      name: datacentre
+    fieldPaths:
+    - spec.config
 
 # IPAddressPool addresses
 - source:
@@ -163,7 +173,7 @@ replacements:
 - source:
     kind: ConfigMap
     name: network-values
-    fieldPath: data.ctlplane.iface
+    fieldPath: data.bridgeName
   targets:
   - select:
       group: metallb.io

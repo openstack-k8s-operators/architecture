@@ -110,3 +110,12 @@ replacements:
     fieldPaths:
     - spec.storageClass
     - spec.glance.template.storageClass
+- source:
+    kind: ConfigMap
+    name: network-values
+    fieldPath: data.bridgeName
+  targets:
+  - select:
+      kind: OpenStackControlPlane
+    fieldPaths:
+    - spec.ovn.template.ovnController.nicMappings.datacentre
