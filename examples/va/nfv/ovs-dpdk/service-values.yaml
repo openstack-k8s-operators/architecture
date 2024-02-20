@@ -16,6 +16,8 @@ metadata:
 data:
   neutron:
     customServiceConfig: |
+      [DEFAULT]
+      global_physnet_mtu = 9000
       [ml2]
       mechanism_drivers = ovn
       [ovn]
