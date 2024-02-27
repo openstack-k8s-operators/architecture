@@ -156,9 +156,8 @@ data:
         - name: Tenant
           subnetName: subnet1
     services:
-    - repo-setup
-    - download-cache
     - bootstrap
+    - download-cache
     - reboot-os
     - configure-ovs-dpdk
     - configure-network
@@ -166,7 +165,6 @@ data:
     - install-os
     - configure-os
     - run-os
-    - reboot-os
     - ovn
     - neutron-metadata
     - libvirt
