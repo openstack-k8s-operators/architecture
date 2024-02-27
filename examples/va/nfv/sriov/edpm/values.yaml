@@ -137,6 +137,7 @@ data:
           subnetName: subnet1
     services:
     - bootstrap
+    - download-cache
     - configure-network
     - validate-network
     - install-os
