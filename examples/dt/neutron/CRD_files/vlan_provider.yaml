@@ -17,7 +17,6 @@ spec:
         allow_automatic_l3agent_failover = true
         debug = true
         log_dir = /var/log/neutron
-        default_availability_zones = zone-1,zone-2
         global_physnet_mtu = 9000
 
         [agent]
@@ -50,32 +49,22 @@ spec:
 
         [ovs]
         igmp_snooping_enable = true
-
+    
         [ovn]
-        ovsdb_probe_interval = 60000
         ovn_emit_need_to_frag = true
-        ovn_metadata_enabled = true
-        enable_distributed_floating_ip = true
-
+  
         [ml2]
         path_mtu = 9000
-        type_drivers = geneve,vxlan,vlan,flat
-        tenant_network_types = geneve,flat
+        type_drivers = geneve,vlan
+        tenant_network_types = geneve,vlan
         extension_drivers = qos,port_security,dns_domain_ports
-
-        [ml2_type_flat]
-        flat_networks = datacentre
 
         [ml2_type_geneve]
         vni_ranges = 1:65536
         max_header_size = 38
 
         [ml2_type_vlan]
-        network_vlan_ranges = tenant:1000:2000
-
-        [ml2_type_vxlan]
-        vni_ranges = 1:65536
-        vxlan_group = 224.0.0.1
+        network_vlan_ranges = tenant:1000:2000,datacentre:218:218
 
   nova:
     template:
