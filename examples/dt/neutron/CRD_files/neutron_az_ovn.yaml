@@ -82,6 +82,6 @@ spec:
       schedulerServiceTemplate:
         customServiceConfig: |
           [filter_scheduler]
-          enabled_filters = RetryFilter, AggregateInstanceExtraSpecsFilter, AvailabilityZoneFilter,ComputeFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,DifferentHostFilter,SameHostFilter,AllHostsFilter,ServerGroupAffinityFilter,ServerGroupAntiAffinityFilter
+          enabled_filters = AggregateInstanceExtraSpecsFilter, AvailabilityZoneFilter,ComputeFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,DifferentHostFilter,SameHostFilter,AllHostsFilter,ServerGroupAffinityFilter,ServerGroupAntiAffinityFilter
 
 

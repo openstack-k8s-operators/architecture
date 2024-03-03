@@ -50,8 +50,8 @@ Tempest and Rally
 | Test framework   | Stage to run | Special configuration | Test case to report |
 | ---------------- | ------------ | --------------------- | :-----------------: |
 | Rally            | stage7       |                       |      11111111       | 
-| Tempest/neutron  | stage8       | Use rhel image        |      11223344       |
-| Tempest/scenario | stage8       | Use cirros image      |      22334455       |
+| Tempest/neutron  | stage6       | Use rhel image        |      11223344       |
+| Tempest/scenario | stage6       | Use cirros image      |      22334455       |
 
 ## Stages
 
