@@ -38,7 +38,7 @@ data:
       rbd_store_user = openstack
     glanceAPIs:
       default:
-        replicas: 1
+        replicas: 3
   manila:
     enabled: true
     manilaShares:
