@@ -1,4 +1,4 @@
-# Configuring networking and deploy the OpenStack control plane
+# Configuring and deploying the post-Ceph dataplane
 
 ## Assumptions
 
