@@ -1,3 +1,5 @@
-resources:
+components:
   - ../../../lib/olm-deps
   - ../../../lib/olm-openstack
+resources:
+  - values.yaml
