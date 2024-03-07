@@ -1,0 +1,9 @@
+# local-config: referenced, but not emitted by kustomize
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: olm-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+data:
+  openstack-operator-image: "quay.io/openstack-k8s-operators/openstack-operator-index:latest"

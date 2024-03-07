@@ -10,7 +10,7 @@ resources:
 replacements:
 - source:
     kind: ConfigMap
-    name: network-values
+    name: olm-values
     fieldPath: data.openstack-operator-image
   targets:
   - select:
