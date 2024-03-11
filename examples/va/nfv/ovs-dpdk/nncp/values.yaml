@@ -6,7 +6,6 @@ metadata:
   annotations:
     config.kubernetes.io/local-config: "true"
 data:
-  openstack-operator-image: "quay.io/openstack-k8s-operators/openstack-operator-index:latest"
   # nodes
   node_0:
     name: ostest-master-0
