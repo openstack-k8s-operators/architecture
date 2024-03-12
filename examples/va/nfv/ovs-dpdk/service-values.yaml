@@ -23,15 +23,19 @@ data:
       [ovn]
       vhost_sock_dir = /var/lib/vhost_sockets
       [ml2_type_vlan]
-      network_vlan_ranges = dpdk1:206:209,dpdk2:206:209 # CHANGE
+      network_vlan_ranges = dpdk1:206:209,dpdk2:206:209 # CHANGEME
       [neutron]
-      physnets = dpdk1, dpdk2 # CHANGE
-      [neutron_physnet_dpdk1] # CHANGE
-      numa_nodes = 0 # CHANGE
-      [neutron_physnet_dpdk2 # CHANGE
-      numa_nodes = 0 # CHANGE
-      [neutron_tunnel] # CHANGE
-      numa_nodes = 0 # CHANGE
+      physnets = dpdk1, dpdk2 # CHANGEME
+      [neutron_physnet_dpdk1] # CHANGEME
+      numa_nodes = 0 # CHANGEME
+      [neutron_physnet_dpdk2 # CHANGEME
+      numa_nodes = 0 # CHANGEME
+      [neutron_tunnel] # CHANGEME
+      numa_nodes = 0 # CHANGEME
+  ovn:
+    ovnController:
+      nicMappings:
+        datacentre: enp4s0 # CHANGEME
   glance:
     customServiceConfig: |
       [DEFAULT]
