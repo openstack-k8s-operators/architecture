@@ -14,7 +14,7 @@ Change to the nfv/sriov/edpm directory
 ```
 cd architecture/examples/va/nfv/sriov/edpm
 ```
-Edit the [values.yaml](values.yaml) file to suit 
+Edit the [values.yaml](edpm/values.yaml) file to suit 
 your environment.
 ```
 vi values.yaml
