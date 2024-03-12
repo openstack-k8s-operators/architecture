@@ -14,7 +14,7 @@ Change to the nfv/ovs-dpdk/edpm directory
 ```
 cd architecture/examples/va/nfv/ovs-dpdk/edpm
 ```
-Edit the [values.yaml](values.yaml) file to suit 
+Edit the [values.yaml](edpm/values.yaml) file to suit 
 your environment.
 ```
 vi values.yaml
