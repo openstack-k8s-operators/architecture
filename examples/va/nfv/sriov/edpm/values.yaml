@@ -35,9 +35,12 @@ data:
         # These vars are edpm_network_config role vars
         edpm_network_config_hide_sensitive_logs: false
         edpm_network_config_os_net_config_mappings:
-          edpm-compute:
-            nic2: enp7s0
-            nic3: eno4
+          edpm-compute-0:
+            nic2: enp7s0 # CHANGEME
+            nic3: eno4 # CHANGEME
+          edpm-compute-1:
+            nic2: enp7s0 # CHANGEME
+            nic3: eno4 # CHANGEME
         edpm_network_config_template: |
           ---
           {% set mtu_list = [ctlplane_mtu] %}
