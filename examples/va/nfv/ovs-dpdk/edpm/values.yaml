@@ -71,7 +71,7 @@ data:
             routes: {{ ctlplane_host_routes }}
             members:
             - type: interface
-              name: eno2
+              name: nic2
               mtu: {{ min_viable_mtu }}
               # force the MAC address of the bridge to this interface
               primary: true
