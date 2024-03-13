@@ -36,9 +36,13 @@ data:
         edpm_network_config_hide_sensitive_logs: false
         edpm_network_config_os_net_config_mappings:
           edpm-compute-0:
+            dmiString: "system-uuid" # CHANGEME
+            id: "4c4c4544-0034-3810-8050-cac04f325432" # CHANGEME
             nic2: enp7s0 # CHANGEME
             nic3: eno4 # CHANGEME
           edpm-compute-1:
+            dmiString: "system-uuid" # CHANGEME
+            id: "cca187e7-6973-4e2e-b95b-8f2098966ecf" # CHANGEME
             nic2: enp7s0 # CHANGEME
             nic3: eno4 # CHANGEME
         edpm_network_config_template: |
