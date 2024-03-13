@@ -123,3 +123,39 @@ vas:
           - name: edpm-values
             src_file: values.yaml
         build_output: dataplane.yaml
+
+  ovs-dpdk-sriov:
+    stages:
+      - path: examples/va/nfv/ovs-dpdk-sriov/nncp
+        validations:
+          - >-
+            oc -n openstack wait nncp
+            -l osp/nncm-config-type=standard
+            --for jsonpath='{.status.conditions[0].reason}'=SuccessfullyConfigured
+            --timeout=60s
+        values:
+          - name: network-values
+            src_file: values.yaml
+        build_output: nncp.yaml
+
+      - path: examples/va/nfv/ovs-dpdk-sriov
+        validations:
+          - >-
+            oc -n openstack wait osctlplane controlplane --for condition=Ready
+            --timeout=600s
+        values:
+          - name: network-values
+            src_file: nncp/values.yaml
+          - name: service-values
+            src_file: service-values.yaml
+        build_output: control-plane.yaml
+
+      - path: examples/va/nfv/ovs-dpdk-sriov/edpm
+        validations:
+          - >-
+            oc -n openstack wait
+            osdpd edpm-deployment --for condition=Ready --timeout=1200s
+        values:
+          - name: edpm-values
+            src_file: values.yaml
+        build_output: dataplane.yaml
