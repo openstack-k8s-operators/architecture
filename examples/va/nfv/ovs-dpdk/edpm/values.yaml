@@ -46,12 +46,10 @@ data:
           # Need to provide nic mapping based on system uuid or system product name
           # here used systetm uuid
           edpm-compute-0: # CHANGEME
-            dmiString: "system-uuid" # CHANGEME
-            id: "4c4c4544-0034-3810-8050-cac04f325432" # CHANGEME
-            nic1: eno1 # CHANGEME
-            nic2: eno2 # CHANGEME
-            nic3: eno3 # CHANGEME
-            nic4: eno4 # CHANGEME
+            nic1: 6c:fe:54:3f:8a:01 # CHANGEME
+            nic2: 6c:fe:54:3f:8a:02 # CHANGEME
+            nic3: 6c:fe:54:3f:8a:03 # CHANGEME
+            nic4: 6c:fe:54:3f:8a:04 # CHANGEME
         edpm_network_config_template: |
           ---
           {% set mtu_list = [ctlplane_mtu] %}
