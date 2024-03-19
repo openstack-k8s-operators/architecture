@@ -18,7 +18,7 @@ be used to validate that the stage is complete.
 ## Requirements
 
 The templating provided here requires [kustomize](https://kustomize.io/)
-version 5.0.1 or higher.
+version 5.0.1 or higher ([OpenShift CLI (oc)](https://docs.openshift.com/container-platform/4.14/cli_reference/openshift_cli/getting-started-cli.html#installing-openshift-cli) 4.14 or higher).
 
 ## Understanding the repository layout
 
