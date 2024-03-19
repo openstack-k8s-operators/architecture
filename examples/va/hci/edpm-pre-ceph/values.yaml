@@ -28,8 +28,12 @@ data:
         edpm_logrotate_crond_image: '{{ registry_url }}/openstack-cron:{{ image_tag }}'
         edpm_network_config_hide_sensitive_logs: false
         edpm_network_config_os_net_config_mappings:
-          edpm-compute:
-            nic2: enp7s0
+          edpm-compute-0:
+            nic2: 6a:fe:54:3f:8a:02 # CHANGEME
+          edpm-compute-1:
+            nic2: 6b:fe:54:3f:8a:02 # CHANGEME
+          edpm-compute-2:
+            nic2: 6c:fe:54:3f:8a:02 # CHANGEME
         edpm_network_config_template: |
           ---
           {% set mtu_list = [ctlplane_mtu] %}
