@@ -49,3 +49,27 @@ replacements:
     - data.03-sriov-nova\.conf
     options:
       create: true
+- source:
+    kind: ConfigMap
+    name: edpm-values
+    fieldPath: data.preProvisioned
+  targets:
+  - select:
+      kind: OpenStackDataPlaneNodeSet
+      name: openstack-edpm
+    fieldPaths:
+    - spec.preProvisioned
+    options:
+      create: true
+- source:
+    kind: ConfigMap
+    name: edpm-values
+    fieldPath: data.baremetalSetTemplate
+  targets:
+  - select:
+      kind: OpenStackDataPlaneNodeSet
+      name: openstack-edpm
+    fieldPaths:
+    - spec.baremetalSetTemplate
+    options:
+      create: true
