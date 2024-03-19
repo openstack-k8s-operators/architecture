@@ -122,37 +122,23 @@ data:
           - 192.168.122.0/24
         # SELinux module
         edpm_selinux_mode: enforcing
+    networks:
+      - defaultRoute: true
+        name: CtlPlane
+        subnetName: subnet1
+      - name: InternalApi
+        subnetName: subnet1
+      - name: Storage
+        subnetName: subnet1
+      - name: Tenant
+        subnetName: subnet1
+      - name: StorageMgmt
+        subnetName: subnet1
     nodes:
       edpm-compute-0:
-        ansible:
-          ansibleHost: 192.168.122.100
         hostName: edpm-compute-0
-        networks:
-        - defaultRoute: true
-          fixedIP: 192.168.122.100
-          name: CtlPlane
-          subnetName: subnet1
-        - name: InternalApi
-          subnetName: subnet1
-        - name: Storage
-          subnetName: subnet1
-        - name: Tenant
-          subnetName: subnet1
       edpm-compute-1:
-        ansible:
-          ansibleHost: 192.168.122.101
         hostName: edpm-compute-1
-        networks:
-        - defaultRoute: true
-          fixedIP: 192.168.122.101
-          name: CtlPlane
-          subnetName: subnet1
-        - name: InternalApi
-          subnetName: subnet1
-        - name: Storage
-          subnetName: subnet1
-        - name: Tenant
-          subnetName: subnet1
     services:
     - bootstrap
     - download-cache
