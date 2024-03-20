@@ -149,8 +149,6 @@ data:
         subnetName: subnet1
       - name: Tenant
         subnetName: subnet1
-      - name: StorageMgmt
-        subnetName: subnet1
     nodes:
       edpm-compute-0:
         hostName: edpm-compute-0
