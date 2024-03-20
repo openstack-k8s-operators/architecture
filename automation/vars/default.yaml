@@ -21,6 +21,7 @@ vas:
             --timeout=600s
         values:
           - name: network-values
+            src_file: nncp/values.yaml
         build_output: ../control-plane.yaml
 
       - path: examples/va/hci/edpm-pre-ceph
