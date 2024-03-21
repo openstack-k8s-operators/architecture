@@ -29,7 +29,7 @@ vas:
           - >-
             oc -n openstack wait
             osdpd edpm-deployment-pre-ceph --for condition=Ready
-            --timeout=1200s
+            --timeout=1500s
         values:
           - name: edpm-values
             src_file: values.yaml
