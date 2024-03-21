@@ -1,0 +1,105 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+transformers:
+  - |-
+      apiVersion: builtin
+      kind: NamespaceTransformer
+      metadata:
+        name: _ignored_
+        namespace: openstack
+      setRoleBindingSubjects: none
+      unsetOnly: true
+      fieldSpecs:
+        - path: metadata/name
+          kind: Namespace
+          create: true
+
+components:
+  - ../../lib/control-plane
+
+replacements:
+  # Cinder
+  # - source:
+  #     kind: ConfigMap
+  #     name: service-values
+  #     fieldPath: data.cinder.cinderVolumes.ontap-iscsi.networkAttachments
+  #   targets:
+  #     - select:
+  #         kind: OpenStackControlPlane
+  #       fieldPaths:
+  #         - spec.cinder.template.cinder.cinderVolumes.ontap-iscsi.networkAttachments
+  #       options:
+  #         create: true
+  # - source:
+  #     kind: ConfigMap
+  #     name: service-values
+  #     fieldPath: data.cinder.cinderVolumes.ontap-iscsi.customServiceConfigSecrets
+  #   targets:
+  #     - select:
+  #         kind: OpenStackControlPlane
+  #       fieldPaths:
+  #         - spec.cinder.template.cinder.cinderVolumes.ontap-iscsi.customServiceConfigSecrets
+  #       options:
+  #         create: true
+  # - source:
+  #     kind: ConfigMap
+  #     name: service-values
+  #     fieldPath: data.cinder.cinderVolumes.ontap-iscsi.customServiceConfig
+  #   targets:
+  #     - select:
+  #         kind: OpenStackControlPlane
+  #       fieldPaths:
+  #         - spec.cinder.template.cinder.cinderVolumes.ontap-iscsi.customServiceConfig
+  #       options:
+  #         create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.extraMounts
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.extraMounts
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.cinder.ontap-creds
+    targets:
+      - select:
+          kind: Secret
+          name: cinder-volume-ontap-secrets
+        fieldPaths:
+          - stringData.ontap-cinder-secrets\.conf
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.cinder.shares-config
+    targets:
+      - select:
+          kind: Secret
+          name: cinder-volume-ontap-shares-secrets
+        fieldPaths:
+          - stringData.shares-config
+        options:
+          create: true
+
+ # Manila
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.manila.netapp-creds
+    targets:
+      - select:
+          kind: Secret
+          name: osp-secret-manila-netapp
+        fieldPaths:
+          - stringData.netapp-secrets\.conf
+        options:
+          create: true

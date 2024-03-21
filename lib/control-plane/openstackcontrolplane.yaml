@@ -181,3 +181,27 @@ spec:
         ringReplicas: 1
       swiftStorage:
         replicas: 1
+  telemetry:
+    enabled: false
+    template:
+      metricStorage:
+        enabled: false
+        monitoringStack:
+          alertingEnabled: true
+          scrapeInterval: 30s
+          storage:
+            strategy: persistent
+            retention: 24h
+            persistent:
+              pvcStorageRequest: 20G
+      autoscaling:
+        enabled: false
+        aodh:
+          passwordSelectors:
+          databaseInstance: openstack
+          memcachedInstance: memcached
+          secret: osp-secret
+        heatInstance: heat
+      ceilometer:
+        enabled: false
+        secret: osp-secret

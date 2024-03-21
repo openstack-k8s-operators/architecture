@@ -1,0 +1,35 @@
+apiVersion: core.openstack.org/v1beta1
+kind: OpenStackControlPlane
+metadata:
+  name: controlplane
+spec:
+  secret: osp-secret
+  storageClass: ""
+  manila:
+    enabled: true
+    template:
+      manilaAPI:
+        customServiceConfig: |
+          [DEFAULT]
+          debug = true
+          enabled_share_protocols=cifs
+        replicas: 1
+      manilaScheduler:
+        replicas: 1
+      manilaShares:
+        share1:
+          networkAttachments:
+          - storage
+          customServiceConfig: |
+            [DEFAULT]
+            debug = true
+            enabled_share_backends=netapp
+            [netapp]
+            driver_handles_share_servers=False
+            share_backend_name=netapp
+            share_driver=manila.share.drivers.netapp.common.NetAppDriver
+            netapp_storage_family=ontap_cluster
+            netapp_transport_type=http
+          customServiceConfigSecrets:
+            - osp-secret-manila-netapp
+          replicas: 1

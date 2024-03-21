@@ -1,0 +1,37 @@
+# Sample using File/NFS as a glance backend
+# Requires a filepath ('/var/lib/glance/image/') is mounted on NFS share
+apiVersion: core.openstack.org/v1beta1
+kind: OpenStackControlPlane
+metadata:
+  name: controlplane
+spec:
+  glance:
+    template:
+      customServiceConfig: |
+        [DEFAULT]
+        enabled_backends = default_backend:file
+        [glance_store]
+        default_backend = default_backend
+        [default_backend]
+        filesystem_store_datadir = /var/lib/glance/images/
+      databaseInstance: openstack
+      glanceAPIs:
+        default:
+          preserveJobs: false
+          replicas: 1
+          type: single
+  extraMounts:
+  - extraVol:
+    - extraVolType: Nfs
+      mounts:
+      - mountPath: /var/lib/glance/images
+        name: nfs
+      propagation:
+      - Glance
+      volumes:
+      - name: nfs
+        nfs:
+          path: /var/nfs
+          server: 172.18.0.5
+    name: r1
+    region: r1
