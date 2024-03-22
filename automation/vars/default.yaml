@@ -18,7 +18,7 @@ vas:
         validations:
           - >-
             oc -n openstack wait osctlplane controlplane --for condition=Ready
-            --timeout=600s
+            --timeout=30m
         values:
           - name: network-values
             src_file: nncp/values.yaml
@@ -45,7 +45,7 @@ vas:
           - >-
             oc -n openstack wait
             osdpd edpm-deployment-post-ceph --for condition=Ready
-            --timeout=1200s
+            --timeout=40m
         values:
           - name: service-values
             src_file: service-values.yaml
