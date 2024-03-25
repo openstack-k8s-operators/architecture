@@ -6,6 +6,13 @@ metadata:
   annotations:
     config.kubernetes.io/local-config: "true"
 data:
+  preProvisioned: false
+  baremetalSetTemplate:
+    ctlplaneInterface: eno2 #CHANGEME
+    cloudUserName: cloud-admin
+    provisioningInterface: enp1s0 #CHANGEME
+    bmhLabelSelector:
+      app: openstack #CHANGEME
   ssh_keys:
     # Authorized keys that will have access to the dataplane computes via SSH
     authorized: CHANGEME
