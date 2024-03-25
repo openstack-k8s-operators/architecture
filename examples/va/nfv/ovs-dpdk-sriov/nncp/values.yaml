@@ -183,7 +183,7 @@ data:
 
   routes:
     config:
-    - destination: 0.0.0.0/0
+    - destination: 192.168.122.0/24
       next-hop-address: 192.168.122.1
       next-hop-interface: enp7s0
 
