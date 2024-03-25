@@ -31,7 +31,7 @@
 ### Additional information 
 tenant_network = geneve
 public_network = flat
-This DT has 3 networker nodes
+This DT has 3 networker nodes, hence ovn-controller is disabled in controller node
 This DT is mapped to unified job - uni-alpha
 
 #### Nova
@@ -39,8 +39,6 @@ This DT is mapped to unified job - uni-alpha
 #### Cinder
 
 #### OVN
-tenant_network_mtu = 9000
-external_network_mtu = 1500
 OVNEmitNeedToFrag = True
 ovn_emit_need_to_frag = True
 [The above specs are taken from network-environment_v2.yaml]

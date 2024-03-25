@@ -18,7 +18,6 @@ spec:
         debug = true
         log_dir = /var/log/neutron
         default_availability_zones = zone-1,zone-2
-        global_physnet_mtu = 9000
 
         [agent]
         report_interval = 300
@@ -58,7 +57,6 @@ spec:
         enable_distributed_floating_ip = true
 
         [ml2]
-        path_mtu = 9000
         type_drivers = geneve,vxlan,vlan,flat
         tenant_network_types = geneve,flat
         extension_drivers = qos,port_security,dns_domain_ports

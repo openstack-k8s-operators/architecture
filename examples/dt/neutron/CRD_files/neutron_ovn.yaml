@@ -9,7 +9,7 @@ metadata:
         [DEFAULT]
         dns_domain = openstackgate.local
         vlan_transparent = true
-        service_plugins = qos,ovn-router-flavors-ha,trunk,segments,port_forwarding,log
+        service_plugins = qos,ovn-router,trunk,segments,port_forwarding,log
         dhcp_agent_notification = false
         agent_down_time = 600
         router_distributed = true

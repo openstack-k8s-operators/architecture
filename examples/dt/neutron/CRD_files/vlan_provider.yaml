@@ -17,7 +17,6 @@ spec:
         allow_automatic_l3agent_failover = true
         debug = true
         log_dir = /var/log/neutron
-        global_physnet_mtu = 9000
 
         [agent]
         report_interval = 300
@@ -54,7 +53,6 @@ spec:
         ovn_emit_need_to_frag = true
   
         [ml2]
-        path_mtu = 9000
         type_drivers = geneve,vlan
         tenant_network_types = geneve,vlan
         extension_drivers = qos,port_security,dns_domain_ports
