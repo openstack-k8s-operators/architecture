@@ -60,7 +60,7 @@ data:
         edpm_network_config_template: |
           ---
           {% set mtu_list = [ctlplane_mtu] %}
-          {% for network in nodeset_networks %}
+          {% for network in role_networks %}
           {{ mtu_list.append(lookup('vars', networks_lower[network] ~ '_mtu')) }}
           {%- endfor %}
           {% set min_viable_mtu = mtu_list | max %}
@@ -80,7 +80,7 @@ data:
               mtu: {{ min_viable_mtu }}
               # force the MAC address of the bridge to this interface
               primary: true
-          {% for network in nodeset_networks if network not in ['External', 'Tenant'] %}
+          {% for network in role_networks if network not in ['External', 'Tenant'] %}
             - type: vlan
               mtu: {{ lookup('vars', networks_lower[network] ~ '_mtu') }}
               vlan_id: {{ lookup('vars', networks_lower[network] ~ '_vlan_id') }}
