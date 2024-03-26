@@ -16,9 +16,9 @@ data:
 apiVersion: dataplane.openstack.org/v1beta1
 kind: OpenStackDataPlaneService
 metadata:
-  name: nova-custom-ovsdpdk
+  name: nova-custom-ovsdpdksriov
 spec:
-  label: nova-custom-ovsdpdk
+  label: nova-custom-ovsdpdksriov
   configMaps:
     - ovs-dpdk-sriov-cpu-pinning-nova
     - sriov-nova
