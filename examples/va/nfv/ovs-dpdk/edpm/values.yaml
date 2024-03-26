@@ -95,7 +95,7 @@ data:
             ovs_extra: "set port br-link1 tag={{ lookup('vars', networks_lower['Tenant'] ~ '_vlan_id') }}"
             addresses:
             - ip_netmask: {{ lookup('vars', networks_lower['Tenant'] ~ '_ip') }}/{{ lookup('vars', networks_lower['Tenant'] ~ '_cidr') }}
-            mtu: {{ lookup('vars', networks_lower[network] ~ '_mtu') }}
+            mtu: {{ lookup('vars', networks_lower['Tenant'] ~ '_mtu') }}
             members:
             - type: ovs_dpdk_port
               name: dpdk1
