@@ -1,0 +1,55 @@
+---
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: service-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+
+data:
+  cinder:
+    ontap-creds: |
+      [ontap]
+      netapp_login=admin_username # CHANGEME
+      netapp_password=admin_password # CHANGEME
+      netapp_vserver=svm_name
+    shares-config: |
+      192.168.1.1:/nfs/test # CHANGEME
+      192.168.1.1:/nfs2/test2 # CHANGEME
+  manila:
+    netapp-creds: |
+      [netapp]
+      netapp_server_hostname = 1.2.3.4  # CHANGEME
+      netapp_login = fancy_netapp_user  # CHANGEME
+      netapp_password = secret_netapp_password  # CHANGEME
+      netapp_vserver = mydatavserver  # CHANGEME
+
+  extraMounts:
+    - name: v1
+      region: r1
+      extraVol:
+        - extraVolType: Nfs
+          mounts:
+          - mountPath: /var/lib/glance/images
+            name: nfs
+          propagation:
+          - Glance
+          volumes:
+          - name: nfs
+            nfs:
+              path: /var/nfs
+              server: 172.18.0.5
+        - propagation:
+          - CinderVolume
+          extraVolType: Undefined
+          volumes:
+          - name: nfs-shares
+            projected:
+              sources:
+              - secret:
+                  name: cinder-volume-ontap-shares-secrets
+          mounts:
+          - name: nfs-shares
+            mountPath: /etc/cinder/nfs_shares.d
+            readOnly: true

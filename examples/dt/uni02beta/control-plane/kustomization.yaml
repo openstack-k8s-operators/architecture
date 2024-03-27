@@ -1,0 +1,17 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../../dt/uni-beta
+
+resources:
+  - nncp/values.yaml
+  - service-values.yaml
+  - cinder-volume-ontap-secrets.yaml
+  - manila-osp-secret-napp.yaml
+
+patches:
+  - path: manila-napp-backend.yaml
+  - path: glance-nfs.yaml
+  - path: cinder-ontap-nfs-backend.yaml

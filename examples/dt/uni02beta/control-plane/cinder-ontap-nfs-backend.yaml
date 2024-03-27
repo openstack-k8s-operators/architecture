@@ -1,0 +1,26 @@
+# To be able to use this sample it is necessary to:
+# - Have a NetApp ONTAP backend with NFS support
+# - Have the NetApp storage credentials and NFS configuration in cinder-volume-netapp-secrets.yaml
+
+apiVersion: core.openstack.org/v1beta1
+kind: OpenStackControlPlane
+metadata:
+  name: controlplane
+spec:
+  cinder:
+    template:
+      cinderVolumes:
+        ontap-iscsi:
+          networkAttachments:
+          - storage
+          customServiceConfigSecrets:
+            - cinder-volume-ontap-secrets
+          customServiceConfig: |
+            [ontap]
+            volume_backend_name=ontap
+            volume_driver=cinder.volume.drivers.netapp.common.NetAppDriver
+            netapp_server_hostname=hostname
+            netapp_server_port=80
+            netapp_storage_protocol=nfs
+            netapp_storage_family=ontap_cluster
+            nfs_shares_config=/etc/cinder/nfs_shares.d/shares-config
