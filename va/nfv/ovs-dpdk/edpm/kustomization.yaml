@@ -20,9 +20,23 @@ components:
 - ../../../../lib/dataplane
 
 resources:
+- baremetalset-password-secret.yaml
 - nova_ovs_dpdk.yaml
 
 replacements:
+- source:
+    kind: ConfigMap
+    name: edpm-values
+    fieldPath: data.root_password
+  targets:
+  - select:
+      kind: Secret
+      name: baremetalset-password-secret
+    fieldPaths:
+    - data.NodeRootPassword
+    options:
+      create: true
+
 # Nova compute CPU pinning customization
 - source:
     kind: ConfigMap
