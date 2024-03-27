@@ -97,6 +97,17 @@ replacements:
 - source:
     kind: ConfigMap
     name: service-values
+    fieldPath: data.manila.manilaAPI.customServiceConfig
+  targets:
+    - select:
+        kind: OpenStackControlPlane
+      fieldPaths:
+        - spec.manila.template.manilaAPI.customServiceConfig
+      options:
+        create: true
+- source:
+    kind: ConfigMap
+    name: service-values
     fieldPath: data.manila.manilaShares.share1.customServiceConfig
   targets:
     - select:
