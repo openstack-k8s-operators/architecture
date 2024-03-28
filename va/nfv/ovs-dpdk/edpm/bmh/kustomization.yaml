@@ -1,0 +1,102 @@
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+transformers:
+# Set namespace to OpenStack on all namespaced objects without a namespace
+- |-
+  apiVersion: builtin
+  kind: NamespaceTransformer
+  metadata:
+    name: _ignored_
+    namespace: openstack
+  setRoleBindingSubjects: none
+  unsetOnly: true
+  fieldSpecs:
+  - path: metadata/name
+    kind: Namespace
+    create: true
+
+resources:
+- idrac-secret.yaml
+- bmh-deploy.yaml
+
+replacements:
+- source:
+    kind: ConfigMap
+    name: bmh-values
+    fieldPath: data.bmh-0.name
+  targets:
+  - select:
+      kind: BareMetalHost
+    fieldPaths:
+      - metadata.name
+    options:
+      create: true
+- source:
+    kind: ConfigMap
+    name: bmh-values
+    fieldPath: data.bmh-0.bootMACAddress
+  targets:
+  - select:
+      kind: BareMetalHost
+    fieldPaths:
+      - spec.bootMACAddress
+    options:
+      create: true
+- source:
+    kind: ConfigMap
+    name: bmh-values
+    fieldPath: data.bmh-0.bootMode
+  targets:
+  - select:
+      kind: BareMetalHost
+    fieldPaths:
+      - spec.bootMode
+    options:
+      create: true
+- source:
+    kind: ConfigMap
+    name: bmh-values
+    fieldPath: data.bmh-0.address
+  targets:
+  - select:
+      kind: BareMetalHost
+    fieldPaths:
+      - spec.bmc.address
+    options:
+      create: true
+- source:
+    kind: ConfigMap
+    name: bmh-values
+    fieldPath: data.bmh-0.labels
+  targets:
+  - select:
+      kind: BareMetalHost
+    fieldPaths:
+      - metadata.labels.app
+    options:
+      create: true
+- source:
+    kind: ConfigMap
+    name: bmh-values
+    fieldPath: data.bmh-0.username
+  targets:
+  - select:
+      kind: Secret
+      name: idrac-secret
+    fieldPaths:
+      - data.username
+    options:
+      create: true
+- source:
+    kind: ConfigMap
+    name: bmh-values
+    fieldPath: data.bmh-0.password
+  targets:
+  - select:
+      kind: Secret
+      name: idrac-secret
+    fieldPaths:
+      - data.password
+    options:
+      create: true
