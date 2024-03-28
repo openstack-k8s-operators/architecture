@@ -1,0 +1,15 @@
+---
+apiVersion: metal3.io/v1alpha1
+kind: BareMetalHost
+metadata:
+  name: _replaced_
+  namespace: openshift-machine-api
+  labels:
+    app: _replaced_
+spec:
+  online: false
+  bootMACAddress: _replaced_
+  bmc:
+    address: _replaced_
+    credentialsName: idrac-secret
+  bootMode: _replaced_
