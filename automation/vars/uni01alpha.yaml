@@ -1,0 +1,51 @@
+---
+vas:
+  uni01alpha:
+    stages:
+      - path: examples/dt/uni01alpha/control-plane/nncp
+        validations:
+          - >-
+            oc -n openstack wait nncp
+            -l osp/nncm-config-type=standard
+            --for jsoonpath='{.status.conditions[0].reason}'=SuccessfullyConfigured
+            --timeout=60s
+        values:
+          - name: network-values
+            src_file: values.yaml
+        build_output: nncp.yaml
+
+      - path: examples/dt/uni01alpha/control-plane
+        validations:
+          - >-
+            oc -n openstack wait openstackcontrolplane
+            controlplane
+            --for condition=Ready
+        values:
+          - name: network-values
+          - name: service-values
+            src_file: service-values.yaml
+        build_output: control-plane.yaml
+
+      - path: examples/dt/uni01alpha/networker
+        validations:
+          - >-
+            oc -n openstack wait openstackdataplanedeployment
+            edpm-networker
+            --for condition=Ready
+            --timeout=1200s
+        values:
+          - name: edpm-networker-values
+            src_file: values.yaml
+        build_output: edpm-networker.yaml
+
+      - path: examples/dt/uni01alpha
+        validations:
+          - >-
+            oc -n openstack wait openstackdataplanedeployment
+            edpm-deployment
+            --for condition=Ready
+            --timeout=1200s
+        values:
+          - name: edpm-values
+            src_file: values.yaml
+        build_outpu: edpm.yaml
