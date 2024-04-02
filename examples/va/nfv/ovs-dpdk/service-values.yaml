@@ -53,3 +53,8 @@ data:
       replicas: 1
   swift:
     enabled: true
+  telemetry:
+    enabled: true
+    template:
+      ceilometer:
+        enabled: true

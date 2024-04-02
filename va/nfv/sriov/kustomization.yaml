@@ -33,6 +33,18 @@ replacements:
     - spec.neutron.template.customServiceConfig
     options:
       create: true
+# OVN control plane SRIOV customization
+- source:
+    kind: ConfigMap
+    name: service-values
+    fieldPath: data.ovn.ovnController
+  targets:
+  - select:
+      kind: OpenStackControlPlane
+    fieldPaths:
+    - spec.ovn.template.ovnController
+    options:
+      create: true
 - source:
     kind: ConfigMap
     name: service-values

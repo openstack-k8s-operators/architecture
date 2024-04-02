@@ -45,3 +45,58 @@ replacements:
     - spec.ovn.template.ovnController
     options:
       create: true
+- source:
+    kind: ConfigMap
+    name: service-values
+    fieldPath: data.glance.customServiceConfig
+  targets:
+  - select:
+      kind: OpenStackControlPlane
+    fieldPaths:
+    - spec.glance.template.customServiceConfig
+    options:
+      create: true
+- source:
+    kind: ConfigMap
+    name: service-values
+    fieldPath: data.glance.default.replicas
+  targets:
+  - select:
+      kind: OpenStackControlPlane
+    fieldPaths:
+    - spec.glance.template.glanceAPIs.default.replicas
+    options:
+      create: true
+- source:
+    kind: ConfigMap
+    name: service-values
+    fieldPath: data.swift.enabled
+  targets:
+  - select:
+      kind: OpenStackControlPlane
+    fieldPaths:
+    - spec.swift.enabled
+    options:
+      create: true
+- source:
+    kind: ConfigMap
+    name: service-values
+    fieldPath: data.telemetry.enabled
+  targets:
+  - select:
+      kind: OpenStackControlPlane
+    fieldPaths:
+    - spec.telemetry.enabled
+    options:
+      create: true
+- source:
+    kind: ConfigMap
+    name: service-values
+    fieldPath: data.telemetry.template.ceilometer.enabled
+  targets:
+  - select:
+      kind: OpenStackControlPlane
+    fieldPaths:
+    - spec.telemetry.template.ceilometer.enabled
+    options:
+      create: true

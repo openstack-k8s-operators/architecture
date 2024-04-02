@@ -12,6 +12,10 @@ data:
       mechanism_drivers = ovn,sriovnicswitch
       [ml2_type_vlan]
       network_vlan_ranges = sriov-phy4
+  ovn:
+    ovnController:
+      nicMappings:
+        datacentre: enp4s0 # CHANGEME
   glance:
     customServiceConfig: |
       [DEFAULT]
