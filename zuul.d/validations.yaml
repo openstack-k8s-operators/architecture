@@ -161,3 +161,19 @@
     vars:
       cifmw_architecture_scenario: uni06zeta
       cifmw_networking_env_def_file: automation/net-env/uni06zeta.yaml
+- job:
+    files:
+    - automation/net-env/uni07eta.yaml
+    - dt/uni07eta
+    - examples/dt/uni07eta
+    - examples/dt/uni07eta/control-plane
+    - examples/dt/uni07eta/control-plane/nncp
+    - examples/dt/uni07eta/edpm
+    - examples/dt/uni07eta/networker
+    - examples/dt/uni07eta/networker/nodeset
+    - lib
+    name: rhoso-architecture-validate-uni07eta
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: uni07eta
+      cifmw_networking_env_def_file: automation/net-env/uni07eta.yaml
