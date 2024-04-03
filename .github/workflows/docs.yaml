@@ -1,5 +1,6 @@
+---
 name: Build Docs
-on:
+on:  # yamllint disable-line rule:truthy
   workflow_dispatch:
   push:
     branches:
@@ -10,7 +11,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          # this fetches all branches. Needed because we need gh-pages branch for deploy to work
+          # this fetches all branches. Needed because we need
+          # gh-pages branch for deploy to work
           fetch-depth: 0
       - uses: actions/setup-python@v2
         with:

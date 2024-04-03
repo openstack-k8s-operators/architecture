@@ -1,19 +1,20 @@
+---
 apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component
 
 resources:
-- catalogsource.yaml
-- namespaces.yaml
-- operatorgroup.yaml
-- subscription.yaml
+  - catalogsource.yaml
+  - namespaces.yaml
+  - operatorgroup.yaml
+  - subscription.yaml
 
 replacements:
-- source:
-    kind: ConfigMap
-    name: olm-values
-    fieldPath: data.openstack-operator-image
-  targets:
-  - select:
-      kind: CatalogSource
-    fieldPaths:
-    - spec.image
+  - source:
+      kind: ConfigMap
+      name: olm-values
+      fieldPath: data.openstack-operator-image
+    targets:
+      - select:
+          kind: CatalogSource
+        fieldPaths:
+          - spec.image

@@ -1,3 +1,4 @@
+---
 apiVersion: dataplane.openstack.org/v1beta1
 kind: OpenStackDataPlaneDeployment
 metadata:
@@ -5,4 +6,4 @@ metadata:
   namespace: openstack
 spec:
   nodeSets:
-  - openstack-edpm
+    - openstack-edpm

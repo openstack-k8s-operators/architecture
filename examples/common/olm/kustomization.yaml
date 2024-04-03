@@ -1,3 +1,4 @@
+---
 components:
   - ../../../lib/olm-deps
   - ../../../lib/olm-openstack

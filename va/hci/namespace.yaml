@@ -1,3 +1,4 @@
+---
 apiVersion: builtin
 kind: NamespaceTransformer
 metadata:
@@ -6,6 +7,6 @@ metadata:
 setRoleBindingSubjects: none
 unsetOnly: true
 fieldSpecs:
-- path: metadata/name
-  kind: Namespace
-  create: true
+  - path: metadata/name
+    kind: Namespace
+    create: true

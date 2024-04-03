@@ -1,4 +1,5 @@
 # local-config: referenced, but not emitted by kustomize
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:

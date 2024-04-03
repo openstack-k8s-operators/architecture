@@ -6,7 +6,7 @@
 # - change numa_nodes in the neutron and neutron_tunnel section
 # based on DPDK NIC's and NUMA alignment in the OvS DPDK & SRIOV compute node.
 #
-
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -35,7 +35,7 @@ data:
   ovn:
     ovnController:
       nicMappings:
-        datacentre: enp4s0 # CHANGEME
+        datacentre: enp4s0  # CHANGEME
   glance:
     customServiceConfig: |
       [DEFAULT]
@@ -58,4 +58,3 @@ data:
     template:
       ceilometer:
         enabled: true
-
