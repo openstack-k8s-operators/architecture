@@ -27,13 +27,6 @@ resources:
 
 patches:
   - target:
-      kind: OpenStackDataPlaneDeployment
-      name: .*
-    patch: |-
-      - op: replace
-        path: /metadata/name
-        value: edpm-deployment-post-ceph
-  - target:
       kind: OpenStackDataPlaneNodeSet
       name: .*
     path: extra_mounts.yaml
@@ -178,5 +171,16 @@ replacements:
           kind: OpenStackDataPlaneNodeSet
         fieldPaths:
           - spec.services
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-values-post-ceph
+      fieldPath: data.deployment.name
+    targets:
+      - select:
+          kind: OpenStackDataPlaneDeployment
+        fieldPaths:
+          - metadata.name
         options:
           create: true

@@ -7,6 +7,8 @@ metadata:
   annotations:
     config.kubernetes.io/local-config: "true"
 data:
+  deployment:
+    name: edpm-deployment-post-ceph
   nodeset:
     services:
       - ceph-client
