@@ -1,357 +1,358 @@
+---
 apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component
 
 resources:
-- metallb_l2advertisement.yaml
-- ocp_networks_netattach.yaml
-- ocp_ip_pools.yaml
-- netconfig.yaml
+  - metallb_l2advertisement.yaml
+  - ocp_networks_netattach.yaml
+  - ocp_ip_pools.yaml
+  - netconfig.yaml
 
 patches:
-- target:
-    kind: NetworkAttachmentDefinition
-    labelSelector: "osp/net-attach-def-type=standard"
-  path: ocp_network_template.yaml
-- target:
-    kind: IPAddressPool
-    labelSelector: "osp/lb-addresses-type=standard"
-  path: ocp_ip_pool_template.yaml
+  - target:
+      kind: NetworkAttachmentDefinition
+      labelSelector: "osp/net-attach-def-type=standard"
+    path: ocp_network_template.yaml
+  - target:
+      kind: IPAddressPool
+      labelSelector: "osp/lb-addresses-type=standard"
+    path: ocp_ip_pool_template.yaml
 
 replacements:
-# NetworkAttachmentDefinition JSON config
-- source:
-    kind: ConfigMap
-    name: network-values
-    fieldPath: data.ctlplane.net-attach-def
-  targets:
-  - select:
-      kind: NetworkAttachmentDefinition
-      name: ctlplane
-    fieldPaths:
-    - spec.config
-- source:
-    kind: ConfigMap
-    name: network-values
-    fieldPath: data.internalapi.net-attach-def
-  targets:
-  - select:
-      kind: NetworkAttachmentDefinition
-      name: internalapi
-    fieldPaths:
-    - spec.config
-- source:
-    kind: ConfigMap
-    name: network-values
-    fieldPath: data.storage.net-attach-def
-  targets:
-  - select:
-      kind: NetworkAttachmentDefinition
-      name: storage
-    fieldPaths:
-    - spec.config
-- source:
-    kind: ConfigMap
-    name: network-values
-    fieldPath: data.tenant.net-attach-def
-  targets:
-  - select:
-      kind: NetworkAttachmentDefinition
-      name: tenant
-    fieldPaths:
-    - spec.config
-- source:
-    kind: ConfigMap
-    name: network-values
-    fieldPath: data.datacentre.net-attach-def
-  targets:
-  - select:
-      kind: NetworkAttachmentDefinition
-      name: datacentre
-    fieldPaths:
-    - spec.config
+  # NetworkAttachmentDefinition JSON config
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ctlplane.net-attach-def
+    targets:
+      - select:
+          kind: NetworkAttachmentDefinition
+          name: ctlplane
+        fieldPaths:
+          - spec.config
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.internalapi.net-attach-def
+    targets:
+      - select:
+          kind: NetworkAttachmentDefinition
+          name: internalapi
+        fieldPaths:
+          - spec.config
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storage.net-attach-def
+    targets:
+      - select:
+          kind: NetworkAttachmentDefinition
+          name: storage
+        fieldPaths:
+          - spec.config
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.tenant.net-attach-def
+    targets:
+      - select:
+          kind: NetworkAttachmentDefinition
+          name: tenant
+        fieldPaths:
+          - spec.config
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.datacentre.net-attach-def
+    targets:
+      - select:
+          kind: NetworkAttachmentDefinition
+          name: datacentre
+        fieldPaths:
+          - spec.config
 
-# IPAddressPool addresses
-- source:
-    kind: ConfigMap
-    name: network-values
-    fieldPath: data.ctlplane.lb_addresses
-  targets:
-  - select:
-      kind: IPAddressPool
-      name: ctlplane
-    fieldPaths:
-    - spec.addresses
-- source:
-    kind: ConfigMap
-    name: network-values
-    fieldPath: data.internalapi.lb_addresses
-  targets:
-  - select:
-      kind: IPAddressPool
-      name: internalapi
-    fieldPaths:
-    - spec.addresses
-- source:
-    kind: ConfigMap
-    name: network-values
-    fieldPath: data.storage.lb_addresses
-  targets:
-  - select:
-      kind: IPAddressPool
-      name: storage
-    fieldPaths:
-    - spec.addresses
-- source:
-    kind: ConfigMap
-    name: network-values
-    fieldPath: data.tenant.lb_addresses
-  targets:
-  - select:
-      kind: IPAddressPool
-      name: tenant
-    fieldPaths:
-    - spec.addresses
+  # IPAddressPool addresses
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ctlplane.lb_addresses
+    targets:
+      - select:
+          kind: IPAddressPool
+          name: ctlplane
+        fieldPaths:
+          - spec.addresses
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.internalapi.lb_addresses
+    targets:
+      - select:
+          kind: IPAddressPool
+          name: internalapi
+        fieldPaths:
+          - spec.addresses
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storage.lb_addresses
+    targets:
+      - select:
+          kind: IPAddressPool
+          name: storage
+        fieldPaths:
+          - spec.addresses
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.tenant.lb_addresses
+    targets:
+      - select:
+          kind: IPAddressPool
+          name: tenant
+        fieldPaths:
+          - spec.addresses
 
-# Loadbalancer address pools
-- source:
-    kind: ConfigMap
-    name: network-values
-    fieldPath: data.ctlplane.lb_addresses
-  targets:
-  - select:
-      group: metallb.io
-      kind: IPAddressPool
-      name: ctlplane
-    fieldPaths:
-    - spec.addresses
-- source:
-    kind: ConfigMap
-    name: network-values
-    fieldPath: data.internalapi.lb_addresses
-  targets:
-  - select:
-      group: metallb.io
-      kind: IPAddressPool
-      name: internalapi
-    fieldPaths:
-    - spec.addresses
-- source:
-    kind: ConfigMap
-    name: network-values
-    fieldPath: data.tenant.lb_addresses
-  targets:
-  - select:
-      group: metallb.io
-      kind: IPAddressPool
-      name: tenant
-    fieldPaths:
-    - spec.addresses
-- source:
-    kind: ConfigMap
-    name: network-values
-    fieldPath: data.ctlplane.lb_addresses
-  targets:
-  - select:
-      group: metallb.io
-      kind: IPAddressPool
-      name: ctlplane
-    fieldPaths:
-    - spec.addresses
-- source:
-    kind: ConfigMap
-    name: network-values
-    fieldPath: data.storage.lb_addresses
-  targets:
-  - select:
-      group: metallb.io
-      kind: IPAddressPool
-      name: storage
-    fieldPaths:
-    - spec.addresses
+  # Loadbalancer address pools
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ctlplane.lb_addresses
+    targets:
+      - select:
+          group: metallb.io
+          kind: IPAddressPool
+          name: ctlplane
+        fieldPaths:
+          - spec.addresses
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.internalapi.lb_addresses
+    targets:
+      - select:
+          group: metallb.io
+          kind: IPAddressPool
+          name: internalapi
+        fieldPaths:
+          - spec.addresses
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.tenant.lb_addresses
+    targets:
+      - select:
+          group: metallb.io
+          kind: IPAddressPool
+          name: tenant
+        fieldPaths:
+          - spec.addresses
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ctlplane.lb_addresses
+    targets:
+      - select:
+          group: metallb.io
+          kind: IPAddressPool
+          name: ctlplane
+        fieldPaths:
+          - spec.addresses
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storage.lb_addresses
+    targets:
+      - select:
+          group: metallb.io
+          kind: IPAddressPool
+          name: storage
+        fieldPaths:
+          - spec.addresses
 
-# Loadbalancer interfaces
-- source:
-    kind: ConfigMap
-    name: network-values
-    fieldPath: data.bridgeName
-  targets:
-  - select:
-      group: metallb.io
-      kind: L2Advertisement
-      name: ctlplane
-    fieldPaths:
-    - spec.interfaces.0
-- source:
-    kind: ConfigMap
-    name: network-values
-    fieldPath: data.tenant.iface
-  targets:
-  - select:
-      group: metallb.io
-      kind: L2Advertisement
-      name: tenant
-    fieldPaths:
-    - spec.interfaces.0
-- source:
-    kind: ConfigMap
-    name: network-values
-    fieldPath: data.storage.iface
-  targets:
-  - select:
-      group: metallb.io
-      kind: L2Advertisement
-      name: storage
-    fieldPaths:
-    - spec.interfaces.0
-- source:
-    kind: ConfigMap
-    name: network-values
-    fieldPath: data.internalapi.iface
-  targets:
-  - select:
-      group: metallb.io
-      kind: L2Advertisement
-      name: internalapi
-    fieldPaths:
-    - spec.interfaces.0
+  # Loadbalancer interfaces
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.bridgeName
+    targets:
+      - select:
+          group: metallb.io
+          kind: L2Advertisement
+          name: ctlplane
+        fieldPaths:
+          - spec.interfaces.0
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.tenant.iface
+    targets:
+      - select:
+          group: metallb.io
+          kind: L2Advertisement
+          name: tenant
+        fieldPaths:
+          - spec.interfaces.0
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storage.iface
+    targets:
+      - select:
+          group: metallb.io
+          kind: L2Advertisement
+          name: storage
+        fieldPaths:
+          - spec.interfaces.0
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.internalapi.iface
+    targets:
+      - select:
+          group: metallb.io
+          kind: L2Advertisement
+          name: internalapi
+        fieldPaths:
+          - spec.interfaces.0
 
-# NetConfig dnsDomain
-- source:
-    kind: ConfigMap
-    name: network-values
-    fieldPath: data.ctlplane.dnsDomain
-  targets:
-  - select:
-      kind: NetConfig
-    fieldPaths:
-    - spec.networks.[name=CtlPlane].dnsDomain
-- source:
-    kind: ConfigMap
-    name: network-values
-    fieldPath: data.internalapi.dnsDomain
-  targets:
-  - select:
-      kind: NetConfig
-    fieldPaths:
-    - spec.networks.[name=InternalApi].dnsDomain
-- source:
-    kind: ConfigMap
-    name: network-values
-    fieldPath: data.external.dnsDomain
-  targets:
-  - select:
-      kind: NetConfig
-    fieldPaths:
-    - spec.networks.[name=External].dnsDomain
-- source:
-    kind: ConfigMap
-    name: network-values
-    fieldPath: data.storage.dnsDomain
-  targets:
-  - select:
-      kind: NetConfig
-    fieldPaths:
-    - spec.networks.[name=Storage].dnsDomain
-- source:
-    kind: ConfigMap
-    name: network-values
-    fieldPath: data.tenant.dnsDomain
-  targets:
-  - select:
-      kind: NetConfig
-    fieldPaths:
-    - spec.networks.[name=Tenant].dnsDomain
+  # NetConfig dnsDomain
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ctlplane.dnsDomain
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=CtlPlane].dnsDomain
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.internalapi.dnsDomain
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=InternalApi].dnsDomain
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.external.dnsDomain
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=External].dnsDomain
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storage.dnsDomain
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=Storage].dnsDomain
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.tenant.dnsDomain
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=Tenant].dnsDomain
 
-# NetConfig MTU
-- source:
-    kind: ConfigMap
-    name: network-values
-    fieldPath: data.ctlplane.mtu
-  targets:
-  - select:
-      kind: NetConfig
-    fieldPaths:
-    - spec.networks.[name=CtlPlane].mtu
-- source:
-    kind: ConfigMap
-    name: network-values
-    fieldPath: data.internalapi.mtu
-  targets:
-  - select:
-      kind: NetConfig
-    fieldPaths:
-    - spec.networks.[name=InternalApi].mtu
-- source:
-    kind: ConfigMap
-    name: network-values
-    fieldPath: data.external.mtu
-  targets:
-  - select:
-      kind: NetConfig
-    fieldPaths:
-    - spec.networks.[name=External].mtu
-- source:
-    kind: ConfigMap
-    name: network-values
-    fieldPath: data.storage.mtu
-  targets:
-  - select:
-      kind: NetConfig
-    fieldPaths:
-    - spec.networks.[name=Storage].mtu
-- source:
-    kind: ConfigMap
-    name: network-values
-    fieldPath: data.tenant.mtu
-  targets:
-  - select:
-      kind: NetConfig
-    fieldPaths:
-    - spec.networks.[name=Tenant].mtu
+  # NetConfig MTU
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ctlplane.mtu
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=CtlPlane].mtu
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.internalapi.mtu
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=InternalApi].mtu
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.external.mtu
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=External].mtu
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storage.mtu
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=Storage].mtu
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.tenant.mtu
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=Tenant].mtu
 
-# NetConfig subnets
-- source:
-    kind: ConfigMap
-    name: network-values
-    fieldPath: data.ctlplane.subnets
-  targets:
-  - select:
-      kind: NetConfig
-    fieldPaths:
-    - spec.networks.[name=CtlPlane].subnets
-- source:
-    kind: ConfigMap
-    name: network-values
-    fieldPath: data.internalapi.subnets
-  targets:
-  - select:
-      kind: NetConfig
-    fieldPaths:
-    - spec.networks.[name=InternalApi].subnets
-- source:
-    kind: ConfigMap
-    name: network-values
-    fieldPath: data.external.subnets
-  targets:
-  - select:
-      kind: NetConfig
-    fieldPaths:
-    - spec.networks.[name=External].subnets
-- source:
-    kind: ConfigMap
-    name: network-values
-    fieldPath: data.storage.subnets
-  targets:
-  - select:
-      kind: NetConfig
-    fieldPaths:
-    - spec.networks.[name=Storage].subnets
-- source:
-    kind: ConfigMap
-    name: network-values
-    fieldPath: data.tenant.subnets
-  targets:
-  - select:
-      kind: NetConfig
-    fieldPaths:
-    - spec.networks.[name=Tenant].subnets
+  # NetConfig subnets
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ctlplane.subnets
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=CtlPlane].subnets
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.internalapi.subnets
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=InternalApi].subnets
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.external.subnets
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=External].subnets
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storage.subnets
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=Storage].subnets
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.tenant.subnets
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=Tenant].subnets

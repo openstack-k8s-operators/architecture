@@ -1,3 +1,5 @@
+# yamllint disable rule:line-length
+---
 site_name: OpenStack K8S Operators Architectures
 site_description: OpenStack K8S Operators Architectures
 site_author: OpenStack Team
@@ -27,16 +29,16 @@ theme:
 nav:
   - Overview: index.md
   - Validated Architectures:
-    - HCI: https://github.com/openstack-k8s-operators/architecture/tree/main/examples/va/hci/README.md
-    - NFV SRIOV: https://github.com/openstack-k8s-operators/architecture/blob/main/examples/va/nfv/sriov/README.md
-    - NFV OvS DPDK: https://github.com/openstack-k8s-operators/architecture/blob/main/examples/va/nfv/ovs-dpdk/README.md
+      - HCI: https://github.com/openstack-k8s-operators/architecture/tree/main/examples/va/hci/README.md
+      - NFV SRIOV: https://github.com/openstack-k8s-operators/architecture/blob/main/examples/va/nfv/sriov/README.md
+      - NFV OvS DPDK: https://github.com/openstack-k8s-operators/architecture/blob/main/examples/va/nfv/ovs-dpdk/README.md
 
   - Deployed Topologies:
-    - None
+      - None
   - FAQ:
-    - Creating Smaller CRs: faq/cr_by_components.md
+      - Creating Smaller CRs: faq/cr_by_components.md
   - Contributing:
-    - contributing/documentation.md
+      - contributing/documentation.md
 markdown_extensions:
   - toc:
       permalink: "#"

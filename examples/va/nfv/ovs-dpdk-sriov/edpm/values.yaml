@@ -1,3 +1,6 @@
+---
+# yamllint disable rule:line-length
+
 # local-config: referenced, but not emitted by kustomize
 apiVersion: v1
 kind: ConfigMap
@@ -9,11 +12,11 @@ data:
   root_password: cmVkaGF0Cg==
   preProvisioned: false
   baremetalSetTemplate:
-    ctlplaneInterface: eno2 #CHANGEME
+    ctlplaneInterface: eno2  # CHANGEME
     cloudUserName: cloud-admin
-    provisioningInterface: enp1s0 #CHANGEME
+    provisioningInterface: enp1s0  # CHANGEME
     bmhLabelSelector:
-      app: openstack #CHANGEME
+      app: openstack  # CHANGEME
     passwordSecret:
       name: baremetalset-password-secret
       namespace: openstack
@@ -31,7 +34,8 @@ data:
       ansibleVars:
         # CHANGEME -- see https://access.redhat.com/solutions/253273
         # edpm_bootstrap_command: |
-        #       subscription-manager register --username <subscription_manager_username> --password <subscription_manager_password>
+        #       subscription-manager register --username <subscription_manager_username> \
+        #         --password <subscription_manager_password>
         #       podman login -u <registry_username> -p <registry_password> registry.redhat.io
         service_net_map:
           nova_api_network: internalapi
@@ -41,6 +45,7 @@ data:
         # CPU pinning settings
         # edpm nfv ovs dpdk config
         # CHANGEME
+        # yamllint disable-line rule:line-length
         edpm_kernel_args: "default_hugepagesz=1GB hugepagesz=1G hugepages=64 iommu=pt intel_iommu=on tsx=off isolcpus=2-11,14-23"
         edpm_tuned_profile: "cpu-partitioning-powersave"
         edpm_tuned_isolated_cores: "2-11,14-23"
@@ -49,7 +54,7 @@ data:
         edpm_ovs_dpdk_socket_memory: "4096"
         edpm_ovs_dpdk_memory_channels: "4"
         edpm_ovs_dpdk_vhost_postcopy_support: "true"
-        edpm_ovn_bridge_mappings: ['dpdk2:br-link2','dpdk1:br-link1']
+        edpm_ovn_bridge_mappings: ['dpdk2:br-link2', 'dpdk1:br-link1']
         # edpm nfv sriov config
         edpm_neutron_sriov_agent_SRIOV_NIC_physical_device_mappings: 'sriov1:eno5,sriov2:eno6'
         # edpm_network_config
@@ -58,13 +63,13 @@ data:
         edpm_network_config_os_net_config_mappings:
           # Need to provide nic mapping based on system uuid or system product name
           # here used systetm uuid
-          edpm-compute-0: # CHANGEME
-            nic1: 6c:fe:54:3f:8a:01 # CHANGEME
-            nic2: 6c:fe:54:3f:8a:02 # CHANGEME
-            nic3: 6c:fe:54:3f:8a:03 # CHANGEME
-            nic4: 6c:fe:54:3f:8a:04 # CHANGEME
-            nic5: 6c:fe:54:3f:8a:05 # CHANGEME
-            nic6: 6c:fe:54:3f:8a:06 # CHANGEME
+          edpm-compute-0:  # CHANGEME
+            nic1: 6c:fe:54:3f:8a:01  # CHANGEME
+            nic2: 6c:fe:54:3f:8a:02  # CHANGEME
+            nic3: 6c:fe:54:3f:8a:03  # CHANGEME
+            nic4: 6c:fe:54:3f:8a:04  # CHANGEME
+            nic5: 6c:fe:54:3f:8a:05  # CHANGEME
+            nic6: 6c:fe:54:3f:8a:06  # CHANGEME
         edpm_network_config_template: |
           ---
           {% set mtu_list = [ctlplane_mtu] %}
@@ -93,7 +98,7 @@ data:
               mtu: {{ lookup('vars', networks_lower[network] ~ '_mtu') }}
               vlan_id: {{ lookup('vars', networks_lower[network] ~ '_vlan_id') }}
               addresses:
-              - ip_netmask: {{ lookup('vars', networks_lower[network] ~ '_ip') }}/{{ lookup('vars', networks_lower[network] ~ '_cidr') }}
+                - ip_netmask: {{ lookup('vars', networks_lower[network] ~ '_ip') }}/{{ lookup('vars', networks_lower[network] ~ '_cidr') }}
               routes: {{ lookup('vars', networks_lower[network] ~ '_host_routes') }}
           {% endfor %}
           - type: ovs_user_bridge
@@ -101,7 +106,7 @@ data:
             use_dhcp: false
             ovs_extra: "set port br-link1 tag={{ lookup('vars', networks_lower['Tenant'] ~ '_vlan_id') }}"
             addresses:
-            - ip_netmask: {{ lookup('vars', networks_lower['Tenant'] ~ '_ip') }}/{{ lookup('vars', networks_lower['Tenant'] ~ '_cidr') }}
+              - ip_netmask: {{ lookup('vars', networks_lower['Tenant'] ~ '_ip') }}/{{ lookup('vars', networks_lower['Tenant'] ~ '_cidr') }}
             mtu: {{ lookup('vars', networks_lower['Tenant'] ~ '_mtu') }}
             rx_queue: 1
             members:
@@ -165,21 +170,21 @@ data:
       edpm-compute-1:
         hostName: edpm-compute-1
     services:
-    - bootstrap
-    - download-cache
-    - reboot-os
-    - configure-ovs-dpdk
-    - configure-network
-    - validate-network
-    - install-os
-    - configure-os
-    - run-os
-    - ovn
-    - neutron-metadata
-    - neutron-sriov
-    - libvirt
-    - nova-custom-ovsdpdksriov
-    - telemetry
+      - bootstrap
+      - download-cache
+      - reboot-os
+      - configure-ovs-dpdk
+      - configure-network
+      - validate-network
+      - install-os
+      - configure-os
+      - run-os
+      - ovn
+      - neutron-metadata
+      - neutron-sriov
+      - libvirt
+      - nova-custom-ovsdpdksriov
+      - telemetry
   nova:
     compute:
       conf: |
@@ -193,7 +198,8 @@ data:
         private: CHANGEME4
         public: CHANGEME5
     pci:
+      # yamllint disable-line rule:line-length
       conf: |
         [pci]
-        device_spec = {"vendor_id":"8086", "product_id":"1572", "address": "0000:19:00.3", "physical_network":"sriov1", "trusted":"true"} #CHANGEME
-        device_spec = {"vendor_id":"8086", "product_id":"1572", "address": "0000:20:00.3", "physical_network":"sriov2", "trusted":"true"} #CHANGEME
+        device_spec = {"vendor_id":"8086", "product_id":"1572", "address": "0000:19:00.3", "physical_network":"sriov1", "trusted":"true"}  # CHANGEME
+        device_spec = {"vendor_id":"8086", "product_id":"1572", "address": "0000:20:00.3", "physical_network":"sriov2", "trusted":"true"}  # CHANGEME

@@ -1,4 +1,5 @@
 # local-config: referenced, but not emitted by kustomize
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -15,7 +16,7 @@ data:
   ovn:
     ovnController:
       nicMappings:
-        datacentre: enp4s0 # CHANGEME
+        datacentre: enp4s0  # CHANGEME
   glance:
     customServiceConfig: |
       [DEFAULT]

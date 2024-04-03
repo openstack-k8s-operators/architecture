@@ -1,0 +1,9 @@
+---
+extends: default
+ignore:
+  - '*.md'
+
+rules:
+  line-length:
+    max: 100
+    level: warning

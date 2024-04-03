@@ -1,4 +1,5 @@
 # local-config: referenced, but not emitted by kustomize
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -42,7 +43,7 @@ data:
     iface: enp6s0
     mtu: 1500
     lb_addresses:
-    - 192.168.122.80-192.168.122.90
+      - 192.168.122.80-192.168.122.90
     endpoint_annotations:
       metallb.universe.tf/address-pool: ctlplane
       metallb.universe.tf/allow-shared-ip: ctlplane
@@ -75,12 +76,12 @@ data:
     vlan: 20
     base_iface: enp6s0
     lb_addresses:
-    - 172.17.0.80-172.17.0.90
+      - 172.17.0.80-172.17.0.90
     endpoint_annotations:
       metallb.universe.tf/address-pool: internalapi
       metallb.universe.tf/allow-shared-ip: internalapi
       metallb.universe.tf/loadBalancerIPs: 172.17.0.80
-    net-attach-def:  |
+    net-attach-def: |
       {
         "cniVersion": "0.3.1",
         "name": "internalapi",
@@ -108,7 +109,7 @@ data:
     vlan: 21
     base_iface: enp6s0
     lb_addresses:
-    - 172.18.0.80-172.18.0.90
+      - 172.18.0.80-172.18.0.90
     net-attach-def: |
       {
         "cniVersion": "0.3.1",
@@ -137,7 +138,7 @@ data:
     vlan: 22
     base_iface: enp6s0
     lb_addresses:
-    - 172.19.0.80-172.19.0.90
+      - 172.19.0.80-172.19.0.90
     net-attach-def: |
       {
         "cniVersion": "0.3.1",
@@ -183,9 +184,9 @@ data:
 
   routes:
     config:
-    - destination: 192.168.122.0/24
-      next-hop-address: 192.168.122.1
-      next-hop-interface: enp6s0
+      - destination: 192.168.122.0/24
+        next-hop-address: 192.168.122.1
+        next-hop-interface: enp6s0
 
   rabbitmq:
     endpoint_annotations:
