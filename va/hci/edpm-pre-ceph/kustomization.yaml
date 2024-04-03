@@ -20,11 +20,15 @@ transformers:
 components:
   - ../../../lib/dataplane
 
-patches:
-  - target:
-      kind: OpenStackDataPlaneDeployment
-      name: .*
-    patch: |-
-      - op: replace
-        path: /metadata/name
-        value: edpm-deployment-pre-ceph
+replacements:
+  - source:
+      kind: ConfigMap
+      name: edpm-values
+      fieldPath: data.deployment.name
+    targets:
+      - select:
+          kind: OpenStackDataPlaneDeployment
+        fieldPaths:
+          - metadata.name
+        options:
+          create: true

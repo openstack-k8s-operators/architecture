@@ -8,6 +8,8 @@ metadata:
   annotations:
     config.kubernetes.io/local-config: "true"
 data:
+  deployment:
+    name: edpm-deployment-pre-ceph
   ssh_keys:
     # Authorized keys that will have access to the dataplane computes via SSH
     authorized: CHANGEME
