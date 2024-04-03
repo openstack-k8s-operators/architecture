@@ -1,0 +1,55 @@
+---
+vas:
+  uni05epsilon:
+    stages:
+      - path: examples/dt/uni05epsilon/control-plane/nncp
+        wait_conditions:
+          - >-
+            oc -n openstack wait nncp
+            -l osp/nncm-config-type=standard
+            --for jsonpath='{.status.conditions[0].reason}'=SuccessfullyConfigured
+            --timeout=60s
+        values:
+          - name: network-values
+            src_file: values.yaml
+        build_output: nncp.yaml
+
+      - path: examples/dt/uni05epsilon/control-plane
+        wait_conditions:
+          - >-
+            oc -n openstack wait openstackcontrolplane
+            controlplane
+            --for condition=Ready
+            --timeout=30m
+        values:
+          - name: network-values
+            src_file: nncp/values.yaml
+          - name: service-values
+            src_file: service-values.yaml
+        build_output: control-plane.yaml
+
+      - path: examples/dt/uni05epsilon
+        wait_conditions:
+          - >-
+            oc -n openstack wait osdpns
+            openstack-edpm
+            --for condition=SetupReady
+            --timeout=600s
+        values:
+          - name: service-values
+            src_file: control-plane/service-values.yaml
+          - name: edpm-nodeset-values
+            src_file: values.yaml
+        build_output: edpm-nodeset.yaml
+
+      - path: examples/dt/uni05epsilon/deployment
+        wait_conditions:
+          - >-
+            oc -n openstack wait osdpd
+            edpm-deployment
+            --for condition=Ready
+            --timeout=2400s
+        values:
+          - name: edpm-deployment-values
+            src_file: values.yaml
+        build_output: edpm.yaml
