@@ -1,0 +1,30 @@
+# This schema is used to validate the automation files.
+# Be sure to update this file if ou add new parameters,
+# or change names or types in the existing files!
+# We are using yamale to validate files
+# https://github.com/23andMe/Yamale
+---
+vas: map(include('_architecture'), key=str())
+
+---
+# Define various nested types
+_values:
+  name: str()
+  src_file: str()
+---
+_hook:
+  name: str()
+  type: str()
+  source: str()
+  inventory: str(required=False)
+---
+_stage:
+  path: str()
+  wait_conditions: list(min=1)
+  values: list(include('_values'), min=1)
+  build_output: str()
+  pre_stage_run: list(include('_hook'), required=False)
+  post_stage_run: list(include('_hook'), required=False)
+---
+_architecture:
+  stages: list(include('_stage'), min=1)
