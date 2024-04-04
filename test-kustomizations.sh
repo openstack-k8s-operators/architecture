@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+#
+# This script verifies whether the prepared kustomization files can be built.
+# By default it looks for all kustomizations under current working directory,
+# but it is possible to specify desired directories as the script's arguments.
+#
+# Usage:
+#   ./test-kustomizations.sh [dir1 dir2 ...]
+#
 set -o errexit
 set -o nounset
 set -o pipefail
@@ -38,8 +46,14 @@ fi
 #
 # Verify files
 #
-cd "${BASE_DIR}"
-mapfile -t FILES < <(find . -name 'kustomization.yaml' \
+if [ "$#" -eq 0 ]; then
+    DIRS_TO_CHECK=('.')
+else
+    DIRS_TO_CHECK=("$@")
+fi
+
+mapfile -t FILES < <(find "${DIRS_TO_CHECK[@]}" \
+                         -name 'kustomization.yaml' \
                          -o -name 'kustomization.yml' \
                          -o -name 'Kustomization')
 
