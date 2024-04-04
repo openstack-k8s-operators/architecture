@@ -1,0 +1,29 @@
+---
+name: Validate automation schema
+on:  # yamllint disable-line rule:truthy
+  pull_request:
+    branches:
+      - main
+      - stable
+    paths:
+      - ".ci/automation-schema.yaml"
+      - "automation/vars/*.yaml"
+      - "automation/vars/*.yml"
+
+jobs:
+  yamale:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install yaml-lint
+        run: pip install yamale
+
+      - name: Run yamale
+        run: yamale -s .ci/automation-schema.yaml automation/vars/
