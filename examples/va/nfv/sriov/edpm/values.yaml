@@ -134,6 +134,7 @@ data:
       - configure-os
       - run-os
       - reboot-os
+      - install-certs
       - libvirt
       - ovn
       - nova-custom-sriov

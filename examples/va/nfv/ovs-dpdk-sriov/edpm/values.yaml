@@ -179,6 +179,7 @@ data:
       - install-os
       - configure-os
       - run-os
+      - install-certs
       - ovn
       - neutron-metadata
       - neutron-sriov
