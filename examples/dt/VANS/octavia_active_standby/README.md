@@ -1,4 +1,4 @@
-# Deployed Topology VANS/octavia-default
+# Deployed Topology VANS/octavia-active-standby
 
 ## General information
 
@@ -8,13 +8,13 @@
 
 ## Purpose
 
-This DT will test the default configuration of Octavia
+This DT will test Octavia when running with Active/Standby topology
 
 ## Node topology
 | Node role                                     | bm/vm | amount |
 | --------------------------------------------- | ----- |--------|
 | Openshift master/worker combo-node cluster    | vm    | 3      |
-| Compute nodes                                 | vm    | 2      |
+| Compute nodes                                 | vm    | 3      |
 
 ## Services, enabled features and configurations
 | Service   | configuration              | Lock-in coverage? |
@@ -26,6 +26,7 @@ This DT will test the default configuration of Octavia
 | Keystone  | default                    | Must have         |
 | OVN       | octavia NIC mapping        | Must have         |
 | Nova      | default                    | Must have         |
+| Redis     | default                    | Must have         |
 
 ### Additional information
 
@@ -45,12 +46,21 @@ e.g.:
         octaviaHousekeeping:
           networkAttachments:
             - octavia
+          customServiceConfig: |
+            [controller_worker]
+            loadbalancer_topology=ACTIVE_STANDBY
         octaviaWorker:
           networkAttachments:
             - octavia
+          customServiceConfig: |
+            [controller_worker]
+            loadbalancer_topology=ACTIVE_STANDBY
         octaviaHealthManager:
           networkAttachments:
             - octavia
+          customServiceConfig: |
+            [controller_worker]
+            loadbalancer_topology=ACTIVE_STANDBY
 
 #### NetworkAttachmentDefinition and NodeNetworkConfigurationPolicy
 
@@ -90,14 +100,20 @@ e.g.:
           - datacentre: ospbr
           - octavia: octbr
 
-#### OVN
-add configuration of ovn extras, ipv4
+#### Redis
+Redis is disabled by default and must be enabled. The default configuration is sufficient.
+
+e.g.:
+  redis:
+    enabled: true
 
 ## Testing tree
+Tempest and Tobiko
 
-| Test framework   | Stage to run | Special configuration | Test case to report |
-|------------------| ------------ |-----------------------|:-------------------:|
-| Tempest/octavia  | stage7       | Use Cirros image      |      11223344       |
+| Test framework         | Stage to run | Special configuration | Test case to report |
+|------------------------| ------------ |-----------------------|:-------------------:|
+| Tempest/octavia        | stage7       | Use Cirros image      |      11223344       |
+| Tobiko/octavia-faults  | stage9       | Use Ubuntu image      |      33445566       |
 
 ## Stages
 

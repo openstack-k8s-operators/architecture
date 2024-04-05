@@ -1,0 +1,49 @@
+---
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: service-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+
+# TODO(beagles): do we need to enforce some neutron configuration. Like the availablilty of flat
+# provider networks or, where it is the default, to rely on that instead. It would be useful to
+# suss out regressions caused by changes to the defaults.
+
+# Services should work mostly with defaults.
+# XXX Images are TBD.
+data:
+  octavia:
+    enabled: true
+    amphoraImageContainerImage: quay.io/gthiemonge/octavia-amphora-image
+    apacheContainerImage: registry.redhat.io/ubi9/httpd-24:latest
+    octaviaAPI:
+      networkAttachments:
+        - internalapi
+    octaviaHousekeeping:
+      networkAttachments:
+        - octavia
+      customServiceConfig: |
+        [controller_worker]
+        loadbalancer_topology=ACTIVE_STANDBY
+    octaviaHealthManager:
+      networkAttachments:
+        - octavia
+      customServiceConfig: |
+        [controller_worker]
+        loadbalancer_topology=ACTIVE_STANDBY
+    octaviaWorker:
+      networkAttachments:
+        - octavia
+      customServiceConfig: |
+        [controller_worker]
+        loadbalancer_topology=ACTIVE_STANDBY
+  redis:
+    enabled: true
+  ovn:
+    ovnController:
+      nicMappings:
+        - octavia: octbr
+      availability-zones:
+        - zone-1

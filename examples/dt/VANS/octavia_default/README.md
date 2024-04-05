@@ -1,4 +1,4 @@
-# Deployed Topology VANS/octavia-active-standby
+# Deployed Topology VANS/octavia-default
 
 ## General information
 
@@ -8,13 +8,13 @@
 
 ## Purpose
 
-This DT will test Octavia when running with Active/Standby topology
+This DT will test the default configuration of Octavia
 
 ## Node topology
 | Node role                                     | bm/vm | amount |
 | --------------------------------------------- | ----- |--------|
 | Openshift master/worker combo-node cluster    | vm    | 3      |
-| Compute nodes                                 | vm    | 3      |
+| Compute nodes                                 | vm    | 2      |
 
 ## Services, enabled features and configurations
 | Service   | configuration              | Lock-in coverage? |
@@ -26,14 +26,12 @@ This DT will test Octavia when running with Active/Standby topology
 | Keystone  | default                    | Must have         |
 | OVN       | octavia NIC mapping        | Must have         |
 | Nova      | default                    | Must have         |
+| Redis     | default                    | Must have         |
 
 ### Additional information
 
 Octavia is disabled by default in the openstack operator so it must be enabled,
-with the appropriate network attachments configured to deploy Octavia. Also
-`active-standby` is enabled by setting the `loadbalancer_topology`
-configuration in the `controller_worker` section of the configuration for the
-worker, health manager and housekeeping services.
+with the appropriate network attachments configured to deploy Octavia.
 
 e.g.:
     octavia:
@@ -45,21 +43,12 @@ e.g.:
         octaviaHousekeeping:
           networkAttachments:
             - octavia
-          customServiceConfig:
-            [controller_worker]
-            loadbalancer_topology=ACTIVE_STANDBY
         octaviaWorker:
           networkAttachments:
             - octavia
-          customServiceConfig:
-            [controller_worker]
-            loadbalancer_topology=ACTIVE_STANDBY
         octaviaHealthManager:
           networkAttachments:
             - octavia
-          customServiceConfig:
-            [controller_worker]
-            loadbalancer_topology=ACTIVE_STANDBY
 
 #### NetworkAttachmentDefinition and NodeNetworkConfigurationPolicy
 
@@ -99,13 +88,18 @@ e.g.:
           - datacentre: ospbr
           - octavia: octbr
 
-## Testing tree
-Tempest and Tobiko
+#### Redis
+Redis is disabled by default and must be enabled. The default configuration is sufficient.
 
-| Test framework         | Stage to run | Special configuration | Test case to report |
-|------------------------| ------------ |-----------------------|:-------------------:|
-| Tempest/octavia        | stage7       | Use Cirros image      |      11223344       |
-| Tobiko/octavia-faults  | stage9       | Use Ubuntu image      |      33445566       |
+e.g.:
+  redis:
+    enabled: true
+
+## Testing tree
+
+| Test framework   | Stage to run | Special configuration | Test case to report |
+|------------------| ------------ |-----------------------|:-------------------:|
+| Tempest/octavia  | stage7       | Use Cirros image      |      11223344       |
 
 ## Stages
 
