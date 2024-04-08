@@ -1,0 +1,157 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+transformers:
+  # Set namespace to OpenStack on all namespaced objects without a namespace
+  - |-
+    apiVersion: builtin
+    kind: NamespaceTransformer
+    metadata:
+      name: _ignored_
+      namespace: openstack
+    setRoleBindingSubjects: none
+    unsetOnly: true
+    fieldSpecs:
+      - path: metadata/name
+        kind: Namespace
+        create: true
+
+components:
+  - ../../../../lib/control-plane
+
+resources:
+  - networking/nncp/values.yaml
+  - service-values.yaml
+
+replacements:
+  # TODO: re-enabled horizon when OSPRH-6238 is fixed
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.horizon.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.horizon.enabled
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.internalapi.endpoint_annotations
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.ironic.template.ironicAPI.override.service.internal.metadata.annotations
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.lbServiceType
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.ironic.template.ironicAPI.override.service.internal.spec.type
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.bmaas.bridgeName
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.ironic.template.ironicConductors.0.networkAttachments.0
+          - spec.ironic.template.ironicConductors.0.provisionNetwork
+          - spec.ironic.template.ironicInspector.inspectionNetwork
+          - spec.ironic.template.ironicInspector.networkAttachments.0
+          - spec.ovn.template.ovnController.nicMappings.bmaas
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.ironic.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.ironic.enabled
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.ironic.ironicConductors.0.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.ironic.template.ironicConductors.0.customServiceConfig
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.nova.cellTemplates
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.nova.template.cellTemplates
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.galera.replicas
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.galera.templates.openstack.replicas
+          - spec.galera.templates.openstack-cell1.replicas
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.rabbitmq.replicas
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.rabbitmq.templates.rabbitmq.replicas
+          - spec.rabbitmq.templates.rabbitmq-cell1.replicas
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.rabbitmq.erlangInetConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.rabbitmq.templates.rabbitmq.rabbitmq.erlangInetConfig
+          - spec.rabbitmq.templates.rabbitmq-cell1.rabbitmq.erlangInetConfig
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.rabbitmq.envConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.rabbitmq.templates.rabbitmq.rabbitmq.envConfig
+          - spec.rabbitmq.templates.rabbitmq-cell1.rabbitmq.envConfig
+        options:
+          create: true

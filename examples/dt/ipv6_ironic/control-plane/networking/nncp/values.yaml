@@ -1,0 +1,209 @@
+# local-config: referenced, but not emitted by kustomize
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: network-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+data:
+  # nodes
+  node_0:
+    name: api.sno.lab.example.com
+    internalapi_ip: "fd00:bbbb::5"
+    tenant_ip: "fd00:dddd::5"
+    ctlplane_ip: "fd00:aaaa::10"
+    storage_ip: "fd00:cccc::5"
+    bmaas_ip: "fd00:00aa::5"
+
+  # networks
+  ctlplane:
+    dnsDomain: ctlplane.example.com
+    subnets:
+      - allocationRanges:
+          - end: "fd00:aaaa::120"
+            start: "fd00:aaaa::100"
+          - end: "fd00:aaaa::200"
+            start: "fd00:aaaa::150"
+        cidr: "fd00:aaaa::0/64"
+        gateway: "fd00:aaaa::1"
+        name: subnet1
+    prefix-length: 64
+    iface: enp7s0
+    mtu: 9000
+    lb_addresses:
+      - "fd00:aaaa::80-fd00:aaaa::90"
+    endpoint_annotations:
+      metallb.universe.tf/address-pool: ctlplane
+      metallb.universe.tf/allow-shared-ip: ctlplane
+      metallb.universe.tf/loadBalancerIPs: "fd00:aaaa::80"
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "ctlplane",
+        "type": "macvlan",
+        "master": "ospbr",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "fd00:aaaa::0/64",
+          "range_start": "fd00:aaaa::30",
+          "range_end": "fd00:aaaa::70"
+        }
+      }
+  internalapi:
+    dnsDomain: internalapi.example.com
+    subnets:
+      - allocationRanges:
+          - end: "fd00:bbbb::250"
+            start: "fd00:bbbb::100"
+        cidr: "fd00:bbbb::0/64"
+        name: subnet1
+        vlan: 20
+    mtu: 1500
+    prefix-length: 64
+    iface: internalapi
+    vlan: 20
+    base_iface: enp7s0
+    lb_addresses:
+      - "fd00:bbbb::80-fd00:bbbb::90"
+    endpoint_annotations:
+      metallb.universe.tf/address-pool: internalapi
+      metallb.universe.tf/allow-shared-ip: internalapi
+      metallb.universe.tf/loadBalancerIPs: "fd00:bbbb::80"
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "internalapi",
+        "type": "macvlan",
+        "master": "internalapi",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "fd00:bbbb::0/64",
+          "range_start": "fd00:bbbb::30",
+          "range_end": "fd00:bbbb::70"
+        }
+      }
+  storage:
+    dnsDomain: storage.example.com
+    subnets:
+      - allocationRanges:
+          - end: "fd00:cccc::250"
+            start: "fd00:cccc::100"
+        cidr: "fd00:cccc::0/64"
+        name: subnet1
+        vlan: 21
+    mtu: 9000
+    prefix-length: 64
+    iface: storage
+    vlan: 21
+    base_iface: enp7s0
+    lb_addresses:
+      - "fd00:cccc::80-fd00:cccc::90"
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "storage",
+        "type": "macvlan",
+        "master": "storage",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "fd00:cccc::0/64",
+          "range_start": "fd00:cccc::30",
+          "range_end": "fd00:cccc::70"
+        }
+      }
+  tenant:
+    dnsDomain: tenant.example.com
+    subnets:
+      - allocationRanges:
+          - end: "fd00:dddd::250"
+            start: "fd00:dddd::100"
+        cidr: "fd00:dddd::0/64"
+        name: subnet1
+        vlan: 22
+    mtu: 1500
+    prefix-length: 64
+    iface: tenant
+    vlan: 22
+    base_iface: enp7s0
+    lb_addresses:
+      - "fd00:dddd::80-fd00:dddd::90"
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "tenant",
+        "type": "macvlan",
+        "master": "tenant",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "fd00:dddd::0/64",
+          "range_start": "fd00:dddd::30",
+          "range_end": "fd00:dddd::70"
+        }
+      }
+  datacentre:
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "datacentre",
+        "type": "bridge",
+        "bridge": "ospbr",
+        "ipam": {}
+      }
+  bmaas:
+    bridgeName: bmaas
+    dnsDomain: bmaas.example.com
+    subnets:
+      - allocationRanges:
+          - end: "fd00:00aa::250"
+            start: "fd00:00aa::100"
+        cidr: "fd00:00aa::0/64"
+        name: subnet1
+        vlan: 22
+    mtu: 1500
+    prefix-length: 64
+    iface: enp8s0
+    lb_addresses:
+      - "fd00:dddd::80-fd00:00aa::90"
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "bmaas",
+        "type": "macvlan",
+        "master": "bmaas",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "fd00:00aa::0/64",
+          "range_start": "fd00:00aa::30",
+          "range_end": "fd00:00aa::70"
+        }
+      }
+
+  dns-resolver:
+    config:
+      server:
+        - "fd00:aaaa::1"
+      search: []
+    options:
+      - key: server
+        values:
+          - "fd00:aaaa::1"
+
+  routes:
+    config:
+      - destination: "::/0"
+        next-hop-address: "fd00:aaaa::1"
+        next-hop-interface: enp6s0
+
+  rabbitmq:
+    endpoint_annotations:
+      metallb.universe.tf/address-pool: internalapi
+      metallb.universe.tf/loadBalancerIPs: "fd00:bbbb::81"
+  rabbitmq-cell1:
+    endpoint_annotations:
+      metallb.universe.tf/address-pool: internalapi
+      metallb.universe.tf/loadBalancerIPs: "fd00:bbbb::82"
+
+  lbServiceType: LoadBalancer
+  storageClass: local-storage
+  bridgeName: ospbr

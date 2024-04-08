@@ -1,0 +1,14 @@
+#
+# Additional advertisements can be added here if needed for other networks
+#
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: bmaas
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+    - bmaas
+  interfaces:
+    - _replaced_
