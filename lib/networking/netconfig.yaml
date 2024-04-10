@@ -7,27 +7,27 @@ metadata:
 spec:
   networks:
     - dnsDomain: _replaced_
-      name: CtlPlane
+      name: ctlplane
       subnets:
         - _replaced_
       mtu: 1500
     - dnsDomain: _replaced_
-      name: InternalApi
+      name: internalapi
       subnets:
         - _replaced_
       mtu: 1500
     - dnsDomain: _replaced_
-      name: External
+      name: external
       subnets:
         - _replaced_
       mtu: 1500
     - dnsDomain: _replaced_
-      name: Storage
+      name: storage
       subnets:
         - _replaced_
       mtu: 1500
     - dnsDomain: _replaced_
-      name: Tenant
+      name: tenant
       subnets:
         - _replaced_
       mtu: 1500

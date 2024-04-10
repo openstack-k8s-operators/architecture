@@ -225,7 +225,7 @@ replacements:
       - select:
           kind: NetConfig
         fieldPaths:
-          - spec.networks.[name=CtlPlane].dnsDomain
+          - spec.networks.[name=ctlplane].dnsDomain
   - source:
       kind: ConfigMap
       name: network-values
@@ -234,7 +234,7 @@ replacements:
       - select:
           kind: NetConfig
         fieldPaths:
-          - spec.networks.[name=InternalApi].dnsDomain
+          - spec.networks.[name=internalapi].dnsDomain
   - source:
       kind: ConfigMap
       name: network-values
@@ -243,7 +243,7 @@ replacements:
       - select:
           kind: NetConfig
         fieldPaths:
-          - spec.networks.[name=External].dnsDomain
+          - spec.networks.[name=external].dnsDomain
   - source:
       kind: ConfigMap
       name: network-values
@@ -252,7 +252,7 @@ replacements:
       - select:
           kind: NetConfig
         fieldPaths:
-          - spec.networks.[name=Storage].dnsDomain
+          - spec.networks.[name=storage].dnsDomain
   - source:
       kind: ConfigMap
       name: network-values
@@ -261,7 +261,7 @@ replacements:
       - select:
           kind: NetConfig
         fieldPaths:
-          - spec.networks.[name=Tenant].dnsDomain
+          - spec.networks.[name=tenant].dnsDomain
 
   # NetConfig MTU
   - source:
@@ -272,7 +272,7 @@ replacements:
       - select:
           kind: NetConfig
         fieldPaths:
-          - spec.networks.[name=CtlPlane].mtu
+          - spec.networks.[name=ctlplane].mtu
   - source:
       kind: ConfigMap
       name: network-values
@@ -281,7 +281,7 @@ replacements:
       - select:
           kind: NetConfig
         fieldPaths:
-          - spec.networks.[name=InternalApi].mtu
+          - spec.networks.[name=internalapi].mtu
   - source:
       kind: ConfigMap
       name: network-values
@@ -290,7 +290,7 @@ replacements:
       - select:
           kind: NetConfig
         fieldPaths:
-          - spec.networks.[name=External].mtu
+          - spec.networks.[name=external].mtu
   - source:
       kind: ConfigMap
       name: network-values
@@ -299,7 +299,7 @@ replacements:
       - select:
           kind: NetConfig
         fieldPaths:
-          - spec.networks.[name=Storage].mtu
+          - spec.networks.[name=storage].mtu
   - source:
       kind: ConfigMap
       name: network-values
@@ -308,7 +308,7 @@ replacements:
       - select:
           kind: NetConfig
         fieldPaths:
-          - spec.networks.[name=Tenant].mtu
+          - spec.networks.[name=tenant].mtu
 
   # NetConfig subnets
   - source:
@@ -319,7 +319,7 @@ replacements:
       - select:
           kind: NetConfig
         fieldPaths:
-          - spec.networks.[name=CtlPlane].subnets
+          - spec.networks.[name=ctlplane].subnets
   - source:
       kind: ConfigMap
       name: network-values
@@ -328,7 +328,7 @@ replacements:
       - select:
           kind: NetConfig
         fieldPaths:
-          - spec.networks.[name=InternalApi].subnets
+          - spec.networks.[name=internalapi].subnets
   - source:
       kind: ConfigMap
       name: network-values
@@ -337,7 +337,7 @@ replacements:
       - select:
           kind: NetConfig
         fieldPaths:
-          - spec.networks.[name=External].subnets
+          - spec.networks.[name=external].subnets
   - source:
       kind: ConfigMap
       name: network-values
@@ -346,7 +346,7 @@ replacements:
       - select:
           kind: NetConfig
         fieldPaths:
-          - spec.networks.[name=Storage].subnets
+          - spec.networks.[name=storage].subnets
   - source:
       kind: ConfigMap
       name: network-values
@@ -355,4 +355,4 @@ replacements:
       - select:
           kind: NetConfig
         fieldPaths:
-          - spec.networks.[name=Tenant].subnets
+          - spec.networks.[name=tenant].subnets
