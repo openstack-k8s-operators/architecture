@@ -112,13 +112,13 @@ data:
         edpm_neutron_sriov_agent_SRIOV_NIC_physical_device_mappings: 'sriov-phy4:eno4'
     networks:
       - defaultRoute: true
-        name: CtlPlane
+        name: ctlplane
         subnetName: subnet1
-      - name: InternalApi
+      - name: internalapi
         subnetName: subnet1
-      - name: Storage
+      - name: storage
         subnetName: subnet1
-      - name: Tenant
+      - name: tenant
         subnetName: subnet1
     nodes:
       edpm-compute-0:

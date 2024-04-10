@@ -103,18 +103,6 @@ data:
         storage_mgmt_vlan_id: 23
         storage_mgmt_cidr: "24"
         storage_mgmt_host_routes: []
-    networks:
-      - defaultRoute: true
-        name: CtlPlane
-        subnetName: subnet1
-      - name: InternalApi
-        subnetName: subnet1
-      - name: Storage
-        subnetName: subnet1
-      - name: Tenant
-        subnetName: subnet1
-      - name: StorageMgmt
-        subnetName: subnet1
     nodes:
       edpm-compute-0:
         ansible:
@@ -123,15 +111,15 @@ data:
         networks:
           - defaultRoute: true
             fixedIP: 192.168.122.100
-            name: CtlPlane
+            name: ctlplane
             subnetName: subnet1
-          - name: InternalApi
+          - name: internalapi
             subnetName: subnet1
-          - name: Storage
+          - name: storage
             subnetName: subnet1
-          - name: StorageMgmt
+          - name: storagemgmt
             subnetName: subnet1
-          - name: Tenant
+          - name: tenant
             subnetName: subnet1
       edpm-compute-1:
         ansible:
@@ -140,15 +128,15 @@ data:
         networks:
           - defaultRoute: true
             fixedIP: 192.168.122.101
-            name: CtlPlane
+            name: ctlplane
             subnetName: subnet1
-          - name: InternalApi
+          - name: internalapi
             subnetName: subnet1
-          - name: Storage
+          - name: storage
             subnetName: subnet1
-          - name: StorageMgmt
+          - name: storagemgmt
             subnetName: subnet1
-          - name: Tenant
+          - name: tenant
             subnetName: subnet1
       edpm-compute-2:
         ansible:
@@ -157,15 +145,15 @@ data:
         networks:
           - defaultRoute: true
             fixedIP: 192.168.122.102
-            name: CtlPlane
+            name: ctlplane
             subnetName: subnet1
-          - name: InternalApi
+          - name: internalapi
             subnetName: subnet1
-          - name: Storage
+          - name: storage
             subnetName: subnet1
-          - name: StorageMgmt
+          - name: storagemgmt
             subnetName: subnet1
-          - name: Tenant
+          - name: tenant
             subnetName: subnet1
     services:
       - bootstrap

@@ -93,7 +93,7 @@ data:
               mtu: {{ min_viable_mtu }}
               # force the MAC address of the bridge to this interface
               primary: true
-          {% for network in nodeset_networks if network not in ['External', 'Tenant'] %}
+          {% for network in nodeset_networks if network not in ['external', 'tenant'] %}
             - type: vlan
               mtu: {{ lookup('vars', networks_lower[network] ~ '_mtu') }}
               vlan_id: {{ lookup('vars', networks_lower[network] ~ '_vlan_id') }}
@@ -104,10 +104,10 @@ data:
           - type: ovs_user_bridge
             name: br-link1
             use_dhcp: false
-            ovs_extra: "set port br-link1 tag={{ lookup('vars', networks_lower['Tenant'] ~ '_vlan_id') }}"
+            ovs_extra: "set port br-link1 tag={{ lookup('vars', networks_lower['tenant'] ~ '_vlan_id') }}"
             addresses:
-              - ip_netmask: {{ lookup('vars', networks_lower['Tenant'] ~ '_ip') }}/{{ lookup('vars', networks_lower['Tenant'] ~ '_cidr') }}
-            mtu: {{ lookup('vars', networks_lower['Tenant'] ~ '_mtu') }}
+              - ip_netmask: {{ lookup('vars', networks_lower['tenant'] ~ '_ip') }}/{{ lookup('vars', networks_lower['tenant'] ~ '_cidr') }}
+            mtu: {{ lookup('vars', networks_lower['tenant'] ~ '_mtu') }}
             rx_queue: 1
             members:
             - type: ovs_dpdk_port
@@ -156,13 +156,13 @@ data:
         edpm_selinux_mode: enforcing
     networks:
       - defaultRoute: true
-        name: CtlPlane
+        name: ctlplane
         subnetName: subnet1
-      - name: InternalApi
+      - name: internalapi
         subnetName: subnet1
-      - name: Storage
+      - name: storage
         subnetName: subnet1
-      - name: Tenant
+      - name: tenant
         subnetName: subnet1
     nodes:
       edpm-compute-0:
