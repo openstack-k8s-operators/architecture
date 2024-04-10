@@ -1,5 +1,5 @@
 ---
-name: Run yaml-lint
+name: file-consistency
 on:  # yamllint disable-line rule:truthy
   pull_request:
     branches:
@@ -38,4 +38,6 @@ jobs:
         uses: imranismail/setup-kustomize@v2
 
       - name: Run test-kustomization script
-        run: ./test-kustomizations.sh examples/
+        run: |
+          kustomize version
+          ./test-kustomizations.sh examples/
