@@ -1,0 +1,148 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+resources:
+  - netconfig.yaml
+
+replacements:
+  # NetConfig dnsDomain
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ctlplane.dnsDomain
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=ctlplane].dnsDomain
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.internalapi.dnsDomain
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=internalapi].dnsDomain
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.external.dnsDomain
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=external].dnsDomain
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storage.dnsDomain
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=storage].dnsDomain
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.tenant.dnsDomain
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=tenant].dnsDomain
+
+  # NetConfig MTU
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ctlplane.mtu
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=ctlplane].mtu
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.internalapi.mtu
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=internalapi].mtu
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.external.mtu
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=external].mtu
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storage.mtu
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=storage].mtu
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.tenant.mtu
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=tenant].mtu
+
+  # NetConfig subnets
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ctlplane.subnets
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=ctlplane].subnets
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.internalapi.subnets
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=internalapi].subnets
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.external.subnets
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=external].subnets
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storage.subnets
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=storage].subnets
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.tenant.subnets
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=tenant].subnets
