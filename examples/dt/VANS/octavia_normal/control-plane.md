@@ -15,7 +15,7 @@ oc project openstack
 Change to the uni01alpha directory
 
 ```bash
-cd architecture/examples/dt/VANS/octavia_default
+cd architecture/examples/dt/VANS/octavia_normal
 ```
 
 Edit [service-values.yaml](service-values.yaml) and

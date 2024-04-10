@@ -1,4 +1,4 @@
-# Deployed Topology VANS/octavia-default
+# Deployed Topology VANS/octavia_normal
 
 ## General information
 

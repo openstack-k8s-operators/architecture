@@ -1,4 +1,4 @@
-# Deployed Topology VANS/octavia-active-standby
+# Deployed Topology VANS/octavia_active_standby
 
 ## General information
 
