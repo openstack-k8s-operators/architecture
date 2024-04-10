@@ -1,0 +1,44 @@
+---
+name: Kustomize Build
+on:  # yamllint disable-line rule:truthy
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+jobs:
+  kustomize:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - path: examples/common/olm
+          - path: examples/common/metallb
+          - path: examples/common/nmstate
+          - path: examples/va/hci/control-plane
+          - path: examples/va/hci/control-plane/nncp
+          - path: examples/va/hci/edpm-pre-ceph
+          - path: examples/va/hci
+          - path: examples/va/nfv/ovs-dpdk
+          - path: examples/va/nfv/ovs-dpdk/nncp
+          - path: examples/va/nfv/ovs-dpdk/edpm
+          - path: examples/va/nfv/ovs-dpdk-sriov
+          - path: examples/va/nfv/ovs-dpdk-sriov/nncp
+          - path: examples/va/nfv/ovs-dpdk-sriov/edpm
+          - path: examples/va/nfv/sriov
+          - path: examples/va/nfv/sriov/nncp
+          - path: examples/va/nfv/sriov/edpm
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # this fetches all branches. Needed because we need gh-pages branch for deploy to work
+          fetch-depth: 0
+      - name: download kustomize
+        run: |
+          mkdir bin
+          LINK=https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh
+          curl -Ss $LINK | bash -s -- 5.0.1 ./bin
+      - name: kustomize build
+        run: |
+          ./bin/kustomize build ${{ matrix.path }}
