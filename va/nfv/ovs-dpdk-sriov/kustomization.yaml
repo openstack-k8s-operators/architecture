@@ -21,6 +21,9 @@ components:
   - ../../../lib/networking
   - ../../../lib/control-plane
 
+resources:
+  - policy.yaml
+
 replacements:
   # Neutron control plane OvS DPDK & SRIOV customization
   - source:
@@ -99,5 +102,16 @@ replacements:
           kind: OpenStackControlPlane
         fieldPaths:
           - spec.telemetry.template.ceilometer.enabled
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.extraMounts
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.extraMounts
         options:
           create: true
