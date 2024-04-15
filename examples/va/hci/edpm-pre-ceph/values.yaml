@@ -47,10 +47,6 @@ data:
           {%- endfor %}
           {% set min_viable_mtu = mtu_list | max %}
           network_config:
-          - type: interface
-            name: nic1
-            use_dhcp: true
-            mtu: {{ min_viable_mtu }}
           - type: ovs_bridge
             name: {{ neutron_physical_bridge_name }}
             mtu: {{ min_viable_mtu }}
