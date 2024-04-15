@@ -51,7 +51,7 @@ data:
         edpm_ovs_dpdk_socket_memory: "4096"
         edpm_ovs_dpdk_memory_channels: "4"
         edpm_ovs_dpdk_vhost_postcopy_support: "true"
-        edpm_ovn_bridge_mappings: ['dpdk2:br-link2', 'dpdk1:br-link1']
+        edpm_ovn_bridge_mappings: ['dpdk-mgmt:br-link1', 'dpdk2:br-link2']
         # edpm nfv sriov config
         edpm_neutron_sriov_agent_SRIOV_NIC_physical_device_mappings: 'sriov1:eno5,sriov2:eno6'
         # edpm_network_config
@@ -67,6 +67,7 @@ data:
             nic4: 6c:fe:54:3f:8a:04  # CHANGEME
             nic5: 6c:fe:54:3f:8a:05  # CHANGEME
             nic6: 6c:fe:54:3f:8a:06  # CHANGEME
+            nic7: 6c:fe:54:3f:8a:07  # CHANGEME
         edpm_network_config_template: |
           ---
           {% set mtu_list = [ctlplane_mtu] %}
@@ -105,32 +106,44 @@ data:
             addresses:
               - ip_netmask: {{ lookup('vars', networks_lower['tenant'] ~ '_ip') }}/{{ lookup('vars', networks_lower['tenant'] ~ '_cidr') }}
             mtu: {{ lookup('vars', networks_lower['tenant'] ~ '_mtu') }}
-            rx_queue: 1
             members:
-            - type: ovs_dpdk_port
-              name: dpdk1
-              members:
-              - type: interface
-                name: nic3
+              - type: ovs_dpdk_bond
+                name: dpdkbond0
+                mtu: 9000
+                rx_queue: 1
+                ovs_options: "bond_mode=balance-tcp lacp=active other_config:lacp-time=fast other-config:lacp-fallback-ab=true other_config:lb-output-action=true"
+                members:
+                - type: ovs_dpdk_port
+                  name: dpdk0
+                  members:
+                  - type: interface
+                    name: nic3
+                - type: ovs_dpdk_port
+                  name: dpdk1
+                  members:
+                  - type: interface
+                    name: nic4
+
           - type: ovs_user_bridge
             name: br-link2
-            use_dhcp: false
             mtu: 9000
-            rx_queue: 1
+            use_dhcp: false
             members:
-            - type: ovs_dpdk_port
-              name: dpdk2
-              members:
-              - type: interface
-                name: nic4
+              - type: ovs_dpdk_port
+                name: dpdk2
+                mtu: 9000
+                rx_queue: 2
+                members:
+                  - type: interface
+                    name: nic5
           - type: sriov_pf
-            name: nic5
+            name: nic6
             numvfs: 10
             mtu: 9000
             use_dhcp: false
             promisc: true
           - type: sriov_pf
-            name: nic6
+            name: nic7
             numvfs: 10
             mtu: 9000
             use_dhcp: false
