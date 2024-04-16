@@ -4,15 +4,16 @@ kind: ConfigMap
 metadata:
   name: neutron-policy
 data:
-  "create_port:binding:profile": "rule:admin_or_network_owner"
-  "get_port:binding:profile": "rule:admin_or_network_owner"
-  "update_port:binding:profile": "rule:admin_or_network_owner"
-  "create_network:provider:network_type": "rule:regular_user"
-  "get_network:provider:network_type": "rule:regular_user"
-  "update_network:provider:network_type": "rule:regular_user"
-  "create_network:provider:physical_network": "rule:regular_user"
-  "get_network:provider:physical_network": "rule:regular_user"
-  "update_network:provider:physical_network": "rule:regular_user"
-  "create_network:provider:segmentation_id": "rule:regular_user"
-  "get_network:provider:segmentation_id": "rule:regular_user"
-  "update_network:provider:segmentation_id": "rule:regular_user"
+  policy.yaml: |
+    "create_port:binding:profile": "rule:admin_or_network_owner"
+    "get_port:binding:profile": "rule:admin_or_network_owner"
+    "update_port:binding:profile": "rule:admin_or_network_owner"
+    "create_network:provider:network_type": "rule:regular_user"
+    "get_network:provider:network_type": "rule:regular_user"
+    "update_network:provider:network_type": "rule:regular_user"
+    "create_network:provider:physical_network": "rule:regular_user"
+    "get_network:provider:physical_network": "rule:regular_user"
+    "update_network:provider:physical_network": "rule:regular_user"
+    "create_network:provider:segmentation_id": "rule:regular_user"
+    "get_network:provider:segmentation_id": "rule:regular_user"
+    "update_network:provider:segmentation_id": "rule:regular_user"
