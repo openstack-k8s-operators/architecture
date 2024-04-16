@@ -186,7 +186,6 @@ data:
     config:
       - destination: 192.168.122.0/24
         next-hop-address: 192.168.122.1
-        next-hop-interface: enp6s0
 
   rabbitmq:
     endpoint_annotations:
