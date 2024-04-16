@@ -20,7 +20,7 @@ _hook:
 ---
 _stage:
   path: str()
-  wait_conditions: list(str(matches='^(oc|kubectl) .*'), min=1)
+  wait_conditions: list(str(matches='^(oc|kubectl) .* wait .*'), min=1)
   values: list(include('_values'), min=1)
   build_output: str()
   pre_stage_run: list(include('_hook'), required=False)
