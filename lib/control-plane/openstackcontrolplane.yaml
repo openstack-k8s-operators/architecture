@@ -153,8 +153,6 @@ spec:
           dbType: SB
           networkAttachment: internalapi
           storageRequest: 10G
-      ovnNorthd:
-        networkAttachment: internalapi
   placement:
     apiOverride:
       route: {}
