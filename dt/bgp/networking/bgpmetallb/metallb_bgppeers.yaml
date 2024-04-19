@@ -10,10 +10,10 @@ spec:
   peerAddress: _replaced_
   password: f00barZ
   nodeSelectors:
-  - matchExpressions:
-    - key: kubernetes.io/hostname
-      operator: In
-      values: ["master-0"]
+    - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values: ["master-0"]
 ---
 apiVersion: metallb.io/v1beta2
 kind: BGPPeer
@@ -26,10 +26,10 @@ spec:
   peerAddress: _replaced_
   password: f00barZ
   nodeSelectors:
-  - matchExpressions:
-    - key: kubernetes.io/hostname
-      operator: In
-      values: ["master-0"]
+    - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values: ["master-0"]
 ---
 apiVersion: metallb.io/v1beta2
 kind: BGPPeer
@@ -42,10 +42,10 @@ spec:
   peerAddress: _replaced_
   password: f00barZ
   nodeSelectors:
-  - matchExpressions:
-    - key: kubernetes.io/hostname
-      operator: In
-      values: ["master-1"]
+    - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values: ["master-1"]
 ---
 apiVersion: metallb.io/v1beta2
 kind: BGPPeer
@@ -58,10 +58,10 @@ spec:
   peerAddress: _replaced_
   password: f00barZ
   nodeSelectors:
-  - matchExpressions:
-    - key: kubernetes.io/hostname
-      operator: In
-      values: ["master-1"]
+    - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values: ["master-1"]
 ---
 apiVersion: metallb.io/v1beta2
 kind: BGPPeer
@@ -74,10 +74,10 @@ spec:
   peerAddress: _replaced_
   password: f00barZ
   nodeSelectors:
-  - matchExpressions:
-    - key: kubernetes.io/hostname
-      operator: In
-      values: ["master-2"]
+    - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values: ["master-2"]
 ---
 apiVersion: metallb.io/v1beta2
 kind: BGPPeer
@@ -90,7 +90,7 @@ spec:
   peerAddress: _replaced_
   password: f00barZ
   nodeSelectors:
-  - matchExpressions:
-    - key: kubernetes.io/hostname
-      operator: In
-      values: ["master-2"]
+    - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values: ["master-2"]

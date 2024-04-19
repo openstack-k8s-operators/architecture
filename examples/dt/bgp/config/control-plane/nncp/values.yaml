@@ -1,3 +1,4 @@
+---
 # local-config: referenced, but not emitted by kustomize
 apiVersion: v1
 kind: ConfigMap
@@ -66,7 +67,7 @@ data:
     iface: enp8s0
     mtu: 1500
     lb_addresses:
-    - 192.168.122.80-192.168.122.90
+      - 192.168.122.80-192.168.122.90
     endpoint_annotations:
       metallb.universe.tf/address-pool: ctlplane
       metallb.universe.tf/allow-shared-ip: ctlplane
@@ -99,12 +100,12 @@ data:
     vlan: 20
     base_iface: enp8s0
     lb_addresses:
-    - 172.17.0.80-172.17.0.90
+      - 172.17.0.80-172.17.0.90
     endpoint_annotations:
       metallb.universe.tf/address-pool: internalapi
       metallb.universe.tf/allow-shared-ip: internalapi
       metallb.universe.tf/loadBalancerIPs: 172.17.0.80
-    net-attach-def:  |
+    net-attach-def: |
       {
         "cniVersion": "0.3.1",
         "name": "internalapi",
@@ -132,7 +133,7 @@ data:
     vlan: 21
     base_iface: enp8s0
     lb_addresses:
-    - 172.18.0.80-172.18.0.90
+      - 172.18.0.80-172.18.0.90
     net-attach-def: |
       {
         "cniVersion": "0.3.1",
@@ -161,7 +162,7 @@ data:
     vlan: 22
     base_iface: enp8s0
     lb_addresses:
-    - 172.19.0.80-172.19.0.90
+      - 172.19.0.80-172.19.0.90
     net-attach-def: |
       {
         "cniVersion": "0.3.1",
@@ -197,119 +198,119 @@ data:
       bgpnet0:
         - name: subnet0
           allocationRanges:
-          - end: 100.64.0.2
-            start: 100.64.0.1
+            - end: 100.64.0.2
+              start: 100.64.0.1
           cidr: 100.64.0.0/30
           gateway: 100.64.0.1
           routes:
-          - destination: 0.0.0.0/0
-            nexthop: 100.64.0.1
+            - destination: 0.0.0.0/0
+              nexthop: 100.64.0.1
         - name: subnet1
           allocationRanges:
-          - end: 100.64.1.2
-            start: 100.64.1.1
+            - end: 100.64.1.2
+              start: 100.64.1.1
           cidr: 100.64.1.0/30
           gateway: 100.64.1.1
           routes:
-          - destination: 0.0.0.0/0
-            nexthop: 100.64.1.1
+            - destination: 0.0.0.0/0
+              nexthop: 100.64.1.1
         - name: subnet2
           allocationRanges:
-          - end: 100.64.2.2
-            start: 100.64.2.1
+            - end: 100.64.2.2
+              start: 100.64.2.1
           cidr: 100.64.2.0/30
           gateway: 100.64.2.1
           routes:
-          - destination: 0.0.0.0/0
-            nexthop: 100.64.2.1
+            - destination: 0.0.0.0/0
+              nexthop: 100.64.2.1
         - name: subnet3
           allocationRanges:
-          - end: 100.64.3.2
-            start: 100.64.3.1
+            - end: 100.64.3.2
+              start: 100.64.3.1
           cidr: 100.64.3.0/30
           gateway: 100.64.3.1
           routes:
-          - destination: 0.0.0.0/0
-            nexthop: 100.64.3.1
+            - destination: 0.0.0.0/0
+              nexthop: 100.64.3.1
       bgpnet1:
         - name: subnet0
           allocationRanges:
-          - end: 100.65.0.2
-            start: 100.65.0.1
+            - end: 100.65.0.2
+              start: 100.65.0.1
           cidr: 100.65.0.0/30
           gateway: 100.65.0.1
           routes:
-          - destination: 0.0.0.0/0
-            nexthop: 100.65.0.1
+            - destination: 0.0.0.0/0
+              nexthop: 100.65.0.1
         - name: subnet1
           allocationRanges:
-          - end: 100.65.1.2
-            start: 100.65.1.1
+            - end: 100.65.1.2
+              start: 100.65.1.1
           cidr: 100.65.1.0/30
           gateway: 100.65.1.1
           routes:
-          - destination: 0.0.0.0/0
-            nexthop: 100.65.1.1
+            - destination: 0.0.0.0/0
+              nexthop: 100.65.1.1
         - name: subnet2
           allocationRanges:
-          - end: 100.65.2.2
-            start: 100.65.2.1
+            - end: 100.65.2.2
+              start: 100.65.2.1
           cidr: 100.65.2.0/30
           gateway: 100.65.2.1
           routes:
-          - destination: 0.0.0.0/0
-            nexthop: 100.65.2.1
+            - destination: 0.0.0.0/0
+              nexthop: 100.65.2.1
         - name: subnet3
           allocationRanges:
-          - end: 100.65.3.2
-            start: 100.65.3.1
+            - end: 100.65.3.2
+              start: 100.65.3.1
           cidr: 100.65.3.0/30
           gateway: 100.65.3.1
           routes:
-          - destination: 0.0.0.0/0
-            nexthop: 100.65.3.1
+            - destination: 0.0.0.0/0
+              nexthop: 100.65.3.1
       bgpmainnet:
         - name: subnet0
           cidr: 172.30.0.0/28
           allocationRanges:
-          - end: 172.30.0.14
-            start: 172.30.0.2
+            - end: 172.30.0.14
+              start: 172.30.0.2
         - name: subnet1
           cidr: 172.30.1.0/28
           allocationRanges:
-          - end: 172.30.1.14
-            start: 172.30.1.2
+            - end: 172.30.1.14
+              start: 172.30.1.2
         - name: subnet2
           cidr: 172.30.2.0/28
           allocationRanges:
-          - end: 172.30.2.14
-            start: 172.30.2.2
+            - end: 172.30.2.14
+              start: 172.30.2.2
         - name: subnet3
           cidr: 172.30.3.0/28
           allocationRanges:
-          - end: 172.30.3.14
-            start: 172.30.3.2
+            - end: 172.30.3.14
+              start: 172.30.3.2
       bgpmainnetv6:
         - name: subnet0
           cidr: f00d:f00d:f00d:f00d:f00d:f00d:f00d:0010/124
           allocationRanges:
-          - end: f00d:f00d:f00d:f00d:f00d:f00d:f00d:001e
-            start: f00d:f00d:f00d:f00d:f00d:f00d:f00d:0012
+            - end: f00d:f00d:f00d:f00d:f00d:f00d:f00d:001e
+              start: f00d:f00d:f00d:f00d:f00d:f00d:f00d:0012
         - name: subnet1
           cidr: f00d:f00d:f00d:f00d:f00d:f00d:f00d:0020/124
           allocationRanges:
-          - end: f00d:f00d:f00d:f00d:f00d:f00d:f00d:002e
-            start: f00d:f00d:f00d:f00d:f00d:f00d:f00d:0022
+            - end: f00d:f00d:f00d:f00d:f00d:f00d:f00d:002e
+              start: f00d:f00d:f00d:f00d:f00d:f00d:f00d:0022
         - name: subnet2
           cidr: f00d:f00d:f00d:f00d:f00d:f00d:f00d:0030/124
           allocationRanges:
-          - end: f00d:f00d:f00d:f00d:f00d:f00d:f00d:003e
-            start: f00d:f00d:f00d:f00d:f00d:f00d:f00d:0032
+            - end: f00d:f00d:f00d:f00d:f00d:f00d:f00d:003e
+              start: f00d:f00d:f00d:f00d:f00d:f00d:f00d:0032
         - name: subnet3
           cidr: f00d:f00d:f00d:f00d:f00d:f00d:f00d:0040/124
           allocationRanges:
-          - end: f00d:f00d:f00d:f00d:f00d:f00d:f00d:004e
-            start: f00d:f00d:f00d:f00d:f00d:f00d:f00d:0042
+            - end: f00d:f00d:f00d:f00d:f00d:f00d:f00d:004e
+              start: f00d:f00d:f00d:f00d:f00d:f00d:f00d:0042
     net-attach-def:
       node0:
         bgpnet0: |
@@ -419,9 +420,9 @@ data:
 
   routes:
     config:
-    - destination: 0.0.0.0/0
-      next-hop-address: 192.168.122.1
-      next-hop-interface: enp8s0
+      - destination: 0.0.0.0/0
+        next-hop-address: 192.168.122.1
+        next-hop-interface: enp8s0
 
   rabbitmq:
     endpoint_annotations:
