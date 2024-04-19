@@ -178,6 +178,7 @@ data:
       - validate-network
       - install-os
       - configure-os
+      - ssh-known-hosts
       - run-os
       - install-certs
       - ovn
