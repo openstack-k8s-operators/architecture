@@ -176,6 +176,7 @@ data:
       - install-os
       - ceph-hci-pre
       - configure-os
+      - ssh-known-hosts
       - run-os
       - reboot-os
   nova:
