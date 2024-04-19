@@ -1,0 +1,140 @@
+---
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: edpm-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+
+data:
+  ssh_keys:
+    authorized: _replaced_
+    private: _replaced_
+    public: _replaced_
+
+  nova:
+    migration:
+      ssh_keys:
+        private: _replaced_
+        public: _replaced_
+
+  nodeset:
+    ansible:
+      ansibleUser: cloud-admin
+      ansiblePort: 22
+      ansibleVars:
+        service_net_map:
+          nova_api_network: internalapi
+          nova_libvirt_network: internalapi
+        timesync_ntp_servers:
+          - hostname: clock.redhat.com
+        edpm_network_config_hide_sensitive_logs: false
+        edpm_network_config_template: |
+          ---
+          {% set mtu_list = [ctlplane_mtu] %}
+          {% for network in nodeset_networks %}
+          {{ mtu_list.append(lookup('vars', networks_lower[network] ~ '_mtu')) }}
+          {%- endfor %}
+          {% set min_viable_mtu = mtu_list | max %}
+          network_config:
+            - type: ovs_bridge
+              name: {{ neutron_physical_bridge_name }}
+              mtu: {{ min_viable_mtu }}
+              use_dhcp: false
+              dns_servers: {{ ctlplane_dns_nameservers }}
+              domain: {{ dns_search_domains }}
+              addresses:
+                - ip_netmask: {{ ctlplane_ip }}/{{ ctlplane_cidr }}
+              routes: {{ ctlplane_host_routes }}
+              members:
+                - type: interface
+                  name: nic2
+                  mtu: {{ min_viable_mtu }}
+                  primary: true
+          {% for network in nodeset_networks %}
+                - type: vlan
+                  mtu: {{ lookup('vars', networks_lower[network] ~ '_mtu') }}
+                  vlan_id: {{ lookup('vars', networks_lower[network] ~ '_vlan_id') }}
+                  addresses:
+                    - ip_netmask: >-
+                        {{
+                          lookup('vars', networks_lower[network] ~ '_ip')
+                        }}/{{
+                          lookup('vars', networks_lower[network] ~ '_cidr')
+                        }}
+                  routes: {{ lookup('vars', networks_lower[network] ~ '_host_routes') }}
+          {% endfor %}
+        neutron_physical_bridge_name: br-ex
+        neutron_public_interface_name: eth0
+
+        edpm_nodes_validation_validate_controllers_icmp: false
+        edpm_nodes_validation_validate_gateway_icmp: false
+
+        edpm_selinux_mode: enforcing
+        edpm_sshd_configure_firewall: true
+        edpm_sshd_allowed_ranges:
+          - 192.168.122.0/24
+
+        enable_debug: false
+        gather_facts: false
+
+    networks:
+      - defaultRoute: true
+        name: ctlplane
+        subnetName: subnet1
+      - name: internalapi
+        subnetName: subnet1
+      - name: storage
+        subnetName: subnet1
+      - name: tenant
+        subnetName: subnet1
+
+    nodes:
+      edpm-compute-0:
+        ansible:
+          ansibleHost: 192.168.122.100
+        hostName: edpm-compute-0
+        networks:
+          - defaultRoute: true
+            fixedIP: 192.168.122.100
+            name: ctlplane
+            subnetName: subnet1
+          - name: internalapi
+            subnetName: subnet1
+          - name: storage
+            subnetName: subnet1
+          - name: tenant
+            subnetName: subnet1
+
+      edpm-compute-1:
+        ansible:
+          ansibleHost: 192.168.122.101
+        hostName: edpm-compute-1
+        networks:
+          - defaultRoute: true
+            fixedIP: 192.168.122.101
+            name: ctlplane
+            subnetName: subnet1
+          - name: internalapi
+            subnetName: subnet1
+          - name: storage
+            subnetName: subnet1
+          - name: tenant
+            subnetName: subnet1
+
+    services:
+      - bootstrap
+      - configure-network
+      - validate-network
+      - install-os
+      - configure-os
+      - ssh-known-hosts
+      - run-os
+      - reboot-os
+      - install-certs
+      - ovn
+      - neutron-metadata
+      - libvirt
+      - nova
+      - telemetry

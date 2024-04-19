@@ -1,0 +1,145 @@
+---
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: service-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+
+data:
+  cinderVolumes:
+    lvm-iscsi:
+      replicas: 1
+      nodeSelector:
+        openstack.org/cinder-lvm: ""
+      customServiceConfig: |
+        [lvm]
+        image_volume_cache_enabled = false
+        volume_driver = cinder.volume.drivers.lvm.LVMVolumeDriver
+        volume_group = cinder-volumes
+        target_protocol = iscsi
+        target_helper = lioadm
+        volume_backend_name = lvm_iscsi
+        target_ip_address=172.18.0.5
+        target_secondary_ip_addresses = 172.19.0.5
+
+  cinderBackup:
+    customServiceConfig: |
+      [DEFAULT]
+      backup_driver = cinder.backup.drivers.swift.SwiftBackupDriver
+    replicas: 1
+
+  glance:
+    customServiceConfig: |
+      [DEFAULT]
+      enabled_backends = default_backend:swift
+
+      [glance_store]
+      default_backend = default_backend
+
+      [default_backend]
+      swift_store_create_container_on_put = True
+      swift_store_auth_version = 3
+      swift_store_auth_address = {{ .KeystoneInternalURL }}
+      swift_store_endpoint_type = internalURL
+      swift_store_user = service:glance
+      swift_store_key = {{ .ServicePassword }}
+    default:
+      replicas: 1
+
+  ironic:
+    enabled: true
+
+  swift:
+    enabled: true
+
+  # ToDo: octavia needs to be enabled once the issue is fixed.
+  octavia:
+    enabled: false
+    amphoraImageContainerImage: quay.io/gthiemonge/octavia-amphora-image
+    apacheContainerImage: registry.redhat.io/ubi9/httpd-24:latest
+    octaviaAPI:
+      networkAttachments:
+        - internalapi
+    octaviaHousekeeping:
+      networkAttachments:
+        - octavia
+    octaviaHealthManager:
+      networkAttachments:
+        - octavia
+    octaviaWorker:
+      networkAttachments:
+        - octavia
+
+  heat:
+    enabled: true
+
+  redis:
+    enabled: true
+
+  telemetry:
+    enabled: true
+    metricStorage:
+      enabled: true
+    autoscaling:
+      enabled: true
+    ceilometer:
+      enabled: true
+
+  ovn:
+    ovnController:
+      nicMappings:
+        datacentre: ocpbr
+        octavia: octbr
+      availability-zones:
+        - zone-1
+
+  neutron:
+    customServiceConfig: |
+      [DEFAULT]
+      vlan_transparent = true
+      agent_down_time = 600
+      router_distributed = true
+      router_scheduler_driver = neutron.scheduler.l3_agent_scheduler.ChanceScheduler
+      allow_automatic_l3agent_failover = true
+      debug = true
+      default_availability_zones = zone-1,zone-2
+
+      [agent]
+      report_interval = 300
+
+      [database]
+      max_retries = -1
+      db_max_retries = -1
+
+      [keystone_authtoken]
+      region_name = regionOne
+      memcache_use_advanced_pool = True
+
+      [oslo_messaging_notifications]
+      driver = noop
+
+      [oslo_middleware]
+      enable_proxy_headers_parsing = true
+
+      [oslo_policy]
+      policy_file = /etc/neutron/policy.yaml
+
+      [ovs]
+      igmp_snooping_enable = true
+
+      [ovn]
+      ovsdb_probe_interval = 60000
+      ovn_emit_need_to_frag = true
+
+      [ml2]
+      type_drivers = geneve,vxlan,vlan,flat
+      tenant_network_types = geneve,flat
+
+  # yamllint disable rule:line-length
+  nova:
+    schedulerServiceTemplate:
+      customServiceConfig: |
+        [filter_scheduler]
+        enabled_filters = AggregateInstanceExtraSpecsFilter,AvailabilityZoneFilter,ComputeFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,DifferentHostFilter,SameHostFilter,AllHostsFilter,ServerGroupAffinityFilter,ServerGroupAntiAffinityFilter

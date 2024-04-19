@@ -15,8 +15,13 @@ _values:
 _hook:
   name: str()
   type: str()
-  source: str()
+  source: str(required=False)
   inventory: str(required=False)
+  extra_vars: map(required=False)
+  definition: map(required=False)
+  resource_name: str(required=False)
+  state: str(required=False)
+  kind: str(required=False)
 ---
 _stage:
   path: str()
