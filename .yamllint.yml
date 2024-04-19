@@ -5,5 +5,5 @@ ignore:
 
 rules:
   line-length:
-    max: 100
+    max: 256
     level: warning
