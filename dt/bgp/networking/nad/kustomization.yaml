@@ -8,7 +8,7 @@ resources:
 patches:
   - target:
       kind: NetworkAttachmentDefinition
-      labelSelector: "osp/net-attach-def-type=standard"
+      labelSelector: "osp/net-attach-def-type=bgp"
     path: ocp_network_template.yaml
 
 replacements:

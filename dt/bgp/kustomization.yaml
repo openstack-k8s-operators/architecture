@@ -75,7 +75,6 @@ patches:
           subnets:
             - _replaced_
           mtu: 1500
-
   # Enable octavia and heat
   - target:
       kind: OpenStackControlPlane
@@ -91,6 +90,15 @@ patches:
       - op: replace
         path: /spec/heat/enabled
         value: true
+  # Connect ovnNorthd to internalapi
+  - target:
+      kind: OpenStackControlPlane
+      name: controlplane
+    patch: |-
+      - op: add
+        path: /spec/ovn/template/ovnNorthd
+        value:
+          networkAttachment: internalapi
 
 replacements:
   # BGP NetConfig customizations
