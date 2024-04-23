@@ -138,6 +138,7 @@ data:
       - install-certs
       - libvirt
       - ovn
+      - neutron-ovn
       - nova-custom-sriov
       - neutron-sriov
       - neutron-metadata
