@@ -23,7 +23,7 @@ components:
 replacements:
   - source:
       kind: ConfigMap
-      name: edpm-values
+      name: edpm-deployment-values
       fieldPath: data.deployment.name
     targets:
       - select:

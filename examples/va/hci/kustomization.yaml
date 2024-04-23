@@ -11,6 +11,8 @@ components:
 
 resources:
   - control-plane/nncp/values.yaml
-  - edpm-pre-ceph/values.yaml
+  - edpm-pre-ceph/nodeset-values.yaml
+  - edpm-pre-ceph/deployment-values.yaml
   - service-values.yaml
-  - values.yaml
+  - nodeset-values.yaml
+  - deployment-values.yaml

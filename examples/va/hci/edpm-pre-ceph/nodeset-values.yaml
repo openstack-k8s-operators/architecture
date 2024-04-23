@@ -4,12 +4,10 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: edpm-values
+  name: edpm-nodeset-values
   annotations:
     config.kubernetes.io/local-config: "true"
 data:
-  deployment:
-    name: edpm-deployment-pre-ceph
   ssh_keys:
     # Authorized keys that will have access to the dataplane computes via SSH
     authorized: CHANGEME

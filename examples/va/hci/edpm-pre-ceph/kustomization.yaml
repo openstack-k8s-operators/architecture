@@ -9,4 +9,5 @@ components:
   ## https://github.com/kubernetes-sigs/kustomize/blob/master/examples/remoteBuild.md
 
 resources:
-  - values.yaml
+  - nodeset-values.yaml
+  - deployment-values.yaml

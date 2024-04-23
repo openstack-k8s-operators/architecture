@@ -124,7 +124,7 @@ replacements:
   # Ceph keyring
   - source:
       kind: ConfigMap
-      name: edpm-values-post-ceph
+      name: edpm-nodeset-values-post-ceph
       fieldPath: data.ceph.keyring
     targets:
       - select:
@@ -137,7 +137,7 @@ replacements:
   # Ceph conf
   - source:
       kind: ConfigMap
-      name: edpm-values-post-ceph
+      name: edpm-nodeset-values-post-ceph
       fieldPath: data.ceph.conf
     targets:
       - select:
@@ -150,7 +150,7 @@ replacements:
   # Nova Ceph conf
   - source:
       kind: ConfigMap
-      name: edpm-values-post-ceph
+      name: edpm-nodeset-values-post-ceph
       fieldPath: data.nova.ceph.conf
     targets:
       - select:
@@ -161,10 +161,10 @@ replacements:
         options:
           create: true
   # Dataplane services override (overrides ../../../lib/dataplane which
-  # is using edpm-values ConfigMap)
+  # is using edpm-nodeset-values ConfigMap)
   - source:
       kind: ConfigMap
-      name: edpm-values-post-ceph
+      name: edpm-nodeset-values-post-ceph
       fieldPath: data.nodeset.services
     targets:
       - select:
@@ -175,7 +175,7 @@ replacements:
           create: true
   - source:
       kind: ConfigMap
-      name: edpm-values-post-ceph
+      name: edpm-deployment-values-post-ceph
       fieldPath: data.deployment.name
     targets:
       - select:
