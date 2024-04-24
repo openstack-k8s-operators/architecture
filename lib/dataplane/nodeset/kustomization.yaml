@@ -19,7 +19,7 @@ secretGenerator:
 replacements:
   - source:
       kind: ConfigMap
-      name: edpm-values
+      name: edpm-nodeset-values
       fieldPath: data.nodeset.ansible
     targets:
       - select:
@@ -30,7 +30,7 @@ replacements:
           create: true
   - source:
       kind: ConfigMap
-      name: edpm-values
+      name: edpm-nodeset-values
       fieldPath: data.nodeset.networks
     targets:
       - select:
@@ -41,7 +41,7 @@ replacements:
           create: true
   - source:
       kind: ConfigMap
-      name: edpm-values
+      name: edpm-nodeset-values
       fieldPath: data.nodeset.nodes
     targets:
       - select:
@@ -52,7 +52,7 @@ replacements:
           create: true
   - source:
       kind: ConfigMap
-      name: edpm-values
+      name: edpm-nodeset-values
       fieldPath: data.nodeset.services
     targets:
       - select:
@@ -65,7 +65,7 @@ replacements:
   # Dataplane SSH access secret customizations
   - source:
       kind: ConfigMap
-      name: edpm-values
+      name: edpm-nodeset-values
       fieldPath: data.ssh_keys.authorized
     targets:
       - select:
@@ -77,7 +77,7 @@ replacements:
           create: true
   - source:
       kind: ConfigMap
-      name: edpm-values
+      name: edpm-nodeset-values
       fieldPath: data.ssh_keys.private
     targets:
       - select:
@@ -89,7 +89,7 @@ replacements:
           create: true
   - source:
       kind: ConfigMap
-      name: edpm-values
+      name: edpm-nodeset-values
       fieldPath: data.ssh_keys.public
     targets:
       - select:
@@ -103,7 +103,7 @@ replacements:
   # Nova migration secret customizations
   - source:
       kind: ConfigMap
-      name: edpm-values
+      name: edpm-nodeset-values
       fieldPath: data.nova.migration.ssh_keys.private
     targets:
       - select:
@@ -115,7 +115,7 @@ replacements:
           create: true
   - source:
       kind: ConfigMap
-      name: edpm-values
+      name: edpm-nodeset-values
       fieldPath: data.nova.migration.ssh_keys.public
     targets:
       - select:

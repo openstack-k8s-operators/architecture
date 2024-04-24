@@ -46,7 +46,7 @@ vas:
             --for condition=Ready
             --timeout=2400s
         values:
-          - name: edpm-values
+          - name: edpm-nodeset-values
             src_file: values.yaml
         build_output: edpm-networker.yaml
 
@@ -58,6 +58,6 @@ vas:
             --for condition=Ready
             --timeout=2400s
         values:
-          - name: edpm-values
+          - name: edpm-nodeset-values
             src_file: values.yaml
         build_output: edpm.yaml
