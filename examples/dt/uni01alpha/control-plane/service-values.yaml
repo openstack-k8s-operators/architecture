@@ -135,10 +135,3 @@ data:
       [ml2]
       type_drivers = geneve,vxlan,vlan,flat
       tenant_network_types = geneve,flat
-
-  # yamllint disable rule:line-length
-  nova:
-    schedulerServiceTemplate:
-      customServiceConfig: |
-        [filter_scheduler]
-        enabled_filters = AggregateInstanceExtraSpecsFilter,AvailabilityZoneFilter,ComputeFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,DifferentHostFilter,SameHostFilter,AllHostsFilter,ServerGroupAffinityFilter,ServerGroupAntiAffinityFilter
