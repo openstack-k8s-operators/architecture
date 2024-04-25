@@ -37,6 +37,7 @@ data:
       store_description = "RBD backend"
       rbd_store_pool = images
       rbd_store_user = openstack
+      rbd_thin_provisioning = True
     glanceAPIs:
       default:
         replicas: 3
