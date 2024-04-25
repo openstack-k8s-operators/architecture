@@ -117,7 +117,7 @@ spec:
   memcached:
     templates:
       memcached:
-        replicas: 1
+        replicas: 3
   neutron:
     apiOverride:
       route: {}
