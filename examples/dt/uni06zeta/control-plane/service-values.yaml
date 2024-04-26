@@ -118,8 +118,3 @@ data:
       max_header_size = 38
       [ml2_type_vlan]
       network_vlan_ranges = tenant:1000:2000,datacentre:218:218
-
-  nova:
-    customServiceConfig: |
-      [filter_scheduler]
-      enabled_filters = AggregateInstanceExtraSpecsFilter, AvailabilityZoneFilter,ComputeFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,DifferentHostFilter,SameHostFilter,AllHostsFilter,ServerGroupAffinityFilter,ServerGroupAntiAffinityFilter

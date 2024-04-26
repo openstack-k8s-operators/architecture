@@ -340,18 +340,6 @@ replacements:
 
   - source:
       kind: ConfigMap
-      name: service-values
-      fieldPath: data.nova.schedulerServiceTemplate.customServiceConfig
-    targets:
-      - select:
-          kind: OpenStackControlPlane
-        fieldPaths:
-          - spec.nova.template.schedulerServiceTemplate.customServiceConfig
-        options:
-          create: true
-
-  - source:
-      kind: ConfigMap
       name: network-values
       fieldPath: data.octavia.net-attach-def
     targets:
