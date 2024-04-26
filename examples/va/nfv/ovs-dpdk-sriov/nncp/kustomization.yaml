@@ -22,3 +22,12 @@ components:
 
 resources:
   - values.yaml
+
+patches:
+  - target:
+      group: nmstate.io
+      version: v1
+      kind: NodeNetworkConfigurationPolicy
+    patch: |-
+      - op: remove
+        path: /spec/desiredState/routes
