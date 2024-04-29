@@ -13,16 +13,16 @@ transformers:
     setRoleBindingSubjects: none
     unsetOnly: true
     fieldSpecs:
-    - path: metadata/name
-      kind: Namespace
-      create: true
+      - path: metadata/name
+        kind: Namespace
+        create: true
 
 components:
-  - ../../../../lib/dataplane
+  - ../../../../../lib/dataplane/nodeset
 
 resources:
   - baremetalset-password-secret.yaml
-  - nova_sriov.yaml
+  - nova_ovs_dpdk.yaml
 
 replacements:
   - source:
@@ -46,22 +46,9 @@ replacements:
     targets:
       - select:
           kind: ConfigMap
-          name: cpu-pinning-nova
+          name: ovs-dpdk-cpu-pinning-nova
         fieldPaths:
-          - data.25-cpu-pinning-nova\.conf
-        options:
-          create: true
-  # Nova compute PCI passthrough customization
-  - source:
-      kind: ConfigMap
-      name: edpm-nodeset-values
-      fieldPath: data.nova.pci.conf
-    targets:
-      - select:
-          kind: ConfigMap
-          name: sriov-nova
-        fieldPaths:
-          - data.03-sriov-nova\.conf
+          - data.04-cpu-pinning-nova\.conf
         options:
           create: true
   - source:
