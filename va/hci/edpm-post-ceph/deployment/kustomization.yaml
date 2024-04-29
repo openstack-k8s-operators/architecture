@@ -18,12 +18,12 @@ transformers:
         create: true
 
 components:
-  - ../../../lib/dataplane
+  - ../../../../lib/dataplane/deployment
 
 replacements:
   - source:
       kind: ConfigMap
-      name: edpm-values
+      name: edpm-deployment-values-post-ceph
       fieldPath: data.deployment.name
     targets:
       - select:

@@ -4,13 +4,10 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 components:
-  - ../../../va/hci/edpm-post-ceph/nodeset
+  - ../../../../va/hci/edpm-post-ceph/deployment
   # - https://github.com/openstack-k8s-operators/architecture/va/hci/edpm-post-ceph/?ref=main
   ## It's possible to replace ../../../va/hci/edpm-post-ceph/ with a git checkout URL as per:
   ## https://github.com/kubernetes-sigs/kustomize/blob/master/examples/remoteBuild.md
 
 resources:
-  - control-plane/nncp/values.yaml
-  - edpm-pre-ceph/nodeset/values.yaml
-  - service-values.yaml
   - values.yaml

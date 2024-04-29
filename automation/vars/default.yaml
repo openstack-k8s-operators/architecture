@@ -24,16 +24,27 @@ vas:
             src_file: nncp/values.yaml
         build_output: ../control-plane.yaml
 
-      - path: examples/va/hci/edpm-pre-ceph
+      - path: examples/va/hci/edpm-pre-ceph/nodeset
         wait_conditions:
           - >-
             oc -n openstack wait
-            osdpd edpm-deployment-pre-ceph --for condition=Ready
+            osdpns openstack-edpm --for condition=SetupReady
+            --timeout=600s
+        values:
+          - name: edpm-nodeset-values
+            src_file: values.yaml
+        build_output: nodeset-pre-ceph.yaml
+
+      - path: examples/va/hci/edpm-pre-ceph/deployment
+        wait_conditions:
+          - >-
+            oc -n openstack wait
+            osdpns openstack-edpm --for condition=Ready
             --timeout=1500s
         values:
-          - name: edpm-values
+          - name: edpm-deployment-values
             src_file: values.yaml
-        build_output: dataplane-pre-ceph.yaml
+        build_output: deployment-pre-ceph.yaml
         post_stage_run:
           - name: Deploy Ceph
             type: playbook
@@ -44,14 +55,25 @@ vas:
         wait_conditions:
           - >-
             oc -n openstack wait
-            osdpd edpm-deployment-post-ceph --for condition=Ready
-            --timeout=40m
+            osdpns openstack-edpm --for condition=SetupReady
+            --timeout=10m
         values:
           - name: service-values
             src_file: service-values.yaml
-          - name: edpm-values-post-ceph
+          - name: edpm-nodeset-values-post-ceph
             src_file: values.yaml
-        build_output: dataplane-post-ceph.yaml
+        build_output: nodeset-post-ceph.yaml
+
+      - path: examples/va/hci/deployment
+        wait_conditions:
+          - >-
+            oc -n openstack wait
+            osdpns openstack-edpm --for condition=Ready
+            --timeout=40m
+        values:
+          - name: edpm-deployment-values-post-ceph
+            src_file: values.yaml
+        build_output: deployment-post-ceph.yaml
 
   sriov:
     stages:
@@ -85,7 +107,7 @@ vas:
             oc -n openstack wait
             osdpd edpm-deployment --for condition=Ready --timeout=1200s
         values:
-          - name: edpm-values
+          - name: edpm-nodeset-values
             src_file: values.yaml
         build_output: dataplane.yaml
 
@@ -121,7 +143,7 @@ vas:
             oc -n openstack wait
             osdpd edpm-deployment --for condition=Ready --timeout=1200s
         values:
-          - name: edpm-values
+          - name: edpm-nodeset-values
             src_file: values.yaml
         build_output: dataplane.yaml
 
@@ -157,7 +179,7 @@ vas:
             oc -n openstack wait
             osdpd edpm-deployment --for condition=Ready --timeout=1200s
         values:
-          - name: edpm-values
+          - name: edpm-nodeset-values
             src_file: values.yaml
         build_output: dataplane.yaml
 
@@ -199,6 +221,6 @@ vas:
             --for condition=Ready
             --timeout=1200s
         values:
-          - name: edpm-values
+          - name: edpm-nodeset-values
             src_file: values.yaml
         build_output: edpm.yaml
