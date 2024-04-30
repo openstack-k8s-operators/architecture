@@ -207,10 +207,7 @@ data:
           - 192.168.122.1
 
   routes:
-    config:
-      - destination: 0.0.0.0/0
-        next-hop-address: 192.168.122.1
-        next-hop-interface: enp6s0
+    config: []
 
   rabbitmq:
     endpoint_annotations:

@@ -418,21 +418,12 @@ replacements:
   - source:
       kind: ConfigMap
       name: network-values
-      fieldPath: data.routes.config.0.destination
+      fieldPath: data.routes
     targets:
       - select:
           kind: NodeNetworkConfigurationPolicy
         fieldPaths:
-          - spec.desiredState.routes.config.0.destination
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.routes.config.0.next-hop-address
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-        fieldPaths:
-          - spec.desiredState.routes.config.0.next-hop-address
+          - spec.desiredState.routes
   - source:
       kind: ConfigMap
       name: network-values
@@ -441,5 +432,4 @@ replacements:
       - select:
           kind: NodeNetworkConfigurationPolicy
         fieldPaths:
-          - spec.desiredState.routes.config.0.next-hop-interface
           - spec.desiredState.interfaces.[type=linux-bridge].name
