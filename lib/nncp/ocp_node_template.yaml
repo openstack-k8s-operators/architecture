@@ -10,10 +10,7 @@ spec:
         search: []
         server: []
     routes:
-      config:
-        - destination: _replaced_
-          next-hop-address: _replaced_
-          next-hop-interface: _replaced_
+      config: []
     interfaces:
       - description: internalapi vlan interface
         ipv4:
