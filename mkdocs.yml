@@ -39,6 +39,7 @@ nav:
       - Creating Smaller CRs: faq/cr_by_components.md
   - Contributing:
       - contributing/documentation.md
+      - contributing/pull-request-testing.md
 markdown_extensions:
   - toc:
       permalink: "#"
