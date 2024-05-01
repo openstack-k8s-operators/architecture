@@ -1,0 +1,13 @@
+---
+cifmw_baremetal_hosts:
+  compute-0:
+    connection: ipmi://10.10.100.100
+    boot_mode: UEFI
+    nics:
+      - mac: "89:9a:b7:cb:4a:3f"
+        network: provision
+      - mac: "53:b0:4d:06:56:ea"
+        network: public
+    credentials_file: "/home/user/foo.yaml"
+    root_device_hint_field: "wwnWithExtension"
+    root_device_hint: "0x6509a4c0ac82ff002dbccf463196ca41"

@@ -1,0 +1,98 @@
+---
+vas:
+  shiftstack:
+    stages:
+      - path: examples/dt/shiftstack/control-plane/nncp
+        wait_conditions:
+          - >-
+            oc -n openstack wait nncp
+            -l osp/nncm-config-type=standard
+            --for jsonpath='{.status.conditions[0].reason}'=SuccessfullyConfigured
+            --timeout=120s
+        values:
+          - name: network-values
+            src_file: values.yaml
+        build_output: nncp.yaml
+
+      - path: examples/dt/shiftstack/control-plane
+        wait_conditions:
+          - >-
+            oc -n openstack wait openstackcontrolplane
+            controlplane
+            --for condition=Ready
+            --timeout=30m
+        values:
+          - name: network-values
+            src_file: nncp/values.yaml
+          - name: service-values
+            src_file: service-values.yaml
+        build_output: control-plane.yaml
+
+      - path: examples/dt/shiftstack/ceph/nodeset
+        wait_conditions:
+          - >-
+            oc -n openstack wait openstackdataplanenodeset
+            ceph-nodes
+            --for condition=SetupReady
+            --timeout=600s
+        values:
+          - name: edpm-nodeset-values
+            src_file: values.yaml
+        build_output: ceph-nodeset.yaml
+
+      - path: examples/dt/shiftstack/ceph
+        wait_conditions:
+          - >-
+            oc -n openstack wait openstackdataplanedeployment
+            ceph-deploy
+            --for condition=Ready
+            --timeout=1500s
+        values:
+          - name: edpm-deployment-values
+            src_file: values.yaml
+        build_output: ceph-deploy.yaml
+        post_stage_run:
+          - name: Deploy ceph
+            type: playbook
+            source: "../../playbooks/ceph.yml"
+            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
+
+      - path: examples/dt/shiftstack
+        wait_conditions:
+          - >-
+            oc -n openstack wait openstackcontrolplane
+            controlplane
+            --for condition=Ready
+            --timeout=30m
+        values:
+          - name: network-values
+            src_file: control-plane/nncp/values.yaml
+          - name: service-values
+            src_file: control-plane/service-values.yaml
+          - name: service-values-post-ceph
+            src_file: service-values.yaml
+        build_output: control-plane-post-ceph.yaml
+
+      - path: examples/dt/shiftstack/compute/nodeset
+        wait_conditions:
+          - >-
+            oc -n openstack wait openstackdataplanenodeset
+            compute-nodes
+            --for condition=SetupReady
+            --timeout=30m
+        values:
+          - name: edpm-nodeset-values
+            src_file: values.yaml
+        build_output: compute-nodes.yaml
+
+      - path: examples/dt/shiftstack/compute
+        wait_conditions:
+          - >-
+            oc -n openstack wait openstackdataplanedeployment
+            compute-deploy
+            --for condition=Ready
+            --timeout=1500s
+        values:
+          - name: edpm-deployment-values
+            src_file: values.yaml
+        build_output: compute-deploy.yaml

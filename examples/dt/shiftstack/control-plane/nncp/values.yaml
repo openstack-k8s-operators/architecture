@@ -1,0 +1,236 @@
+# local-config: referenced, but not emitted by kustomize
+---
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: network-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+
+data:
+  openstack-operator-image: "quay.io/openstack-k8s-operators/openstack-operator-index:latest"
+
+  node_0:
+    name: master-0
+    ctlplane_ip: 192.168.122.10
+    internalapi_ip: 172.17.0.10
+    storage_ip: 172.18.0.10
+    tenant_ip: 172.19.0.10
+  node_1:
+    name: master-1
+    ctlplane_ip: 192.168.122.11
+    internalapi_ip: 172.17.0.11
+    storage_ip: 172.18.0.11
+    tenant_ip: 172.19.0.11
+  node_2:
+    name: master-2
+    ctlplane_ip: 192.168.122.12
+    internalapi_ip: 172.17.0.12
+    storage_ip: 172.18.0.12
+    tenant_ip: 172.19.0.12
+
+  ctlplane:
+    dnsDomain: ctlplane.openstack.lab
+    subnets:
+      - allocationRanges:
+          - start: 192.168.122.100
+            end: 192.168.122.120
+        cidr: 192.168.122.0/24
+        gateway: 192.168.122.1
+        name: subnet1
+    prefix-length: 24
+    iface: enp6s0
+    mtu: 1500
+    lb_addresses:
+      - 192.168.122.80-192.168.122.90
+    endpoint_annotations:
+      metallb.universe.tf/address-pool: ctlplane
+      metallb.universe.tf/allow-shared-ip: ctlplane
+      metallb.universe.tf/loadBalancerIPs: 192.168.122.80
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "ctlplane",
+        "type": "macvlan",
+        "master": "ospbr",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "192.168.122.0/24",
+          "range_start": "192.168.122.30",
+          "range_end": "192.168.122.70"
+        }
+      }
+
+  internalapi:
+    dnsDomain: internalapi.openstack.lab
+    subnets:
+      - allocationRanges:
+          - start: 172.17.0.100
+            end: 172.17.0.250
+        cidr: 172.17.0.0/24
+        name: subnet1
+        vlan: 120
+    mtu: 1500
+    prefix-length: 24
+    iface: internalapi
+    vlan: 120
+    base_iface: enp6s0
+    lb_addresses:
+      - 172.17.0.80-172.17.0.90
+    endpoint_annotations:
+      metallb.universe.tf/address-pool: internalapi
+      metallb.universe.tf/allow-shared-ip: internalapi
+      metallb.universe.tf/loadBalancerIPs: 172.17.0.80
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "internalapi",
+        "type": "macvlan",
+        "master": "internalapi",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "172.17.0.0/24",
+          "range_start": "172.17.0.30",
+          "range_end": "172.17.0.70"
+        }
+      }
+
+  storage:
+    dnsDomain: storage.openstack.lab
+    subnets:
+      - allocationRanges:
+          - start: 172.18.0.100
+            end: 172.18.0.250
+        cidr: 172.18.0.0/24
+        name: subnet1
+        vlan: 121
+    mtu: 1500
+    prefix-length: 24
+    iface: storage
+    vlan: 121
+    base_iface: enp6s0
+    lb_addresses:
+      - 172.18.0.80-172.18.0.90
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "storage",
+        "type": "macvlan",
+        "master": "storage",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "172.18.0.0/24",
+          "range_start": "172.18.0.30",
+          "range_end": "172.18.0.70"
+        }
+      }
+
+  tenant:
+    dnsDomain: tenant.openstack.lab
+    subnets:
+      - allocationRanges:
+          - start: 172.19.0.100
+            end: 172.19.0.250
+        cidr: 172.19.0.0/24
+        name: subnet1
+        vlan: 122
+    mtu: 1500
+    prefix-length: 24
+    iface: tenant
+    vlan: 122
+    base_iface: enp6s0
+    lb_addresses:
+      - 172.19.0.80-172.19.0.90
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "tenant",
+        "type": "macvlan",
+        "master": "tenant",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "172.19.0.0/24",
+          "range_start": "172.19.0.30",
+          "range_end": "172.19.0.70"
+        }
+      }
+
+  storagemgmt:
+    dnsDomain: storagemgmt.openstack.lab
+    subnets:
+      - allocationRanges:
+          - start: 172.20.0.100
+            end: 172.20.0.250
+        cidr: 172.20.0.0/24
+        name: subnet1
+        vlan: 123
+    mtu: 1500
+
+  octavia:
+    dnsDomain: octavia.openstack.lab
+    mtu: 1500
+    vlan: 124
+    base_iface: enp6s0
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "octavia",
+        "type": "bridge",
+        "bridge": "br-octavia",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "172.23.0.0/24",
+          "range_start": "172.23.0.30",
+          "range_end": "172.23.0.70"
+        }
+      }
+
+  external:
+    dnsDomain: openstack.lab
+    subnets:
+      - allocationRanges:
+          - start: 10.46.22.150
+            end: 10.46.22.155
+        cidr: 10.46.22.128/26
+        gateway: 10.46.22.189
+        name: subnet1
+    mtu: 1500
+
+  datacentre:
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "datacentre",
+        "type": "bridge",
+        "bridge": "ospbr",
+        "ipam": {}
+      }
+
+  dns-resolver:
+    config:
+      server:
+        - 10.46.22.129
+        - 192.168.122.1
+      search:
+        - openstack.lab
+    options:
+      - key: server
+        values:
+          - 10.46.22.129
+      - key: server
+        values:
+          - 192.168.122.1
+
+  rabbitmq:
+    endpoint_annotations:
+      metallb.universe.tf/address-pool: internalapi
+      metallb.universe.tf/loadBalancerIPs: 172.17.0.85
+  rabbitmq-cell1:
+    endpoint_annotations:
+      metallb.universe.tf/address-pool: internalapi
+      metallb.universe.tf/loadBalancerIPs: 172.17.0.86
+
+  lbServiceType: LoadBalancer
+  storageClass: local-storage
+  bridgeName: ospbr

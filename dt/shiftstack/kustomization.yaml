@@ -1,0 +1,170 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+transformers:
+  - |-
+    apiVersion: builtin
+    kind: NamespaceTransformer
+    metadata:
+      name: _ignored_
+      namespace: openstack
+    setRoleBindingSubjects: none
+    unsetOnly: true
+    fieldSpecs:
+      - path: metadata/name
+        kind: Namespace
+        create: true
+
+components:
+  - ../../lib/control-plane
+
+resources:
+  - ceph_secret.yaml
+
+replacements:
+  - source:
+      kind: ConfigMap
+      name: service-values-post-ceph
+      fieldPath: data.cinderBackup.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.cinder.template.cinderBackup.customServiceConfig
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values-post-ceph
+      fieldPath: data.cinderVolumes.ceph
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.cinder.template.cinderVolumes.ceph
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values-post-ceph
+      fieldPath: data.glance.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.glance.template.customServiceConfig
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values-post-ceph
+      fieldPath: data.glance.glanceAPIs.default.replicas
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.glance.template.glanceAPIs.default.replicas
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values-post-ceph
+      fieldPath: data.manila.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.manila.enabled
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values-post-ceph
+      fieldPath: data.manila.manilaAPI.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.manila.template.manilaAPI.customServiceConfig
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values-post-ceph
+      fieldPath: data.manila.manilaAPI.replicas
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.manila.template.manilaAPI.replicas
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values-post-ceph
+      fieldPath: data.manila.manilaScheduler.replicas
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.manila.template.manilaScheduler.replicas
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values-post-ceph
+      fieldPath: data.manila.manilaShares.share1.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.manila.template.manilaShares.share1.customServiceConfig
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values-post-ceph
+      fieldPath: data.extraMounts
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.extraMounts
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values-post-ceph
+      fieldPath: data.ceph.keyring
+    targets:
+      - select:
+          kind: Secret
+          name: ceph-conf-files
+        fieldPaths:
+          - data.ceph\.client\.openstack\.keyring
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values-post-ceph
+      fieldPath: data.ceph.conf
+    targets:
+      - select:
+          kind: Secret
+          name: ceph-conf-files
+        fieldPaths:
+          - data.ceph\.conf
+        options:
+          create: true

@@ -78,6 +78,22 @@
       cifmw_architecture_scenario: pidone
 - job:
     files:
+    - automation/mocks/shiftstack.yaml
+    - dt/shiftstack
+    - examples/dt/shiftstack
+    - examples/dt/shiftstack/ceph
+    - examples/dt/shiftstack/ceph/nodeset
+    - examples/dt/shiftstack/compute
+    - examples/dt/shiftstack/compute/nodeset
+    - examples/dt/shiftstack/control-plane
+    - examples/dt/shiftstack/control-plane/nncp
+    - lib
+    name: rhoso-architecture-validate-shiftstack
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: shiftstack
+- job:
+    files:
     - automation/mocks/sriov.yaml
     - examples/va/nfv/sriov
     - examples/va/nfv/sriov/edpm/deployment
