@@ -15,7 +15,7 @@ Change to the ipv6_ironic directory
 ```
 cd architecture/examples/dt/ipv6_ironic
 ```
-Edit the [control-plane/networking/nncp/values.yaml](control-plane/neworking/nncp/values.yaml) file to suit your environment.
+Edit the [control-plane/networking/nncp/values.yaml](control-plane/networking/nncp/values.yaml) file to suit your environment.
 ```
 vi control-plane/networking/nncp/values.yaml
 ```
