@@ -1,0 +1,8 @@
+---
+- name: Documentation generator
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Generate some documentation
+      ansible.builtin.import_role:
+        name: docs_generator

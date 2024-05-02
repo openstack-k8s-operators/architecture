@@ -1,0 +1,32 @@
+---
+- name: Show component contents
+  ansible.builtin.debug:
+    var: component_path
+
+- name: Set component name
+  ansible.builtin.set_fact:
+    component_name: "{{ component_path.split('/')[-2] | trim }}"
+
+- name: Set component directory
+  ansible.builtin.set_fact:
+    component_dir: "{{ component_path.split('/')[:-1] | join('/') }}"
+
+- name: Read contents of module
+  ansible.builtin.slurp:
+    src: "{{ component_path }}"
+  register: kustomization_contents
+
+- name: Interpret as yaml
+  ansible.builtin.set_fact:
+    kustomize_yaml: '{{ kustomization_contents.content | b64decode | from_yaml }}'
+
+- name: Describe which component we're working on
+  ansible.builtin.debug:
+    msg: |
+      Working on documentation for {{ component_name }} at {{ component_dir }}
+
+- name: Generate the documentation {{ component_name }}
+  ansible.builtin.template:
+    src: component_docs.j2
+    dest: "{{ component_dir }}/component_replacements.md"
+  when: "'replacements' in kustomize_yaml"
