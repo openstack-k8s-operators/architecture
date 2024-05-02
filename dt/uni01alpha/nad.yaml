@@ -6,3 +6,11 @@ metadata:
   labels:
     osp/net: octavia
     osp/net-attach-def-type: standard
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: ironic
+  labels:
+    osp/net: ironic
+    osp/net-attach-def-type: standard
