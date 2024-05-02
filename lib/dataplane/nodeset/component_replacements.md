@@ -20,3 +20,20 @@ the manifests with kustomize.
 | edpm-nodeset-values | data.ssh_keys.public |
 | edpm-nodeset-values | data.nova.migration.ssh_keys.private |
 | edpm-nodeset-values | data.nova.migration.ssh_keys.public |
+
+### Creating the local ConfigMap file
+
+In the overlay, create a file that will hold the parameters for the component which will be later included as a resource within the `kustomization.yaml` file. The resource name may match the ConfigMap source name with `.yaml` appended or another filename such as `values.yaml`.
+
+```yaml
+# local-config: referenced, but not emitted by kustomize
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: <ConfigMap source name>
+  annotations:
+    config.kubernetes.io/local-config: "true"
+data:
+  <Parameter field path>: "<environment_specific_value>"
+```
