@@ -1,6 +1,6 @@
-# RHV base adoption Topology
+# RHV base adoption topology
 
-This topology contains Director deployed source openStack on RHV that is networked together with RHV deployed openshift cluster. This topology executes test suite that verifies adoption from existing 17.1 osp deployment into podified openstack. The upgrade/migration to the podified OpenStack requires planning various aspects of the environment such as node roles, planning your network topology.
+This topology contains director deployed source OpenStack(OSP) on Red Hat Virtualization(RHV) that is networked together with RHV deployed Openshift cluster. This topology executes test suite that verifies adoption from existing 17.1 OSP deployment into podified Openstack. The upgrade/migration to the podified OpenStack requires planning various aspects of the environment such as node roles, planning your network topology, etc.
 
 ## General information
 
@@ -11,10 +11,10 @@ This topology contains Director deployed source openStack on RHV that is network
 ## Node topology
 | Node role                                     | bm/vm | amount |
 | --------------------------------------------- | ----- | ------ |
-| Openshift Compact cluster                     | vm    | 3      |
-| Undercloud node - Source osp 17               | vm    | 1      |
-| Controller nodes - Source osp 17              | vm    | 3      |
-| Compute nodes    - Source osp 17              | vm    | 2      |
+| Openshift compact cluster                     | vm    | 3      |
+| Undercloud node - Source OSP 17               | vm    | 1      |
+| Controller nodes - Source OSP 17              | vm    | 3      |
+| Compute nodes    - Source OSP 17              | vm    | 2      |
 
 ##### Networks in RH OSP
 
@@ -39,10 +39,10 @@ This topology contains Director deployed source openStack on RHV that is network
 
 ## Considerations/Constraints
 
-1. 3 node openshift cluster on RHV.
-2. Source openstack with HA is pre-deployed on RHV.
-3. Network protocol - ipv4
-4. Native VLAN for openstack setup shared between source openstack and target openshift environment.
+1. 3 node Openshift cluster on RHV.
+2. Source Openstack with HA is pre-deployed on RHV.
+3. Network protocol - IPv4
+4. Native VLAN for Openstack setup shared between source Openstack and target Openshift environment.
 
 ## Testing
 
