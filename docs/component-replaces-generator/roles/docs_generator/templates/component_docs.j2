@@ -25,9 +25,8 @@ In the overlay, create a file that will hold the parameters for the component wh
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: <ConfigMap source name>
+  name: <source_name>
   annotations:
     config.kubernetes.io/local-config: "true"
-data:
-  <Parameter field path>: "<environment_specific_value>"
+{{ source_dict | to_nice_yaml }}
 ```

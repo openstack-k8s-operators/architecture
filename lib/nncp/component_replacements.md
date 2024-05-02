@@ -63,9 +63,50 @@ In the overlay, create a file that will hold the parameters for the component wh
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: <ConfigMap source name>
+  name: <source_name>
   annotations:
     config.kubernetes.io/local-config: "true"
 data:
-  <Parameter field path>: "<environment_specific_value>"
+    bridgeName: {}
+    ctlplane:
+        iface: {}
+        mtu: {}
+        prefix-length: {}
+    dns-resolver:
+        config: {}
+    internalapi:
+        base_iface: {}
+        mtu: {}
+        prefix-length: {}
+        vlan: {}
+    node_0:
+        ctlplane_ip: {}
+        internalapi_ip: {}
+        name: {}
+        storage_ip: {}
+        tenant_ip: {}
+    node_1:
+        ctlplane_ip: {}
+        internalapi_ip: {}
+        name: {}
+        storage_ip: {}
+        tenant_ip: {}
+    node_2:
+        ctlplane_ip: {}
+        internalapi_ip: {}
+        name: {}
+        storage_ip: {}
+        tenant_ip: {}
+    routes: {}
+    storage:
+        base_iface: {}
+        mtu: {}
+        prefix-length: {}
+        vlan: {}
+    tenant:
+        base_iface: {}
+        mtu: {}
+        prefix-length: {}
+        vlan: {}
+
 ```

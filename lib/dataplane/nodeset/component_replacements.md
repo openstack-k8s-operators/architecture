@@ -31,9 +31,73 @@ In the overlay, create a file that will hold the parameters for the component wh
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: <ConfigMap source name>
+  name: <source_name>
   annotations:
     config.kubernetes.io/local-config: "true"
 data:
-  <Parameter field path>: "<environment_specific_value>"
+    bridgeName: {}
+    ctlplane:
+        endpoint_annotations: {}
+        iface: {}
+        mtu: {}
+        prefix-length: {}
+    dns-resolver:
+        config: {}
+        options: {}
+    internalapi:
+        base_iface: {}
+        endpoint_annotations: {}
+        mtu: {}
+        prefix-length: {}
+        vlan: {}
+    lbServiceType: {}
+    node_0:
+        ctlplane_ip: {}
+        internalapi_ip: {}
+        name: {}
+        storage_ip: {}
+        tenant_ip: {}
+    node_1:
+        ctlplane_ip: {}
+        internalapi_ip: {}
+        name: {}
+        storage_ip: {}
+        tenant_ip: {}
+    node_2:
+        ctlplane_ip: {}
+        internalapi_ip: {}
+        name: {}
+        storage_ip: {}
+        tenant_ip: {}
+    nodeset:
+        ansible: {}
+        networks: {}
+        nodes: {}
+        services: {}
+    nova:
+        migration:
+            ssh_keys:
+                private: {}
+                public: {}
+    rabbitmq:
+        endpoint_annotations: {}
+    rabbitmq-cell1:
+        endpoint_annotations: {}
+    routes: {}
+    ssh_keys:
+        authorized: {}
+        private: {}
+        public: {}
+    storage:
+        base_iface: {}
+        mtu: {}
+        prefix-length: {}
+        vlan: {}
+    storageClass: {}
+    tenant:
+        base_iface: {}
+        mtu: {}
+        prefix-length: {}
+        vlan: {}
+
 ```

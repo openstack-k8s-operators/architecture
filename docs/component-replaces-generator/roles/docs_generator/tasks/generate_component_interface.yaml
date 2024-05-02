@@ -20,6 +20,29 @@
   ansible.builtin.set_fact:
     kustomize_yaml: '{{ kustomization_contents.content | b64decode | from_yaml }}'
 
+- name: Show yaml
+  ansible.builtin.debug:
+    var: kustomize_yaml
+
+- name: Get all the fieldpaths
+  ansible.builtin.set_fact:
+    fieldpaths: "{{ fieldpaths|default([]) + [item.source.fieldPath] }}"
+  loop: "{{ kustomize_yaml.replacements }}"
+  when: "'replacements' in kustomize_yaml"
+
+- name: Show replacements
+  ansible.builtin.debug:
+    var: fieldpaths
+
+- name: Build new structure
+  loop: "{{ fieldpaths }}"
+  ansible.builtin.set_fact:
+    source_dict: "{{ source_dict|default({}) | combine(item | tree, recursive=True) }}"
+
+- name: Show source_dict
+  ansible.builtin.debug:
+    var: source_dict
+
 - name: Describe which component we're working on
   ansible.builtin.debug:
     msg: |
