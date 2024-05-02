@@ -52,6 +52,40 @@ data:
 
   ironic:
     enabled: true
+    rpcTransport: oslo
+    ironicConductors:
+      - customServiceConfig: |
+          [pxe]
+          kernel_append_params = console=ttyS0
+
+          [neutron]
+          cleaning_network = provisioning
+          provisioning_network = provisioning
+          rescuing_network = provisioning
+          inspection_network = provisioning
+    ironicInspector:
+      customServiceConfig: |
+        [capabilities]
+        boot_mode = true
+
+        [processing]
+        update_pxe_enabled = false
+
+  nova:
+    cellTemplates:
+      cell0:
+        cellDatabaseInstance: openstack
+        cellDatabaseAccount: nova-cell0
+        cellMessageBusInstance: rabbitmq
+        hasAPIAccess: true
+      cell1:
+        cellDatabaseInstance: openstack-cell1
+        cellDatabaseAccount: nova-cell1
+        cellMessageBusInstance: rabbitmq-cell1
+        hasAPIAccess: true
+        novaComputeTemplates:
+          compute-ironic:
+            computeDriver: ironic.IronicDriver
 
   swift:
     enabled: true
@@ -96,6 +130,7 @@ data:
       nicMappings:
         datacentre: ocpbr
         octavia: octbr
+        ironic: ironic
       availability-zones:
         - zone-1
 
