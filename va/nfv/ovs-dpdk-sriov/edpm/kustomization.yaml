@@ -24,6 +24,14 @@ resources:
   - baremetalset-password-secret.yaml
   - nova_ovs_dpdk_sriov.yaml
 
+secretGenerator:
+  - name: libvirt-secret
+    behavior: create
+    literals:
+      - LibvirtPassword=12345678
+    options:
+      disableNameSuffixHash: true
+
 replacements:
   - source:
       kind: ConfigMap
