@@ -1,0 +1,453 @@
+---
+# local-config: referenced, but not emitted by kustomize
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: network-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+data:
+  # nodes
+  node_0:
+    name: master-0
+    internalapi_ip: 172.17.0.5
+    tenant_ip: 172.19.0.5
+    ctlplane_ip: 192.168.122.10
+    storage_ip: 172.18.0.5
+    bgp_ip:
+      - 100.64.3.2
+      - 100.65.3.2
+    bgp_peers:
+      - 100.64.3.1
+      - 100.65.3.1
+    loopback_ip: 172.30.4.2
+    loopback_ipv6: f00d:f00d:f00d:f00d:f00d:f00d:f00d:42
+  node_1:
+    name: master-1
+    internalapi_ip: 172.17.0.6
+    tenant_ip: 172.19.0.6
+    ctlplane_ip: 192.168.122.11
+    storage_ip: 172.18.0.6
+    bgp_ip:
+      - 100.64.3.6
+      - 100.65.3.6
+    bgp_peers:
+      - 100.64.3.5
+      - 100.65.3.5
+    loopback_ip: 172.30.4.3
+    loopback_ipv6: f00d:f00d:f00d:f00d:f00d:f00d:f00d:43
+  node_2:
+    name: master-2
+    internalapi_ip: 172.17.0.7
+    tenant_ip: 172.19.0.7
+    ctlplane_ip: 192.168.122.12
+    storage_ip: 172.18.0.7
+    bgp_ip:
+      - 100.64.3.10
+      - 100.65.3.10
+    bgp_peers:
+      - 100.64.3.9
+      - 100.65.3.9
+    loopback_ip: 172.30.4.4
+    loopback_ipv6: f00d:f00d:f00d:f00d:f00d:f00d:f00d:44
+
+  # networks
+  ctlplane:
+    dnsDomain: ctlplane.example.com
+    subnets:
+      - allocationRanges:
+          - end: 192.168.122.120
+            start: 192.168.122.100
+          - end: 192.168.122.200
+            start: 192.168.122.150
+        cidr: 192.168.122.0/24
+        gateway: 192.168.122.1
+        name: subnet1
+    prefix-length: 24
+    iface: enp8s0
+    mtu: 1500
+    lb_addresses:
+      - 192.168.122.80-192.168.122.90
+    endpoint_annotations:
+      metallb.universe.tf/address-pool: ctlplane
+      metallb.universe.tf/allow-shared-ip: ctlplane
+      metallb.universe.tf/loadBalancerIPs: 192.168.122.80
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "ctlplane",
+        "type": "macvlan",
+        "master": "ospbr",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "192.168.122.0/24",
+          "range_start": "192.168.122.30",
+          "range_end": "192.168.122.70"
+        }
+      }
+  internalapi:
+    dnsDomain: internalapi.example.com
+    subnets:
+      - allocationRanges:
+          - end: 172.17.0.250
+            start: 172.17.0.100
+        cidr: 172.17.0.0/24
+        name: subnet1
+        vlan: 20
+    mtu: 1500
+    prefix-length: 24
+    iface: internalapi
+    vlan: 20
+    base_iface: enp8s0
+    lb_addresses:
+      - 172.17.0.80-172.17.0.90
+    endpoint_annotations:
+      metallb.universe.tf/address-pool: internalapi
+      metallb.universe.tf/allow-shared-ip: internalapi
+      metallb.universe.tf/loadBalancerIPs: 172.17.0.80
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "internalapi",
+        "type": "macvlan",
+        "master": "internalapi",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "172.17.0.0/24",
+          "range_start": "172.17.0.30",
+          "range_end": "172.17.0.70"
+        }
+      }
+  storage:
+    dnsDomain: storage.example.com
+    subnets:
+      - allocationRanges:
+          - end: 172.18.0.250
+            start: 172.18.0.100
+        cidr: 172.18.0.0/24
+        name: subnet1
+        vlan: 21
+    mtu: 1500
+    prefix-length: 24
+    iface: storage
+    vlan: 21
+    base_iface: enp8s0
+    lb_addresses:
+      - 172.18.0.80-172.18.0.90
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "storage",
+        "type": "macvlan",
+        "master": "storage",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "172.18.0.0/24",
+          "range_start": "172.18.0.30",
+          "range_end": "172.18.0.70"
+        }
+      }
+  tenant:
+    dnsDomain: tenant.example.com
+    subnets:
+      - allocationRanges:
+          - end: 172.19.0.250
+            start: 172.19.0.100
+        cidr: 172.19.0.0/24
+        name: subnet1
+        vlan: 22
+    mtu: 1500
+    prefix-length: 24
+    iface: tenant
+    vlan: 22
+    base_iface: enp8s0
+    lb_addresses:
+      - 172.19.0.80-172.19.0.90
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "tenant",
+        "type": "macvlan",
+        "master": "tenant",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "172.19.0.0/24",
+          "range_start": "172.19.0.30",
+          "range_end": "172.19.0.70"
+        }
+      }
+  octavia:
+    dnsDomain: octavia.openstack.lab
+    mtu: 1500
+    vlan: 23
+    base_iface: enp8s0
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "octavia",
+        "type": "bridge",
+        "bridge": "octbr",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "172.20.0.0/24",
+          "range_start": "172.20.0.30",
+          "range_end": "172.20.0.70"
+        }
+      }
+  external:
+    dnsDomain: external.example.com
+    subnets:
+      - allocationRanges:
+          - end: 10.0.0.250
+            start: 10.0.0.100
+        cidr: 10.0.0.0/24
+        gateway: 10.0.0.1
+        name: subnet1
+    mtu: 1500
+
+  bgp:
+    prefix-length: 30
+    ifaces:
+      - enp6s0
+      - enp7s0
+    asn: 64999
+    peer_asn: 64999
+    subnets:
+      bgpnet0:
+        - name: subnet0
+          allocationRanges:
+            - end: 100.64.0.2
+              start: 100.64.0.1
+          cidr: 100.64.0.0/30
+          gateway: 100.64.0.1
+          routes:
+            - destination: 0.0.0.0/0
+              nexthop: 100.64.0.1
+        - name: subnet1
+          allocationRanges:
+            - end: 100.64.1.2
+              start: 100.64.1.1
+          cidr: 100.64.1.0/30
+          gateway: 100.64.1.1
+          routes:
+            - destination: 0.0.0.0/0
+              nexthop: 100.64.1.1
+        - name: subnet2
+          allocationRanges:
+            - end: 100.64.2.2
+              start: 100.64.2.1
+          cidr: 100.64.2.0/30
+          gateway: 100.64.2.1
+          routes:
+            - destination: 0.0.0.0/0
+              nexthop: 100.64.2.1
+        - name: subnet3
+          allocationRanges:
+            - end: 100.64.3.2
+              start: 100.64.3.1
+          cidr: 100.64.3.0/30
+          gateway: 100.64.3.1
+          routes:
+            - destination: 0.0.0.0/0
+              nexthop: 100.64.3.1
+      bgpnet1:
+        - name: subnet0
+          allocationRanges:
+            - end: 100.65.0.2
+              start: 100.65.0.1
+          cidr: 100.65.0.0/30
+          gateway: 100.65.0.1
+          routes:
+            - destination: 0.0.0.0/0
+              nexthop: 100.65.0.1
+        - name: subnet1
+          allocationRanges:
+            - end: 100.65.1.2
+              start: 100.65.1.1
+          cidr: 100.65.1.0/30
+          gateway: 100.65.1.1
+          routes:
+            - destination: 0.0.0.0/0
+              nexthop: 100.65.1.1
+        - name: subnet2
+          allocationRanges:
+            - end: 100.65.2.2
+              start: 100.65.2.1
+          cidr: 100.65.2.0/30
+          gateway: 100.65.2.1
+          routes:
+            - destination: 0.0.0.0/0
+              nexthop: 100.65.2.1
+        - name: subnet3
+          allocationRanges:
+            - end: 100.65.3.2
+              start: 100.65.3.1
+          cidr: 100.65.3.0/30
+          gateway: 100.65.3.1
+          routes:
+            - destination: 0.0.0.0/0
+              nexthop: 100.65.3.1
+      bgpmainnet:
+        - name: subnet0
+          cidr: 172.30.0.0/28
+          allocationRanges:
+            - end: 172.30.0.14
+              start: 172.30.0.2
+        - name: subnet1
+          cidr: 172.30.1.0/28
+          allocationRanges:
+            - end: 172.30.1.14
+              start: 172.30.1.2
+        - name: subnet2
+          cidr: 172.30.2.0/28
+          allocationRanges:
+            - end: 172.30.2.14
+              start: 172.30.2.2
+        - name: subnet3
+          cidr: 172.30.3.0/28
+          allocationRanges:
+            - end: 172.30.3.14
+              start: 172.30.3.2
+      bgpmainnetv6:
+        - name: subnet0
+          cidr: f00d:f00d:f00d:f00d:f00d:f00d:f00d:0010/124
+          allocationRanges:
+            - end: f00d:f00d:f00d:f00d:f00d:f00d:f00d:001e
+              start: f00d:f00d:f00d:f00d:f00d:f00d:f00d:0012
+        - name: subnet1
+          cidr: f00d:f00d:f00d:f00d:f00d:f00d:f00d:0020/124
+          allocationRanges:
+            - end: f00d:f00d:f00d:f00d:f00d:f00d:f00d:002e
+              start: f00d:f00d:f00d:f00d:f00d:f00d:f00d:0022
+        - name: subnet2
+          cidr: f00d:f00d:f00d:f00d:f00d:f00d:f00d:0030/124
+          allocationRanges:
+            - end: f00d:f00d:f00d:f00d:f00d:f00d:f00d:003e
+              start: f00d:f00d:f00d:f00d:f00d:f00d:f00d:0032
+        - name: subnet3
+          cidr: f00d:f00d:f00d:f00d:f00d:f00d:f00d:0040/124
+          allocationRanges:
+            - end: f00d:f00d:f00d:f00d:f00d:f00d:f00d:004e
+              start: f00d:f00d:f00d:f00d:f00d:f00d:f00d:0042
+    net-attach-def:
+      node0:
+        bgpnet0: |
+          {
+            "cniVersion": "0.3.1",
+            "name": "bgpnet-0-0",
+            "type": "interface",
+            "master": "enp6s0",
+            "ipam": {
+              "type": "whereabouts",
+              "range": "100.64.3.0/30",
+              "range_start": "100.64.3.1",
+              "range_end": "100.64.3.2"
+            }
+          }
+        bgpnet1: |
+          {
+            "cniVersion": "0.3.1",
+            "name": "bgpnet-0-1",
+            "type": "interface",
+            "master": "enp7s0",
+            "ipam": {
+              "type": "whereabouts",
+              "range": "100.65.3.0/30",
+              "range_start": "100.65.3.1",
+              "range_end": "100.65.3.2"
+            }
+          }
+      node1:
+        bgpnet0: |
+          {
+            "cniVersion": "0.3.1",
+            "name": "bgpnet-1-0",
+            "type": "interface",
+            "master": "enp6s0",
+            "ipam": {
+              "type": "whereabouts",
+              "range": "100.64.3.4/30",
+              "range_start": "100.64.3.5",
+              "range_end": "100.64.3.6"
+            }
+          }
+        bgpnet1: |
+          {
+            "cniVersion": "0.3.1",
+            "name": "bgpnet-1-1",
+            "type": "interface",
+            "master": "enp7s0",
+            "ipam": {
+              "type": "whereabouts",
+              "range": "100.65.3.4/30",
+              "range_start": "100.65.3.5",
+              "range_end": "100.65.3.6"
+            }
+          }
+      node2:
+        bgpnet0: |
+          {
+            "cniVersion": "0.3.1",
+            "name": "bgpnet-2-0",
+            "type": "interface",
+            "master": "enp6s0",
+            "ipam": {
+              "type": "whereabouts",
+              "range": "100.64.3.8/30",
+              "range_start": "100.64.3.9",
+              "range_end": "100.64.3.10"
+            }
+          }
+        bgpnet1: |
+          {
+            "cniVersion": "0.3.1",
+            "name": "bgpnet-2-1",
+            "type": "interface",
+            "master": "enp7s0",
+            "ipam": {
+              "type": "whereabouts",
+              "range": "100.65.3.8/30",
+              "range_start": "100.65.3.9",
+              "range_end": "100.65.3.10"
+            }
+          }
+
+  loopback:
+    prefix-length: 32
+    prefix-length-ipv6: 128
+    iface: lo
+  datacentre:
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "datacentre",
+        "type": "bridge",
+        "bridge": "ospbr",
+        "ipam": {}
+      }
+
+  dns-resolver:
+    config:
+      server:
+        - 192.168.122.1
+      search: []
+    options:
+      - key: server
+        values:
+          - 192.168.122.1
+
+  routes:
+    config: []
+
+  rabbitmq:
+    endpoint_annotations:
+      metallb.universe.tf/address-pool: internalapi
+      metallb.universe.tf/loadBalancerIPs: 172.17.0.85
+  rabbitmq-cell1:
+    endpoint_annotations:
+      metallb.universe.tf/address-pool: internalapi
+      metallb.universe.tf/loadBalancerIPs: 172.17.0.86
+
+  lbServiceType: LoadBalancer
+  storageClass: local-storage
+  bridgeName: ospbr
