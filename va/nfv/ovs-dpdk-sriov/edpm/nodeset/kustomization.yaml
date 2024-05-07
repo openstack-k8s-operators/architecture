@@ -18,7 +18,7 @@ transformers:
       create: true
 
 components:
-  - ../../../../lib/dataplane
+  - ../../../../../lib/dataplane/nodeset
 
 resources:
   - baremetalset-password-secret.yaml

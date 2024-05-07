@@ -101,15 +101,27 @@ vas:
             src_file: service-values.yaml
         build_output: control-plane.yaml
 
-      - path: examples/va/nfv/sriov/edpm
+      - path: examples/va/nfv/sriov/edpm/nodeset
         wait_conditions:
           - >-
             oc -n openstack wait
-            osdpd edpm-deployment --for condition=Ready --timeout=1200s
+            osdpns openstack-edpm --for condition=SetupReady
+            --timeout=30m
         values:
           - name: edpm-nodeset-values
             src_file: values.yaml
-        build_output: dataplane.yaml
+        build_output: nodeset.yaml
+
+      - path: examples/va/nfv/sriov/edpm/deployment
+        wait_conditions:
+          - >-
+            oc -n openstack wait
+            osdpns openstack-edpm --for condition=Ready
+            --timeout=40m
+        values:
+          - name: edpm-deployment-values
+            src_file: values.yaml
+        build_output: deployment.yaml
 
   ovs-dpdk:
     stages:
@@ -137,15 +149,27 @@ vas:
             src_file: service-values.yaml
         build_output: control-plane.yaml
 
-      - path: examples/va/nfv/ovs-dpdk/edpm
+      - path: examples/va/nfv/ovs-dpdk/edpm/nodeset
         wait_conditions:
           - >-
             oc -n openstack wait
-            osdpd edpm-deployment --for condition=Ready --timeout=1200s
+            osdpns openstack-edpm --for condition=SetupReady
+            --timeout=30m
         values:
           - name: edpm-nodeset-values
             src_file: values.yaml
-        build_output: dataplane.yaml
+        build_output: nodeset.yaml
+
+      - path: examples/va/nfv/ovs-dpdk/edpm/deployment
+        wait_conditions:
+          - >-
+            oc -n openstack wait
+            osdpns openstack-edpm --for condition=Ready
+            --timeout=40m
+        values:
+          - name: edpm-deployment-values
+            src_file: values.yaml
+        build_output: deployment.yaml
 
   ovs-dpdk-sriov:
     stages:
@@ -173,12 +197,24 @@ vas:
             src_file: service-values.yaml
         build_output: control-plane.yaml
 
-      - path: examples/va/nfv/ovs-dpdk-sriov/edpm
+      - path: examples/va/nfv/ovs-dpdk-sriov/edpm/nodeset
         wait_conditions:
           - >-
             oc -n openstack wait
-            osdpd edpm-deployment --for condition=Ready --timeout=1200s
+            osdpns openstack-edpm --for condition=SetupReady
+            --timeout=30m
         values:
           - name: edpm-nodeset-values
             src_file: values.yaml
-        build_output: dataplane.yaml
+        build_output: nodeset.yaml
+
+      - path: examples/va/nfv/ovs-dpdk-sriov/edpm/deployment
+        wait_conditions:
+          - >-
+            oc -n openstack wait
+            osdpns openstack-edpm --for condition=Ready
+            --timeout=40m
+        values:
+          - name: edpm-deployment-values
+            src_file: values.yaml
+        build_output: deployment.yaml
