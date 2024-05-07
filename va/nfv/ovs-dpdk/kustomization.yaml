@@ -17,6 +17,10 @@ transformers:
         kind: Namespace
         create: true
 
+labels:
+  - pairs:
+      va: nfv
+
 components:
   - ../../../lib/networking/metallb
   - ../../../lib/networking/netconfig

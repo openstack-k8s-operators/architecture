@@ -10,6 +10,10 @@ secretGenerator:
     options:
       disableNameSuffixHash: true
 
+labels:
+  - pairs:
+      source: architecture
+
 resources:
   - openstackcontrolplane.yaml
 
