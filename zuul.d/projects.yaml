@@ -1,0 +1,5 @@
+---
+- project:
+    github-check:
+      jobs:
+        - noop
