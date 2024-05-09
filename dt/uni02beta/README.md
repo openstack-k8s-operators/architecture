@@ -1,7 +1,7 @@
 # Deployed Topology - Beta
 
 If you are looking for information on how to deploy the beta based DT, then
-please the [README](../../examples/dt/uni02beta/README.md) in the examples
+please review the [README](../../examples/dt/uni02beta/README.md) in the examples
 directory.
 
 This directory `dt/uni02beta/`, exists so that the
