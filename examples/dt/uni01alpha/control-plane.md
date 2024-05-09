@@ -24,7 +24,7 @@ metadata:
 spec:
   channel: development
   installPlanApproval: Automatic
-  name: observability-operator
+  name: cluster-observability-operator
   source: redhat-operators
   sourceNamespace: openshift-marketplace
 EOF
