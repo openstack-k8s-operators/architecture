@@ -1,0 +1,240 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+transformers:
+  - |-
+      apiVersion: builtin
+      kind: NamespaceTransformer
+      metadata:
+        name: _ignored_
+        namespace: openstack
+      setRoleBindingSubjects: none
+      unsetOnly: true
+      fieldSpecs:
+        - path: metadata/name
+          kind: Namespace
+          create: true
+
+components:
+  - ../../lib/control-plane
+
+resources:
+  - cinder-netapp-secrets.yaml
+  - manila-netapp-secrets.yaml
+
+replacements:
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.swift.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.swift.enabled
+        options:
+          create: true
+  # Cinder
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.cinderVolumes.ontap-nfs.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.cinder.template.cinderVolumes.ontap-nfs.customServiceConfig
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.cinderVolumes.ontap-nfs.customServiceConfigSecrets
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.cinder.template.cinderVolumes.ontap-nfs.customServiceConfigSecrets
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.cinderVolumes.ontap-nfs.networkAttachments
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.cinder.template.cinderVolumes.ontap-nfs.networkAttachments
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.ontap-cinder-secrets\.conf
+    targets:
+      - select:
+          kind: Secret
+          name: cinder-volume-ontap-secrets
+        fieldPaths:
+          - stringData.ontap-cinder-secrets\.conf
+        options:
+          create: true
+  # Glance
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.glance.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.glance.template.customServiceConfig
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.glance.databaseInstance
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.glance.template.databaseInstance
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.glance.glanceAPIs.default.preserveJobs
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.glance.template.glanceAPIs.default.preserveJobs
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.glance.glanceAPIs.default.replicas
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.glance.template.glanceAPIs.default.replicas
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.glance.glanceAPIs.default.type
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.glance.template.glanceAPIs.default.type
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.glance.extraMounts
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.glance.extraMounts
+        options:
+          create: true
+  # Manila
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.manila.netapp-secrets\.conf
+    targets:
+      - select:
+          kind: Secret
+          name: osp-secret-manila-netapp
+        fieldPaths:
+          - stringData.netapp-secrets\.conf
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.manila.manilaAPI.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.manila.template.manilaAPI.customServiceConfig
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.manila.manilaAPI.replicas
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.manila.template.manilaAPI.replicas
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.manila.manilaScheduler.replicas
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.manila.template.manilaScheduler.replicas
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.manila.manilaShares.share1.networkAttachments
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.manila.template.manilaShares.share1.networkAttachments
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.manila.manilaShares.share1.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.manila.template.manilaShares.share1.customServiceConfig
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.manila.manilaShares.share1.customServiceConfigSecrets
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.manila.template.manilaShares.share1.customServiceConfigSecrets
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.manila.manilaShares.share1.replicas
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.manila.template.manilaShares.share1.replicas
+        options:
+          create: true

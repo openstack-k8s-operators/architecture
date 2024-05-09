@@ -1,0 +1,99 @@
+---
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: service-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+
+data:
+  cinderVolumes:
+    ontap-nfs:
+      customServiceConfig: |
+        [ontap]
+        nfs_snapshot_support=true
+        nas_secure_file_operations=false
+        nas_secure_file_permissions=false
+        volume_backend_name=ontap
+        volume_driver=cinder.volume.drivers.netapp.c1ommon.NetAppDriver
+        netapp_server_hostname=_replaced_  # CHANGEME
+        netapp_server_port=80
+        netapp_storage_protocol=nfs
+        netapp_storage_family=ontap_cluster
+      networkAttachments:
+        - storage
+      customServiceConfigSecrets:
+        - cinder-volume-ontap-secrets
+
+  ontap-cinder-secrets.conf: |
+    [ontap]
+    netapp_login = _replaced_
+    netapp_password = _replaced_
+    netapp_vserver = _replaced_
+    nas_host = _replaced_
+    nas_share_path = _replaced_
+
+  swift:
+    enabled: true
+
+  manila:
+    enabled: true
+    manilaAPI:
+      customServiceConfig: |
+        [DEFAULT]
+        debug = true
+        enabled_share_protocols=cifs
+      replicas: 1
+    manilaScheduler:
+      replicas: 1
+    manilaShares:
+      share1:
+        networkAttachments:
+          - storage
+        customServiceConfig: |
+          [DEFAULT]
+          debug = true
+          enabled_share_backends=netapp
+          [netapp]
+          driver_handles_share_servers=False
+          share_backend_name=netapp
+          share_driver=manila.share.drivers.netapp.common.NetAppDriver
+          netapp_storage_family=ontap_cluster
+          netapp_transport_type=http
+        customServiceConfigSecrets:
+          - osp-secret-manila-netapp
+        replicas: 1
+
+    netapp-secrets.conf: |
+      [netapp]
+      netapp_server_hostname = _replaced_
+      netapp_login = _replaced_
+      netapp_password = _replaced_
+      netapp_vserver = _replaced_
+
+  glance:
+    customServiceConfig: |
+      [DEFAULT]
+      enabled_backends = default_backend:file
+      [glance_store]
+      default_backend = default_backend
+      [default_backend]
+      filesystem_store_datadir = /var/lib/glance/images/
+    databaseInstance: openstack
+    glanceAPIs:
+      default:
+        preserveJobs: false
+        replicas: 1
+        type: single
+    extraMounts:
+      - extraVol:
+          - extraVolType: Nfs
+            mounts:
+              - mountPath: /var/lib/glance/images
+                name: nfs
+            volumes:
+              - name: nfs
+                nfs:
+                  path: _replaced_
+                  server: _replaced_
