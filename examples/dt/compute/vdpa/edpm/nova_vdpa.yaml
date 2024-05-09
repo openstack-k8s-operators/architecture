@@ -1,0 +1,24 @@
+
+
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vdpa-nova
+data:
+  01-vdpa-nova.conf: |
+    [pci]
+    device_spec = { "vendor_id":"a2d6","product_id":"15b3","address": "0000:82:00.0", "physical_network":"vdpa-phy4"} # CHANGEME
+---
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneService
+metadata:
+  name: nova-custom-vdpa
+spec:
+  label: dataplane-deployment-nova-custom-vdpa
+  configMaps:
+    - vdpa-nova
+  secrets:
+    - nova-cell1-compute-config
+    - nova-migration-ssh-key
+  playbook: osp.edpm.nova
