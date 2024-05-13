@@ -17,7 +17,9 @@ vas:
       - path: examples/dt/bgp/control-plane
         wait_conditions:
           - >-
-            oc -n openstack wait osctlplane controlplane --for condition=Ready
+            oc -n openstack wait openstackcontrolplane
+            controlplane
+            --for condition=Ready
             --timeout=30m
         values:
           - name: network-values
@@ -29,8 +31,10 @@ vas:
       - path: examples/dt/bgp/edpm/nodeset
         wait_conditions:
           - >-
-            oc -n openstack wait
-            osdpns openstack-edpm --for condition=SetupReady --timeout=600s
+            oc -n openstack wait openstackdataplanenodeset
+            openstack-edpm
+            --for condition=SetupReady
+            --timeout=600s
         values:
           - name: edpm-nodeset-values
             src_file: values.yaml
@@ -39,8 +43,10 @@ vas:
       - path: examples/dt/bgp/edpm/deployment
         wait_conditions:
           - >-
-            oc -n openstack wait
-            osdpd edpm-deployment --for condition=Ready --timeout=1500s
+            oc -n openstack wait openstackdataplanedeployment
+            edpm-deployment
+            --for condition=Ready
+            --timeout=2400s
         values:
           - name: edpm-deployment-values
             src_file: values.yaml
