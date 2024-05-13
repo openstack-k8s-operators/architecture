@@ -194,7 +194,7 @@ replacements:
       - select:
           kind: OpenStackControlPlane
         fieldPaths:
-          - spec.octavia.amphoraImageContainerImage
+          - spec.octavia.template.amphoraImageContainerImage
         options:
           create: true
 
@@ -206,7 +206,7 @@ replacements:
       - select:
           kind: OpenStackControlPlane
         fieldPaths:
-          - spec.octavia.apacheContainerImage
+          - spec.octavia.template.apacheContainerImage
         options:
           create: true
 
