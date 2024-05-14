@@ -169,9 +169,9 @@ data:
         "bridge": "octbr",
         "ipam": {
           "type": "whereabouts",
-          "range": "172.20.0.0/24",
-          "range_start": "172.20.0.30",
-          "range_end": "172.20.0.70"
+          "range": "172.24.0.0/24",
+          "range_start": "172.24.0.30",
+          "range_end": "172.24.0.70"
         }
       }
 

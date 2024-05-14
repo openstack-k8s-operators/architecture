@@ -192,6 +192,18 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
+      fieldPath: data.octavia.availabilityZones
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.lbMgmtNetwork.availabilityZones
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
       fieldPath: data.octavia.octaviaAPI.networkAttachments
     targets:
       - select:
