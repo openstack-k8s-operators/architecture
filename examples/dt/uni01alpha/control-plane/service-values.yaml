@@ -21,8 +21,8 @@ data:
         target_protocol = iscsi
         target_helper = lioadm
         volume_backend_name = lvm_iscsi
-        target_ip_address=172.18.0.5
-        target_secondary_ip_addresses = 172.19.0.5
+        target_ip_address=172.18.0.10
+        target_secondary_ip_addresses = 172.19.0.10
 
   cinderBackup:
     customServiceConfig: |

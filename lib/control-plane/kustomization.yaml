@@ -111,6 +111,7 @@ replacements:
         fieldPaths:
           - spec.storageClass
           - spec.glance.template.storageClass
+          - spec.telemetry.template.metricStorage.monitoringStack.storage.persistent.pvcStorageClass
   - source:
       kind: ConfigMap
       name: network-values

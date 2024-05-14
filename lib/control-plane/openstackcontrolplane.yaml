@@ -208,7 +208,7 @@ spec:
             retention: 24h
             persistent:
               pvcStorageRequest: 10Gi
-              pvcStorageClass: local-storage
+              pvcStorageClass: _replaced_
       autoscaling:
         enabled: false
         aodh:
