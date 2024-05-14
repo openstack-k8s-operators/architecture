@@ -4,6 +4,18 @@ kind: OpenStackControlPlane
 metadata:
   name: controlplane
 spec:
+  barbican:
+    apiOverride:
+      route: {}
+    template:
+      databaseInstance: openstack
+      secret: osp-secret
+      barbicanAPI:
+        replicas: 1
+      barbicanWorker:
+        replicas: 1
+      barbicanKeystoneListener:
+        replicas: 1
   ceilometer:
     template:
       passwordSelector:
