@@ -37,7 +37,7 @@ This topology is used for executing integration tests that evaluate the
 | internalapi | VLAN tagged | 172.17.0.0/24     |
 | storage     | VLAN tagged | 172.18.0.0/24     |
 | tenant      | VLAN tagged | 172.19.0.0/24     |
-| octavia     | VLAN tagged | 172.20.0.0/24     |
+| octavia     | VLAN tagged | 172.24.0.0/24     |
 
 ### Services, enabled features and configurations
 
