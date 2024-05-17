@@ -3,6 +3,10 @@
     github-check:
       jobs:
         - noop
+        - rhoso-architecture-validate-hci
+        - rhoso-architecture-validate-ovs-dpdk-sriov
     github-gate:
       jobs:
         - noop
+        - rhoso-architecture-validate-hci
+        - rhoso-architecture-validate-ovs-dpdk-sriov
