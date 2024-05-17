@@ -1,1 +1,4 @@
-examples/dt/one
+examples/dt/uni*/control-plane/control-plane.yaml
+examples/dt/uni*/control-plane/nncp/nncp.yaml
+examples/dt/uni*/data-plane.yaml
+examples/dt/uni*/networker/edpm-networker.yaml
