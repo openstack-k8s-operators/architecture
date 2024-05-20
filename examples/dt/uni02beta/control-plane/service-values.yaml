@@ -43,7 +43,7 @@ data:
       customServiceConfig: |
         [DEFAULT]
         debug = true
-        enabled_share_protocols=cifs
+        enabled_share_protocols = nfs
       replicas: 3
     manilaScheduler:
       replicas: 3
