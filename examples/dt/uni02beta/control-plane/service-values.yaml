@@ -44,9 +44,9 @@ data:
         [DEFAULT]
         debug = true
         enabled_share_protocols=cifs
-      replicas: 1
+      replicas: 3
     manilaScheduler:
-      replicas: 1
+      replicas: 3
     manilaShares:
       share1:
         networkAttachments:
