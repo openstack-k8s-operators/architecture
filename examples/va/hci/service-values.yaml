@@ -7,7 +7,10 @@ metadata:
   annotations:
     config.kubernetes.io/local-config: "true"
 data:
+  cinderAPI:
+    replicas: 3
   cinderBackup:
+    replicas: 3
     customServiceConfig: |
       [DEFAULT]
       backup_driver = cinder.backup.drivers.ceph.CephBackupDriver
