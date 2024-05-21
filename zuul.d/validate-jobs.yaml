@@ -1,0 +1,32 @@
+---
+# How to create a new job:
+# - check the syntax defined for the existing jobs
+# - if your scenario needs mocked data:
+#     - push a proper YAML file in automation/mocks/SCENARIO_NAME.yaml
+#     - that's all!
+
+- job:
+    name: rhoso-architecture-base-job
+    description: |
+      Base job to create new CI jobs running the
+      build-only validation playbook provided by
+      the ci-framework project.
+    parent: cifmw-architecture-validate-base
+    required-projects:
+      - openstack-k8s-operators/ci-framework
+
+- job:
+    name: rhoso-architecture-validate-hci
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: hci
+    files:
+      - examples/va/hci
+
+- job:
+    name: rhoso-architecture-validate-ovs-dpdk-sriov
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: ovs-dpdk-sriov
+    files:
+      - examples/va/nfv
