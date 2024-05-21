@@ -50,6 +50,18 @@
       cifmw_architecture_scenario: ovs-dpdk-sriov
 - job:
     files:
+    - examples/va/pidone
+    - examples/va/pidone/edpm/deployment
+    - examples/va/pidone/edpm/nodeset
+    - examples/va/pidone/nncp
+    - lib
+    - va/pidone
+    name: rhoso-architecture-validate-pidone
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: pidone
+- job:
+    files:
     - automation/mocks/sriov.yaml
     - examples/va/nfv/sriov
     - examples/va/nfv/sriov/edpm/deployment
