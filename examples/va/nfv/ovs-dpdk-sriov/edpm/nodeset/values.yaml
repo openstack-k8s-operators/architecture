@@ -191,19 +191,20 @@ data:
   nova:
     compute:
       conf: |
+        # CHANGEME
         [DEFAULT]
         reserved_host_memory_mb = 4096
         [compute]
         cpu_shared_set = 0-3,24-27
         cpu_dedicated_set = 8-23,32-47
         [neutron]
-        physnets = dpdk1, dpdk2 # CHANGEME
-        [neutron_physnet_dpdk1] # CHANGEME
-        numa_nodes = 0 # CHANGEME
-        [neutron_physnet_dpdk2] # CHANGEME
-        numa_nodes = 0 # CHANGEME
-        [neutron_tunnel] # CHANGEME
-        numa_nodes = 0 # CHANGEME
+        physnets = dpdk1, dpdk2
+        [neutron_physnet_dpdk1]
+        numa_nodes = 0
+        [neutron_physnet_dpdk2]
+        numa_nodes = 0
+        [neutron_tunnel]
+        numa_nodes = 0
     migration:
       ssh_keys:
         private: CHANGEME4
@@ -211,6 +212,7 @@ data:
     pci:
       # yamllint disable-line rule:line-length
       conf: |
+        # CHANGEME
         [pci]
-        device_spec = {"vendor_id":"8086", "product_id":"1572", "address": "0000:19:00.3", "physical_network":"sriov1", "trusted":"true"}  # CHANGEME
-        device_spec = {"vendor_id":"8086", "product_id":"1572", "address": "0000:20:00.3", "physical_network":"sriov2", "trusted":"true"}  # CHANGEME
+        device_spec = {"vendor_id":"8086", "product_id":"1572", "address": "0000:19:00.3", "physical_network":"sriov1", "trusted":"true"}
+        device_spec = {"vendor_id":"8086", "product_id":"1572", "address": "0000:20:00.3", "physical_network":"sriov2", "trusted":"true"}

@@ -145,6 +145,7 @@ data:
   nova:
     compute:
       conf: |
+        # CHANGEME
         [DEFAULT]
         reserved_host_memory_mb = 4096
         reserved_huge_pages = node:0,size:4,count:524160
@@ -158,5 +159,6 @@ data:
         public: CHANGEME5
     pci:
       conf: |
+        # CHANGEME
         [pci]
         device_spec = {"vendor_id":"8086", "product_id":"1572", "address": "0000:19:00.3", "physical_network":"sriov-phy4", "trusted":"true"}
