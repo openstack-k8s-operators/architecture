@@ -1,12 +1,10 @@
 ---
 - project:
     github-check:
-      jobs:
+      jobs: &gate_jobs
         - noop
         - rhoso-architecture-validate-hci
         - rhoso-architecture-validate-ovs-dpdk-sriov
+        - rhoso-architecture-validate-uni01alpha
     github-gate:
-      jobs:
-        - noop
-        - rhoso-architecture-validate-hci
-        - rhoso-architecture-validate-ovs-dpdk-sriov
+      jobs: *gate_jobs

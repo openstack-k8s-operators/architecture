@@ -30,3 +30,16 @@
       cifmw_architecture_scenario: ovs-dpdk-sriov
     files:
       - examples/va/nfv
+
+- job:
+    files:
+      - dt/uni01alpha
+      - examples/dt/uni01alpha
+      - examples/dt/uni01alpha/control-plane
+      - examples/dt/uni01alpha/control-plane/nncp
+      - examples/dt/uni01alpha/networker
+      - lib
+    name: rhoso-architecture-validate-uni01alpha
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: uni01alpha
