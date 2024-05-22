@@ -1,6 +1,6 @@
 ---
 # How to create a new job:
-# - check the syntax defined for the existing jobs
+# - run .ci/create-zuul-jobs.py script to regenerate based on automations
 # - if your scenario needs mocked data:
 #     - push a proper YAML file in automation/mocks/SCENARIO_NAME.yaml
 #     - that's all!
@@ -14,19 +14,3 @@
     parent: cifmw-architecture-validate-base
     required-projects:
       - openstack-k8s-operators/ci-framework
-
-- job:
-    name: rhoso-architecture-validate-hci
-    parent: rhoso-architecture-base-job
-    vars:
-      cifmw_architecture_scenario: hci
-    files:
-      - examples/va/hci
-
-- job:
-    name: rhoso-architecture-validate-ovs-dpdk-sriov
-    parent: rhoso-architecture-base-job
-    vars:
-      cifmw_architecture_scenario: ovs-dpdk-sriov
-    files:
-      - examples/va/nfv

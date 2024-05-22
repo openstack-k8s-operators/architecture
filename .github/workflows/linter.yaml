@@ -41,3 +41,23 @@ jobs:
         run: |
           kustomize version
           ./test-kustomizations.sh examples/
+
+  test-zuul:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install yaml
+        run: pip install pyyaml
+
+      - name: Run create-zuul-jobs
+        run: |
+          sha256sum zuul.d/* > checksum;
+          ./create-zuul-jobs.py;
+          sha256sum -c checksum || (git diff && exit 1) && exit 0;

@@ -2,6 +2,7 @@
 extends: default
 ignore:
   - '*.md'
+  - 'zuul.d/'
 
 rules:
   line-length:
