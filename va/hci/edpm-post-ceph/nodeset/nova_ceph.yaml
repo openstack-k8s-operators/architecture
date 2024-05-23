@@ -27,3 +27,4 @@ spec:
     issuer: osp-rootca-issuer-internal
     edpmRoleServiceName: nova
   caCerts: combined-ca-bundle
+  edpmServiceType: nova
