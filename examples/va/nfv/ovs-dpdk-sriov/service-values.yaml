@@ -32,7 +32,8 @@ data:
   ovn:
     ovnController:
       nicMappings:
-        datacentre: enp4s0  # CHANGEME
+        datacentre: ospbr
+
   glance:
     customServiceConfig: |
       [DEFAULT]
@@ -70,3 +71,8 @@ data:
             - name: neutron-policy
               mountPath: /etc/neutron/policy.d
               readOnly: true
+  nova:
+    schedulerServiceTemplate:
+      customServiceConfig: |
+        [filter_scheduler]
+        enabled_filtes = AvailabilityZoneFilter,ComputeFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,ServerGroupAntiAffinityFilter,ServerGroupAffinityFilter,PciPassthroughFilter,NUMATopologyFilter,AggregateInstanceExtraSpecsFilter

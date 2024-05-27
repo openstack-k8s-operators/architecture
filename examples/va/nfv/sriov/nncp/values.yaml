@@ -40,7 +40,7 @@ data:
         gateway: 192.168.122.1
         name: subnet1
     prefix-length: 24
-    iface: enp6s0
+    iface: enp7s0
     mtu: 1500
     lb_addresses:
       - 192.168.122.80-192.168.122.90
@@ -72,9 +72,9 @@ data:
         vlan: 20
     mtu: 1500
     prefix-length: 24
-    iface: enp6s0.20
+    iface: enp7s0.20
     vlan: 20
-    base_iface: enp6s0
+    base_iface: enp7s0
     lb_addresses:
       - 172.17.0.80-172.17.0.90
     endpoint_annotations:
@@ -105,9 +105,9 @@ data:
         vlan: 21
     mtu: 1500
     prefix-length: 24
-    iface: enp6s0.21
+    iface: enp7s0.21
     vlan: 21
-    base_iface: enp6s0
+    base_iface: enp7s0
     lb_addresses:
       - 172.18.0.80-172.18.0.90
     net-attach-def: |
@@ -134,9 +134,9 @@ data:
         vlan: 22
     mtu: 1500
     prefix-length: 24
-    iface: enp6s0.22
+    iface: enp7s0.22
     vlan: 22
-    base_iface: enp6s0
+    base_iface: enp7s0
     lb_addresses:
       - 172.19.0.80-172.19.0.90
     net-attach-def: |
