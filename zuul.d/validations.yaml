@@ -111,6 +111,18 @@
       cifmw_architecture_scenario: uni04delta
 - job:
     files:
+    - dt/uni05epsilon
+    - examples/dt/uni05epsilon
+    - examples/dt/uni05epsilon/control-plane
+    - examples/dt/uni05epsilon/control-plane/nncp
+    - examples/dt/uni05epsilon/deployment
+    - lib
+    name: rhoso-architecture-validate-uni05epsilon
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: uni05epsilon
+- job:
+    files:
     - dt/uni06zeta
     - examples/dt/uni06zeta
     - examples/dt/uni06zeta/control-plane
