@@ -2,8 +2,9 @@
 extends: default
 ignore:
   - '*.md'
+  - 'zuul.d/'
 
 rules:
   line-length:
-    max: 100
+    max: 256
     level: warning

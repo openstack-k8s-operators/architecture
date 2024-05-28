@@ -1,0 +1,16 @@
+- project:
+    github-check:
+      jobs: &id001
+      - noop
+      - rhoso-architecture-validate-bgp
+      - rhoso-architecture-validate-hci
+      - rhoso-architecture-validate-ovs-dpdk
+      - rhoso-architecture-validate-ovs-dpdk-sriov
+      - rhoso-architecture-validate-sriov
+      - rhoso-architecture-validate-uni01alpha
+      - rhoso-architecture-validate-uni02beta
+      - rhoso-architecture-validate-uni04delta
+      - rhoso-architecture-validate-uni05epsilon
+      - rhoso-architecture-validate-uni06zeta
+    github-gate:
+      jobs: *id001

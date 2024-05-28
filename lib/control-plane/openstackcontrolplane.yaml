@@ -4,6 +4,18 @@ kind: OpenStackControlPlane
 metadata:
   name: controlplane
 spec:
+  barbican:
+    apiOverride:
+      route: {}
+    template:
+      databaseInstance: openstack
+      secret: osp-secret
+      barbicanAPI:
+        replicas: 1
+      barbicanWorker:
+        replicas: 1
+      barbicanKeystoneListener:
+        replicas: 1
   ceilometer:
     template:
       passwordSelector:
@@ -117,7 +129,7 @@ spec:
   memcached:
     templates:
       memcached:
-        replicas: 1
+        replicas: 3
   neutron:
     apiOverride:
       route: {}
@@ -137,6 +149,9 @@ spec:
       databaseInstance: openstack
       octaviaAPI:
         replicas: 1
+      octaviaHousekeeping: {}
+      octaviaWorker: {}
+      octaviaHealthManager: {}
       secret: osp-secret
   ovn:
     template:
@@ -153,8 +168,6 @@ spec:
           dbType: SB
           networkAttachment: internalapi
           storageRequest: 10G
-      ovnNorthd:
-        networkAttachment: internalapi
   placement:
     apiOverride:
       route: {}
@@ -182,3 +195,31 @@ spec:
         ringReplicas: 1
       swiftStorage:
         replicas: 1
+  telemetry:
+    enabled: false
+    template:
+      metricStorage:
+        enabled: false
+        monitoringStack:
+          alertingEnabled: true
+          scrapeInterval: 30s
+          storage:
+            strategy: persistent
+            retention: 24h
+            persistent:
+              pvcStorageRequest: 10Gi
+              pvcStorageClass: _replaced_
+      autoscaling:
+        enabled: false
+        aodh:
+          passwordSelectors:
+          databaseInstance: openstack
+          memcachedInstance: memcached
+          secret: osp-secret
+        heatInstance: heat
+      ceilometer:
+        enabled: false
+        secret: osp-secret
+      logging:
+        enabled: false
+        port: 10514

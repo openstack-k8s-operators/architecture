@@ -14,20 +14,34 @@ Change to the hci directory
 ```
 cd architecture/examples/va/hci
 ```
-Edit the [values.yaml](values.yaml) and [service-values.yaml](service-values.yaml) 
+Edit the [values.yaml](values.yaml) and [service-values.yaml](service-values.yaml)
 files to suit your environment.
 ```
 vi values.yaml
 vi service-values.yaml
 ```
-Generate the post-Ceph dataplane CRs.
+Generate the post-Ceph dataplane nodeset CR.
 ```
-kustomize build > dataplane-post-ceph.yaml
+kustomize build > nodeset-post-ceph.yaml
+```
+Generate the post-Ceph dataplane deployment CR.
+```
+kustomize build deployment > deployment-post-ceph.yaml
 ```
 
 ## Create post-Ceph CRs
+
+Create the nodeset CR
 ```
-oc apply -f dataplane-post-ceph.yaml
+oc apply -f nodeset-post-ceph.yaml
+```
+Wait for post-Ceph dataplane nodeset setup to finish
+```
+oc wait osdpns openstack-edpm --for condition=SetupReady --timeout=600s
+```
+Create the deployment CR
+```
+oc apply -f deployment-post-ceph.yaml
 ```
 
 Wait for control plane to be available after updating

@@ -18,10 +18,12 @@ transformers:
         create: true
 
 components:
-  - ../../lib/networking
+  - ../../lib/networking/metallb
+  - ../../lib/networking/netconfig
+  - ../../lib/networking/nad
   - ../../lib/control-plane
 
-# Add StorageMgmt network template, as it is needed for CephHCI
+# Add storagemgmt network template, as it is needed for CephHCI
 patches:
   - target:
       version: v1beta1
@@ -32,12 +34,12 @@ patches:
         path: /spec/networks/-
         value:
           dnsDomain: _replaced_
-          name: StorageMgmt
+          name: storagemgmt
           subnets:
             - _replaced_
           mtu: 1500
 
-# Add StorageMgmt network replacements
+# Add storagemgmt network replacements
 replacements:
   # NetConfig dnsDomain specific to this VA
   - source:
@@ -48,7 +50,7 @@ replacements:
       - select:
           kind: NetConfig
         fieldPaths:
-          - spec.networks.[name=StorageMgmt].dnsDomain
+          - spec.networks.[name=storagemgmt].dnsDomain
   # NetConfig MTU specific to this VA
   - source:
       kind: ConfigMap
@@ -58,7 +60,7 @@ replacements:
       - select:
           kind: NetConfig
         fieldPaths:
-          - spec.networks.[name=StorageMgmt].mtu
+          - spec.networks.[name=storagemgmt].mtu
   # NetConfig subnets specific to this VA
   - source:
       kind: ConfigMap
@@ -68,4 +70,4 @@ replacements:
       - select:
           kind: NetConfig
         fieldPaths:
-          - spec.networks.[name=StorageMgmt].subnets
+          - spec.networks.[name=storagemgmt].subnets

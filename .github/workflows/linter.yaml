@@ -1,5 +1,5 @@
 ---
-name: Run yaml-lint
+name: file-consistency
 on:  # yamllint disable-line rule:truthy
   pull_request:
     branches:
@@ -8,6 +8,7 @@ on:  # yamllint disable-line rule:truthy
     paths:
       - "**.yaml"
       - "**.yml"
+      - test-kustomizations.sh
 
 jobs:
   yaml-lint:
@@ -26,3 +27,37 @@ jobs:
 
       - name: Run yaml-lint
         run: yamllint -c .yamllint.yml -s .
+
+  test-kustomize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get Kustomize
+        uses: imranismail/setup-kustomize@v2
+
+      - name: Run test-kustomization script
+        run: |
+          kustomize version
+          ./test-kustomizations.sh examples/
+
+  test-zuul:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install yaml
+        run: pip install pyyaml
+
+      - name: Run create-zuul-jobs
+        run: |
+          sha256sum zuul.d/* > checksum;
+          ./create-zuul-jobs.py;
+          sha256sum -c checksum || (git diff && exit 1) && exit 0;

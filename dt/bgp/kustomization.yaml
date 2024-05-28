@@ -1,0 +1,282 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+secretGenerator:
+  - name: octavia-ca-passphrase
+    literals:
+      - server-ca-passphrase=12345678
+    options:
+      disableNameSuffixHash: true
+
+transformers:
+  # Set namespace to OpenStack on all namespaced objects without a namespace
+  - |-
+    apiVersion: builtin
+    kind: NamespaceTransformer
+    metadata:
+      name: _ignored_
+      namespace: openstack
+    setRoleBindingSubjects: none
+    unsetOnly: true
+    fieldSpecs:
+      - path: metadata/name
+        kind: Namespace
+        create: true
+
+components:
+  - ../../lib/networking
+  - networking/bgpmetallb
+  - networking/nad
+  - ../../lib/control-plane
+
+resources:
+  - ocp_networks_octavia_netattach.yaml
+
+patches:
+  # Add BGP networks to NetConfig
+  - target:
+      kind: NetConfig
+      name: netconfig
+    patch: |-
+      - op: add
+        path: /spec/networks/-
+        value:
+          dnsDomain: bgpnet0.example.com
+          name: bgpnet0
+          subnets:
+            - _replaced_
+          mtu: 1500
+  - target:
+      kind: NetConfig
+      name: netconfig
+    patch: |-
+      - op: add
+        path: /spec/networks/-
+        value:
+          dnsDomain: bgpnet1.example.com
+          name: bgpnet1
+          subnets:
+            - _replaced_
+          mtu: 1500
+  - target:
+      kind: NetConfig
+      name: netconfig
+    patch: |-
+      - op: add
+        path: /spec/networks/-
+        value:
+          dnsDomain: bgpmainnet.example.com
+          name: bgpmainnet
+          subnets:
+            - _replaced_
+          mtu: 1500
+  - target:
+      kind: NetConfig
+      name: netconfig
+    patch: |-
+      - op: add
+        path: /spec/networks/-
+        value:
+          dnsDomain: bgpmainnetv6.example.com
+          name: bgpmainnetv6
+          subnets:
+            - _replaced_
+          mtu: 1500
+  # Enable heat
+  - target:
+      kind: OpenStackControlPlane
+      name: controlplane
+    patch: |-
+      - op: replace
+        path: /spec/heat/enabled
+        value: true
+  # Connect ovnNorthd to internalapi
+  - target:
+      kind: OpenStackControlPlane
+      name: controlplane
+    patch: |-
+      - op: add
+        path: /spec/ovn/template/ovnNorthd
+        value:
+          networkAttachment: internalapi
+
+replacements:
+  # BGP NetConfig customizations
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.bgp.subnets.bgpnet0
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=bgpnet0].subnets
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.bgp.subnets.bgpnet1
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=bgpnet1].subnets
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.bgp.subnets.bgpmainnet
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=bgpmainnet].subnets
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.bgp.subnets.bgpmainnetv6
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=bgpmainnetv6].subnets
+
+  # Control plane customization to use glance with swift
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.glance.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.glance.template.customServiceConfig
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.glance.default.replicas
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.glance.template.glanceAPIs.default.replicas
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.swift.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.swift.enabled
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.enabled
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.amphoraImageContainerImage
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.amphoraImageContainerImage
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.apacheContainerImage
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.apacheContainerImage
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.octaviaAPI.networkAttachments
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.octaviaAPI.networkAttachments
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.octaviaHousekeeping.networkAttachments
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.octaviaHousekeeping.networkAttachments
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.octaviaHealthManager.networkAttachments
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.octaviaHealthManager.networkAttachments
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.octaviaWorker.networkAttachments
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.octaviaWorker.networkAttachments
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.ovn.ovnController.nicMappings
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.ovn.template.ovnController.nicMappings
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.octavia.net-attach-def
+    targets:
+      - select:
+          kind: NetworkAttachmentDefinition
+          name: octavia
+        fieldPaths:
+          - spec.config

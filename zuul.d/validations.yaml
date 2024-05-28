@@ -1,0 +1,122 @@
+- job:
+    files:
+    - dt/bgp
+    - examples/dt/bgp/control-plane
+    - examples/dt/bgp/control-plane/nncp
+    - examples/dt/bgp/edpm/deployment
+    - examples/dt/bgp/edpm/nodeset
+    - lib
+    name: rhoso-architecture-validate-bgp
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: bgp
+- job:
+    files:
+    - examples/va/hci
+    - examples/va/hci/control-plane
+    - examples/va/hci/control-plane/nncp
+    - examples/va/hci/deployment
+    - examples/va/hci/edpm-pre-ceph/deployment
+    - examples/va/hci/edpm-pre-ceph/nodeset
+    - lib
+    - va/hci
+    name: rhoso-architecture-validate-hci
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: hci
+- job:
+    files:
+    - automation/mocks/ovs-dpdk.yaml
+    - examples/va/nfv/ovs-dpdk
+    - examples/va/nfv/ovs-dpdk/edpm/deployment
+    - examples/va/nfv/ovs-dpdk/edpm/nodeset
+    - examples/va/nfv/ovs-dpdk/nncp
+    - lib
+    name: rhoso-architecture-validate-ovs-dpdk
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: ovs-dpdk
+- job:
+    files:
+    - automation/mocks/ovs-dpdk-sriov.yaml
+    - examples/va/nfv/ovs-dpdk-sriov
+    - examples/va/nfv/ovs-dpdk-sriov/edpm/deployment
+    - examples/va/nfv/ovs-dpdk-sriov/edpm/nodeset
+    - examples/va/nfv/ovs-dpdk-sriov/nncp
+    - lib
+    name: rhoso-architecture-validate-ovs-dpdk-sriov
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: ovs-dpdk-sriov
+- job:
+    files:
+    - automation/mocks/sriov.yaml
+    - examples/va/nfv/sriov
+    - examples/va/nfv/sriov/edpm/deployment
+    - examples/va/nfv/sriov/edpm/nodeset
+    - examples/va/nfv/sriov/nncp
+    - lib
+    name: rhoso-architecture-validate-sriov
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: sriov
+- job:
+    files:
+    - dt/uni01alpha
+    - examples/dt/uni01alpha
+    - examples/dt/uni01alpha/control-plane
+    - examples/dt/uni01alpha/control-plane/nncp
+    - examples/dt/uni01alpha/networker
+    - lib
+    name: rhoso-architecture-validate-uni01alpha
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: uni01alpha
+- job:
+    files:
+    - dt/uni02beta
+    - examples/dt/uni02beta
+    - examples/dt/uni02beta/control-plane
+    - examples/dt/uni02beta/control-plane/nncp
+    - lib
+    name: rhoso-architecture-validate-uni02beta
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: uni02beta
+- job:
+    files:
+    - dt/uni04delta
+    - examples/dt/uni04delta
+    - examples/dt/uni04delta/control-plane
+    - examples/dt/uni04delta/control-plane/nncp
+    - examples/dt/uni04delta/deployment
+    - examples/dt/uni04delta/edpm-pre-ceph
+    - examples/dt/uni04delta/edpm-pre-ceph/nodeset
+    - lib
+    name: rhoso-architecture-validate-uni04delta
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: uni04delta
+- job:
+    files:
+    - dt/uni05epsilon
+    - examples/dt/uni05epsilon
+    - examples/dt/uni05epsilon/control-plane
+    - examples/dt/uni05epsilon/control-plane/nncp
+    - examples/dt/uni05epsilon/deployment
+    - lib
+    name: rhoso-architecture-validate-uni05epsilon
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: uni05epsilon
+- job:
+    files:
+    - dt/uni06zeta
+    - examples/dt/uni06zeta
+    - examples/dt/uni06zeta/control-plane
+    - examples/dt/uni06zeta/control-plane/nncp
+    - lib
+    name: rhoso-architecture-validate-uni06zeta
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: uni06zeta

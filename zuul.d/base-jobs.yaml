@@ -1,0 +1,16 @@
+---
+# How to create a new job:
+# - run .ci/create-zuul-jobs.py script to regenerate based on automations
+# - if your scenario needs mocked data:
+#     - push a proper YAML file in automation/mocks/SCENARIO_NAME.yaml
+#     - that's all!
+
+- job:
+    name: rhoso-architecture-base-job
+    description: |
+      Base job to create new CI jobs running the
+      build-only validation playbook provided by
+      the ci-framework project.
+    parent: cifmw-architecture-validate-base
+    required-projects:
+      - openstack-k8s-operators/ci-framework
