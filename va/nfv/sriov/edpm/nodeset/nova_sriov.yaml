@@ -19,6 +19,7 @@ metadata:
   name: nova-custom-sriov
 spec:
   label: dataplane-deployment-nova-custom-sriov
+  edpmServiceType: nova
   configMaps:
     - cpu-pinning-nova
     - sriov-nova

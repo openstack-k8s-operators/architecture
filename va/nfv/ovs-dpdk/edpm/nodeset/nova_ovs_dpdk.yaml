@@ -12,6 +12,7 @@ metadata:
   name: nova-custom-ovsdpdk
 spec:
   label: nova-custom-ovsdpdk
+  edpmServiceType: nova
   configMaps:
     - ovs-dpdk-cpu-pinning-nova
   secrets:
