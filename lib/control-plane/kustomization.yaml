@@ -22,6 +22,7 @@ replacements:
       - select:
           kind: OpenStackControlPlane
         fieldPaths:
+          - spec.barbican.template.barbicanAPI.override.service.internal.metadata.annotations
           - spec.cinder.template.cinderAPI.override.service.internal.metadata.annotations
           - spec.glance.template.glanceAPIs.default.override.service.internal.metadata.annotations
           - spec.heat.template.heatAPI.override.service.internal.metadata.annotations
@@ -76,6 +77,7 @@ replacements:
       - select:
           kind: OpenStackControlPlane
         fieldPaths:
+          - spec.barbican.template.barbicanAPI.override.service.internal.spec.type
           - spec.dns.template.override.service.spec.type
           - spec.cinder.template.cinderAPI.override.service.internal.spec.type
           - spec.glance.template.glanceAPIs.default.override.service.internal.spec.type
