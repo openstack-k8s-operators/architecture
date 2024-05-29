@@ -72,7 +72,6 @@ data:
         edpm_sshd_allowed_ranges:
           - 192.168.122.0/24
 
-        enable_debug: false
         gather_facts: false
 
     networks:
