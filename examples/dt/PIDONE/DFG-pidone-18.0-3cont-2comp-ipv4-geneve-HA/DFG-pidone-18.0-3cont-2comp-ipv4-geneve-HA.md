@@ -4,17 +4,19 @@ Based on OpenStack K8S operators from the "main" branch of the OpenStack Operato
 General information:
 Revision	Change		Publication Date
 v0.1	 	Initial		Dec 20 2023
+		Modified        May 29 2024
 
 Node topology:
-Node role	                                bm/vm	amount
-Openshift master/worker combo-node cluster	vm	    3
-Compute node					vm	    2
+Node role                       bm/vm   amount  comment
+OCP master node (cluster)       vm      3
+OCP worker node                 vm      3
+OCP worker node (extra)         vm      1       For running test operator
+Compute node                    vm      2
 
 Services, enabled features and configurations:
 Service	        configuration	    Lock-in coverage?
-Galera      default             Must have
+Galera		default             Must have
 RabbitMQ	default	            Must have
-Redis           ?                   Must have
 Memcached       default             Must have
 TLS             default             Must have
 FIPS Mode	default	            Must have/standard
