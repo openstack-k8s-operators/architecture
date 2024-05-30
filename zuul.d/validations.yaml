@@ -1,5 +1,6 @@
 - job:
     files:
+    - automation/mocks/bgp.yaml
     - dt/bgp
     - examples/dt/bgp/control-plane
     - examples/dt/bgp/control-plane/nncp
@@ -50,6 +51,7 @@
       cifmw_architecture_scenario: ovs-dpdk-sriov
 - job:
     files:
+    - automation/mocks/pidone.yaml
     - examples/va/pidone
     - examples/va/pidone/edpm/deployment
     - examples/va/pidone/edpm/nodeset
