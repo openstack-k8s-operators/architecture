@@ -78,7 +78,9 @@
     - examples/dt/uni01alpha
     - examples/dt/uni01alpha/control-plane
     - examples/dt/uni01alpha/control-plane/nncp
+    - examples/dt/uni01alpha/edpm
     - examples/dt/uni01alpha/networker
+    - examples/dt/uni01alpha/networker/nodeset
     - lib
     name: rhoso-architecture-validate-uni01alpha
     parent: rhoso-architecture-base-job

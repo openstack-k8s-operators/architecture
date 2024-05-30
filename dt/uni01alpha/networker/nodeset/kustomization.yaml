@@ -17,22 +17,22 @@ transformers:
         create: true
 
 components:
-  - ../../../lib/dataplane/deployment
+  - ../../../../lib/dataplane/nodeset
 
 patches:
   - target:
-      kind: OpenStackDataPlaneDeployment
+      kind: OpenStackDataPlaneNodeSet
       name: .*
     patch: |-
       - op: replace
         path: /metadata/name
-        value: networker-deploy
+        value: networker-nodes
 
   - target:
-      kind: OpenStackDataPlaneDeployment
-      name: .*
+      kind: Secret
+      name: nova-migration-ssh-key
     patch: |-
-      - op: replace
-        path: /spec/nodeSets
+      - op: add
+        path: /metadata/annotations
         value:
-          - networker-nodes
+          config.kubernetes.io/local-config: true

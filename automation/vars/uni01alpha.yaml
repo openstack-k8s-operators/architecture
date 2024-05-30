@@ -30,7 +30,7 @@ vas:
             oc -n openstack wait openstackcontrolplane
             controlplane
             --for condition=Ready
-            --timeout=30m
+            --timeout=45m
         values:
           - name: network-values
             src_file: nncp/values.yaml
@@ -38,17 +38,41 @@ vas:
             src_file: service-values.yaml
         build_output: control-plane.yaml
 
+      - path: examples/dt/uni01alpha/networker/nodeset
+        wait_conditions:
+          - >-
+            oc -n openstack wait openstackdataplanenodeset
+            networker-nodes
+            --for condition=SetupReady
+            --timeout=15m
+        values:
+          - name: edpm-nodeset-values
+            src_file: values.yaml
+        build_output: edpm-networker.yaml
+
       - path: examples/dt/uni01alpha/networker
         wait_conditions:
           - >-
             oc -n openstack wait openstackdataplanedeployment
             networker-deploy
             --for condition=Ready
-            --timeout=2400s
+            --timeout=30m
+        values:
+          - name: edpm-deployment-values
+            src_file: values.yaml
+        build_output: edpm-networker.yaml
+
+      - path: examples/dt/uni01alpha/edpm
+        wait_conditions:
+          - >-
+            oc -n openstack wait openstackdataplanenodeset
+            openstack-edpm
+            --for condition=SetupReady
+            --timeout=15m
         values:
           - name: edpm-nodeset-values
             src_file: values.yaml
-        build_output: edpm-networker.yaml
+        build_output: edpm.yaml
 
       - path: examples/dt/uni01alpha
         wait_conditions:
@@ -56,8 +80,8 @@ vas:
             oc -n openstack wait openstackdataplanedeployment
             edpm-deployment
             --for condition=Ready
-            --timeout=2400s
+            --timeout=30m
         values:
-          - name: edpm-nodeset-values
+          - name: edpm-deployment-values
             src_file: values.yaml
         build_output: edpm.yaml
