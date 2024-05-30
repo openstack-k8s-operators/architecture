@@ -65,7 +65,8 @@ data:
       cinder_store_password = {{ .ServicePassword }}
       cinder_store_project_name = service
       cinder_catalog_info = volumev3::internalURL
-      cinder_use_multipath = true
+      # TODO: Enable multipath when OSPRH-7393 is resolved
+      # cinder_use_multipath = true
       [secondary]
       swift_store_create_container_on_put = True
       swift_store_auth_version = 3
