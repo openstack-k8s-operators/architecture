@@ -26,6 +26,10 @@ spec:
     apiOverride:
       route: {}
     template:
+      customServiceConfig: |
+        # Debug logs by default, jobs can override as needed.
+        [DEFAULT]
+        debug = true
       cinderBackup:
         networkAttachments:
           - storage
