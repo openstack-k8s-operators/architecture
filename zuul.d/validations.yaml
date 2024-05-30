@@ -1,6 +1,6 @@
 - job:
     files:
-    - automation/mocks/bgp.yaml
+    - automation/net-env/bgp.yaml
     - dt/bgp
     - examples/dt/bgp/control-plane
     - examples/dt/bgp/control-plane/nncp
@@ -11,6 +11,7 @@
     parent: rhoso-architecture-base-job
     vars:
       cifmw_architecture_scenario: bgp
+      cifmw_networking_env_def_file: automation/net-env/bgp.yaml
 - job:
     files:
     - automation/mocks/bgp_dt01.yaml
@@ -64,7 +65,7 @@
       cifmw_architecture_scenario: ovs-dpdk-sriov
 - job:
     files:
-    - automation/mocks/pidone.yaml
+    - automation/net-env/pidone.yaml
     - examples/va/pidone
     - examples/va/pidone/edpm/deployment
     - examples/va/pidone/edpm/nodeset
@@ -75,6 +76,7 @@
     parent: rhoso-architecture-base-job
     vars:
       cifmw_architecture_scenario: pidone
+      cifmw_networking_env_def_file: automation/net-env/pidone.yaml
 - job:
     files:
     - automation/mocks/sriov.yaml
@@ -89,6 +91,7 @@
       cifmw_architecture_scenario: sriov
 - job:
     files:
+    - automation/net-env/uni01alpha.yaml
     - dt/uni01alpha
     - examples/dt/uni01alpha
     - examples/dt/uni01alpha/control-plane
@@ -101,8 +104,10 @@
     parent: rhoso-architecture-base-job
     vars:
       cifmw_architecture_scenario: uni01alpha
+      cifmw_networking_env_def_file: automation/net-env/uni01alpha.yaml
 - job:
     files:
+    - automation/net-env/uni02beta.yaml
     - dt/uni02beta
     - examples/dt/uni02beta
     - examples/dt/uni02beta/control-plane
@@ -112,8 +117,10 @@
     parent: rhoso-architecture-base-job
     vars:
       cifmw_architecture_scenario: uni02beta
+      cifmw_networking_env_def_file: automation/net-env/uni02beta.yaml
 - job:
     files:
+    - automation/net-env/uni04delta.yaml
     - dt/uni04delta
     - examples/dt/uni04delta
     - examples/dt/uni04delta/control-plane
@@ -126,8 +133,10 @@
     parent: rhoso-architecture-base-job
     vars:
       cifmw_architecture_scenario: uni04delta
+      cifmw_networking_env_def_file: automation/net-env/uni04delta.yaml
 - job:
     files:
+    - automation/net-env/uni05epsilon.yaml
     - dt/uni05epsilon
     - examples/dt/uni05epsilon
     - examples/dt/uni05epsilon/control-plane
@@ -138,8 +147,10 @@
     parent: rhoso-architecture-base-job
     vars:
       cifmw_architecture_scenario: uni05epsilon
+      cifmw_networking_env_def_file: automation/net-env/uni05epsilon.yaml
 - job:
     files:
+    - automation/net-env/uni06zeta.yaml
     - dt/uni06zeta
     - examples/dt/uni06zeta
     - examples/dt/uni06zeta/control-plane
@@ -149,3 +160,4 @@
     parent: rhoso-architecture-base-job
     vars:
       cifmw_architecture_scenario: uni06zeta
+      cifmw_networking_env_def_file: automation/net-env/uni06zeta.yaml
