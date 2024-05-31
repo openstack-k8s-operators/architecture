@@ -36,9 +36,6 @@ data:
         #       subscription-manager register --username <subscription_manager_username> \
         #         --password <subscription_manager_password>
         #       podman login -u <registry_username> -p <registry_password> registry.redhat.io
-        service_net_map:
-          nova_api_network: internalapi
-          nova_libvirt_network: internalapi
         timesync_ntp_servers:
           - hostname: clock.redhat.com
         # CPU pinning settings
@@ -128,13 +125,10 @@ data:
         edpm_nodes_validation_validate_gateway_icmp: false
         dns_search_domains: []
         gather_facts: false
-        enable_debug: false
         # edpm firewall, change the allowed CIDR if needed
         edpm_sshd_configure_firewall: true
         edpm_sshd_allowed_ranges:
           - 192.168.122.0/24
-        # SELinux module
-        edpm_selinux_mode: enforcing
     networks:
       - defaultRoute: true
         name: ctlplane

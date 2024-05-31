@@ -28,7 +28,6 @@ data:
           - hostname: clock.redhat.com
 
         gather_facts: false
-        enable_debug: false
 
         edpm_nodes_validation_validate_controllers_icmp: false
         edpm_nodes_validation_validate_gateway_icmp: false
