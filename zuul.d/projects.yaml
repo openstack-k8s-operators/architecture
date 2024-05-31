@@ -3,6 +3,7 @@
       jobs: &id001
       - noop
       - rhoso-architecture-validate-bgp
+      - rhoso-architecture-validate-bgp_dt01
       - rhoso-architecture-validate-hci
       - rhoso-architecture-validate-ovs-dpdk
       - rhoso-architecture-validate-ovs-dpdk-sriov

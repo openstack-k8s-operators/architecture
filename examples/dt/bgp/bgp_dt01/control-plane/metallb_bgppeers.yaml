@@ -1,0 +1,112 @@
+---
+apiVersion: metallb.io/v1beta2
+kind: BGPPeer
+metadata:
+  name: bgp-peer-node-3-0
+  namespace: metallb-system
+spec:
+  myASN: 64999
+  peerASN: 64999
+  peerAddress: _replaced_
+  password: f00barZ
+  nodeSelectors:
+    - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values: ["worker-0"]
+---
+apiVersion: metallb.io/v1beta2
+kind: BGPPeer
+metadata:
+  name: bgp-peer-node-3-1
+  namespace: metallb-system
+spec:
+  myASN: 64999
+  peerASN: 64999
+  peerAddress: _replaced_
+  password: f00barZ
+  nodeSelectors:
+    - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values: ["worker-0"]
+---
+apiVersion: metallb.io/v1beta2
+kind: BGPPeer
+metadata:
+  name: bgp-peer-node-4-0
+  namespace: metallb-system
+spec:
+  myASN: 64999
+  peerASN: 64999
+  peerAddress: _replaced_
+  password: f00barZ
+  nodeSelectors:
+    - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values: ["worker-1"]
+---
+apiVersion: metallb.io/v1beta2
+kind: BGPPeer
+metadata:
+  name: bgp-peer-node-4-1
+  namespace: metallb-system
+spec:
+  myASN: 64999
+  peerASN: 64999
+  peerAddress: _replaced_
+  password: f00barZ
+  nodeSelectors:
+    - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values: ["worker-1"]
+---
+apiVersion: metallb.io/v1beta2
+kind: BGPPeer
+metadata:
+  name: bgp-peer-node-5-0
+  namespace: metallb-system
+spec:
+  myASN: 64999
+  peerASN: 64999
+  peerAddress: _replaced_
+  password: f00barZ
+  nodeSelectors:
+    - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values: ["worker-2"]
+---
+apiVersion: metallb.io/v1beta2
+kind: BGPPeer
+metadata:
+  name: bgp-peer-node-5-1
+  namespace: metallb-system
+spec:
+  myASN: 64999
+  peerASN: 64999
+  peerAddress: _replaced_
+  password: f00barZ
+  nodeSelectors:
+    - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values: ["worker-2"]
+---
+apiVersion: metallb.io/v1beta2
+kind: BGPPeer
+metadata:
+  name: bgp-peer-node-6-0
+  namespace: metallb-system
+spec:
+  myASN: 64999
+  peerASN: 64999
+  peerAddress: _replaced_
+  password: f00barZ
+  nodeSelectors:
+    - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values: ["worker-3"]  # worker-3 has only one bgp-peer

@@ -13,6 +13,20 @@
       cifmw_architecture_scenario: bgp
 - job:
     files:
+    - automation/mocks/bgp_dt01.yaml
+    - examples/dt/bgp/bgp_dt01/control-plane
+    - examples/dt/bgp/bgp_dt01/control-plane/nncp
+    - examples/dt/bgp/bgp_dt01/edpm/computes
+    - examples/dt/bgp/bgp_dt01/edpm/computes-deployment
+    - examples/dt/bgp/bgp_dt01/edpm/networkers
+    - examples/dt/bgp/bgp_dt01/edpm/networkers-deployment
+    - lib
+    name: rhoso-architecture-validate-bgp_dt01
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: bgp_dt01
+- job:
+    files:
     - examples/va/hci
     - examples/va/hci/control-plane
     - examples/va/hci/control-plane/nncp

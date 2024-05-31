@@ -1,0 +1,19 @@
+---
+components:
+  - ../../../../../lib/metallb
+
+patches:
+  - target:
+      kind: MetalLB
+      name: metallb
+      namespace: metallb-system
+    patch: |-
+      - op: add
+        path: /spec/speakerTolerations
+        value:
+          - key: "testOperator"
+            value: "true"
+            effect: "NoSchedule"
+          - key: "testOperator"
+            value: "true"
+            effect: "NoExecute"
