@@ -11,7 +11,7 @@ should be enabled on those spine and leaf routers.
 ## Purpose
 
 This first BGP DT (DT01) tests default BGP configuration:
-* OVN routing (instead of kernel routing)
+* Kernel routing (instead of OVN routing)
 * OVN NB DB driver (instead of OVN SB DB driver)
 
 The OCP cluster consists on the following nodes:

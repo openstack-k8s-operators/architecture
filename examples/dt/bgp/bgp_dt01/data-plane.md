@@ -21,7 +21,7 @@ your environment.
 ```
 vi values.yaml
 ```
-Edit the [edpm/networkers/values.yaml](edpm/computes/values.yaml) file to suit
+Edit the [edpm/computes/values.yaml](edpm/computes/values.yaml) file to suit
 your environment.
 ```
 vi values.yaml
@@ -38,10 +38,11 @@ Generate the computes dataplane nodeset CR.
 kustomize build edpm/computes > edpm-compute-nodeset.yaml
 ```
 
-## Create EDPM  Deployment CR
-Generate the dataplane deployment CR.
+## Create Networker and Compute Deployment CRs
+Generate the dataplane deployment CRs.
 ```
-kustomize build edpm/deployment > edpm-deployment.yaml
+kustomize build edpm/networkers-deployment > edpm-networkers-deployment.yaml
+kustomize build edpm/computes-deployment > edpm-computes-deployment.yaml
 ```
 
 ## Apply the Nodeset CRs
@@ -63,12 +64,20 @@ Wait for Compute dataplane nodeset setup to finish
 oc wait osdpns compute-nodes --for condition=SetupReady --timeout=600s
 ```
 
-## Apply the deployment
-Start the deployment
+## Apply the Deployment CRs
+Start the Networkers deployment
 ```
-oc apply -f edpm-deployment.yaml
+oc apply -f edpm-networkers-deployment.yaml
 ```
-Wait for dataplane deployment to finish
+Wait for Networkers deployment to finish
 ```
-oc wait osdpd edpm-deployment --for condition=Ready --timeout=2400s
+oc wait osdpd networkers-deployment --for condition=Ready --timeout=2400s
+```
+Start the Computes deployment
+```
+oc apply -f edpm-computes-deployment.yaml
+```
+Wait for Computes deployment to finish
+```
+oc wait osdpd computes-deployment --for condition=Ready --timeout=2400s
 ```
