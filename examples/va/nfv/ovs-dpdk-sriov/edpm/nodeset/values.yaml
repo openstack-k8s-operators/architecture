@@ -182,7 +182,7 @@ data:
       - run-os
       - install-certs
       - ovn
-      - neutron-ovn
+      - neutron-ovn-igmp
       - neutron-metadata
       - neutron-sriov
       - libvirt
@@ -216,3 +216,8 @@ data:
         [pci]
         device_spec = {"vendor_id":"8086", "product_id":"1572", "address": "0000:19:00.3", "physical_network":"sriov1", "trusted":"true"}
         device_spec = {"vendor_id":"8086", "product_id":"1572", "address": "0000:20:00.3", "physical_network":"sriov2", "trusted":"true"}
+  neutron:
+    igmp:
+      conf: |
+        [ovs]
+        igmp_snooping_enable = False
