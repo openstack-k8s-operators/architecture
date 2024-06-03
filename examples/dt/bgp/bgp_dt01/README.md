@@ -1,4 +1,4 @@
-# RHOSO Deployed Topology - BGP DT01 - OVN routing and OVN NB DB driver
+# RHOSO Deployed Topology - BGP DT01 - Kernel routing and OVN NB DB driver
 
 This document describes the first BGP Deployed Topology (DT), used to test the
 BGP Dynamic Routing functionality on Red Hat OpenStack Services on OpenShift

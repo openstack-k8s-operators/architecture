@@ -14,15 +14,6 @@ replacements:
   - source:
       kind: ConfigMap
       name: edpm-deployment-values
-      fieldPath: data.name
-    targets:
-      - select:
-          kind: OpenStackDataPlaneDeployment
-        fieldPaths:
-          - metadata.name
-  - source:
-      kind: ConfigMap
-      name: edpm-deployment-values
       fieldPath: data.nodeSets
     targets:
       - select:

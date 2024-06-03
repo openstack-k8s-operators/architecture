@@ -118,26 +118,14 @@ vas:
             src_file: values.yaml
         build_output: edpm-compute-nodeset.yaml
 
-      - path: examples/dt/bgp/bgp_dt01/edpm/networkers-deployment
+      - path: examples/dt/bgp/bgp_dt01/edpm/deployment
         wait_conditions:
           - >-
             oc -n openstack wait openstackdataplanedeployment
-            networkers-deployment
+            edpm-deployment
             --for condition=Ready
             --timeout=2400s
         values:
           - name: edpm-deployment-values
             src_file: values.yaml
-        build_output: edpm-networkers-deployment.yaml
-
-      - path: examples/dt/bgp/bgp_dt01/edpm/computes-deployment
-        wait_conditions:
-          - >-
-            oc -n openstack wait openstackdataplanedeployment
-            computes-deployment
-            --for condition=Ready
-            --timeout=2400s
-        values:
-          - name: edpm-deployment-values
-            src_file: values.yaml
-        build_output: edpm-computes-deployment.yaml
+        build_output: edpm-deployment.yaml
