@@ -217,3 +217,15 @@ replacements:
           - spec.ovn.template.ovnController.external-ids
         options:
           create: true
+  # configure neutron customServiceConfig
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.neutron.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.neutron.template.customServiceConfig
+        options:
+          create: true
