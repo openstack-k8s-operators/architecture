@@ -1,0 +1,130 @@
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneNodeSet
+metadata:
+  name: openstack-edpm
+spec:
+  services:
+    - download-cache
+    - bootstrap
+    - configure-network
+    - validate-network
+    - install-os
+    - configure-os
+    - run-os
+    - reboot-os
+    - ovn
+    - neutron-metadata
+    - libvirt
+    - nova
+    - telemetry
+  preProvisioned: True # Add this for pre-provisioned nodes
+  baremetalSetTemplate:  # remove this section if not using baremetal provisioning
+    bmhLabelSelector:
+      app: openstack
+    ctlplaneInterface: enp1s0
+    cloudUserName: cloud-admin
+  nodes:
+    edpm-compute-0:
+      hostName: compute01.example.com
+#     ansible:  << un-comment this section for all nodes if using pre-provisioned
+#       ansibleHost: 192.168.122.151
+      networks:
+      - name: CtlPlane
+        subnetName: subnet1
+        defaultRoute: true
+        fixedIP: 192.168.122.151
+      - name: InternalApi
+        subnetName: subnet1
+        fixedIP: 192.168.17.151
+      - name: Storage
+        subnetName: subnet1
+        fixedIP: 192.168.18.151
+      - name: Tenant
+        subnetName: subnet1
+        fixedIP: 192.168.19.151
+    edpm-compute-1:
+      hostName: compute02.example.com
+#     ansible:  << un-comment this section for all nodes if using pre-provisioned
+#       ansibleHost: 192.168.122.152
+      networks:
+      - name: CtlPlane
+        subnetName: subnet1
+        defaultRoute: true
+        fixedIP: 192.168.122.152
+      - name: InternalApi
+        subnetName: subnet1
+        fixedIP: 192.168.17.152
+      - name: Storage
+        subnetName: subnet1
+        fixedIP: 192.168.18.152
+      - name: Tenant
+        subnetName: subnet1
+        fixedIP: 192.168.19.152
+    edpm-compute-2:
+      hostName: compute03.example.com
+#     ansible:  << un-comment this section for all nodes if using pre-provisioned
+#       ansibleHost: 192.168.122.153
+      networks:
+      - name: CtlPlane
+        subnetName: subnet1
+        defaultRoute: true
+        fixedIP: 192.168.122.153
+      - name: InternalApi
+        subnetName: subnet1
+        fixedIP: 192.168.17.153
+      - name: Storage
+        subnetName: subnet1
+        fixedIP: 192.168.18.153
+      - name: Tenant
+        subnetName: subnet1
+        fixedIP: 192.168.19.153
+  networkAttachments:
+    - ctlplane
+  nodeTemplate:
+    ansibleSSHPrivateKeySecret: dataplane-ansible-ssh-private-key-secret
+    managementNetwork: ctlplane
+    ansible:
+      ansibleVars:
+         edpm_network_config_template: |
+              ---
+              {% set mtu_list = [ctlplane_mtu] %}
+              {% for network in role_networks %}
+              {{ mtu_list.append(lookup('vars', networks_lower[network] ~ '_mtu')) }}
+              {%- endfor %}
+              {% set min_viable_mtu = mtu_list | max %}
+              network_config:
+              - type: ovs_bridge
+                name: {{ neutron_physical_bridge_name }}
+                mtu: {{ min_viable_mtu }}
+                use_dhcp: false
+                dns_servers: {{ ctlplane_dns_nameservers }}
+                domain: {{ dns_search_domains }}
+                addresses:
+                - ip_netmask: {{ ctlplane_ip }}/{{ ctlplane_subnet_cidr }}
+                routes: {{ ctlplane_host_routes }}
+                members:
+                - type: interface
+                  name: nic1
+                  mtu: {{ min_viable_mtu }}
+                  # force the MAC address of the bridge to this interface
+                  primary: true
+              {% for network in role_networks %}
+                - type: vlan
+                  mtu: {{ lookup('vars', networks_lower[network] ~ '_mtu') }}
+                  vlan_id: {{ lookup('vars', networks_lower[network] ~ '_vlan_id') }}
+                  addresses:
+                  - ip_netmask:
+                      {{ lookup('vars', networks_lower[network] ~ '_ip') }}/{{ lookup('vars', networks_lower[network] ~ '_cidr') }}
+                  routes: {{ lookup('vars', networks_lower[network] ~ '_host_routes') }}
+              {% endfor %}
+         # These vars are for the network config templates themselves and are
+         # considered EDPM network defaults.
+         neutron_physical_bridge_name: br-ex
+         neutron_public_interface_name: eth0
+         # edpm_nodes_validation
+         edpm_nodes_validation_validate_controllers_icmp: false
+         edpm_nodes_validation_validate_gateway_icmp: false
+         gather_facts: false
+         enable_debug: false
+         # edpm firewall, change the allowed CIDR if needed
+         edpm_sshd_allowed_ranges: ['192.168.111.0/24']
