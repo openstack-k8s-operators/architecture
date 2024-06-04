@@ -47,11 +47,15 @@ data:
   manila:
     enabled: true
     manilaAPI:
+      replicas: 3
       customServiceConfig: |
         [DEFAULT]
         enabled_share_protocols=nfs,cephfs
+    manilaScheduler:
+      replicas: 3
     manilaShares:
       share1:
+        replicas: 1
         customServiceConfig: |
           [DEFAULT]
           enabled_share_backends = cephfs
