@@ -8,7 +8,7 @@ vas:
             oc -n openstack wait nncp
             -l osp/nncm-config-type=standard
             --for jsonpath='{.status.conditions[0].reason}'=SuccessfullyConfigured
-            --timeout=60s
+            --timeout=3m
 
         values:
           - name: network-values
