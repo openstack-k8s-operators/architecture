@@ -51,11 +51,13 @@ spec:
     enabled: true
     templates:
       openstack:
-        replicas: 3
+        # TODO(dciabrin) revert back to 3 once OSPRH-7405 is fixed
+        replicas: 1
         secret: osp-secret
         storageRequest: 500M
       openstack-cell1:
-        replicas: 3
+        # TODO(dciabrin) revert back to 3 once OSPRH-7405 is fixed
+        replicas: 1
         secret: osp-secret
         storageRequest: 500M
   glance:
