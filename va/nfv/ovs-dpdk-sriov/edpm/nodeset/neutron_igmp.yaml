@@ -12,6 +12,7 @@ metadata:
   name: neutron-ovn-igmp
 spec:
   label: neutron-ovn-igmp
+  edpmServiceType: neutron-ovn
   configMaps:
     - neutron-igmp
   caCerts: combined-ca-bundle

@@ -19,6 +19,7 @@ metadata:
   name: nova-custom-ovsdpdksriov
 spec:
   label: nova-custom-ovsdpdksriov
+  edpmServiceType: nova
   configMaps:
     - ovs-dpdk-sriov-cpu-pinning-nova
     - sriov-nova
