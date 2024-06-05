@@ -9,6 +9,7 @@ data:
   glance:
     customServiceConfig: |
       [DEFAULT]
+      debug=True
       enabled_backends = default_backend:swift
       [glance_store]
       default_backend = default_backend
@@ -19,6 +20,8 @@ data:
       swift_store_endpoint_type = internalURL
       swift_store_user = service:glance
       swift_store_key = {{ .ServicePassword }}
+      [database]
+      mysql_wsrep_sync_wait = 1
     default:
       replicas: 1
 
