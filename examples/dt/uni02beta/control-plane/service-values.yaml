@@ -75,11 +75,14 @@ data:
   glance:
     customServiceConfig: |
       [DEFAULT]
+      debug=True
       enabled_backends = default_backend:file
       [glance_store]
       default_backend = default_backend
       [default_backend]
       filesystem_store_datadir = /var/lib/glance/images/
+      [database]
+      mysql_wsrep_sync_wait = 1
     databaseInstance: openstack
     glanceAPIs:
       default:
