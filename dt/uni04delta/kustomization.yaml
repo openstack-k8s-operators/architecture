@@ -79,3 +79,51 @@ replacements:
           - spec.neutron.template.customServiceConfig
         options:
           create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.nova.apiServiceTemplate.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.nova.template.apiServiceTemplate.customServiceConfig
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.nova.cellTemplates.cell0.conductorServiceTemplate.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.nova.template.cellTemplates.cell0.conductorServiceTemplate.customServiceConfig
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.nova.cellTemplates.cell1.conductorServiceTemplate.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.nova.template.cellTemplates.cell1.conductorServiceTemplate.customServiceConfig
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.nova.schedulerServiceTemplate.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.nova.template.schedulerServiceTemplate.customServiceConfig
+        options:
+          create: true

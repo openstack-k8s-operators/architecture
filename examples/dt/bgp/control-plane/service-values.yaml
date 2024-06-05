@@ -28,6 +28,35 @@ data:
   swift:
     enabled: true
 
+  nova:
+    apiServiceTemplate:
+      customServiceConfig: |
+        [database]
+        mysql_wsrep_sync_wait = 1
+        [api_database]
+        mysql_wsrep_sync_wait = 1
+    cellTemplates:
+      cell0:
+        conductorServiceTemplate:
+          customServiceConfig: |
+            [database]
+            mysql_wsrep_sync_wait = 1
+            [api_database]
+            mysql_wsrep_sync_wait = 1
+      cell1:
+        conductorServiceTemplate:
+          customServiceConfig: |
+            [database]
+            mysql_wsrep_sync_wait = 1
+            [api_database]
+            mysql_wsrep_sync_wait = 1
+    schedulerServiceTemplate:
+      customServiceConfig: |
+        [database]
+        mysql_wsrep_sync_wait = 1
+        [api_database]
+        mysql_wsrep_sync_wait = 1
+
   octavia:
     enabled: true
     amphoraImageContainerImage: quay.io/gthiemonge/octavia-amphora-image
