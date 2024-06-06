@@ -18,3 +18,7 @@ transformers:
 
 components:
   - ../../../../lib/dataplane/nodeset
+
+
+resources:
+  - nova_custom.yaml

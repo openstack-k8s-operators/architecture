@@ -148,4 +148,4 @@ data:
       - ovn
       - neutron-metadata
       - libvirt
-      - nova
+      - nova-custom
