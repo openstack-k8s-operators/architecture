@@ -24,7 +24,7 @@ spec:
       serviceUser: ceilometer
   cinder:
     apiOverride:
-      route: {}
+      route: {"haproxy.router.openshift.io/timeout": "60s"}
     template:
       customServiceConfig: |
         # Debug logs by default, jobs can override as needed.
@@ -63,7 +63,7 @@ spec:
   glance:
     apiOverrides:
       default:
-        route: {}
+        route: {"haproxy.router.openshift.io/timeout": "60s"}
     template:
       databaseInstance: openstack
       glanceAPIs:
@@ -115,7 +115,7 @@ spec:
       secret: osp-secret
   manila:
     apiOverride:
-      route: {}
+      route: {"haproxy.router.openshift.io/timeout": "60s"}
     enabled: false
     template:
       manilaAPI:
