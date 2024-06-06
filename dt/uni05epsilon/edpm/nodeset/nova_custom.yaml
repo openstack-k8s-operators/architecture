@@ -1,0 +1,31 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nova-custom-config
+data:
+  25-nova-custom.conf: |
+    # NOTE(gibi): We need to disable multipath as IPv6 is not fully
+    # working in this job with NetApp.
+    # Enable multipath when OSPRH-7393 is resolved.
+    [libvirt]
+    volume_use_multipath = False
+
+---
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneService
+metadata:
+  name: nova-custom
+spec:
+  label: dataplane-deployment-nova-custom
+  configMaps:
+    - nova-custom-config
+  secrets:
+    - nova-cell1-compute-config
+    - nova-migration-ssh-key
+  playbook: osp.edpm.nova
+  caCerts: combined-ca-bundle
+  edpmServiceType: nova
+  containerImageFields:
+    - NovaComputeImage
+    - EdpmIscsidImage
