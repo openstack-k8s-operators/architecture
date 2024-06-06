@@ -55,7 +55,6 @@ patches:
   - target:
       kind: NetworkAttachmentDefinition
       labelSelector: "osp/net-attach-def-type=bgp"
-      name: bgpnet-[3-6]-[0-1]
     path: ocp_network_template.yaml
 
 replacements:
@@ -138,71 +137,11 @@ replacements:
   - source:
       kind: ConfigMap
       name: network-values
-      fieldPath: data.bgp.net-attach-def.node3.bgpnet0
+      fieldPath: data.bgp.net-attach-def.node6
     targets:
       - select:
           kind: NetworkAttachmentDefinition
-          name: bgpnet-3-0
-        fieldPaths:
-          - spec.config
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.bgp.net-attach-def.node3.bgpnet1
-    targets:
-      - select:
-          kind: NetworkAttachmentDefinition
-          name: bgpnet-3-1
-        fieldPaths:
-          - spec.config
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.bgp.net-attach-def.node4.bgpnet0
-    targets:
-      - select:
-          kind: NetworkAttachmentDefinition
-          name: bgpnet-4-0
-        fieldPaths:
-          - spec.config
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.bgp.net-attach-def.node4.bgpnet1
-    targets:
-      - select:
-          kind: NetworkAttachmentDefinition
-          name: bgpnet-4-1
-        fieldPaths:
-          - spec.config
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.bgp.net-attach-def.node5.bgpnet0
-    targets:
-      - select:
-          kind: NetworkAttachmentDefinition
-          name: bgpnet-5-0
-        fieldPaths:
-          - spec.config
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.bgp.net-attach-def.node5.bgpnet1
-    targets:
-      - select:
-          kind: NetworkAttachmentDefinition
-          name: bgpnet-5-1
-        fieldPaths:
-          - spec.config
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.bgp.net-attach-def.node6.bgpnet0
-    targets:
-      - select:
-          kind: NetworkAttachmentDefinition
-          name: bgpnet-6-0
+          name: bgpnet-worker-3
         fieldPaths:
           - spec.config
   # disable OCP workers as gateway nodes
@@ -215,5 +154,17 @@ replacements:
           kind: OpenStackControlPlane
         fieldPaths:
           - spec.ovn.template.ovnController.external-ids
+        options:
+          create: true
+  # configure neutron customServiceConfig
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.neutron.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.neutron.template.customServiceConfig
         options:
           create: true

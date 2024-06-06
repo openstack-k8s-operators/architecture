@@ -49,3 +49,8 @@ data:
         octavia: octbr
       external-ids:
         enable-chassis-as-gateway: false
+  neutron:
+    customServiceConfig: |
+      [DEFAULT]
+      vlan_transparent = true
+      debug = true

@@ -1,8 +1,0 @@
----
-apiVersion: nmstate.io/v1
-kind: NetworkAttachmentDefinition
-metadata:
-  name: _ignored_
-spec:
-  config: |
-    _replaced_

@@ -2,55 +2,7 @@
 apiVersion: k8s.cni.cncf.io/v1
 kind: NetworkAttachmentDefinition
 metadata:
-  name: bgpnet-3-0
+  name: bgpnet-worker-3
   labels:
-    osp/net: bgpnet-3-0
-    osp/net-attach-def-type: bgp
----
-apiVersion: k8s.cni.cncf.io/v1
-kind: NetworkAttachmentDefinition
-metadata:
-  name: bgpnet-3-1
-  labels:
-    osp/net: bgpnet-3-1
-    osp/net-attach-def-type: bgp
----
-apiVersion: k8s.cni.cncf.io/v1
-kind: NetworkAttachmentDefinition
-metadata:
-  name: bgpnet-4-0
-  labels:
-    osp/net: bgpnet-4-0
-    osp/net-attach-def-type: bgp
----
-apiVersion: k8s.cni.cncf.io/v1
-kind: NetworkAttachmentDefinition
-metadata:
-  name: bgpnet-4-1
-  labels:
-    osp/net: bgpnet-4-1
-    osp/net-attach-def-type: bgp
----
-apiVersion: k8s.cni.cncf.io/v1
-kind: NetworkAttachmentDefinition
-metadata:
-  name: bgpnet-5-0
-  labels:
-    osp/net: bgpnet-5-0
-    osp/net-attach-def-type: bgp
----
-apiVersion: k8s.cni.cncf.io/v1
-kind: NetworkAttachmentDefinition
-metadata:
-  name: bgpnet-5-1
-  labels:
-    osp/net: bgpnet-5-1
-    osp/net-attach-def-type: bgp
----
-apiVersion: k8s.cni.cncf.io/v1
-kind: NetworkAttachmentDefinition
-metadata:
-  name: bgpnet-6-0
-  labels:
-    osp/net: bgpnet-6-0
+    osp/net: bgpnet-worker-3
     osp/net-attach-def-type: bgp

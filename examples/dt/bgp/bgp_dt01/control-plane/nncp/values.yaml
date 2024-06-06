@@ -371,188 +371,76 @@ data:
           allocationRanges:
             - end: f00d:f00d:f00d:f00d:f00d:f00d:f00d:004e
               start: f00d:f00d:f00d:f00d:f00d:f00d:f00d:0042
-    net-attach-def:
+    bgpdefs:
       node0:
-        bgpnet0: |
-          {
-            "cniVersion": "0.3.1",
-            "name": "bgpnet-0-0",
-            "type": "interface",
-            "master": "enp6s0",
-            "ipam": {
-              "type": "whereabouts",
-              "range": "100.64.0.8/30",
-              "range_start": "100.64.0.9",
-              "range_end": "100.64.0.10"
-            }
-          }
-        bgpnet1: |
-          {
-            "cniVersion": "0.3.1",
-            "name": "bgpnet-0-1",
-            "type": "interface",
-            "master": "enp7s0",
-            "ipam": {
-              "type": "whereabouts",
-              "range": "100.65.0.8/30",
-              "range_start": "100.65.0.9",
-              "range_end": "100.65.0.10"
-            }
-          }
+        bgpnet0:
+          bgp_peer: 100.64.0.9
+          bgp_ip: 100.64.0.10
+        bgpnet1:
+          bgp_peer: 100.65.0.9
+          bgp_ip: 100.65.0.10
       node1:
-        bgpnet0: |
-          {
-            "cniVersion": "0.3.1",
-            "name": "bgpnet-1-0",
-            "type": "interface",
-            "master": "enp6s0",
-            "ipam": {
-              "type": "whereabouts",
-              "range": "100.64.1.8/30",
-              "range_start": "100.64.1.9",
-              "range_end": "100.64.1.10"
-            }
-          }
-        bgpnet1: |
-          {
-            "cniVersion": "0.3.1",
-            "name": "bgpnet-1-1",
-            "type": "interface",
-            "master": "enp7s0",
-            "ipam": {
-              "type": "whereabouts",
-              "range": "100.65.1.8/30",
-              "range_start": "100.65.1.9",
-              "range_end": "100.65.1.10"
-            }
-          }
+        bgpnet0:
+          bgp_peer: 100.64.1.9
+          bgp_ip: 100.64.1.10
+        bgpnet1:
+          bgp_peer: 100.65.1.9
+          bgp_ip: 100.65.1.10
       node2:
-        bgpnet0: |
-          {
-            "cniVersion": "0.3.1",
-            "name": "bgpnet-2-0",
-            "type": "interface",
-            "master": "enp6s0",
-            "ipam": {
-              "type": "whereabouts",
-              "range": "100.64.2.8/30",
-              "range_start": "100.64.2.9",
-              "range_end": "100.64.2.10"
-            }
-          }
-        bgpnet1: |
-          {
-            "cniVersion": "0.3.1",
-            "name": "bgpnet-2-1",
-            "type": "interface",
-            "master": "enp7s0",
-            "ipam": {
-              "type": "whereabouts",
-              "range": "100.65.2.8/30",
-              "range_start": "100.65.2.9",
-              "range_end": "100.65.2.10"
-            }
-          }
+        bgpnet0:
+          bgp_peer: 100.64.2.9
+          bgp_ip: 100.64.2.10
+        bgpnet1:
+          bgp_peer: 100.65.2.9
+          bgp_ip: 100.65.2.10
       node3:
-        bgpnet0: |
-          {
-            "cniVersion": "0.3.1",
-            "name": "bgpnet-3-0",
-            "type": "interface",
-            "master": "enp6s0",
-            "ipam": {
-              "type": "whereabouts",
-              "range": "100.64.0.12/30",
-              "range_start": "100.64.0.13",
-              "range_end": "100.64.0.14"
-            }
-          }
-        bgpnet1: |
-          {
-            "cniVersion": "0.3.1",
-            "name": "bgpnet-3-1",
-            "type": "interface",
-            "master": "enp7s0",
-            "ipam": {
-              "type": "whereabouts",
-              "range": "100.65.0.12/30",
-              "range_start": "100.65.0.13",
-              "range_end": "100.65.0.14"
-            }
-          }
+        bgpnet0:
+          bgp_peer: 100.64.0.13
+          bgp_ip: 100.64.0.14
+        bgpnet1:
+          bgp_peer: 100.65.0.13
+          bgp_ip: 100.65.0.14
       node4:
-        bgpnet0: |
-          {
-            "cniVersion": "0.3.1",
-            "name": "bgpnet-4-0",
-            "type": "interface",
-            "master": "enp6s0",
-            "ipam": {
-              "type": "whereabouts",
-              "range": "100.64.1.12/30",
-              "range_start": "100.64.1.13",
-              "range_end": "100.64.1.14"
-            }
-          }
-        bgpnet1: |
-          {
-            "cniVersion": "0.3.1",
-            "name": "bgpnet-4-1",
-            "type": "interface",
-            "master": "enp7s0",
-            "ipam": {
-              "type": "whereabouts",
-              "range": "100.65.1.12/30",
-              "range_start": "100.65.1.13",
-              "range_end": "100.65.1.14"
-            }
-          }
+        bgpnet0:
+          bgp_peer: 100.64.1.13
+          bgp_ip: 100.64.1.14
+        bgpnet1:
+          bgp_peer: 100.65.1.13
+          bgp_ip: 100.65.1.14
       node5:
-        bgpnet0: |
-          {
-            "cniVersion": "0.3.1",
-            "name": "bgpnet-5-0",
-            "type": "interface",
-            "master": "enp6s0",
-            "ipam": {
-              "type": "whereabouts",
-              "range": "100.64.2.12/30",
-              "range_start": "100.64.2.13",
-              "range_end": "100.64.2.14"
-            }
-          }
-        bgpnet1: |
-          {
-            "cniVersion": "0.3.1",
-            "name": "bgpnet-5-1",
-            "type": "interface",
-            "master": "enp7s0",
-            "ipam": {
-              "type": "whereabouts",
-              "range": "100.65.2.12/30",
-              "range_start": "100.65.2.13",
-              "range_end": "100.65.2.14"
-            }
-          }
+        bgpnet0:
+          bgp_peer: 100.64.2.13
+          bgp_ip: 100.64.2.14
+        bgpnet1:
+          bgp_peer: 100.65.2.13
+          bgp_ip: 100.65.2.14
       node6:
-        bgpnet0: |
-          {
-            "cniVersion": "0.3.1",
-            "name": "bgpnet-6-0",
-            "type": "interface",
-            "master": "enp6s0",
-            "ipam": {
-              "type": "whereabouts",
-              "range": "100.64.10.0/30",
-              "range_start": "100.64.10.1",
-              "range_end": "100.64.10.2"
-            }
-          }
+        bgpnet0:
+          bgp_peer: 100.64.10.1
+          bgp_ip: 100.64.10.2
         routes:
           config:
             - destination: 192.168.133.0/24
               next-hop-address: 100.64.10.1
               next-hop-interface: enp6s0
+    net-attach-def:
+      node6: |
+        {
+          "cniVersion": "0.3.1",
+          "name": "bgpnet-worker-3",
+          "type": "host-device",
+          "device": "enp6s0",
+          "ipam": {
+            "type": "whereabouts",
+            "range": "100.64.10.0/30",
+            "range_start": "100.64.10.2",
+            "range_end": "100.64.10.2",
+            "routes": [{
+              "dst": "192.168.133.0/24",
+              "gw": "100.64.10.1"
+            }]
+          }
+        }
 
   loopback:
     prefix-length: 32

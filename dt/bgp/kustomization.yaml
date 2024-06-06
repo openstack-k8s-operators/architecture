@@ -27,7 +27,6 @@ transformers:
 components:
   - ../../lib/networking
   - networking/bgpmetallb
-  - networking/nad
   - ../../lib/control-plane
 
 resources:
