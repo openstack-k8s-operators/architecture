@@ -94,12 +94,12 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
-      fieldPath: data.manila.manilaShares.share1.customServiceConfig
+      fieldPath: data.manila.customServiceConfig
     targets:
       - select:
           kind: OpenStackControlPlane
         fieldPaths:
-          - spec.manila.template.manilaShares.share1.customServiceConfig
+          - spec.manila.template.customServiceConfig
         options:
           create: true
 
