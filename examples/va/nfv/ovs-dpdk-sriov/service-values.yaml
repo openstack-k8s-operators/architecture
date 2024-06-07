@@ -26,6 +26,12 @@ data:
       network_vlan_ranges = dpdk1:206:209,dpdk2:206:209,sriov1,sriov2 # CHANGEME
       [oslo_policy]
       policy_file=/etc/neutron/policy.d/policy.yaml
+  nova:
+    template:
+      schedulerServiceTemplate:
+        customServiceConfig: |
+          [filter_scheduler]
+          enabled_filtes = AggregateInstanceExtraSpecsFilter,ComputeFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,ServerGroupAntiAffinityFilter,ServerGroupAffinityFilter,SameHostFilter,DifferentHostFilter,PciPassthroughFilter,NUMATopologyFilter
   ovn:
     ovnController:
       nicMappings:
