@@ -41,19 +41,22 @@ data:
   glance:
     customServiceConfig: |
       [DEFAULT]
-      debug=True
-      enabled_backends = default_backend:swift
-
+      enabled_backends = default_backend:cinder
+      debug = true
       [glance_store]
       default_backend = default_backend
-
       [default_backend]
-      swift_store_create_container_on_put = True
-      swift_store_auth_version = 3
-      swift_store_auth_address = {{ .KeystoneInternalURL }}
-      swift_store_endpoint_type = internalURL
-      swift_store_user = service:glance
-      swift_store_key = {{ .ServicePassword }}
+      rootwrap_config = /etc/glance/rootwrap.conf
+      description = Default cinder backend
+      cinder_store_auth_address = {{ .KeystoneInternalURL }}
+      cinder_store_user_name = {{ .ServiceUser }}
+      cinder_store_password = {{ .ServicePassword }}
+      cinder_store_project_name = service
+      cinder_catalog_info = volumev3::internalURL
+      # TODO: Enable multipath when OSPRH-7393 is resolved
+      # cinder_use_multipath = true
+      [oslo_concurrency]
+      lock_path = /var/lib/glance/tmp
       [database]
       mysql_wsrep_sync_wait = 1
     default:
