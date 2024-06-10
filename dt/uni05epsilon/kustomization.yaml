@@ -2,13 +2,6 @@
 apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component
 
-secretGenerator:
-  - name: octavia-ca-passphrase
-    literals:
-      - server-ca-passphrase=12345678
-    options:
-      disableNameSuffixHash: true
-
 transformers:
   - |-
     apiVersion: builtin
@@ -29,333 +22,54 @@ components:
   - ../../lib/networking/nad
   - ../../lib/control-plane
 
-resources:
-  - resources/cinder-volume-nfs-secrets.yaml
-  - resources/cinder-volume-ontap-secrets.yaml
-  - resources/octavia-network-attachment-definition.yaml
+patches:
+  #
+  # The storagemgmt network template needed for CephHCI
+  #
+  - target:
+      version: v1beta1
+      kind: NetConfig
+      name: netconfig
+    patch: |-
+      - op: add
+        path: /spec/networks/-
+        value:
+          dnsDomain: _replaced_
+          name: storagemgmt
+          subnets:
+            - _replaced_
+          mtu: 1500
 
 replacements:
   #
-  # Cinder
+  # The storagemgmt network replacements
   #
   - source:
       kind: ConfigMap
-      name: service-values
-      fieldPath: data.cinderBackup.customServiceConfig
+      name: network-values
+      fieldPath: data.storagemgmt.dnsDomain
     targets:
       - select:
-          kind: OpenStackControlPlane
+          kind: NetConfig
         fieldPaths:
-          - spec.cinder.template.cinderBackup.customServiceConfig
-        options:
-          create: true
-
-  - source:
-      kind: ConfigMap
-      name: service-values
-      fieldPath: data.cinderBackup.replicas
-    targets:
-      - select:
-          kind: OpenStackControlPlane
-        fieldPaths:
-          - spec.cinder.template.cinderBackup.replicas
-        options:
-          create: true
-
-  - source:
-      kind: ConfigMap
-      name: service-values
-      fieldPath: data.cinderVolumes.nfs.customServiceConfig
-    targets:
-      - select:
-          kind: OpenStackControlPlane
-        fieldPaths:
-          - spec.cinder.template.cinderVolumes.nfs.customServiceConfig
-        options:
-          create: true
-
-  - source:
-      kind: ConfigMap
-      name: service-values
-      fieldPath: data.cinderVolumes.nfs.customServiceConfigSecrets
-    targets:
-      - select:
-          kind: OpenStackControlPlane
-        fieldPaths:
-          - spec.cinder.template.cinderVolumes.nfs.customServiceConfigSecrets
-        options:
-          create: true
-
-  - source:
-      kind: ConfigMap
-      name: service-values
-      fieldPath: data.cinderVolumes.nfs.networkAttachments
-    targets:
-      - select:
-          kind: OpenStackControlPlane
-        fieldPaths:
-          - spec.cinder.template.cinderVolumes.nfs.networkAttachments
-        options:
-          create: true
-
-  - source:
-      kind: ConfigMap
-      name: service-values
-      fieldPath: data.cinder-volume-nfs-secrets
-    targets:
-      - select:
-          kind: Secret
-          name: cinder-volume-nfs-secrets
-        fieldPaths:
-          - stringData.cinder-volume-nfs-secrets
-        options:
-          create: true
-
-  - source:
-      kind: ConfigMap
-      name: service-values
-      fieldPath: data.cinderVolumes.ontap-iscsi.customServiceConfig
-    targets:
-      - select:
-          kind: OpenStackControlPlane
-        fieldPaths:
-          - spec.cinder.template.cinderVolumes.ontap-iscsi.customServiceConfig
-        options:
-          create: true
-
-  - source:
-      kind: ConfigMap
-      name: service-values
-      fieldPath: data.cinderVolumes.ontap-iscsi.customServiceConfigSecrets
-    targets:
-      - select:
-          kind: OpenStackControlPlane
-        fieldPaths:
-          - spec.cinder.template.cinderVolumes.ontap-iscsi.customServiceConfigSecrets
-        options:
-          create: true
-
-  - source:
-      kind: ConfigMap
-      name: service-values
-      fieldPath: data.cinderVolumes.ontap-iscsi.networkAttachments
-    targets:
-      - select:
-          kind: OpenStackControlPlane
-        fieldPaths:
-          - spec.cinder.template.cinderVolumes.ontap-iscsi.networkAttachments
-        options:
-          create: true
-
-  - source:
-      kind: ConfigMap
-      name: service-values
-      fieldPath: data.cinder-volume-ontap-secrets
-    targets:
-      - select:
-          kind: Secret
-          name: cinder-volume-ontap-secrets
-        fieldPaths:
-          - stringData.cinder-volume-ontap-secrets
-        options:
-          create: true
-
-  #
-  # Glance
-  #
-  - source:
-      kind: ConfigMap
-      name: service-values
-      fieldPath: data.glance.customServiceConfig
-    targets:
-      - select:
-          kind: OpenStackControlPlane
-        fieldPaths:
-          - spec.glance.template.customServiceConfig
-        options:
-          create: true
-
-  - source:
-      kind: ConfigMap
-      name: service-values
-      fieldPath: data.glance.databaseInstance
-    targets:
-      - select:
-          kind: OpenStackControlPlane
-        fieldPaths:
-          - spec.glance.template.databaseInstance
-        options:
-          create: true
-
-  - source:
-      kind: ConfigMap
-      name: service-values
-      fieldPath: data.glance.glanceAPIs.default.replicas
-    targets:
-      - select:
-          kind: OpenStackControlPlane
-        fieldPaths:
-          - spec.glance.template.glanceAPIs.default.replicas
-        options:
-          create: true
-
-  - source:
-      kind: ConfigMap
-      name: service-values
-      fieldPath: data.glance.glanceAPIs.default.type
-    targets:
-      - select:
-          kind: OpenStackControlPlane
-        fieldPaths:
-          - spec.glance.template.glanceAPIs.default.type
-        options:
-          create: true
-
-  #
-  # Octavia
-  #
-  - source:
-      kind: ConfigMap
-      name: service-values
-      fieldPath: data.octavia.enabled
-    targets:
-      - select:
-          kind: OpenStackControlPlane
-        fieldPaths:
-          - spec.octavia.enabled
-        options:
-          create: true
-
-  - source:
-      kind: ConfigMap
-      name: service-values
-      fieldPath: data.octavia.amphoraImageContainerImage
-    targets:
-      - select:
-          kind: OpenStackControlPlane
-        fieldPaths:
-          - spec.octavia.template.amphoraImageContainerImage
-        options:
-          create: true
-
-  - source:
-      kind: ConfigMap
-      name: service-values
-      fieldPath: data.octavia.apacheContainerImage
-    targets:
-      - select:
-          kind: OpenStackControlPlane
-        fieldPaths:
-          - spec.octavia.template.apacheContainerImage
-        options:
-          create: true
-
-  - source:
-      kind: ConfigMap
-      name: service-values
-      fieldPath: data.octavia.octaviaAPI.networkAttachments
-    targets:
-      - select:
-          kind: OpenStackControlPlane
-        fieldPaths:
-          - spec.octavia.template.octaviaAPI.networkAttachments
-        options:
-          create: true
-
-  - source:
-      kind: ConfigMap
-      name: service-values
-      fieldPath: data.octavia.octaviaHousekeeping.networkAttachments
-    targets:
-      - select:
-          kind: OpenStackControlPlane
-        fieldPaths:
-          - spec.octavia.template.octaviaHousekeeping.networkAttachments
-        options:
-          create: true
-
-  - source:
-      kind: ConfigMap
-      name: service-values
-      fieldPath: data.octavia.octaviaHousekeeping.customServiceConfig
-    targets:
-      - select:
-          kind: OpenStackControlPlane
-        fieldPaths:
-          - spec.octavia.template.octaviaHousekeeping.customServiceConfig
-        options:
-          create: true
-
-  - source:
-      kind: ConfigMap
-      name: service-values
-      fieldPath: data.octavia.octaviaHealthManager.networkAttachments
-    targets:
-      - select:
-          kind: OpenStackControlPlane
-        fieldPaths:
-          - spec.octavia.template.octaviaHealthManager.networkAttachments
-        options:
-          create: true
-
-  - source:
-      kind: ConfigMap
-      name: service-values
-      fieldPath: data.octavia.octaviaHealthManager.customServiceConfig
-    targets:
-      - select:
-          kind: OpenStackControlPlane
-        fieldPaths:
-          - spec.octavia.template.octaviaHealthManager.customServiceConfig
-        options:
-          create: true
-
-  - source:
-      kind: ConfigMap
-      name: service-values
-      fieldPath: data.octavia.octaviaWorker.networkAttachments
-    targets:
-      - select:
-          kind: OpenStackControlPlane
-        fieldPaths:
-          - spec.octavia.template.octaviaWorker.networkAttachments
-        options:
-          create: true
-
-  - source:
-      kind: ConfigMap
-      name: service-values
-      fieldPath: data.octavia.octaviaWorker.customServiceConfig
-    targets:
-      - select:
-          kind: OpenStackControlPlane
-        fieldPaths:
-          - spec.octavia.template.octaviaWorker.customServiceConfig
-        options:
-          create: true
+          - spec.networks.[name=storagemgmt].dnsDomain
 
   - source:
       kind: ConfigMap
       name: network-values
-      fieldPath: data.octavia.net-attach-def
+      fieldPath: data.storagemgmt.mtu
     targets:
       - select:
-          kind: NetworkAttachmentDefinition
-          name: octavia
+          kind: NetConfig
         fieldPaths:
-          - spec.config
+          - spec.networks.[name=storagemgmt].mtu
 
-  #
-  # Swift
-  #
   - source:
       kind: ConfigMap
-      name: service-values
-      fieldPath: data.swift.enabled
+      name: network-values
+      fieldPath: data.storagemgmt.subnets
     targets:
       - select:
-          kind: OpenStackControlPlane
+          kind: NetConfig
         fieldPaths:
-          - spec.swift.enabled
-        options:
-          create: true
+          - spec.networks.[name=storagemgmt].subnets
