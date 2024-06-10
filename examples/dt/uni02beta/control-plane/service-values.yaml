@@ -8,6 +8,7 @@ metadata:
     config.kubernetes.io/local-config: "true"
 
 data:
+  preserveJobs: false
   cinderVolumes:
     ontap-nfs:
       customServiceConfig: |
@@ -86,6 +87,5 @@ data:
     databaseInstance: openstack
     glanceAPIs:
       default:
-        preserveJobs: false
         replicas: 1
         type: single

@@ -8,6 +8,7 @@ metadata:
     config.kubernetes.io/local-config: "true"
 
 data:
+  preserveJobs: false
   cinderVolumes:
     lvm-iscsi:
       replicas: 1
