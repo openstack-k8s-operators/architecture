@@ -19,11 +19,12 @@ spec:
     - nova-cell1-compute-config
     - nova-migration-ssh-key
   playbook: osp.edpm.nova
-  tlsCert:
-    contents:
-      - dnsnames
-      - ips
-    networks:
-      - ctlplane
-    issuer: osp-rootca-issuer-internal
+  tlsCerts:
+    default:
+      contents:
+        - dnsnames
+        - ips
+      networks:
+        - ctlplane
+      issuer: osp-rootca-issuer-internal
   caCerts: combined-ca-bundle
