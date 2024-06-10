@@ -50,7 +50,7 @@ data:
       replicas: 3
       customServiceConfig: |
         [DEFAULT]
-        enabled_share_protocols=nfs,cephfs
+        enabled_share_protocols=cephfs
     manilaScheduler:
       replicas: 3
     manilaShares:
@@ -59,7 +59,6 @@ data:
         customServiceConfig: |
           [DEFAULT]
           enabled_share_backends = cephfs
-          enabled_share_protocols = cephfs
           [cephfs]
           driver_handles_share_servers = False
           share_backend_name = cephfs
