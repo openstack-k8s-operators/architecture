@@ -17,19 +17,25 @@ def create_job(name, data):
         if os.path.exists(os.path.join(i, name)):
             _paths.append(os.path.join(i, name))
     _mock = os.path.join('automation', 'mocks', '{}.yaml'.format(name))
-    if os.path.exists(_mock):
-        _paths.append(_mock)
-    _paths.sort()
+    _net_env = os.path.join('automation', 'net-env', '{}.yaml'.format(name))
     job = {
             'job': {
                 'name': j_name,
                 'parent': 'rhoso-architecture-base-job',
                 'vars': {
-                    'cifmw_architecture_scenario': name,
+                    'cifmw_architecture_scenario': name
                     },
-                'files': _paths,
                 }
             }
+
+    if os.path.exists(_mock):
+        _paths.append(_mock)
+
+    if os.path.exists(_net_env):
+        _paths.append(_net_env)
+        job['job']['vars']['cifmw_networking_env_def_file'] = _net_env
+
+    job['job']['files'] = sorted(_paths)
     _JOBS.append(job)
     _PROJECTS.append(j_name)
 
