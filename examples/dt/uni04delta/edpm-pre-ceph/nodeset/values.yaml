@@ -144,6 +144,7 @@ data:
       - validate-network
       - install-os
       - ceph-hci-pre
+      - install-certs
 
   nova:
     migration:
