@@ -1,0 +1,76 @@
+---
+vas:
+  uni07eta:
+    stages:
+      - path: examples/dt/uni07eta/control-plane/nncp
+        wait_conditions:
+          - >-
+            oc -n openstack wait nncp
+            -l osp/nncm-config-type=standard
+            --for jsonpath='{.status.conditions[0].reason}'=SuccessfullyConfigured
+            --timeout=120s
+        values:
+          - name: network-values
+            src_file: values.yaml
+        build_output: nncp.yaml
+
+      - path: examples/dt/uni07eta/control-plane
+        wait_conditions:
+          - >-
+            oc -n openstack wait openstackcontrolplane
+            controlplane
+            --for condition=Ready
+            --timeout=45m
+        values:
+          - name: network-values
+            src_file: nncp/values.yaml
+          - name: service-values
+            src_file: service-values.yaml
+        build_output: control-plane.yaml
+
+      - path: examples/dt/uni07eta/networker/nodeset
+        wait_conditions:
+          - >-
+            oc -n openstack wait openstackdataplanenodeset
+            networker-nodes
+            --for condition=SetupReady
+            --timeout=20m
+        values:
+          - name: edpm-nodeset-values
+            src_file: values.yaml
+        build_output: edpm-nodeset-networker.yaml
+
+      - path: examples/dt/uni07eta/networker
+        wait_conditions:
+          - >-
+            oc -n openstack wait openstackdataplanedeployment
+            networker-deploy
+            --for condition=Ready
+            --timeout=40m
+        values:
+          - name: edpm-deployment-values
+            src_file: values.yaml
+        build_output: edpm-deployment-networker.yaml
+
+      - path: examples/dt/uni07eta/edpm
+        wait_conditions:
+          - >-
+            oc -n openstack wait openstackdataplanenodeset
+            openstack-edpm
+            --for condition=SetupReady
+            --timeout=20m
+        values:
+          - name: edpm-nodeset-values
+            src_file: values.yaml
+        build_output: edpm-nodeset.yaml
+      - path: examples/dt/uni07eta
+        wait_conditions:
+          - >-
+            oc -n openstack wait openstackdataplanedeployment
+            edpm-deployment
+            --for condition=Ready
+            --timeout=40m
+        values:
+          - name: edpm-deployment-values
+            src_file: values.yaml
+        build_output: edpm-deployment.yaml

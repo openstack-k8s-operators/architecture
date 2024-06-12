@@ -1,0 +1,272 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+secretGenerator:
+  - name: octavia-ca-passphrase
+    literals:
+      - server-ca-passphrase=12345678
+    options:
+      disableNameSuffixHash: true
+
+transformers:
+  - |-
+      apiVersion: builtin
+      kind: NamespaceTransformer
+      metadata:
+        name: _ignored_
+        namespace: openstack
+      setRoleBindingSubjects: none
+      unsetOnly: true
+      fieldSpecs:
+        - path: metadata/name
+          kind: Namespace
+          create: true
+
+components:
+  - ../../lib/networking/metallb
+  - ../../lib/networking/netconfig
+  - ../../lib/networking/nad
+  - ../../lib/control-plane
+
+resources:
+  - cinder-volume-ontap-secrets.yaml
+  - ocp-networks-octavia-netattach.yaml
+
+replacements:
+  # Cinder
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.cinderVolumes.ontap-iscsi.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.cinder.template.cinderVolumes.ontap-iscsi.customServiceConfig
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.cinderVolumes.ontap-iscsi.customServiceConfigSecrets
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.cinder.template.cinderVolumes.ontap-iscsi.customServiceConfigSecrets
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.cinderVolumes.ontap-iscsi.networkAttachments
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.cinder.template.cinderVolumes.ontap-iscsi.networkAttachments
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.cinder-volume-ontap-secrets
+    targets:
+      - select:
+          kind: Secret
+          name: cinder-volume-ontap-secrets
+        fieldPaths:
+          - stringData.cinder-volume-ontap-secrets
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.cinderBackup.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.cinder.template.cinderBackup.customServiceConfig
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.cinderBackup.replicas
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.cinder.template.cinderBackup.replicas
+        options:
+          create: true
+
+
+  # Glance
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.glance.default.replicas
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.glance.template.glanceAPIs.default.replicas
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.glance.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.glance.template.customServiceConfig
+        options:
+          create: true
+
+  # Swift
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.swift.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.swift.enabled
+        options:
+          create: true
+
+  # Octavia
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.enabled
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.amphoraImageContainerImage
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.amphoraImageContainerImage
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.apacheContainerImage
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.apacheContainerImage
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.octaviaAPI.networkAttachments
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.octaviaAPI.networkAttachments
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.octaviaHousekeeping.networkAttachments
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.octaviaHousekeeping.networkAttachments
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.octaviaHealthManager.networkAttachments
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.octaviaHealthManager.networkAttachments
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.octaviaWorker.networkAttachments
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.octaviaWorker.networkAttachments
+        options:
+          create: true
+
+  # OVN
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.ovn.ovnController.nicMappings
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.ovn.template.ovnController.nicMappings
+        options:
+          create: true
+
+  # Neutron
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.neutron.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.neutron.template.customServiceConfig
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.octavia.net-attach-def
+    targets:
+      - select:
+          kind: NetworkAttachmentDefinition
+          name: octavia
+        fieldPaths:
+          - spec.config
