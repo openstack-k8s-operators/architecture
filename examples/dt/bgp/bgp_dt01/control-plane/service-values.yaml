@@ -54,3 +54,5 @@ data:
       [DEFAULT]
       vlan_transparent = true
       debug = true
+      [ovs]
+      igmp_snooping_enable = true
