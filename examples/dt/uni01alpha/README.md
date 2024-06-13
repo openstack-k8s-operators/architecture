@@ -67,7 +67,7 @@ work properly and can be deployed with any/default configuration.
 | Ceilometer       | needed by Telemetry        |
 | Heat             | needed by Telemetry        |
 | Prometheus       | needed by Telemetry        |
-| Redis            | needed by Octavia          |
+
 
 ### Additional configuration
 
