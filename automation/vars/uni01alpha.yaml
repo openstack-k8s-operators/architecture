@@ -8,7 +8,7 @@ vas:
             oc -n openstack wait nncp
             -l osp/nncm-config-type=standard
             --for jsonpath='{.status.conditions[0].reason}'=SuccessfullyConfigured
-            --timeout=3m
+            --timeout=5m
         values:
           - name: network-values
             src_file: values.yaml
@@ -30,7 +30,7 @@ vas:
             oc -n openstack wait openstackcontrolplane
             controlplane
             --for condition=Ready
-            --timeout=45m
+            --timeout=60m
         values:
           - name: network-values
             src_file: nncp/values.yaml
@@ -44,7 +44,7 @@ vas:
             oc -n openstack wait openstackdataplanenodeset
             networker-nodes
             --for condition=SetupReady
-            --timeout=15m
+            --timeout=10m
         values:
           - name: edpm-nodeset-values
             src_file: values.yaml
@@ -56,7 +56,7 @@ vas:
             oc -n openstack wait openstackdataplanedeployment
             networker-deploy
             --for condition=Ready
-            --timeout=30m
+            --timeout=40m
         values:
           - name: edpm-deployment-values
             src_file: values.yaml
@@ -68,7 +68,7 @@ vas:
             oc -n openstack wait openstackdataplanenodeset
             openstack-edpm
             --for condition=SetupReady
-            --timeout=15m
+            --timeout=10m
         values:
           - name: edpm-nodeset-values
             src_file: values.yaml
@@ -80,7 +80,7 @@ vas:
             oc -n openstack wait openstackdataplanedeployment
             edpm-deployment
             --for condition=Ready
-            --timeout=30m
+            --timeout=40m
         values:
           - name: edpm-deployment-values
             src_file: values.yaml
