@@ -7,6 +7,7 @@ metadata:
   annotations:
     config.kubernetes.io/local-config: "true"
 data:
+  preserveJobs: false
   neutron:
     customServiceConfig: |
       [ml2]

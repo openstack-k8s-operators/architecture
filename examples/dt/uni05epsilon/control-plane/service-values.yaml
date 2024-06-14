@@ -8,6 +8,7 @@ metadata:
     config.kubernetes.io/local-config: "true"
 
 data:
+  preserveJobs: false
   cinderBackup:
     customServiceConfig: |
       [DEFAULT]
@@ -82,7 +83,6 @@ data:
     databaseInstance: openstack
     glanceAPIs:
       default:
-        preserveJobs: false
         replicas: 1
         type: split
 

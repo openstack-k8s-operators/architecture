@@ -190,18 +190,6 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
-      fieldPath: data.glance.glanceAPIs.default.preserveJobs
-    targets:
-      - select:
-          kind: OpenStackControlPlane
-        fieldPaths:
-          - spec.glance.template.glanceAPIs.default.preserveJobs
-        options:
-          create: true
-
-  - source:
-      kind: ConfigMap
-      name: service-values
       fieldPath: data.glance.glanceAPIs.default.replicas
     targets:
       - select:

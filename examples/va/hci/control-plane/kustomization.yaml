@@ -10,3 +10,4 @@ components:
 
 resources:
   - nncp/values.yaml
+  - service-values.yaml

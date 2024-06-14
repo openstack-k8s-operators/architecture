@@ -7,6 +7,7 @@ metadata:
   annotations:
     config.kubernetes.io/local-config: "true"
 data:
+  preserveJobs: false
   cinderAPI:
     replicas: 3
   cinderBackup:
