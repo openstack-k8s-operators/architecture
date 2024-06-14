@@ -30,7 +30,7 @@ vas:
             oc -n openstack wait openstackcontrolplane
             controlplane
             --for condition=Ready
-            --timeout=60m
+            --timeout=90m
         values:
           - name: network-values
             src_file: nncp/values.yaml
