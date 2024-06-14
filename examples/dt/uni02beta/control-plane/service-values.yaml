@@ -89,14 +89,3 @@ data:
         preserveJobs: false
         replicas: 1
         type: single
-    extraMounts:
-      - extraVol:
-          - extraVolType: Nfs
-            mounts:
-              - mountPath: /var/lib/glance/images
-                name: nfs
-            volumes:
-              - name: nfs
-                nfs:
-                  path: _replaced_
-                  server: _replaced_
