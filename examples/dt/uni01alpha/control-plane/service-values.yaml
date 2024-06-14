@@ -79,6 +79,10 @@ data:
 
   heat:
     enabled: true
+    customServiceConfig: |
+      [clients_heat]
+      endpoint_type: public
+      insecure: true
 
   redis:
     enabled: true
