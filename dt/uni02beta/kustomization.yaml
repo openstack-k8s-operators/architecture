@@ -141,6 +141,17 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
+      fieldPath: data.manila.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.manila.enabled
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
       fieldPath: data.manila.netapp-secrets\.conf
     targets:
       - select:
