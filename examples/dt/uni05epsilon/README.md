@@ -66,7 +66,6 @@ to work properly and can be deployed with any/default configuration.
 | ---------------- |--------------------------- |
 | Nova             | needed by scenario testing |
 | Keystone         | needed by all services     |
-| Redis            | needed by Octavia          |
 
 
 ### Additional configuration

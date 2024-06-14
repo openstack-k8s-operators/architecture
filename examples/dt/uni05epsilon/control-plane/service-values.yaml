@@ -117,8 +117,5 @@ data:
       nicMappings:
         - octavia: octbr
 
-  redis:
-    enabled: true
-
   swift:
     enabled: true

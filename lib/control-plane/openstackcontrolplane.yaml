@@ -183,8 +183,6 @@ spec:
         replicas: 3
       rabbitmq-cell1:
         replicas: 3
-  redis:
-    enabled: false
   secret: osp-secret
   storageClass: _replaced_
   swift:

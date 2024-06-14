@@ -358,21 +358,6 @@ replacements:
           - spec.config
 
   #
-  # Redis
-  #
-  - source:
-      kind: ConfigMap
-      name: service-values
-      fieldPath: data.redis.enabled
-    targets:
-      - select:
-          kind: OpenStackControlPlane
-        fieldPaths:
-          - spec.redis.enabled
-        options:
-          create: true
-
-  #
   # Swift
   #
   - source:

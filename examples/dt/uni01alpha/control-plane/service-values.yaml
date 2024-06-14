@@ -80,9 +80,6 @@ data:
   heat:
     enabled: true
 
-  redis:
-    enabled: true
-
   telemetry:
     enabled: true
     metricStorage:
