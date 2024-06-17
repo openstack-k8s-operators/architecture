@@ -264,6 +264,18 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
+      fieldPath: data.heat.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.heat.template.customServiceConfig
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
       fieldPath: data.telemetry.enabled
     targets:
       - select:
