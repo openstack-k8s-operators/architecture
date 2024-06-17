@@ -1,0 +1,24 @@
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: ctlplane
+  labels:
+    osp/net: ctlplane
+    osp/net-attach-def-type: standard
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: internalapi
+  labels:
+    osp/net: internalapi
+    osp/net-attach-def-type: standard
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: tenant
+  labels:
+    osp/net: tenant
+    osp/net-attach-def-type: standard
