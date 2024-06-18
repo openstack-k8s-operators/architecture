@@ -13,12 +13,13 @@ metadata:
 spec:
   label: neutron-ovn-igmp
   edpmServiceType: neutron-ovn
-  configMaps:
-    - neutron-igmp
   caCerts: combined-ca-bundle
   playbook: osp.edpm.neutron_ovn
-  secrets:
-    - neutron-ovn-agent-neutron-config
+  dataSources:
+    - configMapRef:
+        name: neutron-igmp
+    - secretRef:
+        name: neutron-ovn-agent-neutron-config
   tlsCerts:
     default:
       contents:
