@@ -120,6 +120,7 @@ data:
       type_drivers = geneve,vlan
       tenant_network_types = geneve,vlan
       extension_drivers = qos,port_security,dns_domain_ports
+      path_mtu = 1400
       [ml2_type_geneve]
       vni_ranges = 1:65536
       max_header_size = 38
