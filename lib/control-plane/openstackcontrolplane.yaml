@@ -30,10 +30,6 @@ spec:
         # Debug logs by default, jobs can override as needed.
         [DEFAULT]
         debug = true
-        # Necessary to prevent DB race conditions.
-        # Remove once jobs run b0747944394807862e4cdcfa7052f1f8d1febf94.
-        [database]
-        mysql_wsrep_sync_wait = 1
       cinderBackup:
         networkAttachments:
           - storage
