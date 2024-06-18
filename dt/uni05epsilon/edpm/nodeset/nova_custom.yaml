@@ -18,11 +18,13 @@ metadata:
   name: nova-custom
 spec:
   label: dataplane-deployment-nova-custom
-  configMaps:
-    - nova-custom-config
-  secrets:
-    - nova-cell1-compute-config
-    - nova-migration-ssh-key
+  dataSources:
+    - configMapRef:
+        name: nova-custom-config
+    - secretRef:
+        name: nova-cell1-compute-config
+    - secretRef:
+        name: nova-migration-ssh-key
   playbook: osp.edpm.nova
   caCerts: combined-ca-bundle
   edpmServiceType: nova

@@ -4,9 +4,11 @@ kind: OpenStackDataPlaneService
 metadata:
   name: nova-custom
 spec:
-  secrets:
-    - nova-cell1-compute-config
-    - nova-migration-ssh-key
+  dataSources:
+    - secretRef:
+        name: nova-cell1-compute-config
+    - secretRef:
+        name: nova-migration-ssh-key
   playbook: osp.edpm.nova
   tlsCerts:
     default:

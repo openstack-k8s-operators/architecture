@@ -20,12 +20,15 @@ metadata:
 spec:
   label: dataplane-deployment-nova-custom-sriov
   edpmServiceType: nova
-  configMaps:
-    - cpu-pinning-nova
-    - sriov-nova
-  secrets:
-    - nova-cell1-compute-config
-    - nova-migration-ssh-key
+  dataSources:
+    - configMapRef:
+        name: cpu-pinning-nova
+    - configMapRef:
+        name: sriov-nova
+    - secretRef:
+        name: nova-cell1-compute-config
+    - secretRef:
+        name: nova-migration-ssh-key
   playbook: osp.edpm.nova
   tlsCerts:
     default:
