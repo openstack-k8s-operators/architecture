@@ -109,7 +109,7 @@ data:
       config:
         - destination: 192.168.133.0/24
           next-hop-address: 100.64.10.1
-          next-hop-interface: enp6s0
+          next-hop-interface: enp8s0
 
   # networks
   ctlplane:
@@ -124,7 +124,7 @@ data:
         gateway: 192.168.122.1
         name: subnet1
     prefix-length: 24
-    iface: enp8s0
+    iface: enp7s0
     mtu: 1500
     lb_addresses:
       - 192.168.122.80-192.168.122.90
@@ -158,7 +158,7 @@ data:
     prefix-length: 24
     iface: internalapi
     vlan: 20
-    base_iface: enp8s0
+    base_iface: enp7s0
     lb_addresses:
       - 172.17.0.80-172.17.0.90
     endpoint_annotations:
@@ -191,7 +191,7 @@ data:
     prefix-length: 24
     iface: storage
     vlan: 21
-    base_iface: enp8s0
+    base_iface: enp7s0
     lb_addresses:
       - 172.18.0.80-172.18.0.90
     net-attach-def: |
@@ -220,7 +220,7 @@ data:
     prefix-length: 24
     iface: tenant
     vlan: 22
-    base_iface: enp8s0
+    base_iface: enp7s0
     lb_addresses:
       - 172.19.0.80-172.19.0.90
     net-attach-def: |
@@ -240,7 +240,7 @@ data:
     dnsDomain: octavia.openstack.lab
     mtu: 1500
     vlan: 23
-    base_iface: enp8s0
+    base_iface: enp7s0
     net-attach-def: |
       {
         "cniVersion": "0.3.1",
@@ -251,7 +251,13 @@ data:
           "type": "whereabouts",
           "range": "172.23.0.0/24",
           "range_start": "172.23.0.30",
-          "range_end": "172.23.0.70"
+          "range_end": "172.23.0.70",
+          "routes": [
+            {
+              "dst": "172.24.0.0/16",
+              "gw": "172.23.0.150"
+            }
+          ]
         }
       }
   external:
@@ -268,8 +274,8 @@ data:
   bgp:
     prefix-length: 30
     ifaces:
-      - enp6s0
-      - enp7s0
+      - enp8s0
+      - enp9s0
     asn: 64999
     peer_asn: 64999
     subnets:
@@ -422,14 +428,14 @@ data:
           config:
             - destination: 192.168.133.0/24
               next-hop-address: 100.64.10.1
-              next-hop-interface: enp6s0
+              next-hop-interface: enp8s0
     net-attach-def:
       node6: |
         {
           "cniVersion": "0.3.1",
           "name": "bgpnet-worker-3",
           "type": "host-device",
-          "device": "enp6s0",
+          "device": "enp8s0",
           "ipam": {
             "type": "whereabouts",
             "range": "100.64.10.0/30",
