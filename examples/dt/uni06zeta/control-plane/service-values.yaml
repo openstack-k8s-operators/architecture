@@ -23,8 +23,8 @@ data:
         target_port=4420
         target_prefix=nvme-subsystem-1
         nvmeof_conn_info_version=2
-        target_ip_address=172.18.0.5
-        target_secondary_ip_addresses = 172.19.0.5
+        target_ip_address=172.18.0.10
+        target_secondary_ip_addresses = 172.19.0.10
 
   cinderBackup:
     customServiceConfig: |
