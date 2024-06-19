@@ -13,11 +13,13 @@ metadata:
 spec:
   label: nova-custom-ovsdpdk
   edpmServiceType: nova
-  configMaps:
-    - ovs-dpdk-cpu-pinning-nova
-  secrets:
-    - nova-cell1-compute-config
-    - nova-migration-ssh-key
+  dataSources:
+    - configMapRef:
+        name: ovs-dpdk-cpu-pinning-nova
+    - secretRef:
+        name: nova-cell1-compute-config
+    - secretRef:
+        name: nova-migration-ssh-key
   playbook: osp.edpm.nova
   tlsCerts:
     default:
