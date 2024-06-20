@@ -95,7 +95,7 @@ vas:
         wait_conditions:
           - >-
             oc -n openstack wait osctlplane controlplane --for condition=Ready
-            --timeout=600s
+            --timeout=60m
         values:
           - name: network-values
             src_file: nncp/values.yaml
