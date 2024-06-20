@@ -34,7 +34,7 @@ data:
   glance:
     customServiceConfig: |
       [DEFAULT]
-      debug=True
+      debug = True
       enabled_backends = default_backend:rbd
 
       [glance_store]
@@ -45,8 +45,6 @@ data:
       store_description = "RBD backend"
       rbd_store_pool = images
       rbd_store_user = openstack
-      [database]
-      mysql_wsrep_sync_wait = 1
     glanceAPIs:
       default:
         replicas: 3
