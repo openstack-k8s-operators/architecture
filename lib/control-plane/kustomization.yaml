@@ -112,7 +112,7 @@ replacements:
           kind: OpenStackControlPlane
         fieldPaths:
           - spec.storageClass
-          - spec.glance.template.storageClass
+          - spec.glance.template.storage.storageClass
           - spec.telemetry.template.metricStorage.monitoringStack.storage.persistent.pvcStorageClass
   - source:
       kind: ConfigMap
