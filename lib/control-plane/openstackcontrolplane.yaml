@@ -67,8 +67,9 @@ spec:
           replicas: 0
           networkAttachments:
             - storage
-      storageClass: _replaced_
-      storageRequest: 10G
+      storage:
+        storageClass: _replaced_
+        storageRequest: 10G
   heat:
     apiOverride:
       route: {}
