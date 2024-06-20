@@ -42,8 +42,8 @@ data:
   glance:
     customServiceConfig: |
       [DEFAULT]
+      debug = True
       enabled_backends = default_backend:cinder
-      debug = true
       [glance_store]
       default_backend = default_backend
       [default_backend]
@@ -58,8 +58,6 @@ data:
       # cinder_use_multipath = true
       [oslo_concurrency]
       lock_path = /var/lib/glance/tmp
-      [database]
-      mysql_wsrep_sync_wait = 1
     default:
       replicas: 1
 

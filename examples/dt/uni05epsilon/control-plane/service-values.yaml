@@ -55,7 +55,7 @@ data:
   glance:
     customServiceConfig: |
       [DEFAULT]
-      debug=True
+      debug = True
       enabled_backends = primary:cinder,secondary:swift
       [glance_store]
       default_backend = primary
@@ -78,8 +78,6 @@ data:
       swift_store_key = {{ .ServicePassword }}
       [oslo_concurrency]
       lock_path = /var/lib/glance/tmp
-      [database]
-      mysql_wsrep_sync_wait = 1
     databaseInstance: openstack
     glanceAPIs:
       default:
