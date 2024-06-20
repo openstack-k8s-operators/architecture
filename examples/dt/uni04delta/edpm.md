@@ -25,7 +25,37 @@ Modify the [values.yaml](values.yaml) with the following information
 - SSH keys to be use for Nova migration.
 - Ceph Configuration information
 
-> All values must be in base64 encoded format.
+> The SSH key values must be in base64 encoded format.
+
+The ceph sections of [values.yaml](values.yaml) should have values
+like this.
+```yaml
+data:
+    ceph:
+        conf: $CONF
+        keyring: $KEY
+    nova:
+      ceph:
+        conf:
+            conf: |
+              [libvirt]
+              images_type=rbd
+              images_rbd_pool=vms
+              images_rbd_ceph_conf=/etc/ceph/ceph.conf
+              images_rbd_glance_store_name=default_backend
+              images_rbd_glance_copy_poll_interval=15
+              images_rbd_glance_copy_timeout=600
+              rbd_user=openstack
+              rbd_secret_uuid=$FSID
+
+```
+Where the values of the three variables above can be retrieved by
+running the following commands on the Ceph cluster.
+```shell
+CONF=$(cat /etc/ceph/ceph.conf | base64 -w 0)
+KEY=$(cat /etc/ceph/ceph.client.openstack.keyring | base64 -w 0)
+FSID=$(awk -F ' = ' '/fsid/ {print $2}' /etc/ceph/ceph.conf)
+```
 
 ### Compute access
 
