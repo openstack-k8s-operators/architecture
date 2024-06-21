@@ -11,22 +11,22 @@ data:
 
   node_0:
     name: master-0
-    internalapi_ip: 172.17.0.5
-    tenant_ip: 172.19.0.5
+    internalapi_ip: 172.17.0.10
+    tenant_ip: 172.19.0.10
     ctlplane_ip: 192.168.122.10
-    storage_ip: 172.18.0.5
+    storage_ip: 172.18.0.10
   node_1:
     name: master-1
-    internalapi_ip: 172.17.0.6
-    tenant_ip: 172.19.0.6
+    internalapi_ip: 172.17.0.11
+    tenant_ip: 172.19.0.11
     ctlplane_ip: 192.168.122.11
-    storage_ip: 172.18.0.6
+    storage_ip: 172.18.0.11
   node_2:
     name: master-2
-    internalapi_ip: 172.17.0.7
-    tenant_ip: 172.19.0.7
+    internalapi_ip: 172.17.0.12
+    tenant_ip: 172.19.0.12
     ctlplane_ip: 192.168.122.12
-    storage_ip: 172.18.0.7
+    storage_ip: 172.18.0.12
 
   ctlplane:
     dnsDomain: ctlplane.openstack.lab
