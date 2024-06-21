@@ -113,7 +113,31 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
-      fieldPath: data.glance.default.replicas
+      fieldPath: data.glance.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.glance.template.customServiceConfig
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.glance.databaseInstance
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.glance.template.databaseInstance
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.glance.glanceAPIs.default.replicas
     targets:
       - select:
           kind: OpenStackControlPlane
@@ -125,12 +149,24 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
-      fieldPath: data.glance.customServiceConfig
+      fieldPath: data.glance.glanceAPIs.default.type
     targets:
       - select:
           kind: OpenStackControlPlane
         fieldPaths:
-          - spec.glance.template.customServiceConfig
+          - spec.glance.template.glanceAPIs.default.type
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.glance.glanceAPIs.default.preserveJobs
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.glance.template.glanceAPIs.default.preserveJobs
         options:
           create: true
 
