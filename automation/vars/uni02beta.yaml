@@ -2,30 +2,7 @@
 vas:
   uni02beta:
     stages:
-      - pre_stage_run:
-          - name: Make masters schedulable
-            type: cr
-            definition:
-              spec:
-                mastersSchedulable: true
-            kind: Scheduler
-            resource_name: cluster
-            state: patched
-          - name: Apply taint on worker-0
-            type: cr
-            definition:
-              spec:
-                taints:
-                  - effect: NoSchedule
-                    key: testOperator
-                    value: 'true'
-                  - effect: NoExecute
-                    key: testOperator
-                    value: 'true'
-            kind: Node
-            resource_name: worker-0
-            state: patched
-        path: examples/dt/uni02beta/control-plane/nncp
+      - path: examples/dt/uni02beta/control-plane/nncp
         wait_conditions:
           - >-
             oc -n openstack wait nncp
