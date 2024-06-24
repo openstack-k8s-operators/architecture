@@ -1,7 +1,0 @@
----
-apiVersion: nmstate.io/v1
-kind: NodeNetworkConfigurationPolicy
-metadata:
-  name: node-3
-  labels:
-    osp/nncm-config-type: standard
