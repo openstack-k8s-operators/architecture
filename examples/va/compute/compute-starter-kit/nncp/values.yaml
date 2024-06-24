@@ -195,5 +195,5 @@ data:
       metallb.universe.tf/loadBalancerIPs: 172.17.0.86
 
   lbServiceType: LoadBalancer
-  storageClass: local-storage
+  storageClass: crc-csi-hostpath-provisioner
   bridgeName: ospbr

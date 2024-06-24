@@ -9,10 +9,19 @@ spec:
     templates:
       openstack:
         replicas: 1
-        storageRequest: 500M
+      openstack-cell1:
+        replicas: 1
   rabbitmq:
     templates:
       rabbitmq:
+        replicas: 1
+        requests:
+          cpu: 1
+          memory: 512M
+        limits:
+          cpu: 1
+          memory: 512M
+      rabbitmq-cell1:
         replicas: 1
         requests:
           cpu: 1
