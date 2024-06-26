@@ -1,0 +1,14 @@
+# local-config: referenced, but not emitted by kustomize
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: service-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+data:
+  neutron:
+    customServiceConfig: |
+      [ml2]
+      mechanism_drivers = ovn,sriovnicswitch
+      [ml2_type_vlan]
+      network_vlan_ranges = sriov-phy4
