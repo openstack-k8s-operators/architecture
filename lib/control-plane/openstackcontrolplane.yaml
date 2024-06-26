@@ -156,10 +156,12 @@ spec:
   ovn:
     template:
       ovnController:
+        replicas: 3
         networkAttachment: tenant
         nicMappings:
           datacentre: _replaced_
       ovnDBCluster:
+        replicas: 3
         ovndbcluster-nb:
           dbType: NB
           networkAttachment: internalapi
