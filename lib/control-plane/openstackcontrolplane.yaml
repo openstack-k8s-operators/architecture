@@ -134,6 +134,7 @@ spec:
     apiOverride:
       route: {}
     template:
+      replicas: 3
       databaseInstance: openstack
       networkAttachments:
         - internalapi
