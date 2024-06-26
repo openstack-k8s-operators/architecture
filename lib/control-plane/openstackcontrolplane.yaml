@@ -11,9 +11,9 @@ spec:
       databaseInstance: openstack
       secret: osp-secret
       barbicanAPI:
-        replicas: 1
+        replicas: 3
       barbicanWorker:
-        replicas: 1
+        replicas: 3
       barbicanKeystoneListener:
         replicas: 1
   ceilometer:
@@ -26,6 +26,8 @@ spec:
     apiOverride:
       route: {"haproxy.router.openshift.io/timeout": "60s"}
     template:
+      cinderAPI:
+        replicas: 3
       customServiceConfig: |
         # Debug logs by default, jobs can override as needed.
         [DEFAULT]
@@ -110,6 +112,7 @@ spec:
     template:
       databaseInstance: openstack
       secret: osp-secret
+      replicas: 3
   manila:
     apiOverride:
       route: {"haproxy.router.openshift.io/timeout": "60s"}
@@ -138,11 +141,18 @@ spec:
       networkAttachments:
         - internalapi
       secret: osp-secret
+      replicas: 3
   nova:
     apiOverride:
       route: {}
     template:
       secret: osp-secret
+      apiServiceTemplate:
+        replicas: 3
+      metadataServiceTemplate:
+        replicas: 3
+      schedulerServiceTemplate:
+        replicas: 3
   octavia:
     enabled: false
     template:
@@ -164,16 +174,25 @@ spec:
           dbType: NB
           networkAttachment: internalapi
           storageRequest: 10G
+          replicas: 3
         ovndbcluster-sb:
           dbType: SB
           networkAttachment: internalapi
           storageRequest: 10G
+          replicas: 3
+      ovnNorthd:
+        logLevel: info
+        nThreads: 1
+        replicas: 1
+        resources: {}
+        tls: {}
   placement:
     apiOverride:
       route: {}
     template:
       databaseInstance: openstack
       secret: osp-secret
+      replicas: 3
   rabbitmq:
     templates:
       rabbitmq:
