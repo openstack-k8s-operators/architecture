@@ -85,5 +85,7 @@ data:
     databaseInstance: openstack
     glanceAPIs:
       default:
-        replicas: 3
+        # NOTE: (fpantano) - replica here must be 1 because
+        # we removed NFS extraMounts via PR#288 due to OSPRH-7396
+        replicas: 1
         type: single
