@@ -85,5 +85,5 @@ data:
     databaseInstance: openstack
     glanceAPIs:
       default:
-        replicas: 1
+        replicas: 3
         type: single

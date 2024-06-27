@@ -58,10 +58,8 @@ data:
     glanceAPIs:
       default:
         preserveJobs: false
-        replicas: 1
+        replicas: 3
         type: split
-    storageClass: ""
-    storageRequest: 1G
 
   swift:
     enabled: true

@@ -48,7 +48,7 @@ data:
       swift_store_user = service:glance
       swift_store_key = {{ .ServicePassword }}
     default:
-      replicas: 1
+      replicas: 3
 
   ironic:
     enabled: true
