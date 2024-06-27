@@ -23,6 +23,7 @@ spec:
       secret: osp-secret
       serviceUser: ceilometer
   cinder:
+    uniquePodNames: true
     apiOverride:
       route: {"haproxy.router.openshift.io/timeout": "60s"}
     template:
@@ -59,6 +60,7 @@ spec:
         secret: osp-secret
         storageRequest: 5G
   glance:
+    uniquePodNames: true
     apiOverrides:
       default:
         route: {"haproxy.router.openshift.io/timeout": "60s"}
