@@ -59,7 +59,7 @@ data:
       [oslo_concurrency]
       lock_path = /var/lib/glance/tmp
     default:
-      replicas: 1
+      replicas: 3
 
   swift:
     enabled: true
