@@ -1,0 +1,142 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+transformers:
+  # Set namespace to OpenStack on all namespaced objects without a namespace
+  - |-
+    apiVersion: builtin
+    kind: NamespaceTransformer
+    metadata:
+      name: _ignored_
+      namespace: openstack
+    setRoleBindingSubjects: none
+    unsetOnly: true
+    fieldSpecs:
+      - path: metadata/name
+        kind: Namespace
+        create: true
+
+components:
+  - ../../../../lib/networking/metallb
+  - ../../../../lib/networking/netconfig
+  - ../../../../lib/networking/nad
+  - ../../../../lib/control-plane
+
+# Add storagemgmt network template, as it is needed for CephHCI
+patches:
+  - target:
+      version: v1beta1
+      kind: NetConfig
+      name: netconfig
+    patch: |-
+      - op: add
+        path: /spec/networks/-
+        value:
+          dnsDomain: _replaced_
+          name: storagemgmt
+          subnets:
+            - _replaced_
+          mtu: 1500
+resources:
+  - policy.yaml
+
+replacements:
+  # NetConfig dnsDomain specific to this VA
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storagemgmt.dnsDomain
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=storagemgmt].dnsDomain
+  # NetConfig MTU specific to this VA
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storagemgmt.mtu
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=storagemgmt].mtu
+  # NetConfig subnets specific to this VA
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storagemgmt.subnets
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=storagemgmt].subnets
+  # Neutron control plane OvS DPDK & SRIOV customization
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.neutron.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.neutron.template.customServiceConfig
+        options:
+          create: true
+  # OVN control plane OvS DPDK customization
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.ovn.ovnController.nicMappings
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.ovn.template.ovnController.nicMappings
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.telemetry.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.telemetry.enabled
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.telemetry.template.ceilometer.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.telemetry.template.ceilometer.enabled
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.extraMounts
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.extraMounts
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.nova.schedulerServiceTemplate.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.nova.template.schedulerServiceTemplate.customServiceConfig
+        options:
+          create: true
