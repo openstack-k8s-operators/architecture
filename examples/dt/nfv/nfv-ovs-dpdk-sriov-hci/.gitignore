@@ -1,0 +1,6 @@
+nncp.yaml
+control-plane.yaml
+dataplane-nodeset-pre-ceph.yaml
+dataplane-pre-ceph.yaml
+dataplane-nodeset-post-ceph.yaml
+dataplane-post-ceph.yaml
