@@ -41,6 +41,19 @@
       cifmw_architecture_scenario: hci
 - job:
     files:
+    - examples/va/nfv/nfv-ovs-dpdk-sriov-hci
+    - examples/va/nfv/nfv-ovs-dpdk-sriov-hci/control-plane
+    - examples/va/nfv/nfv-ovs-dpdk-sriov-hci/control-plane/nncp
+    - examples/va/nfv/nfv-ovs-dpdk-sriov-hci/deployment
+    - examples/va/nfv/nfv-ovs-dpdk-sriov-hci/edpm-pre-ceph/deployment
+    - examples/va/nfv/nfv-ovs-dpdk-sriov-hci/edpm-pre-ceph/nodeset
+    - lib
+    name: rhoso-architecture-validate-nfv-ovs-dpdk-sriov-hci
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: nfv-ovs-dpdk-sriov-hci
+- job:
+    files:
     - dt/osasinfra
     - examples/dt/osasinfra
     - examples/dt/osasinfra/control-plane
