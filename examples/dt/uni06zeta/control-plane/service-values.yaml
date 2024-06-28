@@ -67,6 +67,9 @@ data:
   octavia:
     enabled: true
 
+  heat:
+    enabled: true
+
   ovn:
     ovnController:
       availability-zones:
