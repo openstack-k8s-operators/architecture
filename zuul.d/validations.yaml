@@ -150,6 +150,23 @@
       cifmw_networking_env_def_file: automation/net-env/uni04delta.yaml
 - job:
     files:
+    - automation/mocks/uni04delta-ipv6.yaml
+    - automation/net-env/uni04delta-ipv6.yaml
+    - dt/uni04delta-ipv6
+    - examples/dt/uni04delta-ipv6
+    - examples/dt/uni04delta-ipv6/control-plane
+    - examples/dt/uni04delta-ipv6/control-plane/nncp
+    - examples/dt/uni04delta-ipv6/deployment
+    - examples/dt/uni04delta-ipv6/edpm-pre-ceph
+    - examples/dt/uni04delta-ipv6/edpm-pre-ceph/nodeset
+    - lib
+    name: rhoso-architecture-validate-uni04delta-ipv6
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: uni04delta-ipv6
+      cifmw_networking_env_def_file: automation/net-env/uni04delta-ipv6.yaml
+- job:
+    files:
     - automation/net-env/uni05epsilon.yaml
     - dt/uni05epsilon
     - examples/dt/uni05epsilon

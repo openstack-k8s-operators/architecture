@@ -1,0 +1,169 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: service-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+data:
+  preserveJobs: false
+
+  cinderBackup:
+    customServiceConfig: |
+      [DEFAULT]
+      backup_driver = cinder.backup.drivers.ceph.CephBackupDriver
+      backup_ceph_pool = backups
+      backup_ceph_user = openstack
+
+  cinderVolumes:
+    ceph:
+      customServiceConfig: |
+        [DEFAULT]
+        enabled_backends = ceph
+
+        [ceph]
+        volume_backend_name = ceph
+        volume_driver = cinder.volume.drivers.rbd.RBDDriver
+        rbd_ceph_conf = /etc/ceph/ceph.conf
+        rbd_user = openstack
+        rbd_pool = volumes
+        rbd_flatten_volume_from_snapshot = False
+        rbd_secret_uuid = _replaced_
+
+  glance:
+    customServiceConfig: |
+      [DEFAULT]
+      debug = True
+      enabled_backends = default_backend:rbd
+
+      [glance_store]
+      default_backend = default_backend
+
+      [default_backend]
+      rbd_store_ceph_conf = /etc/ceph/ceph.conf
+      store_description = "RBD backend"
+      rbd_store_pool = images
+      rbd_store_user = openstack
+    glanceAPIs:
+      default:
+        replicas: 3
+
+  manila:
+    enabled: true
+    customServiceConfig: |
+      [DEFAULT]
+      enabled_share_backends = cephfsnfs
+      enabled_share_protocols = nfs
+
+      [cephfsnfs]
+      driver_handles_share_servers=False
+      share_backend_name=cephfs
+      share_driver=manila.share.drivers.cephfs.driver.CephFSDriver
+      cephfs_auth_id=openstack
+      cephfs_cluster_name=ceph
+      cephfs_nfs_cluster_id=cephfs
+      cephfs_protocol_helper_type=NFS
+
+  neutron:
+    customServiceConfig: |
+      [DEFAULT]
+      vlan_transparent = true
+      service_plugins = qos,ovn-router,trunk,segments,log
+      agent_down_time = 600
+      router_distributed = true
+      router_scheduler_driver = neutron.scheduler.l3_agent_scheduler.ChanceScheduler
+      debug = true
+      [agent]
+      report_interval = 300
+      [database]
+      max_retries = -1
+      db_max_retries = -1
+      [keystone_authtoken]
+      region_name = regionOne
+      memcache_use_advanced_pool = True
+      auth_type = password
+      [nova]
+      region_name = regionOne
+      endpoint_type = internal
+      [oslo_messaging_notifications]
+      driver = noop
+      [oslo_middleware]
+      enable_proxy_headers_parsing = true
+      [oslo_policy]
+      policy_file = /etc/neutron/policy.yaml
+      [placement]
+      region_name = regionOne
+      [ovs]
+      igmp_snooping_enable = true
+      [ovn]
+      ovn_emit_need_to_frag = false
+      [ml2]
+      type_drivers = geneve,vlan,flat
+      tenant_network_types = vlan,flat
+      [ml2_type_vlan]
+      network_vlan_ranges = datacentre:1000:2000
+
+  extraMounts:
+    - name: v1
+      region: r1
+      extraVol:
+        - propagation:
+            - CinderVolume
+            - CinderBackup
+            - GlanceAPI
+            - ManilaShare
+          extraVolType: Ceph
+          volumes:
+            - name: ceph
+              projected:
+                sources:
+                  - secret:
+                      name: ceph-conf-files
+          mounts:
+            - name: ceph
+              mountPath: /etc/ceph
+              readOnly: true
+
+  ironic:
+    enabled: true
+    rpcTransport: oslo
+    ironicConductors:
+      - customServiceConfig: |
+          [pxe]
+          kernel_append_params = console=ttyS0
+
+          [neutron]
+          cleaning_network = provisioning
+          provisioning_network = provisioning
+          rescuing_network = provisioning
+          inspection_network = provisioning
+    ironicInspector:
+      customServiceConfig: |
+        [capabilities]
+        boot_mode = true
+
+        [processing]
+        update_pxe_enabled = false
+
+  nova:
+    cellTemplates:
+      cell0:
+        cellDatabaseInstance: openstack
+        cellDatabaseAccount: nova-cell0
+        cellMessageBusInstance: rabbitmq
+        hasAPIAccess: true
+      cell1:
+        cellDatabaseInstance: openstack-cell1
+        cellDatabaseAccount: nova-cell1
+        cellMessageBusInstance: rabbitmq-cell1
+        hasAPIAccess: true
+        novaComputeTemplates:
+          compute-ironic:
+            computeDriver: ironic.IronicDriver
+
+  ovn:
+    ovnController:
+      nicMappings:
+        datacentre: ocpbr
+        octavia: octbr
+        ironic: ironic
