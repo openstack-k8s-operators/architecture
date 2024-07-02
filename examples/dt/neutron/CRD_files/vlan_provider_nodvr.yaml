@@ -1,0 +1,77 @@
+apiVersion: core.openstack.org/v1beta1
+kind: OpenStackControlPlane
+metadata:
+  name: openstack
+spec:
+  neutron:
+    template:
+      customServiceConfig: |
+        [DEFAULT]
+        dns_domain = openstackgate.local
+        vlan_transparent = true
+        service_plugins = ovn-router,qos,segments,trunk,port_forwarding
+        dhcp_agent_notification = false
+        agent_down_time = 600
+        router_distributed = false
+        enable_dvr = false
+        router_scheduler_driver = neutron.scheduler.l3_agent_scheduler.ChanceScheduler
+        allow_automatic_l3agent_failover = true
+        l3_ha = False
+        max_l3_agents_per_router = 3
+        debug = true
+        log_dir = /var/log/neutron
+        control_exchange = neutron
+
+        [agent]
+        report_interval = 300
+
+        [database]
+        max_retries = -1
+        db_max_retries = -1
+
+        [keystone_authtoken]
+        region_name = regionOne
+        memcache_use_advanced_pool = True
+        auth_type = password
+
+        [nova]
+        region_name = regionOne
+        endpoint_type = internal
+
+        [oslo_messaging_notifications]
+        driver = noop
+
+        [oslo_middleware]
+        enable_proxy_headers_parsing = true
+
+        [oslo_policy]
+        policy_file = /etc/neutron/policy.yaml
+
+        [placement]
+        region_name = regionOne
+
+        [ovs]
+        igmp_snooping_enable = true
+    
+        [ovn]
+        ovn_emit_need_to_frag = true
+        enable_distributed_floating_ip = false
+  
+        [ml2]
+        type_drivers = geneve,vlan
+        tenant_network_types = geneve,vlan
+        extension_drivers = qos,port_security,dns_domain_ports
+
+        [ml2_type_geneve]
+        vni_ranges = 1:65536
+        max_header_size = 38
+
+        [ml2_type_vlan]
+        network_vlan_ranges = tenant:1000:2000,datacentre:218:218
+
+  nova:
+    template:
+      schedulerServiceTemplate:
+        customServiceConfig: |
+          [filter_scheduler]
+          enabled_filters = AggregateInstanceExtraSpecsFilter, AvailabilityZoneFilter,ComputeFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,DifferentHostFilter,SameHostFilter,AllHostsFilter,ServerGroupAffinityFilter,ServerGroupAntiAffinityFilter

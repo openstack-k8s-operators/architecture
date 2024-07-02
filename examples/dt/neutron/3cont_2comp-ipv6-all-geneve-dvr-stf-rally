@@ -1,0 +1,67 @@
+# Deployed Topology 3cont_2comp-ipv6-all-geneve-dvr-stf-rally
+
+## General information
+
+| Revision | Change              |  Date      |
+| -------: | :------------------ | :-----:    |
+|     v0.1 | Initial publication | 2024-01-16 |
+|     v0.2 | Refreshed doc       | 2024-02-29 |
+
+## Node topology
+
+| Node role                                  | bm/vm | amount |
+| ------------------------------------------ | ----- | ------ |
+| Openshift master/worker combo-node cluster | vm    | 3      |
+| Compute nodes                              | vm    | 2      |
+
+
+## Services, enabled features and configurations
+
+| Service   | configuration                | Lock-in coverage?  |
+| --------- | ---------------------------- | ------------------ |
+| Neutron   | ML2/OVN                      | Must have          |
+| Glance    | default                      | Must have          |
+| Cinder    | default                      | Must have          |
+| Keystone  | default                      | Must have          |
+| TLS       | default                      | Must have          |
+| Compute   | DifferentHostFilter          | Must have          |
+
+### Additional information 
+tenant_network = geneve
+public_network = flat
+Enable Service Telemetry
+Add rally tests when available
+This DT is mapped to unified job - uni-delta-ipv6
+
+
+#### Nova
+
+#### Cinder
+
+#### OVN
+add configuration of ipv6, OVNEncapTos=inherit
+
+## Considerations/Constraints
+
+
+## Testing tree
+Tempest and Rally
+
+| Test framework   | Stage to run | Special configuration | Test case to report |
+| ---------------- | ------------ | --------------------- | :-----------------: |
+| Rally            | stage7       |                       |      11111111       | 
+| Tempest/neutron  | stage6       | Use rhel image        |      11223344       |
+| Tempest/scenario | stage6       | Use cirros image      |      22334455       |
+
+## Stages
+
+All stages must be executed in the order listed below. Everything is required unless otherwise indicated.
+
+1. [Install dependencies for the OpenStack K8S operators](stage1)
+2. [Install the OpenStack K8S operators](stage2)
+3. [Configuring networking on the OCP nodes](stage3)
+4. [Configure and deploy the control plane](stage4)
+5. [Post Tasks] Create necessary resources for testing (stage5)
+6. [Execute non destructive testing](stage6)
+7. [Execute load testing](stage7)
+8. [Destructive testing](stage8)
