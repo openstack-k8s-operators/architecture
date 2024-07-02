@@ -11,6 +11,8 @@ spec:
         server: []
     routes:
       config: []
+    route-rules:
+      config: []
     interfaces:
       - description: internalapi vlan interface
         ipv4:
