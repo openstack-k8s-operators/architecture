@@ -1,0 +1,118 @@
+---
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: _ignored_
+spec:
+  desiredState:
+    dns-resolver:
+      config:
+        search: []
+        server: []
+    routes:
+      config:
+        - destination: _replaced_
+          next-hop-address: _replaced_
+          next-hop-interface: _replaced_
+    interfaces:
+      - description: ctlplane interface
+        name: _replaced_
+        state: up
+        type: ethernet
+        mtu: 1500
+      - description: linux-bridge over ctlplane interface
+        ipv4:
+          enabled: false
+        ipv6:
+          address:
+            - ip: _replaced_
+              prefix-length: _replaced_
+          enabled: true
+          dhcp: false
+        name: ospbr
+        state: up
+        type: linux-bridge
+        bridge:
+          options:
+            stp:
+              enabled: false
+          port:
+            - name: _replaced_
+              vlan: {}
+        mtu: 1500
+      - description: bmaas interface
+        name: _replaced_
+        state: up
+        type: ethernet
+        mtu: 1500
+      - description: linux-bridge over bmaas interface
+        ipv4:
+          enabled: false
+        ipv6:
+          address:
+            - ip: _replaced_
+              prefix-length: _replaced_
+          enabled: true
+          dhcp: false
+        name: bmaas
+        state: up
+        type: linux-bridge
+        bridge:
+          options:
+            stp:
+              enabled: false
+          port:
+            - name: _replaced_
+              vlan: {}
+        mtu: 1500
+      - description: internalapi vlan interface
+        ipv4:
+          enabled: false
+        ipv6:
+          address:
+            - ip: _replaced_
+              prefix-length: _replaced_
+          enabled: true
+          dhcp: false
+        name: internalapi
+        state: up
+        type: vlan
+        vlan:
+          base-iface: _replaced_
+          id: _replaced_
+        mtu: 1500
+      - description: storage vlan interface
+        ipv4:
+          enabled: false
+        ipv6:
+          address:
+            - ip: _replaced_
+              prefix-length: _replaced_
+          enabled: true
+          dhcp: false
+        name: storage
+        state: up
+        type: vlan
+        vlan:
+          base-iface: _replaced_
+          id: _replaced_
+        mtu: 1500
+      - description: tenant vlan interface
+        ipv4:
+          enabled: false
+        ipv6:
+          address:
+            - ip: _replaced_
+              prefix-length: _replaced_
+          enabled: true
+          dhcp: false
+        name: tenant
+        state: up
+        type: vlan
+        vlan:
+          base-iface: _replaced_
+          id: _replaced_
+        mtu: 1500
+  nodeSelector:
+    kubernetes.io/hostname: _replaced_
+    node-role.kubernetes.io/worker: ""

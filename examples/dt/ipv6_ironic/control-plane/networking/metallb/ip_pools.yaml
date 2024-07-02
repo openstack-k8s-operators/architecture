@@ -1,0 +1,10 @@
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  namespace: metallb-system
+  name: bmaas
+  labels:
+    osp/lb-addresses-type: standard
+spec:
+  addresses: []

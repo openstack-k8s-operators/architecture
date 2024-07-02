@@ -1,0 +1,54 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../../../lib/metallb
+  - ../../../../../lib/networking/metallb
+  - ../../../../../lib/networking/nad
+
+resources:
+  - nncp/values.yaml
+  - metallb/ip_pools.yaml
+  - metallb/l2advertisement.yaml
+  - nad/nad.yaml
+
+replacements:
+
+  # Network Attachemnt Definitions
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.bmaas.net-attach-def
+    targets:
+      - select:
+          kind: NetworkAttachmentDefinition
+          name: bmaas
+        fieldPaths:
+          - spec.config
+
+  # IPAddressPool addresses
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.bmaas.lb_addresses
+    targets:
+      - select:
+          group: metallb.io
+          kind: IPAddressPool
+          name: bmaas
+        fieldPaths:
+          - spec.addresses
+
+  # Loadbalancer interfaces
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.bmaas.iface
+    targets:
+      - select:
+          group: metallb.io
+          kind: L2Advertisement
+          name: bmaas
+        fieldPaths:
+          - spec.interfaces.0
