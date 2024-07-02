@@ -41,6 +41,20 @@
       cifmw_architecture_scenario: hci
 - job:
     files:
+    - dt/osasinfra
+    - examples/dt/osasinfra
+    - examples/dt/osasinfra/control-plane
+    - examples/dt/osasinfra/control-plane/nncp
+    - examples/dt/osasinfra/deployment
+    - examples/dt/osasinfra/edpm-pre-ceph/deployment
+    - examples/dt/osasinfra/edpm-pre-ceph/nodeset
+    - lib
+    name: rhoso-architecture-validate-osasinfra
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: osasinfra
+- job:
+    files:
     - automation/mocks/ovs-dpdk.yaml
     - examples/va/nfv/ovs-dpdk
     - examples/va/nfv/ovs-dpdk/edpm/deployment
