@@ -1,0 +1,11 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../dt/uni04delta-ipv6/edpm/nodeset
+
+resources:
+  - control-plane/nncp/values.yaml
+  - control-plane/service-values.yaml
+  - values.yaml
