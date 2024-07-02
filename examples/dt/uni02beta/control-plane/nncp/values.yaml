@@ -27,6 +27,12 @@ data:
     tenant_ip: 172.19.0.7
     ctlplane_ip: 192.168.122.12
     storage_ip: 172.18.0.7
+  node_3:
+    name: ostest-worker-0
+    internalapi_ip: 172.17.0.8
+    tenant_ip: 172.19.0.8
+    ctlplane_ip: 192.168.122.13
+    storage_ip: 172.18.0.8
 
   ctlplane:
     dnsDomain: ctlplane.example.com
