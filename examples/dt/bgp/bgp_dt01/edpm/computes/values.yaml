@@ -29,11 +29,9 @@ data:
           - nic4
         timesync_ntp_servers:
           - hostname: clock.redhat.com
-        # CHANGEME -- see https://access.redhat.com/solutions/253273
-        # edpm_bootstrap_command: |
-        #       subscription-manager register --username <subscription_manager_username> \
-        #         --password <subscription_manager_password>
-        #       podman login -u <registry_username> -p <registry_password> registry.redhat.io
+        # conntrack is necessary for some tobiko tests
+        edpm_bootstrap_command: |
+          dnf -y install conntrack-tools
         edpm_network_config_hide_sensitive_logs: false
         edpm_network_config_os_net_config_mappings:
           edpm-compute-0:
