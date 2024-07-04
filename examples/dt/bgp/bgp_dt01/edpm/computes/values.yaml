@@ -25,9 +25,6 @@ data:
         edpm_frr_bgp_ipv4_src_network: bgpmainnet
         edpm_frr_bgp_ipv6_src_network: bgpmainnetv6
         edpm_frr_bgp_neighbor_password: f00barZ
-        edpm_frr_bgp_uplinks:
-          - nic3
-          - nic4
         timesync_ntp_servers:
           - hostname: clock.redhat.com
         # conntrack is necessary for some tobiko tests
@@ -141,9 +138,6 @@ data:
         ansible:
           ansibleHost: 192.168.122.100
           ansibleVars:
-            edpm_ovn_bgp_agent_local_ovn_peer_ips:
-              - 100.64.0.1
-              - 100.65.0.1
             edpm_frr_bgp_peers:
               - 100.64.0.1
               - 100.65.0.1
@@ -175,9 +169,6 @@ data:
         ansible:
           ansibleHost: 192.168.122.101
           ansibleVars:
-            edpm_ovn_bgp_agent_local_ovn_peer_ips:
-              - 100.64.1.1
-              - 100.65.1.1
             edpm_frr_bgp_peers:
               - 100.64.1.1
               - 100.65.1.1
@@ -209,9 +200,6 @@ data:
         ansible:
           ansibleHost: 192.168.122.102
           ansibleVars:
-            edpm_ovn_bgp_agent_local_ovn_peer_ips:
-              - 100.64.2.1
-              - 100.65.2.1
             edpm_frr_bgp_peers:
               - 100.64.2.1
               - 100.65.2.1

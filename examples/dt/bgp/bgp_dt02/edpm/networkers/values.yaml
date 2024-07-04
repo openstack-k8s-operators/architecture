@@ -21,10 +21,14 @@ data:
       ansiblePort: 22
       ansibleVars:
         edpm_ovn_encap_ip: "{{ lookup('vars', 'bgpmainnet_ip') }}"
-        edpm_ovn_bgp_agent_expose_tenant_networks: false
+        edpm_ovn_bgp_agent_driver: ovn_bgp_driver
+        edpm_ovn_bgp_agent_reconcile_interval: 999999
         edpm_frr_bgp_ipv4_src_network: bgpmainnet
         edpm_frr_bgp_ipv6_src_network: bgpmainnetv6
         edpm_frr_bgp_neighbor_password: f00barZ
+        edpm_frr_bgp_uplinks:
+          - nic3
+          - nic4
         timesync_ntp_servers:
           - hostname: clock.redhat.com
         # conntrack is necessary for some tobiko tests
@@ -138,10 +142,6 @@ data:
         hostName: edpm-networker-0
         ansible:
           ansibleHost: 192.168.122.105
-          ansibleVars:
-            edpm_frr_bgp_peers:
-              - 100.64.0.5
-              - 100.65.0.5
         networks:
           - defaultRoute: true
             fixedIP: 192.168.122.105
@@ -169,10 +169,6 @@ data:
         hostName: edpm-networker-1
         ansible:
           ansibleHost: 192.168.122.106
-          ansibleVars:
-            edpm_frr_bgp_peers:
-              - 100.64.1.5
-              - 100.65.1.5
         networks:
           - defaultRoute: true
             fixedIP: 192.168.122.106
@@ -200,10 +196,6 @@ data:
         hostName: edpm-networker-2
         ansible:
           ansibleHost: 192.168.122.107
-          ansibleVars:
-            edpm_frr_bgp_peers:
-              - 100.64.2.5
-              - 100.65.2.5
         networks:
           - defaultRoute: true
             fixedIP: 192.168.122.107
