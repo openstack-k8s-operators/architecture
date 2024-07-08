@@ -20,6 +20,7 @@ data:
       ansibleUser: cloud-admin
       ansiblePort: 22
       ansibleVars:
+        edpm_ovn_encap_ip: "{{ lookup('vars', 'bgpmainnet_ip') }}"
         edpm_ovn_bgp_agent_expose_tenant_networks: false
         edpm_frr_bgp_ipv4_src_network: bgpmainnet
         edpm_frr_bgp_ipv6_src_network: bgpmainnetv6
