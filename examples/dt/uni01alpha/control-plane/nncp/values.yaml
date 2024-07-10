@@ -9,24 +9,31 @@ metadata:
 data:
   openstack-operator-image: "quay.io/openstack-k8s-operators/openstack-operator-index:latest"
 
+  ocp:
+    cluster_network_cidr: 192.168.16.0/20
+    service_network_cidr: 172.30.0.0/16
+
   node_0:
     name: master-0
     internalapi_ip: 172.17.0.10
     tenant_ip: 172.19.0.10
     ctlplane_ip: 192.168.122.10
     storage_ip: 172.18.0.10
+    ironic_ip: 172.20.1.10
   node_1:
     name: master-1
     internalapi_ip: 172.17.0.11
     tenant_ip: 172.19.0.11
     ctlplane_ip: 192.168.122.11
     storage_ip: 172.18.0.11
+    ironic_ip: 172.20.1.11
   node_2:
     name: master-2
     internalapi_ip: 172.17.0.12
     tenant_ip: 172.19.0.12
     ctlplane_ip: 192.168.122.12
     storage_ip: 172.18.0.12
+    ironic_ip: 172.20.1.12
 
   ctlplane:
     dnsDomain: ctlplane.openstack.lab
@@ -40,7 +47,7 @@ data:
         gateway: 192.168.122.1
         name: subnet1
     prefix-length: 24
-    iface: enp6s0
+    iface: enp7s0
     mtu: 9000
     lb_addresses:
       - 192.168.122.80-192.168.122.90
@@ -75,7 +82,7 @@ data:
     prefix-length: 24
     iface: internalapi
     vlan: 20
-    base_iface: enp6s0
+    base_iface: enp7s0
     lb_addresses:
       - 172.17.0.80-172.17.0.90
     endpoint_annotations:
@@ -109,7 +116,7 @@ data:
     prefix-length: 24
     iface: storage
     vlan: 21
-    base_iface: enp6s0
+    base_iface: enp7s0
     lb_addresses:
       - 172.18.0.80-172.18.0.90
     net-attach-def: |
@@ -139,7 +146,7 @@ data:
     prefix-length: 24
     iface: tenant
     vlan: 22
-    base_iface: enp6s0
+    base_iface: enp7s0
     lb_addresses:
       - 172.19.0.80-172.19.0.90
     net-attach-def: |
@@ -160,7 +167,7 @@ data:
     dnsDomain: octavia.openstack.lab
     mtu: 1500
     vlan: 23
-    base_iface: enp6s0
+    base_iface: enp7s0
     net-attach-def: |
       {
         "cniVersion": "0.3.1",
@@ -194,6 +201,27 @@ data:
         "type": "bridge",
         "bridge": "ospbr",
         "ipam": {}
+      }
+
+  ironic:
+    mtu: 1500
+    iface: ironic
+    base_iface: enp8s0
+    cidr: 172.20.1.0/24
+    prefix-length: 24
+    gateway: 172.20.1.1
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "ironic",
+        "type": "bridge",
+        "bridge": "ironic",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "172.20.1.0/24",
+          "range_start": "172.20.1.30",
+          "range_end": "172.20.1.70"
+        }
       }
 
   dns-resolver:

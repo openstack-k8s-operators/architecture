@@ -28,8 +28,9 @@ This topology is used for executing integration tests that evaluate the
 | Provisioning | untagged | nic1      | 172.22.0.0/24   |
 | Machine      | untagged | nic2      | 192.168.32.0/20 |
 | RH OSP       | trunk    | nic3      |                 |
+| ironic       | untagged | nic4      | 172.20.1.0/24   |
 
-#### VLAN networks in RH OSP
+#### Networks in RH OSP
 
 | Name        | Type        | CIDR              |
 | ----------- | ----------- | ----------------- |
@@ -38,6 +39,7 @@ This topology is used for executing integration tests that evaluate the
 | storage     | VLAN tagged | 172.18.0.0/24     |
 | tenant      | VLAN tagged | 172.19.0.0/24     |
 | octavia     | VLAN tagged | 172.23.0.0/24     |
+| ironic      | untagged    | 172.20.1.0/24     |
 
 ### Services, enabled features and configurations
 
@@ -298,6 +300,149 @@ spec:
           datacentre: ospbr
           octavia: octbr
 ```
+
+### Ironic
+
+Ironic service is enabled and appropriate network configuration is applied
+to configure Baremetal-as-a-Service. It manages baremetal nodes and enables
+baremetal nova instances.
+
+A dedicated network is required for baremetal node management, such as
+provisioning, cleaning and inspection. This network should be connected
+to the OCP worker nodes, networker node and the test VMs (Virtual Baremetal).
+
+The appropriate bridge mappings must be configured in Neutron (OVN).
+
+```yaml
+spec:
+  ironic:
+    enabled: true
+    template:
+      databaseInstance: openstack
+      ironicAPI:
+        override:
+          service:
+            internal:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: internalapi
+                  metallb.universe.tf/allow-shared-ip: internalapi
+                  metallb.universe.tf/loadBalancerIPs: 172.17.0.80
+              spec:
+                type: LoadBalancer
+        replicas: 1
+      ironicConductors:
+      - customServiceConfig: |
+          [neutron]
+          cleaning_network = provisioning
+          provisioning_network = provisioning
+          rescuing_network = provisioning
+        networkAttachments:
+        - ironic
+        provisionNetwork: ironic
+        replicas: 1
+        storageRequest: 10G
+      ironicInspector:
+        inspectionNetwork: ironic
+        networkAttachments:
+        - ironic
+        replicas: 1
+      ironicNeutronAgent:
+        replicas: 1
+      secret: osp-secret
+
+  nova:
+    template:
+      cellTemplates:
+        cell1:
+          cellDatabaseAccount: nova-cell1
+          cellDatabaseInstance: openstack-cell1
+          cellMessageBusInstance: rabbitmq-cell1
+          hasAPIAccess: true
+          novaComputeTemplates:
+            compute-ironic:
+              computeDriver: ironic.IronicDriver
+
+  ovn:
+    template:
+      ovnController:
+        nicMappings:
+          datacentre: ocpbr
+          ironic: ironic
+```
+
+#### Ironic cloud configuration
+
+##### Provisioning network
+
+```bash
+openstack network create provisioning \
+  --share --provider-physical-network ironic \
+  --provider-network-type flat \
+  --availability-zone-hint zone-1
+openstack subnet create provisioning-subnet \
+  --network provisioning \
+  --subnet-range 172.20.254.0/24 \
+  --gateway 172.20.254.1 \
+  --allocation-pool start=172.20.254.100,end=172.20.254.200
+```
+
+##### Nova flavor
+
+```shell
+sh-5.1$ openstack flavor create baremetal
+  --ram 1024 --vcpus 1 --disk 15 \
+  --property resources:VCPU=0 \
+  --property resources:MEMORY_MB=0 \
+  --property resources:DISK_GB=0 \
+  --property resources:CUSTOM_BAREMETAL=1 \
+  --property capabilities:boot_mode=uefi
+```
+
+##### Enroll nodes
+
+```shell
+$ cat nodes.yaml
+---
+nodes:
+  - name: ironic-0
+    driver: ipmi
+    ports:
+      - address: "52:54:00:71:7e:6c"
+    driver_info:
+      ipmi_address: 10.1.200.16
+      ipmi_port: 6260
+      ipmi_username: admin
+      ipmi_password: password
+  - name: ironic-1
+    driver: ipmi
+    ports:
+      - address: "52:54:00:e3:64:98"
+    driver_info:
+      ipmi_address: 10.1.200.16
+      ipmi_port: 6261
+      ipmi_username: admin
+      ipmi_password: password
+
+sh-5.1$ openstack baremetal create nodes.yaml
+sh-5.1$ openstack baremetal node list
++--------------------------------------+----------+---------------+-------------+--------------------+-------------+
+| UUID                                 | Name     | Instance UUID | Power State | Provisioning State | Maintenance |
++--------------------------------------+----------+---------------+-------------+--------------------+-------------+
+| 887726a6-3e69-4038-98d8-4d5047213d5a | ironic-0 | None          | None        | enroll             | False       |
+| 4a510c68-703d-46b3-b31c-0f873e1f20f2 | ironic-1 | None          | None        | enroll             | False       |
++--------------------------------------+----------+---------------+-------------+--------------------+-------------+
+sh-5.1$ openstack baremetal node manage ironic-0
+sh-5.1$ openstack baremetal node manage ironic-1
+sh-5.1$ openstack baremetal node list
++--------------------------------------+----------+---------------+-------------+--------------------+-------------+
+| UUID                                 | Name     | Instance UUID | Power State | Provisioning State | Maintenance |
++--------------------------------------+----------+---------------+-------------+--------------------+-------------+
+| 887726a6-3e69-4038-98d8-4d5047213d5a | ironic-0 | None          | None        | verifying          | False       |
+| 4a510c68-703d-46b3-b31c-0f873e1f20f2 | ironic-1 | None          | None        | verifying          | False       |
++--------------------------------------+----------+---------------+-------------+--------------------+-------------+
+```
+
 
 ## Testing
 
