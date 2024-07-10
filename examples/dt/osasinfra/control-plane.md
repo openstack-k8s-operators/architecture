@@ -31,7 +31,7 @@ oc apply -f nncp.yaml
 ```
 Wait for NNCPs to be available
 ```
-oc wait nncp -l osp/nncm-config-type=standard --for jsonpath='{.status.conditions[0].reason}'=SuccessfullyConfigured --timeout=3m
+oc wait nncp -l osp/nncm-config-type=standard --for jsonpath='{.status.conditions[0].reason}'=SuccessfullyConfigured --timeout=5m
 ```
 
 ## Apply networking and control-plane configuration
@@ -47,5 +47,5 @@ oc apply -f control-plane.yaml
 
 Wait for control plane to be available
 ```
-oc wait osctlplane controlplane --for condition=Ready --timeout=30m
+oc wait osctlplane controlplane --for condition=Ready --timeout=60m
 ```

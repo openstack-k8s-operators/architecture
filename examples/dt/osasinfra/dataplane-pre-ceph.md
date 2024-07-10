@@ -36,7 +36,7 @@ oc apply -f dataplane-nodeset-pre-ceph.yaml
 ```
 Wait for pre-Ceph dataplane nodeset setup to finish
 ```
-oc wait osdpns openstack-edpm --for condition=SetupReady --timeout=600s
+oc wait osdpns openstack-edpm --for condition=SetupReady --timeout=10m
 ```
 
 Start the deployment
@@ -46,5 +46,5 @@ oc apply -f dataplane-deployment-pre-ceph.yaml
 
 Wait for pre-Ceph dataplane deployment to finish
 ```
-oc wait osdpd edpm-deployment-pre-ceph --for condition=Ready --timeout=1500s
+oc wait osdpd edpm-deployment-pre-ceph --for condition=Ready --timeout=30m
 ```

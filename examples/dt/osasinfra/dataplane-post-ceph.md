@@ -52,7 +52,7 @@ oc apply -f nodeset-post-ceph.yaml
 ```
 Wait for post-Ceph dataplane nodeset setup to finish
 ```
-oc wait osdpns openstack-edpm --for condition=SetupReady --timeout=600s
+oc wait osdpns openstack-edpm --for condition=SetupReady --timeout=10m
 ```
 Create the deployment CR
 ```
