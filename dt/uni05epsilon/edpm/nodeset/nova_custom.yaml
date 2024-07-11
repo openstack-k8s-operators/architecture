@@ -9,11 +9,6 @@ data:
     # Override our defaults in this dt to get coverage for metadata-api based
     # cloud-init scenarios
     force_config_drive = False
-    # NOTE(gibi): We need to disable multipath as IPv6 is not fully
-    # working in this job with NetApp.
-    # Enable multipath when OSPRH-7393 is resolved.
-    [libvirt]
-    volume_use_multipath = False
 
 ---
 apiVersion: dataplane.openstack.org/v1beta1
