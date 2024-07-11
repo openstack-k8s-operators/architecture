@@ -8,6 +8,9 @@ metadata:
 data:
   preserveJobs: false
 
+  horizon:
+    enabled: false
+
   cinderBackup:
     customServiceConfig: |
       [DEFAULT]

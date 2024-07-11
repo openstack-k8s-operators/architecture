@@ -194,3 +194,15 @@ replacements:
           - spec.nova.template.cellTemplates
         options:
           create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.horizon.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.horizon.enabled
+        options:
+          create: true
