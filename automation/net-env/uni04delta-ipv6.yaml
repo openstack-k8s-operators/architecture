@@ -1,0 +1,620 @@
+---
+instances:
+  ceph-0:
+    hostname: ceph-0
+    name: ceph-0
+    networks:
+      ctlplane:
+        interface_name: eth1
+        ip_v6: 2620:cf:cf:aaaa::106
+        is_trunk_parent: true
+        mac_addr: 52:54:05:a9:f2:c4
+        mtu: 1500
+        network_name: ctlplane
+        prefix_length_v6: 64
+        skip_nm: false
+      internalapi:
+        interface_name: eth1.20
+        ip_v6: 2620:cf:cf:bbbb::106
+        is_trunk_parent: false
+        mac_addr: 52:54:00:04:df:87
+        mtu: 1500
+        network_name: internalapi
+        parent_interface: eth1
+        prefix_length_v6: 64
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 20
+      storage:
+        interface_name: eth1.21
+        ip_v6: 2620:cf:cf:cccc::106
+        is_trunk_parent: false
+        mac_addr: 52:54:00:7e:b2:1c
+        mtu: 1500
+        network_name: storage
+        parent_interface: eth1
+        prefix_length_v6: 64
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 21
+      storagemgmt:
+        interface_name: eth1.23
+        ip_v6: 2620:cf:cf:dddd::106
+        is_trunk_parent: false
+        mac_addr: 52:54:00:12:53:0e
+        mtu: 1500
+        network_name: storagemgmt
+        parent_interface: eth1
+        prefix_length_v6: 64
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 23
+  ceph-1:
+    hostname: ceph-1
+    name: ceph-1
+    networks:
+      ctlplane:
+        interface_name: eth1
+        ip_v6: 2620:cf:cf:aaaa::107
+        is_trunk_parent: true
+        mac_addr: 52:54:06:1c:ff:4d
+        mtu: 1500
+        network_name: ctlplane
+        prefix_length_v6: 64
+        skip_nm: false
+      internalapi:
+        interface_name: eth1.20
+        ip_v6: 2620:cf:cf:bbbb::107
+        is_trunk_parent: false
+        mac_addr: 52:54:00:04:df:87
+        mtu: 1500
+        network_name: internalapi
+        parent_interface: eth1
+        prefix_length_v6: 64
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 20
+      storage:
+        interface_name: eth1.21
+        ip_v6: 2620:cf:cf:cccc::107
+        is_trunk_parent: false
+        mac_addr: 52:54:00:7e:b2:1c
+        mtu: 1500
+        network_name: storage
+        parent_interface: eth1
+        prefix_length_v6: 64
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 21
+      storagemgmt:
+        interface_name: eth1.23
+        ip_v6: 2620:cf:cf:dddd::107
+        is_trunk_parent: false
+        mac_addr: 52:54:00:12:53:0e
+        mtu: 1500
+        network_name: storagemgmt
+        parent_interface: eth1
+        prefix_length_v6: 64
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 23
+  ceph-2:
+    hostname: ceph-2
+    name: ceph-2
+    networks:
+      ctlplane:
+        interface_name: eth1
+        ip_v6: 2620:cf:cf:aaaa::108
+        is_trunk_parent: true
+        mac_addr: 52:54:07:be:1b:6a
+        mtu: 1500
+        network_name: ctlplane
+        prefix_length_v6: 64
+        skip_nm: false
+      internalapi:
+        interface_name: eth1.20
+        ip_v6: 2620:cf:cf:bbbb::108
+        is_trunk_parent: false
+        mac_addr: 52:54:00:04:df:87
+        mtu: 1500
+        network_name: internalapi
+        parent_interface: eth1
+        prefix_length_v6: 64
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 20
+      storage:
+        interface_name: eth1.21
+        ip_v6: 2620:cf:cf:cccc::108
+        is_trunk_parent: false
+        mac_addr: 52:54:00:7e:b2:1c
+        mtu: 1500
+        network_name: storage
+        parent_interface: eth1
+        prefix_length_v6: 64
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 21
+      storagemgmt:
+        interface_name: eth1.23
+        ip_v6: 2620:cf:cf:dddd::108
+        is_trunk_parent: false
+        mac_addr: 52:54:00:12:53:0e
+        mtu: 1500
+        network_name: storagemgmt
+        parent_interface: eth1
+        prefix_length_v6: 64
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 23
+  compute-0:
+    hostname: compute-0
+    name: compute-0
+    networks:
+      ctlplane:
+        interface_name: eth1
+        ip_v6: 2620:cf:cf:aaaa::100
+        is_trunk_parent: true
+        mac_addr: 52:54:03:6f:dc:42
+        mtu: 1500
+        network_name: ctlplane
+        prefix_length_v6: 64
+        skip_nm: false
+      internalapi:
+        interface_name: eth1.20
+        ip_v6: 2620:cf:cf:bbbb::100
+        is_trunk_parent: false
+        mac_addr: 52:54:00:04:df:87
+        mtu: 1500
+        network_name: internalapi
+        parent_interface: eth1
+        prefix_length_v6: 64
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 20
+      storage:
+        interface_name: eth1.21
+        ip_v6: 2620:cf:cf:cccc::100
+        is_trunk_parent: false
+        mac_addr: 52:54:00:7e:b2:1c
+        mtu: 1500
+        network_name: storage
+        parent_interface: eth1
+        prefix_length_v6: 64
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 21
+      tenant:
+        interface_name: eth1.22
+        ip_v6: 2620:cf:cf:eeee::100
+        is_trunk_parent: false
+        mac_addr: 52:54:00:12:d1:e1
+        mtu: 1500
+        network_name: tenant
+        parent_interface: eth1
+        prefix_length_v6: 64
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 22
+  compute-1:
+    hostname: compute-1
+    name: compute-1
+    networks:
+      ctlplane:
+        interface_name: eth1
+        ip_v6: 2620:cf:cf:aaaa::101
+        is_trunk_parent: true
+        mac_addr: 52:54:04:a6:70:fb
+        mtu: 1500
+        network_name: ctlplane
+        prefix_length_v6: 64
+        skip_nm: false
+      internalapi:
+        interface_name: eth1.20
+        ip_v6: 2620:cf:cf:bbbb::101
+        is_trunk_parent: false
+        mac_addr: 52:54:00:04:df:87
+        mtu: 1500
+        network_name: internalapi
+        parent_interface: eth1
+        prefix_length_v6: 64
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 20
+      storage:
+        interface_name: eth1.21
+        ip_v6: 2620:cf:cf:cccc::101
+        is_trunk_parent: false
+        mac_addr: 52:54:00:7e:b2:1c
+        mtu: 1500
+        network_name: storage
+        parent_interface: eth1
+        prefix_length_v6: 64
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 21
+      tenant:
+        interface_name: eth1.22
+        ip_v6: 2620:cf:cf:eeee::101
+        is_trunk_parent: false
+        mac_addr: 52:54:00:12:d1:e1
+        mtu: 1500
+        network_name: tenant
+        parent_interface: eth1
+        prefix_length_v6: 64
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 22
+  controller-0:
+    hostname: controller-0
+    name: controller-0
+    networks:
+      ctlplane:
+        interface_name: eth1
+        ip_v6: 2620:cf:cf:aaaa::9
+        mac_addr: 52:54:08:5f:4e:bb
+        mtu: 1500
+        network_name: ctlplane
+        prefix_length_v6: 64
+        skip_nm: false
+  ocp-0:
+    hostname: master-0
+    name: ocp-0
+    networks:
+      ctlplane:
+        interface_name: enp7s0
+        ip_v6: 2620:cf:cf:aaaa::10
+        is_trunk_parent: true
+        mac_addr: 52:54:00:cb:fa:32
+        mtu: 1500
+        network_name: ctlplane
+        prefix_length_v6: 64
+        skip_nm: false
+      internalapi:
+        interface_name: enp7s0.20
+        ip_v6: 2620:cf:cf:bbbb::10
+        is_trunk_parent: false
+        mac_addr: 52:54:00:04:df:87
+        mtu: 1500
+        network_name: internalapi
+        parent_interface: enp7s0
+        prefix_length_v6: 64
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 20
+      ironic:
+        interface_name: enp8s0
+        ip_v6: 2620:cf:cf:ffff::10
+        mac_addr: 52:54:00:c2:32:a2
+        mtu: 1500
+        network_name: ironic
+        prefix_length_v6: 64
+        skip_nm: false
+      storage:
+        interface_name: enp7s0.21
+        ip_v6: 2620:cf:cf:cccc::10
+        is_trunk_parent: false
+        mac_addr: 52:54:00:7e:b2:1c
+        mtu: 1500
+        network_name: storage
+        parent_interface: enp7s0
+        prefix_length_v6: 64
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 21
+      tenant:
+        interface_name: enp7s0.22
+        ip_v6: 2620:cf:cf:eeee::10
+        is_trunk_parent: false
+        mac_addr: 52:54:00:12:d1:e1
+        mtu: 1500
+        network_name: tenant
+        parent_interface: enp7s0
+        prefix_length_v6: 64
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 22
+  ocp-1:
+    hostname: master-1
+    name: ocp-1
+    networks:
+      ctlplane:
+        interface_name: enp7s0
+        ip_v6: 2620:cf:cf:aaaa::11
+        is_trunk_parent: true
+        mac_addr: 52:54:01:86:d1:0e
+        mtu: 1500
+        network_name: ctlplane
+        prefix_length_v6: 64
+        skip_nm: false
+      internalapi:
+        interface_name: enp7s0.20
+        ip_v6: 2620:cf:cf:bbbb::11
+        is_trunk_parent: false
+        mac_addr: 52:54:00:04:df:87
+        mtu: 1500
+        network_name: internalapi
+        parent_interface: enp7s0
+        prefix_length_v6: 64
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 20
+      ironic:
+        interface_name: enp8s0
+        ip_v6: 2620:cf:cf:ffff::11
+        mac_addr: 52:54:00:c2:32:a2
+        mtu: 1500
+        network_name: ironic
+        prefix_length_v6: 64
+        skip_nm: false
+      storage:
+        interface_name: enp7s0.21
+        ip_v6: 2620:cf:cf:cccc::11
+        is_trunk_parent: false
+        mac_addr: 52:54:00:7e:b2:1c
+        mtu: 1500
+        network_name: storage
+        parent_interface: enp7s0
+        prefix_length_v6: 64
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 21
+      tenant:
+        interface_name: enp7s0.22
+        ip_v6: 2620:cf:cf:eeee::11
+        is_trunk_parent: false
+        mac_addr: 52:54:00:12:d1:e1
+        mtu: 1500
+        network_name: tenant
+        parent_interface: enp7s0
+        prefix_length_v6: 64
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 22
+  ocp-2:
+    hostname: master-2
+    name: ocp-2
+    networks:
+      ctlplane:
+        interface_name: enp7s0
+        ip_v6: 2620:cf:cf:aaaa::12
+        is_trunk_parent: true
+        mac_addr: 52:54:02:18:86:bb
+        mtu: 1500
+        network_name: ctlplane
+        prefix_length_v6: 64
+        skip_nm: false
+      internalapi:
+        interface_name: enp7s0.20
+        ip_v6: 2620:cf:cf:bbbb::12
+        is_trunk_parent: false
+        mac_addr: 52:54:00:04:df:87
+        mtu: 1500
+        network_name: internalapi
+        parent_interface: enp7s0
+        prefix_length_v6: 64
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 20
+      ironic:
+        interface_name: enp8s0
+        ip_v6: 2620:cf:cf:ffff::12
+        mac_addr: 52:54:00:c2:32:a2
+        mtu: 1500
+        network_name: ironic
+        prefix_length_v6: 64
+        skip_nm: false
+      storage:
+        interface_name: enp7s0.21
+        ip_v6: 2620:cf:cf:cccc::12
+        is_trunk_parent: false
+        mac_addr: 52:54:00:7e:b2:1c
+        mtu: 1500
+        network_name: storage
+        parent_interface: enp7s0
+        prefix_length_v6: 64
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 21
+      tenant:
+        interface_name: enp7s0.22
+        ip_v6: 2620:cf:cf:eeee::12
+        is_trunk_parent: false
+        mac_addr: 52:54:00:12:d1:e1
+        mtu: 1500
+        network_name: tenant
+        parent_interface: enp7s0
+        prefix_length_v6: 64
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 22
+networks:
+  ctlplane:
+    dns_v4: []
+    dns_v6:
+      - 2620:cf:cf:aaaa::1
+    gw_v6: 2620:cf:cf:aaaa::1
+    mtu: 1500
+    network_name: ctlplane
+    network_v6: 2620:cf:cf:aaaa::/64
+    search_domain: ctlplane.example.com
+    tools:
+      metallb:
+        ipv6_ranges:
+          - end: 2620:cf:cf:aaaa::90
+            end_host: 90
+            length: 11
+            start: 2620:cf:cf:aaaa::80
+            start_host: 80
+        ipv4_ranges: []
+      multus:
+        ipv6_ranges:
+          - end: 2620:cf:cf:aaaa::70
+            end_host: 70
+            length: 41
+            start: 2620:cf:cf:aaaa::30
+            start_host: 30
+        ipv4_ranges: []
+      netconfig:
+        ipv6_ranges:
+          - end: 2620:cf:cf:aaaa::120
+            end_host: 120
+            length: 21
+            start: 2620:cf:cf:aaaa::100
+            start_host: 100
+          - end: 2620:cf:cf:aaaa::200
+            end_host: 200
+            length: 51
+            start: 2620:cf:cf:aaaa::150
+            start_host: 150
+        ipv4_ranges: []
+  external:
+    dns_v4: []
+    dns_v6: []
+    mtu: 1500
+    network_name: external
+    network_v6: 2620:cf:cf:cf02::/64
+    search_domain: external.example.com
+    tools:
+      netconfig:
+        ipv6_ranges:
+          - end: 2620:cf:cf:cf02::250
+            end_host: 250
+            length: 121
+            start: 2620:cf:cf:cf02::130
+            start_host: 130
+        ipv4_ranges: []
+    vlan_id: 22
+  internalapi:
+    dns_v4: []
+    dns_v6: []
+    mtu: 1500
+    network_name: internalapi
+    network_v6: 2620:cf:cf:bbbb::0/64
+    search_domain: internalapi.example.com
+    tools:
+      metallb:
+        ipv6_ranges:
+          - end: 2620:cf:cf:bbbb::90
+            end_host: 90
+            length: 11
+            start: 2620:cf:cf:bbbb::80
+            start_host: 80
+        ipv4_ranges: []
+      multus:
+        ipv6_ranges:
+          - end: 2620:cf:cf:bbbb::70
+            end_host: 70
+            length: 41
+            start: 2620:cf:cf:bbbb::30
+            start_host: 30
+        ipv4_ranges: []
+      netconfig:
+        ipv6_ranges:
+          - end: 2620:cf:cf:bbbb::250
+            end_host: 250
+            length: 151
+            start: 2620:cf:cf:bbbb::100
+            start_host: 100
+        ipv4_ranges: []
+    vlan_id: 20
+  ironic:
+    dns_v4: []
+    dns_v6: []
+    mtu: 1500
+    network_name: ironic
+    network_v6: 2620:cf:cf:ffff::0/64
+    search_domain: ironic.example.com
+    tools:
+      multus:
+        ipv6_ranges:
+          - end: 2620:cf:cf:ffff::70
+            end_host: 70
+            length: 41
+            start: 2620:cf:cf:ffff::30
+            start_host: 30
+        ipv4_ranges: []
+  storage:
+    dns_v4: []
+    dns_v6: []
+    mtu: 1500
+    network_name: storage
+    network_v6: 2620:cf:cf:cccc::0/64
+    search_domain: storage.example.com
+    tools:
+      metallb:
+        ipv6_ranges:
+          - end: 2620:cf:cf:cccc::90
+            end_host: 90
+            length: 11
+            start: 2620:cf:cf:cccc::80
+            start_host: 80
+        ipv4_ranges: []
+      multus:
+        ipv6_ranges:
+          - end: 2620:cf:cf:cccc::70
+            end_host: 70
+            length: 41
+            start: 2620:cf:cf:cccc::30
+            start_host: 30
+        ipv4_ranges: []
+      netconfig:
+        ipv6_ranges:
+          - end: 2620:cf:cf:cccc::250
+            end_host: 250
+            length: 151
+            start: 2620:cf:cf:cccc::100
+            start_host: 100
+        ipv4_ranges: []
+    vlan_id: 21
+  storagemgmt:
+    dns_v4: []
+    dns_v6: []
+    mtu: 1500
+    network_name: storagemgmt
+    network_v6: 2620:cf:cf:dddd::0/64
+    search_domain: storagemgmt.example.com
+    tools:
+      netconfig:
+        ipv6_ranges:
+          - end: 2620:cf:cf:dddd::250
+            end_host: 250
+            length: 151
+            start: 2620:cf:cf:dddd::100
+            start_host: 100
+        ipv4_ranges: []
+    vlan_id: 23
+  tenant:
+    dns_v4: []
+    dns_v6: []
+    mtu: 1500
+    network_name: tenant
+    network_v6: 2620:cf:cf:eeee::0/64
+    search_domain: tenant.example.com
+    tools:
+      metallb:
+        ipv6_ranges:
+          - end: 2620:cf:cf:eeee::90
+            end_host: 90
+            length: 11
+            start: 2620:cf:cf:eeee::80
+            start_host: 80
+        ipv4_ranges: []
+      multus:
+        ipv6_ranges:
+          - end: 2620:cf:cf:eeee::70
+            end_host: 70
+            length: 41
+            start: 2620:cf:cf:eeee::30
+            start_host: 30
+        ipv4_ranges: []
+      netconfig:
+        ipv6_ranges:
+          - end: 2620:cf:cf:eeee::250
+            end_host: 250
+            length: 151
+            start: 2620:cf:cf:eeee::100
+            start_host: 100
+        ipv4_ranges: []
+    vlan_id: 22
+routers: {}

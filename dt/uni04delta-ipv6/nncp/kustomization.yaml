@@ -1,0 +1,262 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+transformers:
+  - |-
+    apiVersion: builtin
+    kind: NamespaceTransformer
+    metadata:
+      name: _ignored_
+      namespace: openstack
+    setRoleBindingSubjects: none
+    unsetOnly: true
+    fieldSpecs:
+      - path: metadata/name
+        kind: Namespace
+        create: true
+
+components:
+  - ../../../lib/nncp_ipv6
+
+patches:
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: master-0
+    patch: &ironicbr_template |-
+      - op: add
+        path: /spec/desiredState/interfaces/-
+        value:
+          description: Ironic bridge
+          ipv6:
+            enabled: true
+            address:
+              - ip: _replaced_
+                prefix-length: _replaced_
+          ipv4:
+             enabled: false
+          mtu: 1500
+          name: ironic
+          type: linux-bridge
+          bridge:
+            options:
+              stp:
+                enabled: false
+            port:
+              - name: _replaced_
+
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: master-1
+    patch: *ironicbr_template
+
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: master-2
+    patch: *ironicbr_template
+
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: master-0
+    patch: &ironicvrf_template |-
+      - op: add
+        path: /spec/desiredState/interfaces/-
+        value:
+          description: Ironic VRF
+          name: ironicvrf
+          type: vrf
+          state: up
+          vrf:
+            port:
+              - ironic
+            route-table-id: 10
+
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: master-1
+    patch: *ironicvrf_template
+
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: master-2
+    patch: *ironicvrf_template
+
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: master-0
+    patch: &routes |-
+      - op: add
+        path: /spec/desiredState/routes/config/-
+        value:
+          destination: "::/0"
+          metric: 150
+          next-hop-address: _replaced_
+          next-hop-interface: ironic
+          table-id: 10
+      - op: add
+        path: /spec/desiredState/routes/config/-
+        value:
+          destination: _replaced_
+          metric: 150
+          next-hop-address: _replaced_
+          next-hop-interface: ospbr
+      - op: add
+        path: /spec/desiredState/routes/config/-
+        value:
+          destination: "::/0"
+          metric: 150
+          next-hop-address: _replaced_
+          next-hop-interface: ospbr
+
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: master-1
+    patch: *routes
+
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: master-2
+    patch: *routes
+
+replacements:
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ironic.base_iface
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-0
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=ironic].bridge.port.0.name
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-1
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=ironic].bridge.port.0.name
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-2
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=ironic].bridge.port.0.name
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_0.ironic_ip
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-0
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=ironic].ipv6.address.0.ip
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_1.ironic_ip
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-1
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=ironic].ipv6.address.0.ip
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_2.ironic_ip
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-2
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=ironic].ipv6.address.0.ip
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ironic.prefix-length
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-0
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=ironic].ipv6.address.0.prefix-length
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-1
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=ironic].ipv6.address.0.prefix-length
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-2
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=ironic].ipv6.address.0.prefix-length
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ironic.gateway
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-0
+        fieldPaths:
+          - spec.desiredState.routes.config.0.next-hop-address
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-1
+        fieldPaths:
+          - spec.desiredState.routes.config.0.next-hop-address
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-2
+        fieldPaths:
+          - spec.desiredState.routes.config.0.next-hop-address
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ctlplane.subnets.0.gateway
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-0
+        fieldPaths:
+          - spec.desiredState.routes.config.1.next-hop-address
+          - spec.desiredState.routes.config.2.next-hop-address
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-1
+        fieldPaths:
+          - spec.desiredState.routes.config.1.next-hop-address
+          - spec.desiredState.routes.config.2.next-hop-address
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-2
+        fieldPaths:
+          - spec.desiredState.routes.config.1.next-hop-address
+          - spec.desiredState.routes.config.2.next-hop-address
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ironic.cidr
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-0
+        fieldPaths:
+          - spec.desiredState.routes.config.1.destination
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-1
+        fieldPaths:
+          - spec.desiredState.routes.config.1.destination
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-2
+        fieldPaths:
+          - spec.desiredState.routes.config.1.destination
