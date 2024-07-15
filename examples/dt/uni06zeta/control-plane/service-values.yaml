@@ -54,8 +54,7 @@ data:
       cinder_store_password = {{ .ServicePassword }}
       cinder_store_project_name = service
       cinder_catalog_info = volumev3::internalURL
-      # TODO: Enable multipath when OSPRH-7393 is resolved
-      # cinder_use_multipath = true
+      cinder_use_multipath = true
       [oslo_concurrency]
       lock_path = /var/lib/glance/tmp
     default:
