@@ -15,6 +15,7 @@ data:
       backup_driver = cinder.backup.drivers.ceph.CephBackupDriver
       backup_ceph_pool = backups
       backup_ceph_user = openstack
+    replicas: 3
 
   cinderVolumes:
     ceph:
