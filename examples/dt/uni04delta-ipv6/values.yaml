@@ -49,7 +49,7 @@ data:
               name: {{ neutron_physical_bridge_name }}
               mtu: {{ min_viable_mtu }}
               use_dhcp: false
-              dns_servers: '{{ ctlplane_dns_nameservers }}'
+              dns_servers: {{ ctlplane_dns_nameservers | list }}
               domain: {{ dns_search_domains }}
               addresses:
                 - ip_netmask: '{{ ctlplane_ip }}/{{ ctlplane_cidr }}'
