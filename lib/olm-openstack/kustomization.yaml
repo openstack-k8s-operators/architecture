@@ -18,3 +18,13 @@ replacements:
           kind: CatalogSource
         fieldPaths:
           - spec.image
+  - source:
+      kind: ConfigMap
+      name: olm-values
+      fieldPath: data.openstack-operator-channel
+    targets:
+      - select:
+          kind: Subscription
+          name: openstack-operator
+        fieldPaths:
+          - spec.channel
