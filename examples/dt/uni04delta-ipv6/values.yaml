@@ -37,6 +37,7 @@ data:
         edpm_logrotate_crond_image: '{{ registry_url }}/openstack-cron:{{ image_tag }}'
         edpm_network_config_hide_sensitive_logs: false
 
+        # todo(fultonj): remove hard-coded value in dns_servers OSPRH-8771
         edpm_network_config_template: |
           ---
           {% set mtu_list = [ctlplane_mtu] %}
@@ -49,7 +50,7 @@ data:
               name: {{ neutron_physical_bridge_name }}
               mtu: {{ min_viable_mtu }}
               use_dhcp: false
-              dns_servers: {{ ctlplane_dns_nameservers | list }}
+              dns_servers: {{ ( ['2620:cf:cf:cf02::1'] + ctlplane_dns_nameservers ) | list }}
               domain: {{ dns_search_domains }}
               addresses:
                 - ip_netmask: '{{ ctlplane_ip }}/{{ ctlplane_cidr }}'
