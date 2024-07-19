@@ -762,6 +762,9 @@ cifmw_networking_env_definition:
               start: 172.23.0.30
               start_host: 30
           ipv6_ranges: []
+          ipv4_routes:
+            - destination: "172.24.0.0/16"
+              gateway: "172.23.0.150"
         netconfig:
           ipv4_ranges:
             - end: 172.23.0.250
