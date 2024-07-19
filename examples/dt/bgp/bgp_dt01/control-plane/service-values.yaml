@@ -27,21 +27,33 @@ data:
     enabled: true
 
   octavia:
-    enabled: false
+    enabled: true
     amphoraImageContainerImage: quay.io/gthiemonge/octavia-amphora-image
     apacheContainerImage: registry.redhat.io/ubi9/httpd-24:latest
     octaviaAPI:
       networkAttachments:
         - internalapi
+      customServiceConfig: |
+        [controller_worker]
+        loadbalancer_topology=ACTIVE_STANDBY
     octaviaHousekeeping:
       networkAttachments:
         - octavia
+      customServiceConfig: |
+        [controller_worker]
+        loadbalancer_topology=ACTIVE_STANDBY
     octaviaHealthManager:
       networkAttachments:
         - octavia
+      customServiceConfig: |
+        [controller_worker]
+        loadbalancer_topology=ACTIVE_STANDBY
     octaviaWorker:
       networkAttachments:
         - octavia
+      customServiceConfig: |
+        [controller_worker]
+        loadbalancer_topology=ACTIVE_STANDBY
 
   ovn:
     ovnController:
