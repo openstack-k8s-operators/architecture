@@ -9,3 +9,40 @@ metadata:
 
 data:
   preserveJobs: false
+  octavia:
+    enabled: true
+     # Workaround for https://issues.redhat.com/browse/OSPRH-9102
+￼    # There's a bug in uni-epsilon, the octavia-operator uploads a qcow2 image
+￼    # to glance but a pre-tests task updates the properties of a cinder volume.
+￼    # This update fails because the default volume type is already in use.
+    amphoraImageContainerImage: ""
+    apacheContainerImage: registry.redhat.io/ubi9/httpd-24:latest
+    octaviaAPI:
+      networkAttachments:
+        - internalapi
+      customServiceConfig: |
+        [controller_worker]
+        loadbalancer_topology=ACTIVE_STANDBY
+    octaviaHousekeeping:
+      networkAttachments:
+        - octavia
+      customServiceConfig: |
+        [controller_worker]
+        loadbalancer_topology=ACTIVE_STANDBY
+    octaviaHealthManager:
+      networkAttachments:
+        - octavia
+      customServiceConfig: |
+        [controller_worker]
+        loadbalancer_topology=ACTIVE_STANDBY
+    octaviaWorker:
+      networkAttachments:
+        - octavia
+      customServiceConfig: |
+        [controller_worker]
+        loadbalancer_topology=ACTIVE_STANDBY
+
+  ovn:
+    ovnController:
+      nicMappings:
+        - octavia: octbr
