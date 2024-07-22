@@ -84,6 +84,60 @@ the operators, recommended to create dedicated label for each target serving nod
 and configure the storage ips of each cinder-volume instance with LVM backend.
 
 
+#### Octavia
+
+Octavia is enabled with the appropriate network attachments configured to
+deploy Octavia. It manages amphorae VMs through a self-service tenant network.
+The Octavia Amphora controllers get access to it through a Neutron externally
+routed flat provider network configured as a SNAT-less gateway for a neutron
+router linked to the tenant networks. Host routes on the tenant network's
+subnet and routes on the network attachment provide the required `next hop`
+routing to establish the necessary bidirectional routing.
+
+This arrangement requires a network attachment for connecting the OVN and
+Amphora Controller pods (octavia-housekeeping, octavia-healthmanager,
+octavia-worker). Because Neutron ML2/OVN implements provider networks by
+bridging the relevant physical interface - in this case the network-attachment,
+there is an additional requirement that this attachment function when
+bridged. As the default macvlan attachments do not function when bridged, a
+bridge network attachment is used.
+
+Bridge attachments do not directly provide connectivity outside of the OCP
+node. To implement this, the NodeNetworkConfigurationPolicy creates an VLAN
+interface as is typical for the other networks, but does not configure an IP
+pool as it is not needed. It is also not configured for metallb as it is solely
+as part of a way to establish a L2 network link between nodes. The
+NodeNetworkConfigurationPolicy also configures an octbr linux bridge which is
+configured as the bridge for the network attachment mentioned above. It is also
+configured to add the VLAN interface as a port, effectively linking the nodes
+and the network attachments.
+
+```YAML
+spec:
+  octavia:
+    enabled: true
+    template:
+      octaviaAPI:
+        networkAttachments:
+          - internalapi
+      octaviaHousekeeping:
+        networkAttachments:
+          - octavia
+      octaviaWorker:
+        networkAttachments:
+          - octavia
+      octaviaHealthManager:
+        networkAttachments:
+          - octavia
+
+  ovn:
+    template:
+      ovncontroller:
+        nicMappings:
+          datacentre: ospbr
+          octavia: octbr
+```
+
 ## Testing tree
 
 | Test framework   | When to run          | Special configuration |
