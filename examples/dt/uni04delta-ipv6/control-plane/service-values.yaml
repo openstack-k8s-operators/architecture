@@ -9,7 +9,7 @@ data:
   preserveJobs: false
 
   horizon:
-    enabled: false
+    enabled: true
 
   cinderBackup:
     customServiceConfig: |
