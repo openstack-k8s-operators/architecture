@@ -85,10 +85,19 @@ data:
     databaseInstance: openstack
     glanceAPIs:
       default:
-        # NOTE: (fpantano) - replica here must be 1 because
-        # we removed NFS extraMounts via PR#288 due to OSPRH-7396
-        replicas: 1
+        replicas: 3
         type: single
+    extraMounts:
+      - extraVol:
+          - extraVolType: Nfs
+            mounts:
+              - mountPath: /var/lib/glance/images
+                name: nfs
+            volumes:
+              - name: nfs
+                nfs:
+                  path: _replaced_
+                  server: _replaced_
 
   heat:
     enabled: true
