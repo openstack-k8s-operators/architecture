@@ -64,10 +64,29 @@ data:
     enabled: true
 
   octavia:
-    enabled: true
+    enabled: false
+    amphoraImageContainerImage: quay.io/gthiemonge/octavia-amphora-image
+    apacheContainerImage: registry.redhat.io/ubi9/httpd-24:latest
+    availabilityZones:
+      - zone-1
+    octaviaAPI:
+      networkAttachments:
+        - internalapi
+    octaviaHousekeeping:
+      networkAttachments:
+        - octavia
+    octaviaHealthManager:
+      networkAttachments:
+        - octavia
+    octaviaWorker:
+      networkAttachments:
+        - octavia
 
   ovn:
     ovnController:
+      nicMappings:
+        octavia: octbr
+        datacentre: ocpbr
       availability-zones:
         - zone-1
 
@@ -114,7 +133,7 @@ data:
       ovn_emit_need_to_frag = true
       enable_distributed_floating_ip = false
       [ml2]
-      type_drivers = geneve,vlan
+      type_drivers = geneve,vlan,flat
       tenant_network_types = geneve,vlan
       extension_drivers = qos,port_security,dns_domain_ports
       path_mtu = 1400
