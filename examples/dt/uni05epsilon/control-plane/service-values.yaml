@@ -84,7 +84,7 @@ data:
         type: split
 
   octavia:
-    enabled: false  # TODO after healthmanager fixed
+    enabled: true
     amphoraImageContainerImage: quay.io/gthiemonge/octavia-amphora-image
     apacheContainerImage: registry.redhat.io/ubi9/httpd-24:latest
     octaviaAPI:
