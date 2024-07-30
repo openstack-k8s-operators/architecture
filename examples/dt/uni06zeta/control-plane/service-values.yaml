@@ -68,8 +68,11 @@ data:
     swiftRing:
       ringReplicas: 1
 
+  heat:
+    enabled: true
+
   octavia:
-    enabled: false
+    enabled: true
     amphoraImageContainerImage: quay.io/gthiemonge/octavia-amphora-image
     apacheContainerImage: registry.redhat.io/ubi9/httpd-24:latest
     availabilityZones:

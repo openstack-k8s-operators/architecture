@@ -21,7 +21,7 @@ components:
   - ../../../lib/networking/nad
 
 resources:
-  - resources/octavia-network-attachment-definition.yaml
+  - nad.yaml
 
 replacements:
   - source:
