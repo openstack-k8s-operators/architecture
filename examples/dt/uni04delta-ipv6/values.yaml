@@ -72,6 +72,7 @@ data:
         edpm_nodes_validation_validate_controllers_icmp: false
         edpm_nodes_validation_validate_gateway_icmp: false
 
+        edpm_ovn_encap_tos: "inherit"
         edpm_sshd_configure_firewall: true
         edpm_sshd_allowed_ranges:
           - '2620:cf:cf:aaaa::0/64'
