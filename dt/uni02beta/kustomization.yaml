@@ -81,6 +81,7 @@ replacements:
           - stringData.ontap-cinder-secrets\.conf
         options:
           create: true
+
   # Glance
   - source:
       kind: ConfigMap
@@ -126,17 +127,18 @@ replacements:
           - spec.glance.template.glanceAPIs.default.type
         options:
           create: true
-  - source:
-      kind: ConfigMap
-      name: service-values
-      fieldPath: data.glance.extraMounts
-    targets:
-      - select:
-          kind: OpenStackControlPlane
-        fieldPaths:
-          - spec.glance.template.extraMounts
-        options:
-          create: true
+  # - source:
+  #     kind: ConfigMap
+  #     name: service-values
+  #     fieldPath: data.glance.extraMounts
+  #   targets:
+  #     - select:
+  #         kind: OpenStackControlPlane
+  #       fieldPaths:
+  #         - spec.glance.template.extraMounts
+  #       options:
+  #         create: true
+
   # Manila
   - source:
       kind: ConfigMap
