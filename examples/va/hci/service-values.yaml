@@ -51,7 +51,7 @@ data:
       replicas: 3
       customServiceConfig: |
         [DEFAULT]
-        enabled_share_protocols=cephfs
+        enabled_share_protocols=nfs
     manilaScheduler:
       replicas: 3
     manilaShares:
@@ -68,7 +68,8 @@ data:
           cephfs_cluster_name = ceph
           cephfs_auth_id=openstack
           cephfs_volume_mode = 0755
-          cephfs_protocol_helper_type = CEPHFS
+          cephfs_nfs_cluster_id = cephfs
+          cephfs_protocol_helper_type = NFS
   extraMounts:
     - name: v1
       region: r1
