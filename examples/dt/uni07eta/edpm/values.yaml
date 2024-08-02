@@ -19,6 +19,9 @@ data:
         private: _replaced_
         public: _replaced_
 
+  nova-extra-config: |
+    # Additional overrides that can be set in environment-specific cases
+
   nodeset:
     ansible:
       ansibleUser: cloud-admin
@@ -132,4 +135,4 @@ data:
       - ovn
       - neutron-metadata
       - libvirt
-      - nova
+      - nova-custom
