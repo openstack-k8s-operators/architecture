@@ -37,9 +37,10 @@ Focused on verifying Cinder and Glance with multiple backends.
 | ----------- | ----------- | ----------------- |
 | ctlplane    | untagged    | 192.168.122.0/24  |
 | internalapi | VLAN tagged | 172.17.0.0/24     |
-| storage     | VLAN tagged | 172.18.0.0/24     |
-| tenant      | VLAN tagged | 172.19.0.0/24     |
 | octavia     | VLAN tagged | 172.23.0.0/24     |
+| storage     | VLAN tagged | 172.18.0.0/24     |
+| storagemgmt | VLAN tagged | 172.20.0.0/24     |
+| tenant      | VLAN tagged | 172.19.0.0/24     |
 
 
 ### Services, enabled features and configurations
@@ -47,9 +48,9 @@ Focused on verifying Cinder and Glance with multiple backends.
 | Service          | configuration           | Lock-in coverage?  |
 | ---------------- | ----------------------- | ------------------ |
 | Barbican         | (default)               | Must have          |
-| Cinder           | iSCSI/netapp, NFS       | Must have          |
+| Cinder           | iSCSI/netapp, NFS, Ceph | Must have          |
 | Cinder Backup    | Swift                   | Must have          |
-| Glance           | cinder/NFS, swift       | Must have          |
+| Glance           | cinder/NFS, Ceph, swift | Must have          |
 | Horizon          | N/A                     | Must have          |
 | Neutron          | Geneve (OVN)            | Must have          |
 | Octavia (TODO)   | act-stby                | Must have          |
@@ -142,6 +143,11 @@ spec:
 
 ## Workflow
 
-1. [Install the OpenStack K8S operators and their dependencies](../../common/README.md)
-2. [Configure and deploy the OpenStack control plane](control-plane.md)
-3. [Configure and deploy the OpenStack data plane](data-plane.md)
+1. [Install the OpenStack K8S operators and their dependencies](../../common/README.md).
+2. [Configure networking and deploy the OpenStack control plane](control-plane.md).
+3. [Configure and deploy the initial data plane to prepare for Ceph installation](dataplane-pre-ceph.md).
+4. Install Ceph on the compute nodes.
+5. [Update the control plane and finish deploying the data plane after Ceph has been installed](dataplane-post-ceph.md).
+
+Note: OpenStack K8S CRDs do not provide a way to install Ceph via any sort
+of CRs combination. This step needs to be handled separately.
