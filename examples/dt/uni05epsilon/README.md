@@ -52,7 +52,7 @@ Focused on verifying Cinder and Glance with multiple backends.
 | Glance           | cinder/NFS, swift       | Must have          |
 | Horizon          | N/A                     | Must have          |
 | Neutron          | Geneve (OVN)            | Must have          |
-| Octavia          | act-stby                | Must have          |
+| Octavia (TODO)   | act-stby                | Must have          |
 | Swift            | (default)               | Must have          |
 
 

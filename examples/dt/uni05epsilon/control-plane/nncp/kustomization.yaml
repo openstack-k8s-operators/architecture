@@ -18,7 +18,6 @@ transformers:
 
 components:
   - ../../../../../lib/nncp
-  # - ../../../../../dt/uni05epsilon/nncp
 
 resources:
   - values.yaml

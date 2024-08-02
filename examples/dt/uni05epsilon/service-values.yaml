@@ -121,36 +121,5 @@ data:
         replicas: 3
         type: split
 
-  octavia:
-    enabled: false  # TODO after healthmanager fixed
-    amphoraImageContainerImage: quay.io/gthiemonge/octavia-amphora-image
-    apacheContainerImage: registry.redhat.io/ubi9/httpd-24:latest
-    octaviaAPI:
-      networkAttachments:
-        - internalapi
-    octaviaHousekeeping:
-      networkAttachments:
-        - octavia
-      customServiceConfig: |
-        [controller_worker]
-        loadbalancer_topology=ACTIVE_STANDBY
-    octaviaHealthManager:
-      networkAttachments:
-        - octavia
-      customServiceConfig: |
-        [controller_worker]
-        loadbalancer_topology=ACTIVE_STANDBY
-    octaviaWorker:
-      networkAttachments:
-        - octavia
-      customServiceConfig: |
-        [controller_worker]
-        loadbalancer_topology=ACTIVE_STANDBY
-
-  ovn:
-    ovnController:
-      nicMappings:
-        - octavia: octbr
-
   swift:
     enabled: true
