@@ -45,7 +45,7 @@ spec:
   dns:
     template:
       options: []
-      replicas: 1
+      replicas: 2
   galera:
     enabled: true
     templates:
