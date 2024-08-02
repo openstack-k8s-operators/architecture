@@ -17,8 +17,17 @@ transformers:
         create: true
 
 components:
-  - ../../../../lib/dataplane/nodeset
+  - ../../../../lib/dataplane/deployment
 
-
-resources:
-  - nova_custom.yaml
+replacements:
+  - source:
+      kind: ConfigMap
+      name: edpm-deployment-values-post-ceph
+      fieldPath: data.deployment.name
+    targets:
+      - select:
+          kind: OpenStackDataPlaneDeployment
+        fieldPaths:
+          - metadata.name
+        options:
+          create: true

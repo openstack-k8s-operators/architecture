@@ -173,6 +173,8 @@
     - examples/dt/uni05epsilon/control-plane
     - examples/dt/uni05epsilon/control-plane/nncp
     - examples/dt/uni05epsilon/deployment
+    - examples/dt/uni05epsilon/edpm-pre-ceph/deployment
+    - examples/dt/uni05epsilon/edpm-pre-ceph/nodeset
     - lib
     name: rhoso-architecture-validate-uni05epsilon
     parent: rhoso-architecture-base-job

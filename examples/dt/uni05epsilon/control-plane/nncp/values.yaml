@@ -7,9 +7,6 @@ metadata:
     config.kubernetes.io/local-config: "true"
 
 data:
-  openstack-operator-image:
-    "quay.io/openstack-k8s-operators/openstack-operator-index:latest"
-
   node_0:
     name: master-0
     internalapi_ip: 172.17.0.5
@@ -127,6 +124,17 @@ data:
         }
       }
 
+  storagemgmt:
+    dnsDomain: storagemgmt.openstack.lab
+    subnets:
+      - allocationRanges:
+          - end: 172.20.0.250
+            start: 172.20.0.100
+        cidr: 172.20.0.0/24
+        name: subnet1
+        vlan: 23
+    mtu: 1500
+
   tenant:
     dnsDomain: tenant.openstack.lab
     subnets:
@@ -160,7 +168,7 @@ data:
   octavia:
     dnsDomain: octavia.openstack.lab
     mtu: 1500
-    vlan: 23
+    vlan: 24
     base_iface: enp6s0
     net-attach-def: |
       {
