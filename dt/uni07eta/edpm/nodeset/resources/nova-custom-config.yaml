@@ -4,10 +4,5 @@ kind: ConfigMap
 metadata:
   name: nova-custom-config
 data:
-  25-nova-custom.conf: |
-    [DEFAULT]
-    # Override our defaults in this dt to get coverage for metadata-api based
-    # cloud-init scenarios
-    force_config_drive = False
   55-nova-extra.conf: |
     # Additional overrides that can be set in environment-specific cases

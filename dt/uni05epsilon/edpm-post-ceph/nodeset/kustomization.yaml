@@ -296,6 +296,22 @@ replacements:
           create: true
 
   #
+  # Nova
+  #
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.nova-extra-config
+    targets:
+      - select:
+          kind: ConfigMap
+          name: nova-custom-config
+        fieldPaths:
+          - data.55-nova-extra\.conf
+        options:
+          create: true
+
+  #
   # Swift
   #
   - source:
