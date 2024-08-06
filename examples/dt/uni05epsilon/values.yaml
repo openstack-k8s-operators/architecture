@@ -14,6 +14,16 @@ data:
 
   nodeset:
     services:
+      - bootstrap
+      - download-cache
+      - configure-network
+      - validate-network
+      - install-os
+      - ceph-hci-pre
+      - configure-os
+      - ssh-known-hosts
+      - run-os
+      - reboot-os
       - install-certs
       - ceph-client
       - ovn

@@ -114,3 +114,12 @@ Wait for post-Ceph dataplane deployment to finish.
 ```bash
 oc wait osdpd edpm-deployment-post-ceph --for condition=Ready --timeout=40m
 ```
+
+## Final OpenStackDataPlaneNodeSet services list
+
+The `OpenStackDataPlaneNodeSet` must contain the full `services` list
+so that during updates all required services are updated. Thus, the
+pre-ceph and post-ceph deployments used a `servicesOverride` so that
+only a subset of the services would be configured either before or
+after Ceph was deployed. Any subsequent deployments should not pass a
+`servicesOverride` unless necessary.
