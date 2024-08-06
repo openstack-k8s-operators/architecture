@@ -168,3 +168,20 @@ data:
         datacentre: ocpbr
         octavia: octbr
         ironic: ironic
+
+  # Heat is required for telemetry autoscaling
+  heat:
+    enabled: true
+    customServiceConfig: |
+      [clients_heat]
+      endpoint_type: public
+      insecure: true
+
+  telemetry:
+    enabled: true
+    metricStorage:
+      enabled: true
+    autoscaling:
+      enabled: true
+    ceilometer:
+      enabled: true
