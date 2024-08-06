@@ -10,3 +10,16 @@ components:
 
 resources:
   - values.yaml
+
+replacements:
+  - source:
+      kind: ConfigMap
+      name: edpm-deployment-values
+      fieldPath: data.servicesOverride
+    targets:
+      - select:
+          kind: OpenStackDataPlaneDeployment
+        fieldPaths:
+          - spec.servicesOverride
+        options:
+          create: true
