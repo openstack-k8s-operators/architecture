@@ -34,12 +34,13 @@ nav:
       - NFV OvS DPDK: https://github.com/openstack-k8s-operators/architecture/blob/main/examples/va/nfv/ovs-dpdk/README.md
 
   - Deployed Topologies:
-      - None
+      - Unified Jobs: https://github.com/openstack-k8s-operators/architecture/tree/main/dt
   - FAQ:
       - Creating Smaller CRs: faq/cr_by_components.md
   - Contributing:
       - contributing/documentation.md
       - contributing/pull-request-testing.md
+      - contributing/cherry-picking.md
 markdown_extensions:
   - toc:
       permalink: "#"
