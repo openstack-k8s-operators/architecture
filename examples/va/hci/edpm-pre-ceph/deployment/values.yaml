@@ -10,3 +10,13 @@ metadata:
 data:
   deployment:
     name: edpm-deployment-pre-ceph
+  servicesOverride:
+    - bootstrap
+    - configure-network
+    - validate-network
+    - install-os
+    - ceph-hci-pre
+    - configure-os
+    - ssh-known-hosts
+    - run-os
+    - reboot-os

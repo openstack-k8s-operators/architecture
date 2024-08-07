@@ -88,3 +88,12 @@ Ask Nova to discover all compute hosts
 ```bash
 oc rsh nova-cell0-conductor-0 nova-manage cell_v2 discover_hosts --verbose
 ```
+
+## Final OpenStackDataPlaneNodeSet services list
+
+The `OpenStackDataPlaneNodeSet` must contain the full `services` list
+so that during updates all required services are updated. Thus, the
+pre-ceph and post-ceph deployments used a `servicesOverride` so that
+only a subset of the services would be configured either before or
+after Ceph was deployed. Any subsequent deployments should not pass a
+`servicesOverride` unless necessary.
