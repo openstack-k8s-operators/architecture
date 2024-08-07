@@ -12,13 +12,11 @@
         <meta name="author" content="OpenStack Team">
       
       
-        <link rel="canonical" href="https://openstack-k8s-operators.github.io/architecture/contributing/documentation/">
+        <link rel="canonical" href="https://openstack-k8s-operators.github.io/architecture/contributing/cherry-picking/">
       
       
-        <link rel="prev" href="../../faq/cr_by_components/">
+        <link rel="prev" href="../pull-request-testing/">
       
-      
-        <link rel="next" href="../pull-request-testing/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -26,7 +24,7 @@
     
     
       
-        <title>Contributing to documentation - OpenStack K8S Operators Architectures</title>
+        <title>Getting your PR into a stable branch - OpenStack K8S Operators Architectures</title>
       
     
     
@@ -78,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#contributing-to-documentation" class="md-skip">
+        <a href="#getting-your-pr-into-a-stable-branch" class="md-skip">
           Skip to content
         </a>
       
@@ -117,7 +115,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Contributing to documentation
+              Getting your PR into a stable branch
             
           </span>
         </div>
@@ -551,30 +549,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Contributing to documentation
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../documentation/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -583,44 +561,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#rendering-documentation-locally" class="md-nav__link">
-    <span class="md-ellipsis">
-      Rendering documentation locally
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#structure-and-content" class="md-nav__link">
-    <span class="md-ellipsis">
-      Structure and Content
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -651,10 +591,19 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../cherry-picking/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -663,6 +612,7 @@
   
 
       </a>
+      
     </li>
   
 
@@ -695,32 +645,6 @@
     
   
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#rendering-documentation-locally" class="md-nav__link">
-    <span class="md-ellipsis">
-      Rendering documentation locally
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#structure-and-content" class="md-nav__link">
-    <span class="md-ellipsis">
-      Structure and Content
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -737,37 +661,35 @@
   
 
 
-<h1 id="contributing-to-documentation">Contributing to documentation<a class="headerlink" href="#contributing-to-documentation" title="Permanent link">#</a></h1>
-<h2 id="rendering-documentation-locally">Rendering documentation locally<a class="headerlink" href="#rendering-documentation-locally" title="Permanent link">#</a></h2>
-<p>Install docs build requirements into virtualenv:</p>
-<div class="highlight"><pre><span></span><code>python3 -m venv local/docs-venv
-source local/docs-venv/bin/activate
-pip install -r docs/doc_requirements.txt
+<h1 id="getting-your-pr-into-a-stable-branch">Getting your PR into a stable branch<a class="headerlink" href="#getting-your-pr-into-a-stable-branch" title="Permanent link">#</a></h1>
+<p>After your PR merges into the main branch you should open a PR to
+cherry pick it into a stable branch if appropriate. For example,
+you may want your patch to be in the
+<a href="https://github.com/openstack-k8s-operators/architecture/tree/18.0.0-proposed">18.0.0-proposed branch</a>.</p>
+<p>If you anticipate that your PR should be cherry picked then please tag
+it accordingly. For example we have a
+<a href="https://github.com/openstack-k8s-operators/architecture/issues?q=label%3Aneeds-18.0.0-proposed-cherry-pick+">needs-18.0.0-proposed-cherry-pick</a>
+tag. If we think a patch should be in a stable branch, then we will
+apply that tag to your PR to remind you to follow up to send in a
+cherry pick.</p>
+<p>Please do not ask <a href="../../OWNERS">core maintainers</a> to cherry pick your
+patch though we will be happy to review it and help merge it once the
+cherry pick PR has been submitted.</p>
+<p>If you can send a PR to this repository then you can create a cherry
+pick using the <code>git</code> command line tools without requiring any
+additional privileges. For example, the following produces a
+cherry-pick within a personal fork of the architecture repository.
+<div class="highlight"><pre><span></span><code>git remote add upstream git@github.com:openstack-k8s-operators/architecture.git 
+git fetch upstream
+git checkout -b 18.0.0-proposed upstream/18.0.0-proposed
+git push origin 18.0.0-proposed
+git log origin/main
+git cherry-pick &lt;commit hash&gt;
+git push origin 18.0.0-proposed
 </code></pre></div>
-<p>Serve docs site on localhost:</p>
-<div class="highlight"><pre><span></span><code>mkdocs serve
-</code></pre></div>
-<p>Click the link it outputs. As you save changes to files modified in your editor,
-the browser will automatically show the new content.</p>
-<h2 id="structure-and-content">Structure and Content<a class="headerlink" href="#structure-and-content" title="Permanent link">#</a></h2>
-<p>The <code>MkDocs</code> output generates nice looking HTML pages that link to the
-content genereated by github.com.</p>
-<p>This is because the authors believe it's more valuable to have
-<a href="https://github.com/openstack-k8s-operators/architecture">github.com/openstack-k8s-operators/architecture</a>
-be navigable relative to the github pages which contain the CRs,
-than have all of the documentation isolated in the <code>docs</code> directory.
-Thus, there are non-relative links in the <code>MkDocs</code> content to the
-pages hosted on github.</p>
-<p>Though it's
-<a href="https://www.mkdocs.org/user-guide/writing-your-docs/#linking-to-pages">possible</a>
-to create symbolic links to README files or link to a directory above
-the <code>docs</code> directory, the resulting HTML will contain invalid links
-unless all READMEs are moved out of the directories that they
-describe. However, this would make reading the CRs more complicated as
-they wouldn't have a corresponding README.</p>
-<p>Thus, if you add a new VA or DT, then please just link it in the
-<code>mkdocs.yml</code> file, similar to the way the HCI VA is linked, in to keep
-the <code>MkDocs</code> output up to date.</p>
+You should then be able to use the github web interface to create the
+PR. Please add <code>(cherry picked from &lt;commit hash&gt;)</code> to the bottom of
+your commit message.</p>
 
 
 
@@ -788,7 +710,7 @@ the <code>MkDocs</code> output up to date.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    2023-12-04
+    2024-08-06
   </span>
 
     

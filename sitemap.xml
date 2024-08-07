@@ -11,6 +11,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://openstack-k8s-operators.github.io/architecture/contributing/cherry-picking/</loc>
+         <lastmod>2024-08-07</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://openstack-k8s-operators.github.io/architecture/contributing/documentation/</loc>
          <lastmod>2024-08-07</lastmod>
          <changefreq>daily</changefreq>
