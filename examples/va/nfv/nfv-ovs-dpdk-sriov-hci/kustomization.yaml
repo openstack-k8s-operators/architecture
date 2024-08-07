@@ -1,0 +1,18 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../../va/nfv/nfv-ovs-dpdk-sriov-hci/control-plane-pre-ceph
+  - ../../../../va/nfv/nfv-ovs-dpdk-sriov-hci/edpm-pre-ceph/nodeset
+  - ../../../../va/nfv/nfv-ovs-dpdk-sriov-hci/edpm-post-ceph/nodeset
+  # - https://github.com/openstack-k8s-operators/architecture/va/nfv/nfv-ovs-dpdk-sriov-hci/edpm-post-ceph/?ref=main
+  ## It's possible to replace ../../../va/nfv/nfv-ovs-dpdk-sriov-hci/edpm-post-ceph/ with a git checkout URL as per:
+  ## https://github.com/kubernetes-sigs/kustomize/blob/master/examples/remoteBuild.md
+
+resources:
+  - control-plane/service-values.yaml
+  - control-plane/nncp/values.yaml
+  - edpm-pre-ceph/nodeset/values.yaml
+  - service-values.yaml
+  - values.yaml

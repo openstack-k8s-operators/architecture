@@ -1,0 +1,96 @@
+# local-config: referenced, but not emitted by kustomize
+#
+# CHANGEME:
+#
+# - Change network_vlan_ranges based on EDPM OVS DPDK SRIOV HCI environment.
+# - change numa_nodes in the neutron and neutron_tunnel section
+# based on DPDK NIC's and NUMA alignment in the OVS DPDK SRIOV HCI compute node.
+#
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: service-values-post-ceph
+  annotations:
+    config.kubernetes.io/local-config: "true"
+data:
+  preserveJobs: false
+  swift:
+    enabled: false
+  cinderAPI:
+    replicas: 3
+  cinderBackup:
+    replicas: 3
+    customServiceConfig: |
+      [DEFAULT]
+      backup_driver = cinder.backup.drivers.ceph.CephBackupDriver
+      backup_ceph_pool = backups
+      backup_ceph_user = openstack
+  cinderVolumes:
+    ceph:
+      customServiceConfig: |
+        [DEFAULT]
+        enabled_backends = ceph
+        [ceph]
+        volume_backend_name = ceph
+        volume_driver = cinder.volume.drivers.rbd.RBDDriver
+        rbd_ceph_conf = /etc/ceph/ceph.conf
+        rbd_user = openstack
+        rbd_pool = volumes
+        rbd_flatten_volume_from_snapshot = False
+        rbd_secret_uuid = CHANGEME
+  glance:
+    customServiceConfig: |
+      [DEFAULT]
+      enabled_backends = default_backend:rbd
+      [glance_store]
+      default_backend = default_backend
+      [default_backend]
+      rbd_store_ceph_conf = /etc/ceph/ceph.conf
+      store_description = "RBD backend"
+      rbd_store_pool = images
+      rbd_store_user = openstack
+      rbd_thin_provisioning = True
+    glanceAPIs:
+      default:
+        replicas: 3
+  manila:
+    enabled: true
+    manilaAPI:
+      replicas: 3
+      customServiceConfig: |
+        [DEFAULT]
+        enabled_share_protocols=cephfs
+    manilaScheduler:
+      replicas: 3
+    manilaShares:
+      share1:
+        replicas: 1
+        customServiceConfig: |
+          [DEFAULT]
+          enabled_share_backends = cephfs
+          [cephfs]
+          driver_handles_share_servers = False
+          share_backend_name = cephfs
+          share_driver = manila.share.drivers.cephfs.driver.CephFSDriver
+          cephfs_conf_path = /etc/ceph/ceph.conf
+          cephfs_cluster_name = ceph
+          cephfs_auth_id=openstack
+          cephfs_volume_mode = 0755
+          cephfs_protocol_helper_type = CEPHFS
+  extraMounts:
+    - extraVol:
+        - propagation:
+            - CinderVolume
+            - CinderBackup
+            - GlanceAPI
+            - ManilaShare
+          extraVolType: Ceph
+          volumes:
+            - name: ceph
+              secret:
+                secretName: ceph-conf-files
+          mounts:
+            - name: ceph
+              mountPath: /etc/ceph
+              readOnly: true
