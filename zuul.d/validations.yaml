@@ -80,12 +80,12 @@
 - job:
     files:
     - automation/net-env/pidone.yaml
-    - examples/va/pidone
-    - examples/va/pidone/edpm/deployment
-    - examples/va/pidone/edpm/nodeset
-    - examples/va/pidone/nncp
+    - dt/pidone
+    - examples/dt/pidone
+    - examples/dt/pidone/edpm/deployment
+    - examples/dt/pidone/edpm/nodeset
+    - examples/dt/pidone/nncp
     - lib
-    - va/pidone
     name: rhoso-architecture-validate-pidone
     parent: rhoso-architecture-base-job
     vars:

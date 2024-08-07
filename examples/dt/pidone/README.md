@@ -26,7 +26,7 @@ oc project openstack
 ```
 Change to the pidone directory
 ```
-cd architecture/examples/va/pidone
+cd architecture/examples/dt/pidone
 ```
 Edit the [nncp/values.yaml](nncp/values.yaml) and
 [service-values.yaml](service-values.yaml) files to suit

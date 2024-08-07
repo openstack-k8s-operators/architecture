@@ -17,7 +17,7 @@ vas:
             kind: Node
             resource_name: worker-3
             state: patched
-        path: examples/va/pidone/nncp
+        path: examples/dt/pidone/nncp
         wait_conditions:
           - >-
             oc -n openstack wait nncp
@@ -29,7 +29,7 @@ vas:
             src_file: values.yaml
         build_output: nncp.yaml
 
-      - path: examples/va/pidone
+      - path: examples/dt/pidone
         wait_conditions:
           - >-
             oc -n openstack wait osctlplane controlplane --for condition=Ready
@@ -41,7 +41,7 @@ vas:
             src_file: service-values.yaml
         build_output: control-plane.yaml
 
-      - path: examples/va/pidone/edpm/nodeset
+      - path: examples/dt/pidone/edpm/nodeset
         wait_conditions:
           - >-
             oc -n openstack wait openstackdataplanenodeset
@@ -53,7 +53,7 @@ vas:
             src_file: values.yaml
         build_output: nodeset.yaml
 
-      - path: examples/va/pidone/edpm/deployment
+      - path: examples/dt/pidone/edpm/deployment
         wait_conditions:
           - >-
             oc -n openstack wait openstackdataplanedeployment
