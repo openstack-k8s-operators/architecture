@@ -9,3 +9,10 @@ metadata:
 data:
   deployment:
     name: edpm-deployment-post-ceph
+  servicesOverride:
+    - install-certs
+    - ceph-client
+    - ovn
+    - neutron-metadata
+    - libvirt
+    - nova-custom

@@ -151,7 +151,9 @@ data:
             subnetName: subnet1
           - name: tenant
             subnetName: subnet1
-
+    # The nova-custom service is omitted since it is not yet
+    # defined. It will be defined and set after Ceph is deployed.
+    # See deployment servicesOverride for effective services list.
     services:
       - bootstrap
       - download-cache
@@ -163,3 +165,8 @@ data:
       - ssh-known-hosts
       - run-os
       - reboot-os
+      - install-certs
+      - ceph-client
+      - ovn
+      - neutron-metadata
+      - libvirt
