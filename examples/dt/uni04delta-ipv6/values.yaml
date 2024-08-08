@@ -31,7 +31,7 @@ data:
       ansiblePort: 22
       ansibleVars:
         timesync_ntp_servers:
-          - hostname: clock.redhat.com
+          - hostname: pool.ntp.org
 
         edpm_iscsid_image: '{{ registry_url }}/openstack-iscsid:{{ image_tag }}'
         edpm_logrotate_crond_image: '{{ registry_url }}/openstack-cron:{{ image_tag }}'

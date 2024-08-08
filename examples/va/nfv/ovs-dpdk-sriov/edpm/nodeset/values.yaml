@@ -38,7 +38,7 @@ data:
         #         --password <subscription_manager_password>
         #       podman login -u <registry_username> -p <registry_password> registry.redhat.io
         timesync_ntp_servers:
-          - hostname: clock.redhat.com
+          - hostname: pool.ntp.org
         # CPU pinning settings
         # edpm nfv ovs dpdk config
         # CHANGEME
