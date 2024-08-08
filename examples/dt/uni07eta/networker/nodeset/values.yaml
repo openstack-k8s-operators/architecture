@@ -25,7 +25,7 @@ data:
       ansiblePort: 22
       ansibleVars:
         timesync_ntp_servers:
-          - hostname: clock.redhat.com
+          - hostname: pool.ntp.org
 
         gather_facts: false
 

@@ -28,7 +28,7 @@ data:
           - nic3
           - nic4
         timesync_ntp_servers:
-          - hostname: clock.redhat.com
+          - hostname: pool.ntp.org
         # CHANGEME -- see https://access.redhat.com/solutions/253273
         # edpm_bootstrap_command: |
         #       subscription-manager register --username <subscription_manager_username> \
