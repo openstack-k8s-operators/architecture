@@ -20,6 +20,10 @@ components:
   - ../../../lib/networking/metallb
   - ../../../lib/networking/netconfig
   - ../../../lib/networking/nad
+  - metallb
+
+resources:
+  - nad.yaml
 
 patches:
   - target:
@@ -66,3 +70,25 @@ replacements:
           kind: NetConfig
         fieldPaths:
           - spec.networks.[name=storagemgmt].subnets
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.designate.net-attach-def
+    targets:
+      - select:
+          kind: NetworkAttachmentDefinition
+          name: designate
+        fieldPaths:
+          - spec.config
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.designateext.net-attach-def
+    targets:
+      - select:
+          kind: NetworkAttachmentDefinition
+          name: designateext
+        fieldPaths:
+          - spec.config
