@@ -32,6 +32,41 @@ data:
         rbd_flatten_volume_from_snapshot = False
         rbd_secret_uuid = _replaced_
 
+  designate-redis:
+    enabled: true
+    replicas: 1
+
+  designate:
+    enabled: false
+    nsRecords:
+      - hostname: ns1.example.org.
+        priority: 1
+      - hostname: ns2.example.org.
+        priority: 2
+    bind9Services:
+      services:
+        - metadata:
+            annotations:
+              metallb.universe.tf/address-pool: designateext
+              metallb.universe.tf/allow-shared-ip: designateext
+              metallb.universe.tf/LoadBalancerIPs: 172.34.0.80
+          spec:
+            type: LoadBalancer
+        - metadata:
+            annotations:
+              metallb.universe.tf/address-pool: designateext
+              metallb.universe.tf/allow-shared-ip: designateext
+              metallb.universe.tf/LoadBalancerIPs: 172.34.0.81
+          spec:
+            type: LoadBalancer
+        - metadata:
+            annotations:
+              metallb.universe.tf/address-pool: designateext
+              metallb.universe.tf/allow-shared-ip: designateext
+              metallb.universe.tf/LoadBalancerIPs: 172.34.0.82
+          spec:
+            type: LoadBalancer
+
   glance:
     customServiceConfig: |
       [DEFAULT]
