@@ -34,6 +34,7 @@ replacements:
           - spec.nova.template.metadataServiceTemplate.override.service.metadata.annotations
           - spec.placement.template.override.service.internal.metadata.annotations
           - spec.swift.template.swiftProxy.override.service.internal.metadata.annotations
+          - spec.designate.template.designateAPI.override.service.internal.metadata.annotations
         options:
           create: true
   - source:
@@ -114,6 +115,7 @@ replacements:
           - spec.storageClass
           - spec.glance.template.storage.storageClass
           - spec.telemetry.template.metricStorage.monitoringStack.storage.persistent.pvcStorageClass
+          - spec.designate.template.designateBackendbind9.storageClass
   - source:
       kind: ConfigMap
       name: network-values
