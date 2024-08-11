@@ -22,6 +22,11 @@ spec:
         - _replaced_
       mtu: 1500
     - dnsDomain: _replaced_
+      name: storagemgmt
+      subnets:
+        - _replaced_
+      mtu: 1500
+    - dnsDomain: _replaced_
       name: storage
       subnets:
         - _replaced_

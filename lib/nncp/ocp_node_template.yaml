@@ -46,6 +46,22 @@ spec:
           base-iface: _replaced_
           id: _replaced_
         mtu: 1500
+      - description: storagemgmt vlan interface
+        ipv4:
+          address:
+            - ip: _replaced_
+              prefix-length: _replaced_
+          enabled: true
+          dhcp: false
+        ipv6:
+          enabled: false
+        name: storagemgmt
+        state: up
+        type: vlan
+        vlan:
+          base-iface: _replaced_
+          id: _replaced_
+        mtu: 1500
       - description: tenant vlan interface
         ipv4:
           address:

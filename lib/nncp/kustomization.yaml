@@ -94,6 +94,33 @@ replacements:
           kind: NodeNetworkConfigurationPolicy
         fieldPaths:
           - spec.desiredState.interfaces.[name=storage].mtu
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storagemgmt.base_iface
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=storagemgmt].vlan.base-iface
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storagemgmt.vlan
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=storagemgmt].vlan.id
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storagemgmt.mtu
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=storagemgmt].mtu
   # ctlplane type is ethernet (not vlan)
   - source:
       kind: ConfigMap
@@ -157,6 +184,16 @@ replacements:
           name: node-0
         fieldPaths:
           - spec.desiredState.interfaces.[name=storage].ipv4.address.0.ip
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_0.storagemgmt_ip
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: node-0
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=storagemgmt].ipv4.address.0.ip
 
   # Static Node IPs: node-1
   - source:
@@ -199,7 +236,16 @@ replacements:
           name: node-1
         fieldPaths:
           - spec.desiredState.interfaces.[name=storage].ipv4.address.0.ip
-
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_1.storagemgmt_ip
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: node-1
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=storagemgmt].ipv4.address.0.ip
   # Static Node IPs: node-2
   - source:
       kind: ConfigMap
@@ -241,7 +287,16 @@ replacements:
           name: node-2
         fieldPaths:
           - spec.desiredState.interfaces.[name=storage].ipv4.address.0.ip
-
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_2.storagemgmt_ip
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: node-2
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=storagemgmt].ipv4.address.0.ip
   # prefix-length: node-0
   - source:
       kind: ConfigMap
@@ -283,7 +338,16 @@ replacements:
           name: node-0
         fieldPaths:
           - spec.desiredState.interfaces.[name=storage].ipv4.address.0.prefix-length
-
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storagemgmt.prefix-length
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: node-0
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=storagemgmt].ipv4.address.0.prefix-length
   # prefix-length: node-1
   - source:
       kind: ConfigMap
@@ -325,6 +389,16 @@ replacements:
           name: node-1
         fieldPaths:
           - spec.desiredState.interfaces.[name=storage].ipv4.address.0.prefix-length
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storagemgmt.prefix-length
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: node-1
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=storagemgmt].ipv4.address.0.prefix-length
 
   # prefix-length: node-2
   - source:
@@ -367,7 +441,16 @@ replacements:
           name: node-2
         fieldPaths:
           - spec.desiredState.interfaces.[name=storage].ipv4.address.0.prefix-length
-
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storagemgmt.prefix-length
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: node-2
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=storagemgmt].ipv4.address.0.prefix-length
   # Node names
   - source:
       kind: ConfigMap

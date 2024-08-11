@@ -252,7 +252,7 @@ vas:
           - >-
             oc -n openstack wait
             osdpns openstack-edpm --for condition=SetupReady
-            --timeout=10m
+            --timeout=60m
         values:
           - name: edpm-nodeset-values
             src_file: values.yaml
@@ -263,7 +263,7 @@ vas:
           - >-
             oc -n openstack wait
             osdpns openstack-edpm --for condition=Ready
-            --timeout=30m
+            --timeout=60m
         values:
           - name: edpm-deployment-values
             src_file: values.yaml
@@ -279,7 +279,7 @@ vas:
           - >-
             oc -n openstack wait
             osdpns openstack-edpm --for condition=SetupReady
-            --timeout=10m
+            --timeout=60m
         values:
           - name: service-values
             src_file: service-values.yaml
@@ -292,7 +292,7 @@ vas:
           - >-
             oc -n openstack wait
             osdpns openstack-edpm --for condition=Ready
-            --timeout=40m
+            --timeout=60m
         values:
           - name: edpm-deployment-values-post-ceph
             src_file: values.yaml

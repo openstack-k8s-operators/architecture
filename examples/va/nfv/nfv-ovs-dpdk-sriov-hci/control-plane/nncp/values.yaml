@@ -123,7 +123,7 @@ data:
           "range_end": "172.18.0.70"
         }
       }
-  storagemgmt:  # used on RHEL, not used on OpenShift
+  storagemgmt:
     dnsDomain: storagemgmt.example.com
     subnets:
       - allocationRanges:
@@ -133,6 +133,35 @@ data:
         name: subnet1
         vlan: 23
     mtu: 9000
+    prefix-length: 24
+    iface: storagemgmt
+    vlan: 23
+    base_iface: enp7s0
+    lb_addresses:
+      - 172.20.0.80-172.20.0.90
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "storagemgmt",
+        "type": "macvlan",
+        "master": "storagemgmt",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "172.20.0.0/24",
+          "range_start": "172.20.0.30",
+          "range_end": "172.20.0.70"
+        }
+      }
+  # storagemgmt:  # used on RHEL, not used on OpenShift
+  #   dnsDomain: storagemgmt.example.com
+  #   subnets:
+  #     - allocationRanges:
+  #         - end: 172.20.0.250
+  #           start: 172.20.0.100
+  #       cidr: 172.20.0.0/24
+  #       name: subnet1
+  #       vlan: 23
+  #   mtu: 9000
   tenant:
     dnsDomain: tenant.example.com
     subnets:
