@@ -36,7 +36,7 @@ data:
         #       subscription-manager register --username <subscription_manager_username> --password <subscription_manager_password>
         #       podman login -u <registry_username> -p <registry_password> registry.redhat.io
         timesync_ntp_servers:
-          - hostname: clock.redhat.com
+          - hostname: pool.ntp.org
         # CPU pinning settings
         edpm_kernel_args: "default_hugepagesz=1GB hugepagesz=1G hugepages=16 intel_iommu=on iommu=pt isolcpus=4-23,28-47"
         edpm_tuned_profile: "cpu-partitioning-powersave"
