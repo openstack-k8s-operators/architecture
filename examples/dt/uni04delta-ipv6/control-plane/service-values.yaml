@@ -49,6 +49,11 @@ data:
       default:
         replicas: 3
 
+  keystone:
+    customServiceConfig: |
+      [token]
+      expiration = 28800
+
   manila:
     enabled: true
     customServiceConfig: |
