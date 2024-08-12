@@ -261,3 +261,15 @@ replacements:
           - spec.telemetry.template.ceilometer.enabled
         options:
           create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.keystone.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.keystone.template.customServiceConfig
+        options:
+          create: true
