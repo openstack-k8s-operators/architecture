@@ -172,7 +172,13 @@ data:
           "type": "whereabouts",
           "range": "172.23.0.0/24",
           "range_start": "172.23.0.30",
-          "range_end": "172.23.0.70"
+          "range_end": "172.23.0.70",
+          "routes": [
+            {
+              "dst": "172.24.0.0/16",
+              "gw": "172.23.0.150"
+            }
+          ]
         }
       }
 
@@ -222,3 +228,4 @@ data:
   lbServiceType: LoadBalancer
   storageClass: local-storage
   bridgeName: ospbr
+
