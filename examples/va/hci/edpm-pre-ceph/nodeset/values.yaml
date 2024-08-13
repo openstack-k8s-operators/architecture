@@ -102,6 +102,8 @@ data:
         subnetName: subnet1
       - name: tenant
         subnetName: subnet1
+      - name: swift
+        subnetName: subnet1
     nodes:
       edpm-compute-0:
         ansible:
@@ -120,6 +122,8 @@ data:
             subnetName: subnet1
           - name: tenant
             subnetName: subnet1
+          - name: swift
+            subnetName: subnet1
       edpm-compute-1:
         ansible:
           ansibleHost: 192.168.122.101
@@ -137,6 +141,8 @@ data:
             subnetName: subnet1
           - name: tenant
             subnetName: subnet1
+          - name: swift
+            subnetName: subnet1
       edpm-compute-2:
         ansible:
           ansibleHost: 192.168.122.102
@@ -153,6 +159,8 @@ data:
           - name: storagemgmt
             subnetName: subnet1
           - name: tenant
+            subnetName: subnet1
+          - name: swift
             subnetName: subnet1
     # The nova-custom-ceph service is omitted since it is not yet
     # defined. It will be defined and set after Ceph is deployed.

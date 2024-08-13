@@ -1,0 +1,40 @@
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  namespace: metallb-system
+  name: ctlplane
+  labels:
+    osp/lb-addresses-type: standard
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  namespace: metallb-system
+  name: internalapi
+  labels:
+    osp/lb-addresses-type: standard
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  namespace: metallb-system
+  name: storage
+  labels:
+    osp/lb-addresses-type: standard
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  namespace: metallb-system
+  name: tenant
+  labels:
+    osp/lb-addresses-type: standard
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  namespace: metallb-system
+  name: swift
+  labels:
+    osp/lb-addresses-type: standard
