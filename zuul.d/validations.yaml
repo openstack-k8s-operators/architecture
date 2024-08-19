@@ -27,6 +27,21 @@
       cifmw_architecture_scenario: bgp_dt01
 - job:
     files:
+    - automation/mocks/bgp_dt03_ipv6.yaml
+    - automation/net-env/bgp_dt03_ipv6.yaml
+    - examples/dt/bgp/bgp_dt03_ipv6/control-plane
+    - examples/dt/bgp/bgp_dt03_ipv6/control-plane/nncp
+    - examples/dt/bgp/bgp_dt03_ipv6/edpm/computes
+    - examples/dt/bgp/bgp_dt03_ipv6/edpm/deployment
+    - examples/dt/bgp/bgp_dt03_ipv6/edpm/networkers
+    - lib
+    name: rhoso-architecture-validate-bgp_dt03_ipv6
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: bgp_dt03_ipv6
+      cifmw_networking_env_def_file: automation/net-env/bgp_dt03_ipv6.yaml
+- job:
+    files:
     - examples/va/hci
     - examples/va/hci/control-plane
     - examples/va/hci/control-plane/nncp
