@@ -1,0 +1,16 @@
+# local-config: referenced, but not emitted by kustomize
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: edpm-deployment-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+data:
+  nodeSets:
+    - r0-networker-nodes
+    - r1-networker-nodes
+    - r2-networker-nodes
+    - r0-compute-nodes
+    - r1-compute-nodes
+    - r2-compute-nodes
