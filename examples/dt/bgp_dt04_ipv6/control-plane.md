@@ -12,9 +12,9 @@ Switch to the "openstack" namespace
 ```
 oc project openstack
 ```
-Change to the bgp_dt01/control-plane directory
+Change to the bgp_dt04_ipv6/control-plane directory
 ```
-cd architecture/examples/dt/bgp_dt01/control-plane
+cd architecture/examples/dt/bgp_dt04_ipv6/control-plane
 ```
 Edit the [networking/nncp/values.yaml](control-plane/networking/nncp/values.yaml) and
 [service-values.yaml](control-plane/service-values.yaml) files to suit 

@@ -20,7 +20,7 @@ data:
       ansibleUser: cloud-admin
       ansiblePort: 22
       ansibleVars:
-        edpm_ovn_encap_ip: "{{ lookup('vars', 'bgpmainnet_ip') }}"
+        edpm_ovn_encap_ip: "{{ lookup('vars', 'bgpmainnetv6_ip') }}"
         edpm_ovn_bgp_agent_expose_tenant_networks: false
         edpm_frr_bgp_ipv4_src_network: bgpmainnet
         edpm_frr_bgp_ipv6_src_network: bgpmainnetv6
@@ -58,26 +58,35 @@ data:
             domain: {{ dns_search_domains }}
             addresses:
               - ip_netmask: {{ ctlplane_ip }}/{{ ctlplane_cidr }}
+            routes:
+              - destination: "2620:cf:cf:aaab::/64"
+                nexthop: {{ ctlplane_gateway_ip }}
+              - destination: "2620:cf:cf:aaac::/64"
+                nexthop: {{ ctlplane_gateway_ip }}
+              - destination: "2620:cf:cf:aaad::/64"
+                nexthop: {{ ctlplane_gateway_ip }}
           - type: interface
             name: nic3
             use_dhcp: false
             addresses:
-            - ip_netmask: {{ lookup('vars', 'bgpnet0_ip') }}/30
+            - ip_netmask: {{ lookup('vars', 'bgpnet0_ip') }}/126
+            - ip_netmask: {{ lookup('vars', 'bgpnet0ipv4_ip') }}/30
           - type: interface
             name: nic4
             use_dhcp: false
             addresses:
-            - ip_netmask: {{ lookup('vars', 'bgpnet1_ip') }}/30
+            - ip_netmask: {{ lookup('vars', 'bgpnet1_ip') }}/126
+            - ip_netmask: {{ lookup('vars', 'bgpnet1ipv4_ip') }}/30
           - type: interface
             name: lo
             addresses:
             - ip_netmask: {{ lookup('vars', 'bgpmainnet_ip') }}/32
             - ip_netmask: {{ lookup('vars', 'bgpmainnetv6_ip') }}/128
-            - ip_netmask: {{ lookup('vars', 'internalapi_ip') }}/32
-            - ip_netmask: {{ lookup('vars', 'storage_ip') }}/32
-            - ip_netmask: {{ lookup('vars', 'tenant_ip') }}/32
+            - ip_netmask: {{ lookup('vars', 'internalapi_ip') }}/128
+            - ip_netmask: {{ lookup('vars', 'storage_ip') }}/128
+            - ip_netmask: {{ lookup('vars', 'tenant_ip') }}/128
         edpm_sshd_allowed_ranges:
-          - 192.168.122.0/24
+          - '2620:cf:cf:aaad::0/64'
         edpm_sshd_configure_firewall: true
         gather_facts: false
         neutron_physical_bridge_name: br-ex
@@ -96,6 +105,10 @@ data:
         subnetName: subnet0
       - name: BgpNet1
         subnetName: subnet0
+      - name: BgpNet0ipv4
+        subnetName: subnet0
+      - name: BgpNet1ipv4
+        subnetName: subnet0
       - name: BgpMainNet
         subnetName: subnet0
       - name: BgpMainNetV6
@@ -103,6 +116,10 @@ data:
       - name: BgpNet0
         subnetName: subnet1
       - name: BgpNet1
+        subnetName: subnet1
+      - name: BgpNet0ipv4
+        subnetName: subnet1
+      - name: BgpNet1ipv4
         subnetName: subnet1
       - name: BgpMainNet
         subnetName: subnet1
@@ -111,6 +128,10 @@ data:
       - name: BgpNet0
         subnetName: subnet2
       - name: BgpNet1
+        subnetName: subnet2
+      - name: BgpNet0ipv4
+        subnetName: subnet2
+      - name: BgpNet1ipv4
         subnetName: subnet2
       - name: BgpMainNet
         subnetName: subnet2
@@ -120,17 +141,17 @@ data:
       edpm-r0-compute-0:
         hostName: edpm-r0-compute-0
         ansible:
-          ansibleHost: 192.168.122.100
+          ansibleHost: '2620:cf:cf:aaaa::100'
           ansibleVars:
             edpm_ovn_bgp_agent_local_ovn_peer_ips:
-              - 100.64.0.1
-              - 100.65.0.1
+              - "2620:cf::100:64:0:1"
+              - "2620:cf::100:65:0:1"
             edpm_frr_bgp_peers:
-              - 100.64.0.1
-              - 100.65.0.1
+              - "2620:cf::100:64:0:1"
+              - "2620:cf::100:65:0:1"
         networks:
           - defaultRoute: true
-            fixedIP: 192.168.122.100
+            fixedIP: '2620:cf:cf:aaaa::100'
             name: CtlPlane
             subnetName: subnet1
           - name: InternalApi
@@ -140,17 +161,23 @@ data:
           - name: Tenant
             subnetName: subnet1
           - name: Bgpnet0
-            subnetName: subnet1
-            fixedIP: 100.64.0.2
+            subnetName: subnet0
+            fixedIP: "2620:cf::100:64:0:2"
           - name: Bgpnet1
-            subnetName: subnet1
-            fixedIP: 100.65.0.2
+            subnetName: subnet0
+            fixedIP: "2620:cf::100:65:0:2"
+          - name: Bgpnet0ipv4
+            subnetName: subnet0
+            fixedIP: "100.64.0.2"
+          - name: Bgpnet1ipv4
+            subnetName: subnet0
+            fixedIP: "100.65.0.2"
           - name: Bgpmainnet
             subnetName: subnet1
             fixedIP: 99.99.0.2
           - name: BgpmainnetV6
             subnetName: subnet1
-            fixedIP: f00d:f00d:f00d:f00d:f00d:f00d:f00d:0012
+            fixedIP: f00d:f00d:f00d:f00d:99:99:0:2
     services:
       - download-cache
       - bootstrap

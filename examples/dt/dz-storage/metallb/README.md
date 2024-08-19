@@ -2,12 +2,12 @@
 
 Observe CRs which will be generated.
 ```
-kustomize build examples/dt/bgp/bgp_dt01/metallb/
+kustomize build examples/dt/bgp_dt01/metallb/
 ```
 
 Apply the metallb kustomization from this directory.
 ```
-oc apply -k examples/dt/bgp/bgp_dt01/metallb/
+oc apply -k examples/dt/bgp_dt01/metallb/
 ```
 
 Then, check that a speaker is running on the OCP tester node.
