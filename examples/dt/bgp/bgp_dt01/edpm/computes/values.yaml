@@ -253,7 +253,7 @@ data:
       - neutron-metadata
       - ovn-bgp-agent
       - libvirt
-      - nova-custom
+      - nova
   nova:
     migration:
       ssh_keys:
