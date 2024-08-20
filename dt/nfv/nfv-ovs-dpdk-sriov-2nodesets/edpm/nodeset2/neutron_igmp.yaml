@@ -1,0 +1,34 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: neutron-igmp-2
+data:
+  25-igmp.conf: _replaced_
+---
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneService
+metadata:
+  name: neutron-ovn-igmp-2
+spec:
+  label: neutron-ovn-igmp-2
+  edpmServiceType: neutron-ovn
+  caCerts: combined-ca-bundle
+  playbook: osp.edpm.neutron_ovn
+  dataSources:
+    - configMapRef:
+        name: neutron-igmp-2
+    - secretRef:
+        name: neutron-ovn-agent-neutron-config
+  tlsCerts:
+    default:
+      contents:
+        - dnsnames
+        - ips
+      issuer: osp-rootca-issuer-ovn
+      keyUsages:
+        - digital signature
+        - key encipherment
+        - client auth
+      networks:
+        - ctlplane
