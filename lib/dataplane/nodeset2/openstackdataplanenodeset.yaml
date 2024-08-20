@@ -1,0 +1,15 @@
+---
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneNodeSet
+metadata:
+  name: openstack-edpm-2
+spec:
+  env:
+    - name: ANSIBLE_FORCE_COLOR
+      value: "True"
+  preProvisioned: true
+  networkAttachments:
+    - ctlplane
+  nodeTemplate:
+    ansibleSSHPrivateKeySecret: dataplane-ansible-ssh-private-key-secret-2
+    managementNetwork: ctlplane
