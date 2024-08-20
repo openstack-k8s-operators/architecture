@@ -1,0 +1,127 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+resources:
+  - dataplane-ssh-secret.yaml
+  - nova-migration-ssh-secret.yaml
+  - openstackdataplanenodeset.yaml
+
+secretGenerator:
+  - name: libvirt-secret-2
+    behavior: create
+    literals:
+      - LibvirtPassword=12345678
+    options:
+      disableNameSuffixHash: true
+
+# OpenStackDataPlaneNodeSet customizations
+replacements:
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset2-values
+      fieldPath: data.nodeset.ansible
+    targets:
+      - select:
+          kind: OpenStackDataPlaneNodeSet
+        fieldPaths:
+          - spec.nodeTemplate.ansible
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset2-values
+      fieldPath: data.nodeset.networks
+    targets:
+      - select:
+          kind: OpenStackDataPlaneNodeSet
+        fieldPaths:
+          - spec.nodeTemplate.networks
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset2-values
+      fieldPath: data.nodeset.nodes
+    targets:
+      - select:
+          kind: OpenStackDataPlaneNodeSet
+        fieldPaths:
+          - spec.nodes
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset2-values
+      fieldPath: data.nodeset.services
+    targets:
+      - select:
+          kind: OpenStackDataPlaneNodeSet
+        fieldPaths:
+          - spec.services
+        options:
+          create: true
+
+  # Dataplane SSH access secret customizations
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset2-values
+      fieldPath: data.ssh_keys.authorized
+    targets:
+      - select:
+          kind: Secret
+          name: dataplane-ansible-ssh-private-key-secret-2
+        fieldPaths:
+          - data.authorized_keys
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset2-values
+      fieldPath: data.ssh_keys.private
+    targets:
+      - select:
+          kind: Secret
+          name: dataplane-ansible-ssh-private-key-secret-2
+        fieldPaths:
+          - data.ssh-privatekey
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset2-values
+      fieldPath: data.ssh_keys.public
+    targets:
+      - select:
+          kind: Secret
+          name: dataplane-ansible-ssh-private-key-secret-2
+        fieldPaths:
+          - data.ssh-publickey
+        options:
+          create: true
+
+  # Nova migration secret customizations
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset2-values
+      fieldPath: data.nova.migration.ssh_keys.private
+    targets:
+      - select:
+          kind: Secret
+          name: nova-migration-ssh-key-2
+        fieldPaths:
+          - data.ssh-privatekey
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset2-values
+      fieldPath: data.nova.migration.ssh_keys.public
+    targets:
+      - select:
+          kind: Secret
+          name: nova-migration-ssh-key-2
+        fieldPaths:
+          - data.ssh-publickey
+        options:
+          create: true
