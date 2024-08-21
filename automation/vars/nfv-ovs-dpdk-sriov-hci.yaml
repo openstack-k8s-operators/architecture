@@ -50,8 +50,10 @@ vas:
         post_stage_run:
           - name: Deploy Ceph
             type: playbook
-            source: "../../playbooks/ceph.yml"
+            source: "../../hooks/playbooks/ceph-bm.yml"
             inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
+            extra_vars:
+              cifmw_cephadm_log_path: /home/zuul/ci-framework-data/logs/ceph
 
       - path: examples/dt/nfv/nfv-ovs-dpdk-sriov-hci
         wait_conditions:
@@ -69,9 +71,10 @@ vas:
       - path: examples/dt/nfv/nfv-ovs-dpdk-sriov-hci/deployment
         wait_conditions:
           - >-
-            oc -n openstack wait
-            osdpns openstack-edpm --for condition=Ready
-            --timeout=60m
+            oc -n openstack
+            wait openstackdataplanedeployments.dataplane.openstack.org
+            edpm-deployment-post-ceph
+            --for condition=Ready --timeout=60m
         values:
           - name: edpm-deployment-values-post-ceph
             src_file: values.yaml
