@@ -55,6 +55,16 @@ instances:
         prefix_length_v4: 24
         skip_nm: false
         vlan_id: 123
+      nfs:
+        interface_name: eth1.124
+        ip_v4: 172.21.0.111
+        mac_addr: '52:54:00:1b:1c:e5'
+        mtu: 1500
+        network_name: nfs
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        vlan_id: 124
   ceph-1:
     hostname: ceph-1
     name: ceph-1
@@ -110,6 +120,16 @@ instances:
         prefix_length_v4: 24
         skip_nm: false
         vlan_id: 123
+      nfs:
+        interface_name: eth1.124
+        ip_v4: 172.21.0.112
+        mac_addr: '52:54:00:1b:1c:e6'
+        mtu: 1500
+        network_name: nfs
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        vlan_id: 124
   ceph-2:
     hostname: ceph-2
     name: ceph-2
@@ -165,6 +185,16 @@ instances:
         prefix_length_v4: 24
         skip_nm: false
         vlan_id: 123
+      nfs:
+        interface_name: eth1.124
+        ip_v4: 172.21.0.113
+        mac_addr: '52:54:00:1b:1c:e7'
+        mtu: 1500
+        network_name: nfs
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        vlan_id: 124
   controller-0:
     hostname: controller-0
     name: controller-0
@@ -235,6 +265,16 @@ instances:
         prefix_length_v4: 24
         skip_nm: false
         vlan_id: 122
+      nfs:
+        interface_name: enp6s0.124
+        ip_v4: 172.21.0.10
+        mac_addr: '52:54:00:18:a1:f6'
+        mtu: 1500
+        network_name: nfs
+        parent_interface: enp6s0
+        prefix_length_v4: 24
+        skip_nm: false
+        vlan_id: 124
   ocp-1:
     hostname: osasinfra-master-1
     name: ocp-1
@@ -292,6 +332,16 @@ instances:
         prefix_length_v4: 24
         skip_nm: false
         vlan_id: 122
+      nfs:
+        interface_name: enp6s0.124
+        ip_v4: 172.21.0.11
+        mac_addr: '52:54:00:18:a1:f7'
+        mtu: 1500
+        network_name: nfs
+        parent_interface: enp6s0
+        prefix_length_v4: 24
+        skip_nm: false
+        vlan_id: 124
   ocp-2:
     hostname: osasinfra-master-2
     name: ocp-2
@@ -349,6 +399,16 @@ instances:
         prefix_length_v4: 24
         skip_nm: false
         vlan_id: 122
+      nfs:
+        interface_name: enp6s0.124
+        ip_v4: 172.21.0.12
+        mac_addr: '52:54:00:18:a1:f8'
+        mtu: 1500
+        network_name: nfs
+        parent_interface: enp6s0
+        prefix_length_v4: 24
+        skip_nm: false
+        vlan_id: 124
   networker-0:
     hostname: networker-0
     name: networker-0
@@ -447,6 +507,15 @@ instances:
         parent_interface: eth1
         skip_nm: false
         vlan_id: 22
+      nfs:
+        interface_name: eth1.24
+        ip_v4: 172.21.0.100
+        mac_addr: '52:54:00:1b:1c:e8'
+        mtu: 1500
+        network_name: nfs
+        parent_interface: eth1
+        skip_nm: false
+        vlan_id: 24
   compute-1:
     hostname: compute-1
     name: compute-1
@@ -485,6 +554,15 @@ instances:
         parent_interface: eth1
         skip_nm: false
         vlan_id: 22
+      nfs:
+        interface_name: eth1.24
+        ip_v4: 172.21.0.101
+        mac_addr: '52:54:00:1b:1c:e9'
+        mtu: 1500
+        network_name: nfs
+        parent_interface: eth1
+        skip_nm: false
+        vlan_id: 24
   compute-2:
     hostname: compute-2
     name: compute-2
@@ -523,6 +601,15 @@ instances:
         parent_interface: eth1
         skip_nm: false
         vlan_id: 22
+      nfs:
+        interface_name: eth1.24
+        ip_v4: 172.21.0.102
+        mac_addr: '52:54:00:1b:1c:e0'
+        mtu: 1500
+        network_name: nfs
+        parent_interface: eth1
+        skip_nm: false
+        vlan_id: 24
 networks:
   ctlplane:
     dns_v4:
@@ -716,4 +803,37 @@ networks:
             start_host: 100
         ipv6_ranges: []
     vlan_id: 122
+  nfs:
+    dns_v4: []
+    dns_v6: []
+    mtu: 1496
+    network_name: nfs
+    network_v4: 172.21.0.0/24
+    search_domain: nfs.example.com
+    tools:
+      metallb:
+        ipv4_ranges:
+          - end: 172.21.0.90
+            end_host: 90
+            length: 11
+            start: 172.21.0.80
+            start_host: 80
+        ipv6_ranges: []
+      multus:
+        ipv4_ranges:
+          - end: 172.21.0.70
+            end_host: 70
+            length: 41
+            start: 172.21.0.30
+            start_host: 30
+        ipv6_ranges: []
+      netconfig:
+        ipv4_ranges:
+          - end: 172.21.0.250
+            end_host: 250
+            length: 151
+            start: 172.21.0.100
+            start_host: 100
+        ipv6_ranges: []
+    vlan_id: 124
 routers: {}

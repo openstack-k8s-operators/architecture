@@ -102,6 +102,8 @@ data:
         subnetName: subnet1
       - name: storagemgmt
         subnetName: subnet1
+      - name: nfs
+        subnetName: subnet1
 
     nodes:
       edpm-compute-0:
@@ -119,6 +121,8 @@ data:
             subnetName: subnet1
           - name: tenant
             subnetName: subnet1
+          - name: nfs
+            subnetName: subnet1
       edpm-compute-1:
         ansible:
           ansibleHost: 192.168.122.101
@@ -133,6 +137,8 @@ data:
           - name: storage
             subnetName: subnet1
           - name: tenant
+            subnetName: subnet1
+          - name: nfs
             subnetName: subnet1
 
     services:
