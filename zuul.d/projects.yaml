@@ -5,11 +5,16 @@
       - rhoso-architecture-validate-bgp
       - rhoso-architecture-validate-bgp_dt01
       - rhoso-architecture-validate-hci
+      - rhoso-architecture-validate-hci
+      - rhoso-architecture-validate-nfv-ovs-dpdk-sriov-hci
       - rhoso-architecture-validate-nfv-ovs-dpdk-sriov-hci
       - rhoso-architecture-validate-osasinfra
       - rhoso-architecture-validate-ovs-dpdk
+      - rhoso-architecture-validate-ovs-dpdk
+      - rhoso-architecture-validate-ovs-dpdk-sriov
       - rhoso-architecture-validate-ovs-dpdk-sriov
       - rhoso-architecture-validate-pidone
+      - rhoso-architecture-validate-sriov
       - rhoso-architecture-validate-sriov
       - rhoso-architecture-validate-uni01alpha
       - rhoso-architecture-validate-uni02beta
