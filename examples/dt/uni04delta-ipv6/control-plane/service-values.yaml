@@ -53,6 +53,7 @@ data:
     enabled: true
     customServiceConfig: |
       [DEFAULT]
+      debug = true
       enabled_share_backends = cephfsnfs
       enabled_share_protocols = nfs
 
