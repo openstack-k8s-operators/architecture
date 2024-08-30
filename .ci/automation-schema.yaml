@@ -5,9 +5,10 @@
 # https://github.com/23andMe/Yamale
 ---
 vas: map(include('_architecture'), key=str())
+adoption: map(include('_adoption'), key=str(), max=1, required=False)
 
 ---
-# Define various nested types
+# Define VA/DT various nested types
 _values:
   name: str()
   src_file: str()
@@ -33,3 +34,9 @@ _stage:
 ---
 _architecture:
   stages: list(include('_stage'), min=1)
+
+# Define adoption nested types
+---
+_adoption:
+  layout_patch: map(key=str(), required=False)
+  networking_mapper_patch: map(key=str(), required=False)
