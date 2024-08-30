@@ -76,3 +76,78 @@ vas:
           - name: edpm-deployment-values-post-ceph
             src_file: values.yaml
         build_output: deployment-post-ceph.yaml
+
+# Adoption related content for adoption
+adoption:
+  hci:
+    layout_patch:
+      vms:
+        # Let's remove the default computes, since we want to adopt the
+        # OSP ones
+        compute:
+          amount: 0
+        osp-undercloud:
+          amount: 1
+          disk_file_name: rhel-8.10.qcow2
+          image_local_dir: "{{ cifmw_basedir }}/images/"
+          image_url: "{{ cifmw_discovered_image_url }}"
+          sha256_image_name: "{{ cifmw_discovered_hash }}"
+          memory: 16
+          cpus: 8
+          disksize: 80
+          nets:
+            - ocpbm
+            - osp_trunk
+        osp-controller:
+          amount: 3
+          disk_file_name: rhel-8.10.qcow2
+          image_local_dir: "{{ cifmw_basedir }}/images/"
+          image_url: "{{ cifmw_discovered_image_url }}"
+          sha256_image_name: "{{ cifmw_discovered_hash }}"
+          memory: 16
+          cpus: 8
+          disksize: 80
+          nets:
+            - ocpbm
+            - osp_trunk
+        osp-compute:
+          amount: 3
+          disk_file_name: rhel-8.10.qcow2
+          image_local_dir: "{{ cifmw_basedir }}/images/"
+          image_url: "{{ cifmw_discovered_image_url }}"
+          sha256_image_name: "{{ cifmw_discovered_hash }}"
+          memory: 4
+          cpus: 4
+          disksize: 20
+          nets:
+            - ocpbm
+            - osp_trunk
+    networking_mapper_patch:
+      group-templates:
+        osp-controllers:
+          network-template:
+            range:
+              start: 200
+              length: 3
+          networks: &osp_nets
+            ctlplane: {}
+            internalapi:
+              trunk-parent: ctlplane
+            tenant:
+              trunk-parent: ctlplane
+            storage:
+              trunk-parent: ctlplane
+            storagemgmt:
+              trunk-parent: ctlplane
+        osp-computes:
+          network-template:
+            range:
+              start: 210
+              length: 3
+          networks: *osp_nets
+        osp-underclouds:
+          network-template:
+            range:
+              start: 199
+              length: 1
+          networks: *osp_nets
