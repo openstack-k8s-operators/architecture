@@ -151,3 +151,49 @@ adoption:
               start: 199
               length: 1
           networks: *osp_nets
+    undercloud:
+      config:
+        - section: DEFAULT
+          option: undercloud_hostname
+          value: undercloud.localdomain
+        # other undercloud values
+    pre_oc_run:
+      - name: Deploy Ceph
+        type: playbook
+        source: "path_to_playbook tbd"
+        inventory: "path_to_invenotry_tbd"
+    cloud_domain: "localdomain"
+    hostname_groups_map:
+      # map ansible groups in the inventory to role hostname format for
+      # 17.1 deployment
+      osp-computes: "overcloud-computehci"
+      osp-controllers: "overcloud-controller"
+    overcloud:
+      stackname: "overcloud"
+      args:
+        - "--override-ansible-cfg /home/zuul/ansible_config.cfg"
+        - "--templates /usr/share/openstack-tripleo-heat-templates"
+        - "--libvirt-type qemu"
+        - "--timeout 90"
+        - "--overcloud-ssh-user zuul"
+        - "--deployed-server"
+        - "--validation-warnings-fatal"
+        - "--disable-validations"
+        - "--heat-type pod"
+        - "--disable-protected-resource-types"
+      vars:
+        - "/home/zuul/deployed_ceph.yaml"
+        - "/usr/share/openstack-tripleo-heat-templates/environments/docker-ha.yaml"
+        - "/usr/share/openstack-tripleo-heat-templates/environments/podman.yaml"
+        - "/usr/share/openstack-tripleo-heat-templates/environments/low-memory-usage.yaml"
+        - "/usr/share/openstack-tripleo-heat-templates/environments/debug.yaml"
+        - "/usr/share/openstack-tripleo-heat-templates/environments/manila-cephfsnative-config.yaml"
+        - "/usr/share/openstack-tripleo-heat-templates/environments/enable-legacy-telemetry.yaml"
+        - "/usr/share/openstack-tripleo-heat-templates/environments/cephadm/cephadm.yaml"
+        - "/usr/share/openstack-tripleo-heat-templates/environments/cephadm/ceph-mds.yaml"
+      services_file: "adoption/hci/overcloud_services.yaml"
+      network_data_file: "adoption/hci/network_data.yaml"
+      vips_data_file: "adoption/hci/vips_data.yaml"
+      roles_file: "adoption/hci/roles.yaml"
+      ceph_osd_spec_file: "adoption/hci/osd_spec.yaml"
+      config_download_file: "adoption/hci/config-download.yaml"

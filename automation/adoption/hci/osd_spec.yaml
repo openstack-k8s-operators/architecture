@@ -1,0 +1,4 @@
+---
+data_devices:
+  paths:
+    - /dev/ceph_vg0/ceph_lv0
