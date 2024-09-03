@@ -41,33 +41,6 @@
       cifmw_architecture_scenario: hci
 - job:
     files:
-    - examples/va/hci
-    - examples/va/hci/control-plane
-    - examples/va/hci/control-plane/nncp
-    - examples/va/hci/deployment
-    - examples/va/hci/edpm-pre-ceph/deployment
-    - examples/va/hci/edpm-pre-ceph/nodeset
-    - lib
-    - va/hci
-    name: rhoso-architecture-validate-hci
-    parent: rhoso-architecture-base-job
-    vars:
-      cifmw_architecture_scenario: hci
-- job:
-    files:
-    - examples/dt/nfv/nfv-ovs-dpdk-sriov-hci
-    - examples/dt/nfv/nfv-ovs-dpdk-sriov-hci/control-plane
-    - examples/dt/nfv/nfv-ovs-dpdk-sriov-hci/control-plane/nncp
-    - examples/dt/nfv/nfv-ovs-dpdk-sriov-hci/deployment
-    - examples/dt/nfv/nfv-ovs-dpdk-sriov-hci/edpm-pre-ceph/deployment
-    - examples/dt/nfv/nfv-ovs-dpdk-sriov-hci/edpm-pre-ceph/nodeset
-    - lib
-    name: rhoso-architecture-validate-nfv-ovs-dpdk-sriov-hci
-    parent: rhoso-architecture-base-job
-    vars:
-      cifmw_architecture_scenario: nfv-ovs-dpdk-sriov-hci
-- job:
-    files:
     - examples/dt/nfv/nfv-ovs-dpdk-sriov-hci
     - examples/dt/nfv/nfv-ovs-dpdk-sriov-hci/control-plane
     - examples/dt/nfv/nfv-ovs-dpdk-sriov-hci/control-plane/nncp
@@ -107,30 +80,6 @@
       cifmw_architecture_scenario: ovs-dpdk
 - job:
     files:
-    - automation/mocks/ovs-dpdk.yaml
-    - examples/va/nfv/ovs-dpdk
-    - examples/va/nfv/ovs-dpdk/edpm/deployment
-    - examples/va/nfv/ovs-dpdk/edpm/nodeset
-    - examples/va/nfv/ovs-dpdk/nncp
-    - lib
-    name: rhoso-architecture-validate-ovs-dpdk
-    parent: rhoso-architecture-base-job
-    vars:
-      cifmw_architecture_scenario: ovs-dpdk
-- job:
-    files:
-    - automation/mocks/ovs-dpdk-sriov.yaml
-    - examples/va/nfv/ovs-dpdk-sriov
-    - examples/va/nfv/ovs-dpdk-sriov/edpm/deployment
-    - examples/va/nfv/ovs-dpdk-sriov/edpm/nodeset
-    - examples/va/nfv/ovs-dpdk-sriov/nncp
-    - lib
-    name: rhoso-architecture-validate-ovs-dpdk-sriov
-    parent: rhoso-architecture-base-job
-    vars:
-      cifmw_architecture_scenario: ovs-dpdk-sriov
-- job:
-    files:
     - automation/mocks/ovs-dpdk-sriov.yaml
     - examples/va/nfv/ovs-dpdk-sriov
     - examples/va/nfv/ovs-dpdk-sriov/edpm/deployment
@@ -155,18 +104,6 @@
     vars:
       cifmw_architecture_scenario: pidone
       cifmw_networking_env_def_file: automation/net-env/pidone.yaml
-- job:
-    files:
-    - automation/mocks/sriov.yaml
-    - examples/va/nfv/sriov
-    - examples/va/nfv/sriov/edpm/deployment
-    - examples/va/nfv/sriov/edpm/nodeset
-    - examples/va/nfv/sriov/nncp
-    - lib
-    name: rhoso-architecture-validate-sriov
-    parent: rhoso-architecture-base-job
-    vars:
-      cifmw_architecture_scenario: sriov
 - job:
     files:
     - automation/mocks/sriov.yaml
