@@ -2,26 +2,26 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://openstack-k8s-operators.github.io/architecture/</loc>
-         <lastmod>2024-08-30</lastmod>
+         <lastmod>2024-09-04</lastmod>
     </url>
     <url>
          <loc>https://openstack-k8s-operators.github.io/architecture/dt/</loc>
-         <lastmod>2024-08-30</lastmod>
+         <lastmod>2024-09-04</lastmod>
     </url>
     <url>
          <loc>https://openstack-k8s-operators.github.io/architecture/contributing/cherry-picking/</loc>
-         <lastmod>2024-08-30</lastmod>
+         <lastmod>2024-09-04</lastmod>
     </url>
     <url>
          <loc>https://openstack-k8s-operators.github.io/architecture/contributing/documentation/</loc>
-         <lastmod>2024-08-30</lastmod>
+         <lastmod>2024-09-04</lastmod>
     </url>
     <url>
          <loc>https://openstack-k8s-operators.github.io/architecture/contributing/pull-request-testing/</loc>
-         <lastmod>2024-08-30</lastmod>
+         <lastmod>2024-09-04</lastmod>
     </url>
     <url>
          <loc>https://openstack-k8s-operators.github.io/architecture/faq/cr_by_components/</loc>
-         <lastmod>2024-08-30</lastmod>
+         <lastmod>2024-09-04</lastmod>
     </url>
 </urlset>
