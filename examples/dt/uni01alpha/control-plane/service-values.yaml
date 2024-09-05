@@ -171,6 +171,13 @@ data:
       [ovn]
       ovsdb_probe_interval = 60000
       ovn_emit_need_to_frag = true
+      fdb_age_threshold = 300
+      mac_binding_age_threshold = 5
+      localnet_learn_fdb = True
+
+      [ovn_nb_global]
+      fdb_removal_limit = 100
+      mac_binding_removal_limit = 50000
 
       [ml2]
       type_drivers = geneve,vxlan,vlan,flat,local
