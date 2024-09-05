@@ -53,7 +53,8 @@ with open('./zuul.d/validations.yaml', 'w+') as zuul_jobs:
 _PROJECTS.sort()
 with open('./zuul.d/projects.yaml', 'w+') as zuul_projects:
     struct = [{'project': {'github-check': {'jobs': _PROJECTS},
-                           'github-gate': {'jobs': _PROJECTS}
+                           'github-gate': {'jobs': _PROJECTS},
+                           'github-experimental-trigger': {'jobs': ['architecture-downstream-va-hci-trigger-job']}
                            }
                }
               ]

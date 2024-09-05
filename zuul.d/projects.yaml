@@ -18,5 +18,8 @@
       - rhoso-architecture-validate-uni05epsilon
       - rhoso-architecture-validate-uni06zeta
       - rhoso-architecture-validate-uni07eta
+    github-experimental-trigger:
+      jobs:
+      - architecture-downstream-va-hci-trigger-job
     github-gate:
       jobs: *id001
