@@ -133,7 +133,7 @@ data:
       ovn_emit_need_to_frag = true
       enable_distributed_floating_ip = false
       [ml2]
-      type_drivers = geneve,vlan,flat
+      type_drivers = geneve,vlan,flat,local
       tenant_network_types = geneve,vlan
       extension_drivers = qos,port_security,dns_domain_ports
       path_mtu = 1400
