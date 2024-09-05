@@ -125,6 +125,6 @@ data:
       ovn_emit_need_to_frag = true
 
       [ml2]
-      type_drivers = geneve,vxlan,vlan,flat
+      type_drivers = geneve,vxlan,vlan,flat,local
       tenant_network_types = geneve,flat,vlan
       path_mtu = 1400
