@@ -101,7 +101,7 @@ data:
       [ovn]
       ovn_emit_need_to_frag = true
       [ml2]
-      type_drivers = geneve,vlan,flat
+      type_drivers = geneve,vlan,flat,local
       tenant_network_types = vlan,flat
       [ml2_type_vlan]
       network_vlan_ranges = datacentre:1000:2000
