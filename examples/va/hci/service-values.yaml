@@ -59,6 +59,7 @@ data:
         replicas: 1
         customServiceConfig: |
           [DEFAULT]
+          debug = true
           enabled_share_backends = cephfs
           [cephfs]
           driver_handles_share_servers = False

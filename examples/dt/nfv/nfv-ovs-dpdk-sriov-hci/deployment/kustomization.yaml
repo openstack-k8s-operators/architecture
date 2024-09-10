@@ -1,0 +1,37 @@
+# This is the kustomization for the FINAL step, edpm-post-ceph
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../../../dt/nfv/nfv-ovs-dpdk-sriov-hci/edpm-post-ceph/deployment
+  # - https://github.com/openstack-k8s-operators/architecture/dt/nfv/nfv-ovs-dpdk-sriov-hci/edpm-post-ceph/deployment?ref=main
+  ## It's possible to replace ../../../dt/nfv/nfv-ovs-dpdk-sriov-hci/edpm-post-ceph/deployment with a git checkout URL as per:
+  ## https://github.com/kubernetes-sigs/kustomize/blob/master/examples/remoteBuild.md
+
+resources:
+  - values.yaml
+
+replacements:
+  - source:
+      kind: ConfigMap
+      name: edpm-deployment-values-post-ceph
+      fieldPath: data.servicesOverride
+    targets:
+      - select:
+          kind: OpenStackDataPlaneDeployment
+        fieldPaths:
+          - spec.servicesOverride
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-deployment-values-post-ceph
+      fieldPath: data.deployment.name
+    targets:
+      - select:
+          kind: OpenStackDataPlaneDeployment
+        fieldPaths:
+          - metadata.name
+        options:
+          create: true

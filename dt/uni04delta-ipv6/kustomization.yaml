@@ -82,7 +82,17 @@ replacements:
           - spec.neutron.template.customServiceConfig
         options:
           create: true
-
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.ironic.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.ironic.enabled
+        options:
+          create: true
   - source:
       kind: ConfigMap
       name: network-values

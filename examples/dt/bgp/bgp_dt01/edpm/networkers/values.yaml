@@ -29,7 +29,7 @@ data:
           - nic3
           - nic4
         timesync_ntp_servers:
-          - hostname: clock.redhat.com
+          - hostname: pool.ntp.org
         # conntrack is necessary for some tobiko tests
         edpm_bootstrap_command: |
           dnf -y install conntrack-tools

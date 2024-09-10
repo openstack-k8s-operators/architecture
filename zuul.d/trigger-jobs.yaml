@@ -1,0 +1,14 @@
+- job:
+    name: architecture-downstream-va-hci-trigger-job
+    parent: downstream-va-hci-trigger-job
+    description: |
+      This job will trigger a VA HCI job downstream.
+      We can invoke this job by adding following comment
+      `\trigger github-experimental` in the github pull request comment.
+      These jobs runs in github-experimental-trigger pipeline.
+    files:
+      - ^automation/vars/hci.yaml
+      - ^lib
+      - ^examples/common
+      - ^examples/dt/hci
+      - ^va/hci
