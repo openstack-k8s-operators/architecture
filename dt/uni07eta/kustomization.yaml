@@ -269,6 +269,54 @@ replacements:
         options:
           create: true
 
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.octaviaAPI.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.octaviaAPI.customServiceConfig
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.octaviaHealthManager.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.octaviaHealthManager.customServiceConfig
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.octaviaHousekeeping.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.octaviaHousekeeping.customServiceConfig
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.octaviaWorker.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.octaviaWorker.customServiceConfig
+        options:
+          create: true
+
   # OVN
 
   - source:
