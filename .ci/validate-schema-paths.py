@@ -24,6 +24,8 @@ class TestSchema():
             content = yaml.safe_load(fh)
         for scenario in content['vas']:
             print(f'  Checking scenario: {scenario}')
+            assert (rel.name == f'{scenario}.yaml'), \
+            f'!! {rel.name} does not match {scenario}.yaml'
             self.__validate(content['vas'][scenario])
 
     def __validate(self, scenario):

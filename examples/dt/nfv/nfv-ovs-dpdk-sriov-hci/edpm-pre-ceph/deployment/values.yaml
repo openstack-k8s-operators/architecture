@@ -22,4 +22,3 @@ data:
     - configure-os
     - ssh-known-hosts
     - run-os
-    - reboot-os

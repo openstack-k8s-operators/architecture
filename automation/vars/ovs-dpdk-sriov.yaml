@@ -1,8 +1,8 @@
 ---
 vas:
-  bgp:
+  ovs-dpdk-sriov:
     stages:
-      - path: examples/dt/bgp/control-plane/nncp
+      - path: examples/va/nfv/ovs-dpdk-sriov/nncp
         wait_conditions:
           - >-
             oc -n openstack wait nncp
@@ -14,13 +14,11 @@ vas:
             src_file: values.yaml
         build_output: nncp.yaml
 
-      - path: examples/dt/bgp/control-plane
+      - path: examples/va/nfv/ovs-dpdk-sriov
         wait_conditions:
           - >-
-            oc -n openstack wait openstackcontrolplane
-            controlplane
-            --for condition=Ready
-            --timeout=30m
+            oc -n openstack wait osctlplane controlplane --for condition=Ready
+            --timeout=1200s
         values:
           - name: network-values
             src_file: nncp/values.yaml
@@ -28,26 +26,24 @@ vas:
             src_file: service-values.yaml
         build_output: control-plane.yaml
 
-      - path: examples/dt/bgp/edpm/nodeset
+      - path: examples/va/nfv/ovs-dpdk-sriov/edpm/nodeset
         wait_conditions:
           - >-
-            oc -n openstack wait openstackdataplanenodeset
-            openstack-edpm
-            --for condition=SetupReady
-            --timeout=600s
+            oc -n openstack wait
+            osdpns openstack-edpm --for condition=SetupReady
+            --timeout=60m
         values:
           - name: edpm-nodeset-values
             src_file: values.yaml
-        build_output: nodeset-dataplane.yaml
+        build_output: nodeset.yaml
 
-      - path: examples/dt/bgp/edpm/deployment
+      - path: examples/va/nfv/ovs-dpdk-sriov/edpm/deployment
         wait_conditions:
           - >-
-            oc -n openstack wait openstackdataplanedeployment
-            edpm-deployment
-            --for condition=Ready
-            --timeout=2400s
+            oc -n openstack wait
+            osdpns openstack-edpm --for condition=Ready
+            --timeout=60m
         values:
           - name: edpm-deployment-values
             src_file: values.yaml
-        build_output: deployment-dataplane.yaml
+        build_output: deployment.yaml

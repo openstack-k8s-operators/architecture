@@ -41,6 +41,7 @@
       cifmw_architecture_scenario: hci
 - job:
     files:
+    - automation/mocks/nfv-ovs-dpdk-sriov-hci.yaml
     - examples/dt/nfv/nfv-ovs-dpdk-sriov-hci
     - examples/dt/nfv/nfv-ovs-dpdk-sriov-hci/control-plane
     - examples/dt/nfv/nfv-ovs-dpdk-sriov-hci/control-plane/nncp
