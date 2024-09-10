@@ -1,0 +1,34 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../../../../dt/nova/nova-three-cells/edpm/nodeset
+
+resources:
+  - values.yaml
+
+patches:
+  - target:
+      kind: OpenStackDataPlaneNodeSet
+      name: openstack-edpm
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: openstack-edpm-2
+      - op: replace
+        path: /spec/services/13
+        value: nova-cell-2
+  - target:
+      kind: OpenStackDataPlaneService
+      name: nova
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: nova-cell-2
+      - op: replace
+        path: /spec/label
+        value: nova-cell-2
+      - op: replace
+        path: /spec/dataSources/0/secretRef/name
+        value: nova-cell2-compute-config
