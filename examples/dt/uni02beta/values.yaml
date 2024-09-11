@@ -74,6 +74,10 @@ data:
 
         gather_facts: false
 
+        # conntrack is necessary for some tobiko tests
+        edpm_bootstrap_command: |
+          dnf -y install conntrack-tools
+
     networks:
       - defaultRoute: true
         name: ctlplane
