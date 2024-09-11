@@ -24,3 +24,14 @@ replacements:
           - spec.servicesOverride
         options:
           create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-deployment-values-post-ceph
+      fieldPath: data.deployment.name
+    targets:
+      - select:
+          kind: OpenStackDataPlaneDeployment
+        fieldPaths:
+          - metadata.name
+        options:
+          create: true
