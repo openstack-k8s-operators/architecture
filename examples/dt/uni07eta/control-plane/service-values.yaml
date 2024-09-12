@@ -144,4 +144,3 @@ data:
       type_drivers = geneve,vxlan,vlan,flat,local
       tenant_network_types = geneve,flat,vlan
       path_mtu = 1400
-
