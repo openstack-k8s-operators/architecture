@@ -12,7 +12,7 @@ oc project openstack
 ```
 Change to the dcn directory
 ```
-cd architecture/examples/va/dcn
+cd architecture/examples/dt/dcn
 ```
 Edit the [values.yaml](values.yaml) and [service-values.yaml](service-values.yaml)
 files to suit your environment.

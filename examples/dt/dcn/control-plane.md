@@ -12,7 +12,7 @@ oc project openstack
 ```
 Change to the dcn directory
 ```
-cd architecture/examples/va/dcn
+cd architecture/examples/dt/dcn
 ```
 Edit the [control-plane/nncp/values.yaml](control-plane/nncp/values.yaml) file to suit your environment.
 ```

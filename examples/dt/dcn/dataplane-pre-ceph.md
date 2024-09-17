@@ -12,7 +12,7 @@ oc project openstack
 ```
 Change to the dcn directory
 ```
-cd architecture/examples/va/dcn
+cd architecture/examples/dt/dcn
 ```
 Edit the [edpm-pre-ceph/nodeset/values.yaml](edpm-pre-ceph/nodeset/values.yaml) file to suit
 your environment.

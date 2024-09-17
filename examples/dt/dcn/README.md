@@ -1,8 +1,8 @@
 # Distributed Compute Node (DCN) OpenStack Architecture with HCI and Ceph
 
-**Based on OpenStack K8S operators from the "main" branch of the [OpenStack Operator repo](https://github.com/openstack-k8s-operators/openstack-operator/commit/aa63bf3931f74722dd48af8a0914233b2b384330) on Dec 19th, 2023**
+<img src="image.png" width="640">
 
-This is a collection of CR templates that represent a validated Red Hat OpenStack Services on OpenShift deployment that has the following characteristics:
+This is a collection of CR templates that represent a Red Hat OpenStack Services on OpenShift deployment that has the following characteristics:
 
 - 3 master/worker combo-node OpenShift cluster
 - 3-replica Galera database
