@@ -16,6 +16,9 @@ data:
     # The public key that will have access to the dataplane computes via SSH
     public: CHANGEME3
   nodeset:
+    env:
+      - name: "ANSIBLE_VERBOSITY"
+        value: "4"
     ansible:
       ansibleUser: cloud-admin
       ansiblePort: 22
