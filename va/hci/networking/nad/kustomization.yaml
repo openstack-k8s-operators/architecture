@@ -17,6 +17,19 @@ transformers:
         kind: Namespace
         create: true
 
-components:
-  - ../../../../lib/dataplane/nodeset
-  - ../../../../va/hci/nodeset
+resources:
+  - ocp_networks_netattach.yaml
+
+replacements:
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.swift.net-attach-def
+    targets:
+      - select:
+          kind: NetworkAttachmentDefinition
+          name: swift
+        fieldPaths:
+          - spec.config
+        options:
+          create: true
