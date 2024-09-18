@@ -2,7 +2,7 @@
 vas:
   dcn:
     stages:
-      - path: examples/va/dcn/control-plane/nncp
+      - path: examples/dt/dcn/control-plane/nncp
         wait_conditions:
           - >-
             oc -n openstack wait nncp
@@ -14,7 +14,7 @@ vas:
             src_file: values.yaml
         build_output: nncp.yaml
 
-      - path: examples/va/dcn/control-plane
+      - path: examples/dt/dcn/control-plane
         wait_conditions:
           - >-
             oc -n openstack wait osctlplane controlplane --for condition=Ready
