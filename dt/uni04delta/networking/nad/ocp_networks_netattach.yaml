@@ -1,0 +1,8 @@
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: nfs
+  labels:
+    osp/net: nfs
+    osp/net-attach-def-type: standard

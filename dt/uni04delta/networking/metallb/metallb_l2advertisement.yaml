@@ -1,0 +1,11 @@
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: nfs
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+    - nfs
+  interfaces:
+    - _replaced_
