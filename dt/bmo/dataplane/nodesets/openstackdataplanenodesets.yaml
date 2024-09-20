@@ -1,0 +1,129 @@
+---
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneNodeSet
+metadata:
+  name: nodeset-0
+spec:
+  env:
+    - name: ANSIBLE_FORCE_COLOR
+      value: "True"
+  preProvisioned: false
+  baremetalSetTemplate:
+    deploymentSSHSecret: dataplane-ansible-ssh-private-key-secret
+    bmhNamespace: openstack
+    cloudUserName: cloud-user
+    bmhLabelSelector:
+      app: openstack
+      nodeset: leaf0
+    ctlplaneInterface: _replaced_
+  networkAttachments:
+    - ctlplane
+  nodeTemplate:
+    ansibleSSHPrivateKeySecret: dataplane-ansible-ssh-private-key-secret
+    managementNetwork: ctlplane
+    networks:
+      - defaultRoute: true
+        name: ctlplane
+        subnetName: subnet2
+      - name: internalapi
+        subnetName: subnet2
+      - name: storage
+        subnetName: subnet2
+      - name: tenant
+        subnetName: subnet2
+    services:
+      - bootstrap
+      - configure-network
+      - validate-network
+      - install-os
+      - configure-os
+      - ssh-known-hosts
+      - run-os
+      - reboot-os
+      - install-certs
+      - ovn
+      - neutron-metadata
+      - libvirt
+      - nova
+    ansible:
+      ansibleUser: cloud-admin
+      ansiblePort: 22
+      ansibleVars:
+        timesync_ntp_servers: []
+        edpm_network_config_hide_sensitive_logs: false
+        edpm_network_config_template: _replaced_
+        neutron_physical_bridge_name: _replaced_
+        neutron_public_interface_name: _replaced_
+
+        edpm_nodes_validation_validate_controllers_icmp: false
+        edpm_nodes_validation_validate_gateway_icmp: false
+
+        edpm_sshd_configure_firewall: true
+        edpm_sshd_allowed_ranges: []
+
+        gather_facts: false
+
+---
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneNodeSet
+metadata:
+  name: nodeset-1
+spec:
+  env:
+    - name: ANSIBLE_FORCE_COLOR
+      value: "True"
+  preProvisioned: false
+  baremetalSetTemplate:
+    deploymentSSHSecret: dataplane-ansible-ssh-private-key-secret
+    bmhNamespace: openstack
+    cloudUserName: cloud-user
+    bmhLabelSelector:
+      app: openstack
+      nodeset: leaf1
+    ctlplaneInterface: _replaced_
+  networkAttachments:
+    - ctlplane
+  nodeTemplate:
+    ansibleSSHPrivateKeySecret: dataplane-ansible-ssh-private-key-secret
+    managementNetwork: ctlplane
+    networks:
+      - defaultRoute: true
+        name: ctlplane
+        subnetName: subnet3
+      - name: internalapi
+        subnetName: subnet1
+      - name: storage
+        subnetName: subnet1
+      - name: tenant
+        subnetName: subnet1
+    services:
+      - bootstrap
+      - configure-network
+      - validate-network
+      - install-os
+      - configure-os
+      - ssh-known-hosts
+      - run-os
+      - reboot-os
+      - install-certs
+      - ovn
+      - neutron-metadata
+      - libvirt
+      - nova
+    ansible:
+      ansibleUser: cloud-admin
+      ansiblePort: 22
+      ansibleVars:
+        timesync_ntp_servers: []
+        edpm_network_config_hide_sensitive_logs: false
+        edpm_network_config_template: _replaced_
+        neutron_physical_bridge_name: _replaced_
+        neutron_public_interface_name: _replaced_
+
+        edpm_nodes_validation_validate_controllers_icmp: false
+        edpm_nodes_validation_validate_gateway_icmp: false
+
+        edpm_sshd_configure_firewall: true
+        edpm_sshd_allowed_ranges: []
+
+        gather_facts: false
