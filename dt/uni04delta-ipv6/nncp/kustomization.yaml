@@ -57,11 +57,6 @@ patches:
 
   - target:
       kind: NodeNetworkConfigurationPolicy
-      name: worker-0
-    patch: *ironicbr_template
-
-  - target:
-      kind: NodeNetworkConfigurationPolicy
       name: master-0
     patch: &ironicvrf_template |-
       - op: add
@@ -84,11 +79,6 @@ patches:
   - target:
       kind: NodeNetworkConfigurationPolicy
       name: master-2
-    patch: *ironicvrf_template
-
-  - target:
-      kind: NodeNetworkConfigurationPolicy
-      name: worker-0
     patch: *ironicvrf_template
 
   - target:
@@ -128,10 +118,6 @@ patches:
       name: master-2
     patch: *routes
 
-  - target:
-      kind: NodeNetworkConfigurationPolicy
-      name: worker-0
-    patch: *routes
 
 replacements:
 
@@ -155,12 +141,6 @@ replacements:
           name: master-2
         fieldPaths:
           - spec.desiredState.interfaces.[name=ironic].bridge.port.0.name
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: worker-0
-        fieldPaths:
-          - spec.desiredState.interfaces.[name=ironic].bridge.port.0.name
-
 
   - source:
       kind: ConfigMap
@@ -198,17 +178,6 @@ replacements:
   - source:
       kind: ConfigMap
       name: network-values
-      fieldPath: data.node_3.ironic_ip
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: worker-0
-        fieldPaths:
-          - spec.desiredState.interfaces.[name=ironic].ipv6.address.0.ip
-
-  - source:
-      kind: ConfigMap
-      name: network-values
       fieldPath: data.ironic.prefix-length
     targets:
       - select:
@@ -226,12 +195,6 @@ replacements:
           name: master-2
         fieldPaths:
           - spec.desiredState.interfaces.[name=ironic].ipv6.address.0.prefix-length
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: worker-0
-        fieldPaths:
-          - spec.desiredState.interfaces.[name=ironic].ipv6.address.0.prefix-length
-
 
   - source:
       kind: ConfigMap
@@ -251,11 +214,6 @@ replacements:
       - select:
           kind: NodeNetworkConfigurationPolicy
           name: master-2
-        fieldPaths:
-          - spec.desiredState.routes.config.0.next-hop-address
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: worker-0
         fieldPaths:
           - spec.desiredState.routes.config.0.next-hop-address
 
@@ -282,13 +240,6 @@ replacements:
         fieldPaths:
           - spec.desiredState.routes.config.1.next-hop-address
           - spec.desiredState.routes.config.2.next-hop-address
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: worker-0
-        fieldPaths:
-          - spec.desiredState.routes.config.1.next-hop-address
-          - spec.desiredState.routes.config.2.next-hop-address
-
 
   - source:
       kind: ConfigMap
@@ -308,10 +259,5 @@ replacements:
       - select:
           kind: NodeNetworkConfigurationPolicy
           name: master-2
-        fieldPaths:
-          - spec.desiredState.routes.config.1.destination
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: worker-0
         fieldPaths:
           - spec.desiredState.routes.config.1.destination
