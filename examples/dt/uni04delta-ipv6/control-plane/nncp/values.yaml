@@ -33,8 +33,8 @@ data:
     storage_ip: "2620:cf:cf:cccc::12"
     ironic_ip: "2620:cf:cf:ffff::12"
   node_3:
-    name: ocp-worker-0
-    node_name: master-0.ocp.openstack.lab
+    name: worker-0
+    node_name: worker-0.ocp.openstack.lab
     internalapi_ip: "2620:cf:cf:bbbb::13"
     tenant_ip: "2620:cf:cf:eeee::13"
     ctlplane_ip: "2620:cf:cf:aaaa::13"
