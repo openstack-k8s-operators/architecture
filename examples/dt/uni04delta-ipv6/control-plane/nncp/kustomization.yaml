@@ -10,7 +10,7 @@ resources:
 patches:
   - target:
       kind: NodeNetworkConfigurationPolicy
-      name: worker-0
+      name: node-3
     patch: |-
       - op: add
         path: /spec/desiredState/interfaces/-
@@ -35,7 +35,7 @@ patches:
 
   - target:
       kind: NodeNetworkConfigurationPolicy
-      name: worker-0
+      name: node-3
     patch: |-
       - op: add
         path: /spec/desiredState/interfaces/-
@@ -51,7 +51,7 @@ patches:
 
   - target:
       kind: NodeNetworkConfigurationPolicy
-      name: worker-0
+      name: node-3
     patch: |-
       - op: add
         path: /spec/desiredState/routes/config/-
@@ -114,11 +114,11 @@ replacements:
     targets:
       - select:
           kind: NodeNetworkConfigurationPolicy
-          name: worker-0
+          name: node-3
         fieldPaths:
           - spec.desiredState.interfaces.[name=ironic].bridge.port.0.name
 
-  # Static Node IPs: worker-0
+  # Static Node IPs: node-3
   - source:
       kind: ConfigMap
       name: network-values
@@ -126,7 +126,7 @@ replacements:
     targets:
       - select:
           kind: NodeNetworkConfigurationPolicy
-          name: worker-0
+          name: node-3
         fieldPaths:
           - spec.desiredState.interfaces.[name=internalapi].ipv6.address.0.ip
   - source:
@@ -136,7 +136,7 @@ replacements:
     targets:
       - select:
           kind: NodeNetworkConfigurationPolicy
-          name: worker-0
+          name: node-3
         fieldPaths:
           - spec.desiredState.interfaces.[name=tenant].ipv6.address.0.ip
   - source:
@@ -146,7 +146,7 @@ replacements:
     targets:
       - select:
           kind: NodeNetworkConfigurationPolicy
-          name: worker-0
+          name: node-3
         fieldPaths:
           - spec.desiredState.interfaces.[type=linux-bridge].ipv6.address.0.ip
   - source:
@@ -156,7 +156,7 @@ replacements:
     targets:
       - select:
           kind: NodeNetworkConfigurationPolicy
-          name: worker-0
+          name: node-3
         fieldPaths:
           - spec.desiredState.interfaces.[name=storage].ipv6.address.0.ip
   - source:
@@ -166,12 +166,12 @@ replacements:
     targets:
       - select:
           kind: NodeNetworkConfigurationPolicy
-          name: worker-0
+          name: node-3
         fieldPaths:
           - spec.desiredState.interfaces.[name=ironic].ipv6.address.0.ip
 
 
-  # prefix-length: worker-0
+  # prefix-length: node-3
   - source:
       kind: ConfigMap
       name: network-values
@@ -179,7 +179,7 @@ replacements:
     targets:
       - select:
           kind: NodeNetworkConfigurationPolicy
-          name: worker-0
+          name: node-3
         fieldPaths:
           - spec.desiredState.interfaces.[type=linux-bridge].ipv6.address.0.prefix-length
   - source:
@@ -189,7 +189,7 @@ replacements:
     targets:
       - select:
           kind: NodeNetworkConfigurationPolicy
-          name: worker-0
+          name: node-3
         fieldPaths:
           - spec.desiredState.interfaces.[name=internalapi].ipv6.address.0.prefix-length
   - source:
@@ -199,7 +199,7 @@ replacements:
     targets:
       - select:
           kind: NodeNetworkConfigurationPolicy
-          name: worker-0
+          name: node-3
         fieldPaths:
           - spec.desiredState.interfaces.[name=tenant].ipv6.address.0.prefix-length
   - source:
@@ -209,7 +209,7 @@ replacements:
     targets:
       - select:
           kind: NodeNetworkConfigurationPolicy
-          name: worker-0
+          name: node-3
         fieldPaths:
           - spec.desiredState.interfaces.[name=storage].ipv6.address.0.prefix-length
 
@@ -220,7 +220,7 @@ replacements:
     targets:
       - select:
           kind: NodeNetworkConfigurationPolicy
-          name: worker-0
+          name:
         fieldPaths:
           - spec.desiredState.interfaces.[name=ironic].ipv6.address.0.prefix-length
 
@@ -231,7 +231,7 @@ replacements:
     targets:
       - select:
           kind: NodeNetworkConfigurationPolicy
-          name: worker-0
+          name: node-3
         fieldPaths:
           - metadata.name
           - spec.nodeSelector.[kubernetes.io/hostname]
@@ -243,7 +243,7 @@ replacements:
     targets:
       - select:
           kind: NodeNetworkConfigurationPolicy
-          name: worker-0
+          name: node-3
         fieldPaths:
           - spec.desiredState.routes.config.0.next-hop-address
 
@@ -254,7 +254,7 @@ replacements:
     targets:
       - select:
           kind: NodeNetworkConfigurationPolicy
-          name: worker-0
+          name: node-3
         fieldPaths:
           - spec.desiredState.routes.config.1.next-hop-address
           - spec.desiredState.routes.config.2.next-hop-address
@@ -266,6 +266,6 @@ replacements:
     targets:
       - select:
           kind: NodeNetworkConfigurationPolicy
-          name: worker-0
+          name: node-3
         fieldPaths:
           - spec.desiredState.routes.config.1.destination
