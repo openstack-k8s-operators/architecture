@@ -428,6 +428,63 @@ instances:
         skip_nm: false
         trunk_parent: ctlplane
         vlan_id: 22
+  ocp-3:
+    hostname: worker-2
+    name: ocp-3
+    networks:
+      ctlplane:
+        interface_name: enp7s0
+        ip_v6: 2620:cf:cf:aaaa::13
+        is_trunk_parent: true
+        mac_addr: 52:54:02:18:86:bc
+        mtu: 1500
+        network_name: ctlplane
+        prefix_length_v6: 64
+        skip_nm: false
+      internalapi:
+        interface_name: enp7s0.20
+        ip_v6: 2620:cf:cf:bbbb::13
+        is_trunk_parent: false
+        mac_addr: 52:54:00:04:df:88
+        mtu: 1500
+        network_name: internalapi
+        parent_interface: enp7s0
+        prefix_length_v6: 64
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 20
+      ironic:
+        interface_name: enp8s0
+        ip_v6: 2620:cf:cf:ffff::13
+        mac_addr: 52:54:00:c2:32:a3
+        mtu: 1500
+        network_name: ironic
+        prefix_length_v6: 64
+        skip_nm: false
+      storage:
+        interface_name: enp7s0.21
+        ip_v6: 2620:cf:cf:cccc::13
+        is_trunk_parent: false
+        mac_addr: 52:54:00:7e:b2:1d
+        mtu: 1500
+        network_name: storage
+        parent_interface: enp7s0
+        prefix_length_v6: 64
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 21
+      tenant:
+        interface_name: enp7s0.22
+        ip_v6: 2620:cf:cf:eeee::13
+        is_trunk_parent: false
+        mac_addr: 52:54:00:12:d1:e2
+        mtu: 1500
+        network_name: tenant
+        parent_interface: enp7s0
+        prefix_length_v6: 64
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 22
 networks:
   ctlplane:
     dns_v4: []
