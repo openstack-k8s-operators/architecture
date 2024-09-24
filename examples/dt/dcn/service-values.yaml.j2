@@ -10,6 +10,9 @@ data:
   preserveJobs: false
   cinderAPI:
     replicas: 3
+    customServiceConfig: |
+      [DEFAULT]
+        default_availability_zone = ceph
   cinderBackup:
     replicas: 3
     customServiceConfig: |
@@ -24,7 +27,7 @@ data:
         [DEFAULT]
         enabled_backends = ceph
 {% if 'ceph' not in _ceph.cifmw_ceph_client_cluster %}
-        glance_api_servers = http://glance-{{ _ceph.cifmw_ceph_client_cluster }}-internal.openstack.svc:9292
+        glance_api_servers = https://glance-{{ _ceph.cifmw_ceph_client_cluster }}-internal.openstack.svc:9292
 {% endif %}
         [ceph]
         volume_backend_name = ceph

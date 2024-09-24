@@ -53,7 +53,7 @@ replacements:
       - select:
           kind: OpenStackControlPlane
         fieldPaths:
-          - spec.nova.customServiceConfig
+          - spec.nova.template.apiServiceTemplate.customServiceConfig
         options:
           create: true
   - source:
@@ -98,6 +98,17 @@ replacements:
           kind: OpenStackControlPlane
         fieldPaths:
           - spec.cinder.template.cinderAPI.replicas
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.cinderAPI.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.cinder.template.cinderAPI.customServiceConfig
         options:
           create: true
   - source:

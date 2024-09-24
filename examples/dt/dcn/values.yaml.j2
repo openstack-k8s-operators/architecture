@@ -31,11 +31,21 @@ data:
                 images_type=rbd
                 images_rbd_pool=vms
                 images_rbd_ceph_conf=/etc/ceph/{{ cifmw_ceph_client_cluster }}.conf
-                images_rbd_glance_store_name=default_backend
+                images_rbd_glance_store_name={{ cifmw_ceph_client_cluster }}
                 images_rbd_glance_copy_poll_interval=15
                 images_rbd_glance_copy_timeout=600
                 rbd_user=openstack
                 rbd_secret_uuid={{ cifmw_ceph_client_fsid }}
+                [glance]
+{% if 'ceph' in cifmw_ceph_client_cluster %}
+                endpoint_override = https://glance-default-internal.openstack.svc:9292
+{% else %}
+                endpoint_override = https://glance-{{ _az }}-internal.openstack.svc:9292
+{% endif %}
+                valid_interfaces = internal
+                [cinder]
+                cross_az_attach = False
+                catalog_info = volumev3:cinderv3:internalURL
         name: ceph-nova-{{ _az }}
         dataSources:
         - configMapRef:

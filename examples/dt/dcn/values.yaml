@@ -1,14 +1,17 @@
-# local-config: referenced, but not emitted by kustomize
----
 apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: edpm-nodeset-values-post-ceph
-  annotations:
-    config.kubernetes.io/local-config: "true"
 data:
-  nodeset:
-    services:
+    customDataplanService:
+      name: nova-custom-ceph
+    nodeset_name: computes-edpm
+    ceph_conf:
+        ceph.client.openstack.keyring: CHANGEME_CEPH_CONF
+        ceph.conf: CHANGEME_CEPH_KEYRING
+        az1.client.openstack.keyring: CHANGEME_CEPH_KEYRING
+        az1.conf: CHANGEME_CEPH_CONF
+        az2.client.openstack.keyring: CHANGEME_CEPH_KEYRING
+        az2.conf: CHANGEME_CEPH_CONF
+    nodeset:
+        services:
         - bootstrap
         - configure-network
         - validate-network
@@ -23,10 +26,20 @@ data:
         - ovn
         - neutron-metadata
         - libvirt
-        - nova-custom-ceph-az0
-  ceph:
-    conf: CHANGEME_CEPH_CONF
-    keyring: CHANGEME_CEPH_KEYRING
-  nova:
-    ceph:
-      conf: CHANGEME_NOVA_CEPH_CONF
+        - nova-custom-ceph
+    nova:
+        ceph:
+            conf: CHANGEME_NOVA_CEPH_CONF
+        name: ceph-nova
+        dataSources:
+        - configMapRef:
+            name: ceph-nova
+        - secretRef:
+            name: nova-cell1-compute-config
+        - secretRef:
+            name: nova-migration-ssh-key
+kind: ConfigMap
+metadata:
+    annotations:
+        config.kubernetes.io/local-config: 'true'
+    name: edpm-nodeset-values-post-ceph
