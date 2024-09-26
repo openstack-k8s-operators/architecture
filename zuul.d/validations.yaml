@@ -79,6 +79,14 @@
       cifmw_architecture_scenario: hci-adoption
 - job:
     files:
+    - examples/va/nfv/ovs-dpdk-sriov/nncp
+    - lib
+    name: rhoso-architecture-validate-nfv-ovs-dpdk-sriov-adoption
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: nfv-ovs-dpdk-sriov-adoption
+- job:
+    files:
     - automation/mocks/nfv-ovs-dpdk-sriov-hci.yaml
     - examples/dt/nfv/nfv-ovs-dpdk-sriov-hci
     - examples/dt/nfv/nfv-ovs-dpdk-sriov-hci/control-plane
