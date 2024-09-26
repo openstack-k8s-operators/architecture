@@ -55,6 +55,14 @@
       cifmw_architecture_scenario: nfv-ovs-dpdk-sriov-hci
 - job:
     files:
+    - examples/va/nfv/ovs-dpdk-sriov/nncp
+    - lib
+    name: rhoso-architecture-validate-nfv-ovs-dpdk-sriov-adoption
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: nfv-ovs-dpdk-sriov-adoption
+- job:
+    files:
     - dt/osasinfra
     - examples/dt/osasinfra
     - examples/dt/osasinfra/control-plane
