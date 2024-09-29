@@ -429,7 +429,7 @@ instances:
         trunk_parent: ctlplane
         vlan_id: 22
   ocp-3:
-    hostname: worker-2
+    hostname: worker-0
     name: ocp-3
     networks:
       ctlplane:
