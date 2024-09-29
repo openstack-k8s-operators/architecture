@@ -14,18 +14,21 @@ data:
     tenant_ip: 172.19.0.5
     ctlplane_ip: 192.168.122.10
     storage_ip: 172.18.0.5
+    swift_ip: 172.22.0.5
   node_1:
     name: ostest-master-1
     internalapi_ip: 172.17.0.6
     tenant_ip: 172.19.0.6
     ctlplane_ip: 192.168.122.11
     storage_ip: 172.18.0.6
+    swift_ip: 172.22.0.6
   node_2:
     name: ostest-master-2
     internalapi_ip: 172.17.0.7
     tenant_ip: 172.19.0.7
     ctlplane_ip: 192.168.122.12
     storage_ip: 172.18.0.7
+    swift_ip: 172.22.0.7
 
   # networks
   ctlplane:
@@ -172,6 +175,36 @@ data:
         gateway: 10.0.0.1
         name: subnet1
     mtu: 1500
+  swift:
+    dnsDomain: swift.example.com
+    subnets:
+      - allocationRanges:
+          - end: 172.22.0.250
+            start: 172.22.0.100
+        cidr: 172.22.0.0/24
+        gateway: 172.22.0.1
+        name: subnet1
+        vlan: 25
+    mtu: 1500
+    prefix-length: 24
+    iface: swift
+    vlan: 25
+    base_iface: enp6s0
+    lb_addresses:
+      - 172.22.0.80-172.22.0.90
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "swift",
+        "type": "macvlan",
+        "master": "swift",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "172.22.0.0/24",
+          "range_start": "172.22.0.100",
+          "range_end": "172.22.0.250"
+        }
+      }
   datacentre:
     net-attach-def: |
       {

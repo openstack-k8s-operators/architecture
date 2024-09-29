@@ -1,0 +1,111 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+transformers:
+  # Set namespace to OpenStack on all namespaced objects without a namespace
+  - |-
+    apiVersion: builtin
+    kind: NamespaceTransformer
+    metadata:
+      name: _ignored_
+      namespace: openstack
+    setRoleBindingSubjects: none
+    unsetOnly: true
+    fieldSpecs:
+      - path: metadata/name
+        kind: Namespace
+        create: true
+
+components:
+  - ../../../lib/nncp
+
+patches:
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      labelSelector: "osp/nncm-config-type=standard"
+    patch: |-
+      - op: add
+        path: /spec/desiredState/interfaces/-
+        value:
+          description: swift vlan interface
+          ipv4:
+            address:
+              - ip: _replaced_
+                prefix-length: _replaced_
+            enabled: true
+            dhcp: false
+          ipv6:
+            enabled: false
+          name: swift
+          state: up
+          type: vlan
+          vlan:
+            base-iface: _replaced_
+            id: _replaced_
+          mtu: 1500
+
+replacements:
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.swift.base_iface
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=swift].vlan.base-iface
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.swift.vlan
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=swift].vlan.id
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_0.swift_ip
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          labelSelector: "osp/nncm-node=0"
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=swift].ipv4.address.0.ip
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_1.swift_ip
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          labelSelector: "osp/nncm-node=1"
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=swift].ipv4.address.0.ip
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_2.swift_ip
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          labelSelector: "osp/nncm-node=2"
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=swift].ipv4.address.0.ip
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.swift.prefix-length
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=swift].ipv4.address.0.prefix-length

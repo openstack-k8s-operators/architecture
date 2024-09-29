@@ -1,0 +1,13 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+patches:
+  - target:
+      kind: OpenStackDataPlaneNodeSet
+    patch: |-
+      - op: add
+        path: /spec/nodeTemplate/networks/-
+        value:
+          name: swift
+          subnetName: subnet1
