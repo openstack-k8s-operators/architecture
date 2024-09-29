@@ -234,6 +234,16 @@ replacements:
           name: node-3
         fieldPaths:
           - metadata.name
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_3.node_name
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: node-3
+        fieldPaths:
           - spec.nodeSelector.[kubernetes.io/hostname]
 
   - source:
