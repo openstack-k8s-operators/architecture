@@ -1,0 +1,310 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+resources:
+  - baremetalhosts.yaml
+
+patches:
+  - target:
+      kind: BareMetalHost
+    path: baremetalhost_template.yaml
+  - target:
+      kind: BareMetalHost
+    patch: |
+     - op: replace
+       path: /spec/bmc/credentialsName
+       value: bmc-secret
+  - target:
+      kind: BareMetalHost
+      name: leaf0-0
+    patch: |
+     - op: replace
+       path: /spec/preprovisioningNetworkDataName
+       value: leaf0-0-preprovision-network-data
+  - target:
+      kind: BareMetalHost
+      name: leaf0-1
+    patch: |
+     - op: replace
+       path: /spec/preprovisioningNetworkDataName
+       value: leaf0-1-preprovision-network-data
+  - target:
+      kind: BareMetalHost
+      name: leaf1-0
+    patch: |
+     - op: replace
+       path: /spec/preprovisioningNetworkDataName
+       value: leaf1-0-preprovision-network-data
+  - target:
+      kind: BareMetalHost
+      name: leaf1-1
+    patch: |
+     - op: replace
+       path: /spec/preprovisioningNetworkDataName
+       value: leaf1-1-preprovision-network-data
+
+replacements:
+
+  # Labels
+  - source:
+      kind: ConfigMap
+      name: baremetalhost-values
+      fieldPath: data.leaf0-0.labels
+    targets:
+      - select:
+          kind: BareMetalHost
+          name: leaf0-0
+        fieldPaths:
+          - metadata.labels
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: baremetalhost-values
+      fieldPath: data.leaf0-1.labels
+    targets:
+      - select:
+          kind: BareMetalHost
+          name: leaf0-1
+        fieldPaths:
+          - metadata.labels
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: baremetalhost-values
+      fieldPath: data.leaf1-0.labels
+    targets:
+      - select:
+          kind: BareMetalHost
+          name: leaf1-0
+        fieldPaths:
+          - metadata.labels
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: baremetalhost-values
+      fieldPath: data.leaf1-1.labels
+    targets:
+      - select:
+          kind: BareMetalHost
+          name: leaf1-1
+        fieldPaths:
+          - metadata.labels
+        options:
+          create: true
+
+  # Enable/Disable Metal3 Inspection
+  - source:
+      kind: ConfigMap
+      name: baremetalhost-values
+      fieldPath: data.metal3_inspection
+    targets:
+      - select:
+          kind: BareMetalHost
+        fieldPaths:
+          - metadata.annotations.inspect\.metal3\.io
+        options:
+          create: true
+
+  # BMC Address
+  - source:
+      kind: ConfigMap
+      name: baremetalhost-values
+      fieldPath: data.leaf0-0.bmc.address
+    targets:
+      - select:
+          kind: BareMetalHost
+          name: leaf0-0
+        fieldPaths:
+          - spec.bmc.address
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: baremetalhost-values
+      fieldPath: data.leaf0-1.bmc.address
+    targets:
+      - select:
+          kind: BareMetalHost
+          name: leaf0-1
+        fieldPaths:
+          - spec.bmc.address
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: baremetalhost-values
+      fieldPath: data.leaf1-0.bmc.address
+    targets:
+      - select:
+          kind: BareMetalHost
+          name: leaf1-0
+        fieldPaths:
+          - spec.bmc.address
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: baremetalhost-values
+      fieldPath: data.leaf1-1.bmc.address
+    targets:
+      - select:
+          kind: BareMetalHost
+          name: leaf1-1
+        fieldPaths:
+          - spec.bmc.address
+        options:
+          create: true
+
+  # bootMACAddress
+  - source:
+      kind: ConfigMap
+      name: baremetalhost-values
+      fieldPath: data.leaf0-0.bootMACAddress
+    targets:
+      - select:
+          kind: BareMetalHost
+          name: leaf0-0
+        fieldPaths:
+          - spec.bootMACAddress
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: baremetalhost-values
+      fieldPath: data.leaf0-1.bootMACAddress
+    targets:
+      - select:
+          kind: BareMetalHost
+          name: leaf0-1
+        fieldPaths:
+          - spec.bootMACAddress
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: baremetalhost-values
+      fieldPath: data.leaf1-0.bootMACAddress
+    targets:
+      - select:
+          kind: BareMetalHost
+          name: leaf1-0
+        fieldPaths:
+          - spec.bootMACAddress
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: baremetalhost-values
+      fieldPath: data.leaf1-1.bootMACAddress
+    targets:
+      - select:
+          kind: BareMetalHost
+          name: leaf1-1
+        fieldPaths:
+          - spec.bootMACAddress
+        options:
+          create: true
+
+  # rootDeviceHints
+  - source:
+      kind: ConfigMap
+      name: baremetalhost-values
+      fieldPath: data.leaf0-0.rootDeviceHints
+    targets:
+      - select:
+          kind: BareMetalHost
+          name: leaf0-0
+        fieldPaths:
+          - spec.rootDeviceHints
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: baremetalhost-values
+      fieldPath: data.leaf0-1.rootDeviceHints
+    targets:
+      - select:
+          kind: BareMetalHost
+          name: leaf0-1
+        fieldPaths:
+          - spec.rootDeviceHints
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: baremetalhost-values
+      fieldPath: data.leaf1-0.rootDeviceHints
+    targets:
+      - select:
+          kind: BareMetalHost
+          name: leaf1-0
+        fieldPaths:
+          - spec.rootDeviceHints
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: baremetalhost-values
+      fieldPath: data.leaf1-1.rootDeviceHints
+    targets:
+      - select:
+          kind: BareMetalHost
+          name: leaf1-1
+        fieldPaths:
+          - spec.rootDeviceHints
+        options:
+          create: true
+
+  # preprovisioningNetworkData
+  - source:
+      kind: ConfigMap
+      name: baremetalhost-values
+      fieldPath: data.leaf0-0.preprovisioningNetworkData
+    targets:
+      - select:
+          kind: Secret
+          name: leaf0-0-preprovision-network-data
+        fieldPaths:
+          - stringData
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: baremetalhost-values
+      fieldPath: data.leaf0-1.preprovisioningNetworkData
+    targets:
+      - select:
+          kind: Secret
+          name: leaf0-1-preprovision-network-data
+        fieldPaths:
+          - stringData
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: baremetalhost-values
+      fieldPath: data.leaf1-0.preprovisioningNetworkData
+    targets:
+      - select:
+          kind: Secret
+          name: leaf1-0-preprovision-network-data
+        fieldPaths:
+          - stringData
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: baremetalhost-values
+      fieldPath: data.leaf1-1.preprovisioningNetworkData
+    targets:
+      - select:
+          kind: Secret
+          name: leaf1-1-preprovision-network-data
+        fieldPaths:
+          - stringData
+        options:
+          create: true
