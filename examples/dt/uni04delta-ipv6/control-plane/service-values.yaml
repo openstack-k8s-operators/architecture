@@ -169,3 +169,6 @@ data:
         datacentre: ocpbr
         octavia: octbr
         ironic: ironic
+
+  heat:
+    enabled: true
