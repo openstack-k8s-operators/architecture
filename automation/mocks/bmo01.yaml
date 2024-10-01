@@ -1,0 +1,43 @@
+---
+cifmw_install_ca_url: http://example.com/example.pem
+cifmw_repo_setup_rhos_release_rpm: http://example.com/rhos-release.rpm
+cifmw_repo_setup_rhos_release_args: example-args
+cifmw_ci_gen_kustomize_values_remove_keys_expressions:
+  - ^node(_[0-9]+)?$
+cifmw_baremetal_hosts:
+  leaf0-0:
+    boot_mode: legacy
+    connection: redfish-virtualmedia+http://sushy.utility:8000/redfish/v1/Systems/3e8d850a-fed0-436e-a353-61328877c947
+    nics:
+      - mac: 52:54:04:58:1e:2a
+        network: trunk1
+    password: password
+    username: admin
+    uuid: 3e8d850a-fed0-436e-a353-61328877c947
+  leaf0-1:
+    boot_mode: legacy
+    connection: redfish-virtualmedia+http://sushy.utility:8000/redfish/v1/Systems/a208f619-46cb-4e72-815d-e8d3cf88b9ce
+    nics:
+      - mac: 52:54:05:17:94:6b
+        network: trunk1
+    password: password
+    username: admin
+    uuid: a208f619-46cb-4e72-815d-e8d3cf88b9ce
+  leaf1-0:
+    boot_mode: legacy
+    connection: redfish-virtualmedia+http://sushy.utility:8000/redfish/v1/Systems/a0c6bd33-9d30-440b-8d70-9784f6ff7378
+    nics:
+      - mac: 52:54:06:39:e4:4b
+        network: trunk2
+    password: password
+    username: admin
+    uuid: a0c6bd33-9d30-440b-8d70-9784f6ff7378
+  leaf1-1:
+    boot_mode: legacy
+    connection: redfish-virtualmedia+http://sushy.utility:8000/redfish/v1/Systems/0beaadd5-75bb-430a-b566-49e4f68208d5
+    nics:
+      - mac: 52:54:07:16:d9:8e
+        network: trunk2
+    password: password
+    username: admin
+    uuid: 0beaadd5-75bb-430a-b566-49e4f68208d5
