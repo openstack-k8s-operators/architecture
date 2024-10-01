@@ -1,0 +1,8 @@
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: swift
+  labels:
+    osp/net: swift
+    osp/net-attach-def-type: standard
