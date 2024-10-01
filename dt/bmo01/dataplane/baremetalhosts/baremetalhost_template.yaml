@@ -1,0 +1,18 @@
+---
+apiVersion: metal3.io/v1alpha1
+kind: BareMetalHost
+metadata:
+  labels: {}
+  name: _ignored_
+  namespace: openstack
+spec:
+  architecture: x86_64
+  automatedCleaningMode: metadata
+  bmc:
+    address: _replaced_
+    credentialsName: _replaced_
+  bootMACAddress: _replaced_
+  bootMode: UEFI
+  rootDeviceHints: {}
+  online: false
+  preprovisioningNetworkDataName: _replaced_
