@@ -20,7 +20,6 @@ transformers:
 components:
   - ../../../../lib/control-plane
   - ../../../../lib/dataplane/nodeset
-  - ../../../../va/hci/nodeset
 
 resources:
   - ceph_secret.yaml
