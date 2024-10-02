@@ -103,6 +103,10 @@ data:
           rbd_store_pool = images
           rbd_store_user = openstack
           rbd_thin_provisioning = True
+          [image_import_opts]
+          image_import_plugins = ['image_conversion']
+          [image_conversion]
+          output_format = raw
         networkAttachments:
         - storage
         override:
@@ -142,6 +146,10 @@ data:
           rbd_store_pool = images
           rbd_store_user = openstack
           rbd_thin_provisioning = True
+          [image_import_opts]
+          image_import_plugins = ['image_conversion']
+          [image_conversion]
+          output_format = raw
         networkAttachments:
         - storage
         override:
@@ -181,6 +189,10 @@ data:
           rbd_store_pool = images
           rbd_store_user = openstack
           rbd_thin_provisioning = True
+          [image_import_opts]
+          image_import_plugins = ['image_conversion']
+          [image_conversion]
+          output_format = raw
         networkAttachments:
         - storage
         override:

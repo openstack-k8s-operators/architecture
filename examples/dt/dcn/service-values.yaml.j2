@@ -87,6 +87,10 @@ data:
           rbd_thin_provisioning = True
 {% endif %}
 {% endfor %}
+          [image_import_opts]
+          image_import_plugins = ['image_conversion']
+          [image_conversion]
+          output_format = raw
         networkAttachments:
         - storage
         override:
