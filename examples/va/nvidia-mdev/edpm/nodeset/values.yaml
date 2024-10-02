@@ -1,0 +1,160 @@
+# yamllint disable rule:line-length
+# local-config: referenced, but not emitted by kustomize
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: edpm-nodeset-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+data:
+  root_password: cmVkaGF0Cg==
+  preProvisioned: false
+  baremetalSetTemplate:
+    ctlplaneInterface: eno2  # CHANGEME
+    cloudUserName: cloud-admin
+    provisioningInterface: enp1s0  # CHANGEME
+    bmhLabelSelector:
+      app: openstack  # CHANGEME
+    passwordSecret:
+      name: baremetalset-password-secret
+      namespace: openstack
+  ssh_keys:
+    # Authorized keys that will have access to the dataplane computes via SSH
+    authorized: CHANGEME
+    # The private key that will have access to the dataplane computes via SSH
+    private: CHANGEME2
+    # The public key that will have access to the dataplane computes via SSH
+    public: CHANGEME3
+  nodeset:
+    ansible:
+      ansibleUser: cloud-admin
+      ansiblePort: 22
+      ansibleVars:
+        # CHANGEME -- see https://access.redhat.com/solutions/253273
+        # edpm_bootstrap_command: |
+        #       subscription-manager register --username <subscription_manager_username> --password <subscription_manager_password>
+        #       podman login -u <registry_username> -p <registry_password> registry.redhat.io
+        timesync_ntp_servers:
+          - hostname: pool.ntp.org
+        # CPU pinning settings
+        edpm_kernel_args: "default_hugepagesz=1GB hugepagesz=1G hugepages=16 intel_iommu=on iommu=pt isolcpus=4-23,28-47"
+        edpm_tuned_profile: "cpu-partitioning-powersave"
+        edpm_tuned_isolated_cores: "4-23,28-47"
+        # edpm_network_config
+        # These vars are edpm_network_config role vars
+        edpm_network_config_hide_sensitive_logs: false
+        edpm_network_config_os_net_config_mappings:
+          edpm-compute-0:
+            nic2: 6c:fe:54:3f:8a:02  # CHANGEME
+            nic3: 6c:fe:54:3f:8a:03  # CHANGEME
+          edpm-compute-1:
+            nic2: 6b:fe:54:3f:8a:02  # CHANGEME
+            nic3: 6b:fe:54:3f:8a:03  # CHANGEME
+        edpm_network_config_template: |
+          ---
+          {% set mtu_list = [ctlplane_mtu] %}
+          {% for network in nodeset_networks %}
+          {{ mtu_list.append(lookup('vars', networks_lower[network] ~ '_mtu')) }}
+          {%- endfor %}
+          {% set min_viable_mtu = mtu_list | max %}
+          network_config:
+          - type: ovs_bridge
+            name: {{ neutron_physical_bridge_name }}
+            mtu: {{ min_viable_mtu }}
+            use_dhcp: false
+            dns_servers: {{ ctlplane_dns_nameservers }}
+            domain: {{ dns_search_domains }}
+            addresses:
+            - ip_netmask: {{ ctlplane_ip }}/{{ ctlplane_cidr }}
+            routes: {{ ctlplane_host_routes }}
+            members:
+            - type: interface
+              name: nic2
+              mtu: {{ min_viable_mtu }}
+              # force the MAC address of the bridge to this interface
+              primary: true
+          {% for network in nodeset_networks %}
+            - type: vlan
+              mtu: {{ lookup('vars', networks_lower[network] ~ '_mtu') }}
+              vlan_id: {{ lookup('vars', networks_lower[network] ~ '_vlan_id') }}
+              addresses:
+              - ip_netmask:
+                  {{ lookup('vars', networks_lower[network] ~ '_ip') }}/{{ lookup('vars', networks_lower[network] ~ '_cidr') }}
+              routes: {{ lookup('vars', networks_lower[network] ~ '_host_routes') }}
+          {% endfor %}
+          - type: sriov_pf
+            name: nic3
+            numvfs: 10
+            use_dhcp: false
+            promisc: true
+
+        # These vars are for the network config templates themselves and are
+        # considered EDPM network defaults.
+        neutron_physical_bridge_name: br-ex
+        neutron_public_interface_name: eth0
+        # edpm_nodes_validation
+        edpm_nodes_validation_validate_controllers_icmp: false
+        edpm_nodes_validation_validate_gateway_icmp: false
+        dns_search_domains: []
+        gather_facts: false
+        # edpm firewall, change the allowed CIDR if needed
+        edpm_sshd_configure_firewall: true
+        edpm_sshd_allowed_ranges:
+          - 192.168.122.0/24
+        # SRIOV settings
+        edpm_neutron_sriov_agent_SRIOV_NIC_physical_device_mappings: 'sriov-phy4:eno4'
+    networks:
+      - defaultRoute: true
+        name: ctlplane
+        subnetName: subnet1
+      - name: internalapi
+        subnetName: subnet1
+      - name: storage
+        subnetName: subnet1
+      - name: tenant
+        subnetName: subnet1
+    nodes:
+      edpm-compute-0:
+        hostName: edpm-compute-0
+      edpm-compute-1:
+        hostName: edpm-compute-1
+    services:
+      - bootstrap
+      - download-cache
+      - configure-network
+      - validate-network
+      - install-os
+      - configure-os
+      - ssh-known-hosts
+      - run-os
+      - reboot-os
+      - install-certs
+      - libvirt
+      - ovn
+      - neutron-ovn
+      - nova-custom-sriov
+      - neutron-sriov
+      - neutron-metadata
+  nova:
+    compute:
+      conf: |
+        # CHANGEME
+        [DEFAULT]
+        reserved_host_memory_mb = 4096
+        reserved_huge_pages = node:0,size:4,count:524160
+        reserved_huge_pages = node:1,size:4,count:524160
+        [compute]
+        cpu_shared_set = 0-3,24-27
+        cpu_dedicated_set = 8-23,32-47
+        [devices]
+        mdev_enabled_types = nvidia-268
+    migration:
+      ssh_keys:
+        private: CHANGEME4
+        public: CHANGEME5
+    pci:
+      conf: |
+        # CHANGEME
+        [pci]
+        device_spec = {"vendor_id":"8086", "product_id":"1572", "address": "0000:19:00.3", "physical_network":"sriov-phy4", "trusted":"true"}

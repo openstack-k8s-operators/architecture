@@ -1,0 +1,55 @@
+---
+vas:
+  nvidia-mdev:
+    stages:
+      - path: examples/va/nvidia-mdev/nncp
+        wait_conditions:
+          - >-
+            oc -n openstack wait nncp
+            -l osp/nncm-config-type=standard
+            --for jsonpath='{.status.conditions[0].reason}'=SuccessfullyConfigured
+            --timeout=60s
+        values:
+          - name: network-values
+            src_file: values.yaml
+        build_output: nncp.yaml
+
+      - path: examples/va/nvidia-mdev
+        wait_conditions:
+          - >-
+            oc -n openstack wait osctlplane controlplane --for condition=Ready
+            --timeout=600s
+        values:
+          - name: network-values
+            src_file: nncp/values.yaml
+          - name: service-values
+            src_file: service-values.yaml
+        build_output: control-plane.yaml
+
+      - path: examples/va/nvidia-mdev/edpm/nodeset
+        wait_conditions:
+          - >-
+            oc -n openstack wait
+            osdpns openstack-edpm --for condition=SetupReady
+            --timeout=60m
+        values:
+          - name: edpm-nodeset-values
+            src_file: values.yaml
+        build_output: nodeset.yaml
+        post_stage_run:
+          - name: Install nvidia driver
+            type: playbook
+            # As a reminder, the job needs to set the nvidia driver URL
+            source: "../../playbooks/nvidia-mdev.yml"
+            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
+
+      - path: examples/va/nvidia-mdev/edpm/deployment
+        wait_conditions:
+          - >-
+            oc -n openstack wait
+            osdpns openstack-edpm --for condition=Ready
+            --timeout=60m
+        values:
+          - name: edpm-deployment-values
+            src_file: values.yaml
+        build_output: deployment.yaml
