@@ -1,0 +1,36 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: compute-provider
+data:
+  provider.yaml: _replaced_
+---
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneService
+metadata:
+  name: compute-provider
+spec:
+  label: dataplane-deployment-compute-provider
+  edpmServiceType: nova
+  dataSources:
+    - configMapRef:
+        name: compute-provider
+    - configMapRef:
+        name: cpu-pinning-nova
+    - configMapRef:
+        name: sriov-nova
+    - secretRef:
+        name: nova-cell1-compute-config
+    - secretRef:
+        name: nova-migration-ssh-key
+  playbook: osp.edpm.nova
+  tlsCerts:
+    default:
+      contents:
+        - dnsnames
+        - ips
+      networks:
+        - ctlplane
+      issuer: osp-rootca-issuer-internal
+  caCerts: combined-ca-bundle
