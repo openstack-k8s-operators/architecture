@@ -92,7 +92,7 @@ data:
           [image_conversion]
           output_format = raw
         networkAttachments:
-        - storage
+          - storage
         override:
           service:
             internal:
@@ -133,11 +133,11 @@ data:
           cephfs_protocol_helper_type = CEPHFS
   neutron:
       template:
-          customServiceConfig: |
-            [ml2_type_vlan]
-            network_vlan_ranges = datacentre:1:1000,leaf1:1:1000,leaf2:1:1000
-            [neutron]
-            physnets = datacentre,leaf1,leaf2
+        customServiceConfig: |
+          [ml2_type_vlan]
+          network_vlan_ranges = datacentre:1:1000,leaf1:1:1000,leaf2:1:1000
+          [neutron]
+          physnets = datacentre,leaf1,leaf2
   nova:
       customServiceConfig: |
         [DEFAULT]

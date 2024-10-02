@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 data:
     customDataplanService:
@@ -9,21 +10,21 @@ data:
 {% endfor %}
     nodeset:
         services:
-        - bootstrap
-        - configure-network
-        - validate-network
-        - install-os
-        - ceph-hci-pre
-        - configure-os
-        - ssh-known-hosts
-        - run-os
-        - reboot-os
-        - install-certs
-        - ceph-client
-        - ovn
-        - neutron-metadata
-        - libvirt
-        - nova-custom-ceph-{{ _az }}
+            - bootstrap
+            - configure-network
+            - validate-network
+            - install-os
+            - ceph-hci-pre
+            - configure-os
+            - ssh-known-hosts
+            - run-os
+            - reboot-os
+            - install-certs
+            - ceph-client
+            - ovn
+            - neutron-metadata
+            - libvirt
+            - nova-custom-ceph-{{ _az }}
     nova:
         ceph:
             conf: |
@@ -48,12 +49,12 @@ data:
                 catalog_info = volumev3:cinderv3:internalURL
         name: ceph-nova-{{ _az }}
         dataSources:
-        - configMapRef:
-            name: ceph-nova-{{ _az }}
-        - secretRef:
-            name: nova-cell1-compute-config
-        - secretRef:
-            name: nova-migration-ssh-key
+            - configMapRef:
+                name: ceph-nova-{{ _az }}
+            - secretRef:
+                name: nova-cell1-compute-config
+            - secretRef:
+                name: nova-migration-ssh-key
 kind: ConfigMap
 metadata:
     annotations:

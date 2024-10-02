@@ -31,14 +31,14 @@ data:
         edpm_network_config_hide_sensitive_logs: false
         edpm_network_config_os_net_config_mappings:
           edpm-compute-0:
-              nic1: "52:54:03:88:69:8f"
-              nic2: "52:54:03:fa:fd:1a"
+            nic1: "52:54:03:88:69:8f"
+            nic2: "52:54:03:fa:fd:1a"
           edpm-compute-1:
-              nic1: "52:54:04:df:ec:df"
-              nic2: "52:54:04:c1:e2:8a"
+            nic1: "52:54:04:df:ec:df"
+            nic2: "52:54:04:c1:e2:8a"
           edpm-compute-2:
-              nic1: "52:54:05:58:9f:66"
-              nic2: "52:54:05:da:10:54"
+            nic1: "52:54:05:58:9f:66"
+            nic2: "52:54:05:da:10:54"
         edpm_network_config_template: |
           ---
           {% set mtu_list = [ctlplane_mtu] %}

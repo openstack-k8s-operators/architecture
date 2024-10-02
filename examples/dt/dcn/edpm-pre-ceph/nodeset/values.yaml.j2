@@ -31,7 +31,7 @@ data:
 {% for _host_name in _edpm_hosts.keys() %}
           edpm-{{ _host_name }}:
 {% for  nic in _edpm_hosts[_host_name].nics %}
-              nic{{ loop.index }}: "{{ nic.mac }}"
+            nic{{ loop.index }}: "{{ nic.mac }}"
 {% endfor %}
 {% endfor %}
 {% raw %}

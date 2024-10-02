@@ -8,6 +8,7 @@ metadata:
   annotations:
     config.kubernetes.io/local-config: "true"
 data:
+  nodeset_name: computes-edpm
   deployment:
     name: edpm-deployment-pre-ceph
   servicesOverride:
