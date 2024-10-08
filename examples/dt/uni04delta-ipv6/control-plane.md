@@ -3,40 +3,6 @@
 ## Assumptions
 
 - A storage class called `local-storage` should already exist.
-- Cluster observability operator is already deployed. If not, follow the
-  steps found [below](#cluster-observability-operator).
-
-### Cluster observability operator
-
-Cluster Observability Operator must be installed as it is required by OpenStack
-Telemetry operator. If not installed, the below steps can be followed
-
-```bash
-cat > subscription.yaml << EOF
----
-apiVersion: operators.coreos.com/v1alpha1
-kind: Subscription
-metadata:
-  name: observability-operator
-  namespace: openshift-operators
-  labels:
-    operators.coreos.com/observability-operator.openshift-operators: ""
-spec:
-  channel: development
-  installPlanApproval: Automatic
-  name: cluster-observability-operator
-  source: redhat-operators
-  sourceNamespace: openshift-marketplace
-EOF
-
-# Apply the cr
-oc apply -f subscription.yaml
-
-# Wait for the deployment to be ready
-oc wait deployments/observability-operator --for condition=Available \
-    --timeout=300s
-```
-
 
 ## Initialize
 
