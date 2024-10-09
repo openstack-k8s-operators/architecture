@@ -37,33 +37,6 @@ replacements:
           - data.NodeRootPassword
         options:
           create: true
-
-  # Nova compute CPU pinning customization
-  - source:
-      kind: ConfigMap
-      name: edpm-nodeset-values
-      fieldPath: data.nova.compute.conf
-    targets:
-      - select:
-          kind: ConfigMap
-          name: cpu-pinning-nova
-        fieldPaths:
-          - data.25-cpu-pinning-nova\.conf
-        options:
-          create: true
-  # Nova compute PCI passthrough customization
-  - source:
-      kind: ConfigMap
-      name: edpm-nodeset-values
-      fieldPath: data.nova.pci.conf
-    targets:
-      - select:
-          kind: ConfigMap
-          name: sriov-nova
-        fieldPaths:
-          - data.03-sriov-nova\.conf
-        options:
-          create: true
   - source:
       kind: ConfigMap
       name: edpm-nodeset-values
@@ -86,5 +59,29 @@ replacements:
           name: openstack-edpm
         fieldPaths:
           - spec.baremetalSetTemplate
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values
+      fieldPath: data.nova.compute.conf
+    targets:
+      - select:
+          kind: ConfigMap
+          name: cpu-pinning-nova
+        fieldPaths:
+          - data.25-cpu-pinning-nova\.conf
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values
+      fieldPath: data.nova.pci.conf
+    targets:
+      - select:
+          kind: ConfigMap
+          name: sriov-nova
+        fieldPaths:
+          - data.03-sriov-nova\.conf
         options:
           create: true
