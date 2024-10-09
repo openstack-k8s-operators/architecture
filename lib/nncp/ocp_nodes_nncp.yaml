@@ -5,7 +5,6 @@ metadata:
   name: node-0
   labels:
     osp/nncm-config-type: standard
-    osp/nncm-node: "0"
 ---
 apiVersion: nmstate.io/v1
 kind: NodeNetworkConfigurationPolicy
@@ -13,7 +12,6 @@ metadata:
   name: node-1
   labels:
     osp/nncm-config-type: standard
-    osp/nncm-node: "1"
 ---
 apiVersion: nmstate.io/v1
 kind: NodeNetworkConfigurationPolicy
@@ -21,4 +19,3 @@ metadata:
   name: node-2
   labels:
     osp/nncm-config-type: standard
-    osp/nncm-node: "2"
