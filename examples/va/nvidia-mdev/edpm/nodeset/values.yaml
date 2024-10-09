@@ -122,20 +122,20 @@ data:
     services:
       - bootstrap
       - download-cache
+      - reboot-os
       - configure-network
       - validate-network
       - install-os
       - configure-os
       - ssh-known-hosts
       - run-os
-      - reboot-os
       - install-certs
-      - libvirt
       - ovn
       - neutron-ovn
-      - nova-custom-sriov
-      - neutron-sriov
       - neutron-metadata
+      - neutron-sriov
+      - libvirt
+      - nova-custom-sriov
   nova:
     compute:
       conf: |
