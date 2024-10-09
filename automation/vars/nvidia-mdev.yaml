@@ -37,10 +37,10 @@ vas:
             src_file: values.yaml
         build_output: nodeset.yaml
         post_stage_run:
-          - name: Install nvidia driver
+          - name: Run phase 1 playbook
             type: playbook
             # As a reminder, the job needs to set the nvidia driver URL
-            source: "../../playbooks/nvidia-mdev.yml"
+            source: "../../playbooks/nvidia-mdev-phase1.yml"
             inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
 
       - path: examples/va/nvidia-mdev/edpm/deployment
@@ -53,3 +53,30 @@ vas:
           - name: edpm-deployment-values
             src_file: values.yaml
         build_output: deployment.yaml
+
+      - path: examples/va/nvidia-mdev/edpm-post-driver/nodeset
+        wait_conditions:
+          - >-
+            oc -n openstack wait
+            osdpns openstack-edpm --for condition=SetupReady
+            --timeout=60m
+        values:
+          - name: edpm-post-driver-nodeset-values
+            src_file: values.yaml
+        build_output: nodeset-post-driver.yaml
+        post_stage_run:
+          - name: Run phase 2 playbook
+            type: playbook
+            source: "../../playbooks/nvidia-mdev-phase2.yml"
+            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
+
+      - path: examples/va/nvidia-mdev/edpm-post-driver/deployment
+        wait_conditions:
+          - >-
+            oc -n openstack wait
+            osdpns openstack-edpm --for condition=Ready
+            --timeout=60m
+        values:
+          - name: edpm-post-driver-deployment-values
+            src_file: values.yaml
+        build_output: deployment-post-driver.yaml

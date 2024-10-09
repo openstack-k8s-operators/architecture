@@ -22,6 +22,7 @@ components:
 
 resources:
   - baremetalset-password-secret.yaml
+  - nova_sriov.yaml
 
 replacements:
   - source:
@@ -36,27 +37,30 @@ replacements:
           - data.NodeRootPassword
         options:
           create: true
+
+  # Nova compute CPU pinning customization
   - source:
       kind: ConfigMap
       name: edpm-nodeset-values
-      fieldPath: data.preProvisioned
+      fieldPath: data.nova.compute.conf
     targets:
       - select:
-          kind: OpenStackDataPlaneNodeSet
-          name: openstack-edpm
+          kind: ConfigMap
+          name: cpu-pinning-nova
         fieldPaths:
-          - spec.preProvisioned
+          - data.25-cpu-pinning-nova\.conf
         options:
           create: true
+  # Nova compute PCI passthrough customization
   - source:
       kind: ConfigMap
       name: edpm-nodeset-values
-      fieldPath: data.baremetalSetTemplate
+      fieldPath: data.nova.pci.conf
     targets:
       - select:
-          kind: OpenStackDataPlaneNodeSet
-          name: openstack-edpm
+          kind: ConfigMap
+          name: sriov-nova
         fieldPaths:
-          - spec.baremetalSetTemplate
+          - data.03-sriov-nova\.conf
         options:
           create: true
