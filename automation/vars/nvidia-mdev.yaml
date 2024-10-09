@@ -2,7 +2,7 @@
 vas:
   nvidia-mdev:
     stages:
-      - path: examples/va/nvidia-mdev/nncp
+      - path: examples/va/nvidia-mdev/control-plane/nncp
         wait_conditions:
           - >-
             oc -n openstack wait nncp
@@ -14,7 +14,7 @@ vas:
             src_file: values.yaml
         build_output: nncp.yaml
 
-      - path: examples/va/nvidia-mdev
+      - path: examples/va/nvidia-mdev/control-plane
         wait_conditions:
           - >-
             oc -n openstack wait osctlplane controlplane --for condition=Ready
@@ -36,12 +36,6 @@ vas:
           - name: edpm-nodeset-values
             src_file: values.yaml
         build_output: nodeset.yaml
-        post_stage_run:
-          - name: Install nvidia driver
-            type: playbook
-            # As a reminder, the job needs to set the nvidia driver URL
-            source: "../../playbooks/nvidia-mdev.yml"
-            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
 
       - path: examples/va/nvidia-mdev/edpm/deployment
         wait_conditions:
@@ -53,3 +47,24 @@ vas:
           - name: edpm-deployment-values
             src_file: values.yaml
         build_output: deployment.yaml
+        post_stage_run:
+          - name: Run phase 1 playbook
+            type: playbook
+            # As a reminder, the job needs to set the nvidia driver URL
+            source: "../../playbooks/nvidia-mdev-phase1.yml"
+            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
+          - name: Run phase 2 playbook
+            type: playbook
+            source: "../../playbooks/nvidia-mdev-phase2.yml"
+            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
+
+      - path: examples/va/nvidia-mdev/edpm-post-driver/deployment
+        wait_conditions:
+          - >-
+            oc -n openstack wait
+            osdpd edpm-deployment-post-driver --for condition=Ready
+            --timeout=60m
+        values:
+          - name: edpm-post-driver-deployment-values
+            src_file: values.yaml
+        build_output: deployment-post-driver.yaml

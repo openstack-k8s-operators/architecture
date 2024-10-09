@@ -10,3 +10,65 @@ components:
 
 resources:
   - values.yaml
+
+replacements:
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values
+      fieldPath: data.root_password
+    targets:
+      - select:
+          kind: Secret
+          name: baremetalset-password-secret
+        fieldPaths:
+          - data.NodeRootPassword
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values
+      fieldPath: data.preProvisioned
+    targets:
+      - select:
+          kind: OpenStackDataPlaneNodeSet
+          name: openstack-edpm
+        fieldPaths:
+          - spec.preProvisioned
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values
+      fieldPath: data.baremetalSetTemplate
+    targets:
+      - select:
+          kind: OpenStackDataPlaneNodeSet
+          name: openstack-edpm
+        fieldPaths:
+          - spec.baremetalSetTemplate
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values
+      fieldPath: data.nova.compute.conf
+    targets:
+      - select:
+          kind: ConfigMap
+          name: cpu-pinning-nova
+        fieldPaths:
+          - data.25-cpu-pinning-nova\.conf
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values
+      fieldPath: data.nova.pci.conf
+    targets:
+      - select:
+          kind: ConfigMap
+          name: sriov-nova
+        fieldPaths:
+          - data.03-sriov-nova\.conf
+        options:
+          create: true
