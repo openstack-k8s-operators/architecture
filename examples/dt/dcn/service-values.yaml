@@ -12,7 +12,7 @@ data:
     replicas: 3
     customServiceConfig: |
       [DEFAULT]
-        default_availability_zone = ceph
+      default_availability_zone = az0
   cinderBackup:
     replicas: 3
     customServiceConfig: |
@@ -21,25 +21,25 @@ data:
       backup_ceph_pool = backups
       backup_ceph_user = openstack
   cinderVolumes:
-    ceph:
+    az0:
       customServiceConfig: |
         [DEFAULT]
         enabled_backends = ceph
         [ceph]
         volume_backend_name = ceph
         volume_driver = cinder.volume.drivers.rbd.RBDDriver
-        rbd_ceph_conf = /etc/ceph/ceph.conf
+        rbd_ceph_conf = /etc/ceph/az0.conf
         rbd_user = openstack
         rbd_pool = volumes
         rbd_flatten_volume_from_snapshot = False
         rbd_secret_uuid = CHANGEME
-        rbd_cluster_name = ceph
-        backend_availability_zone = ceph
+        rbd_cluster_name = az0
+        backend_availability_zone = az0
     az1:
       customServiceConfig: |
         [DEFAULT]
         enabled_backends = ceph
-        glance_api_servers = http://glance-az1-internal.openstack.svc:9292
+        glance_api_servers = https://glance-az1-internal.openstack.svc:9292
         [ceph]
         volume_backend_name = ceph
         volume_driver = cinder.volume.drivers.rbd.RBDDriver
@@ -54,7 +54,7 @@ data:
       customServiceConfig: |
         [DEFAULT]
         enabled_backends = ceph
-        glance_api_servers = http://glance-az2-internal.openstack.svc:9292
+        glance_api_servers = https://glance-az2-internal.openstack.svc:9292
         [ceph]
         volume_backend_name = ceph
         volume_driver = cinder.volume.drivers.rbd.RBDDriver
@@ -67,27 +67,27 @@ data:
         backend_availability_zone = az2
   glance:
     customServiceConfig: |
-        [DEFAULT]
-        enabled_backends = default_backend:rbd
-        [glance_store]
-        default_backend = default_backend
-        [default_backend]
-        rbd_store_ceph_conf = /etc/ceph/ceph.conf
-        store_description = "RBD backend"
-        rbd_store_pool = images
-        rbd_store_user = openstack
-        rbd_thin_provisioning = True
+      [DEFAULT]
+      enabled_backends = default_backend:rbd
+      [glance_store]
+      default_backend = default_backend
+      [default_backend]
+      rbd_store_ceph_conf = /etc/ceph/az0.conf
+      store_description = "RBD backend"
+      rbd_store_pool = images
+      rbd_store_user = openstack
+      rbd_thin_provisioning = True
     glanceAPIs:
       default:
         customServiceConfig: |
           [DEFAULT]
           enabled_import_methods = [web-download,copy-image,glance-direct]
-          enabled_backends = ceph:rbd,az1:rbd,az2:rbd
+          enabled_backends = az0:rbd,az1:rbd,az2:rbd
           [glance_store]
-          default_backend = ceph
-          [ceph]
-          rbd_store_ceph_conf = /etc/ceph/ceph.conf
-          store_description = "ceph RBD backend"
+          default_backend = az0
+          [az0]
+          rbd_store_ceph_conf = /etc/ceph/az0.conf
+          store_description = "az0 RBD backend"
           rbd_store_pool = images
           rbd_store_user = openstack
           rbd_thin_provisioning = True
@@ -125,7 +125,7 @@ data:
         customServiceConfig: |
           [DEFAULT]
           enabled_import_methods = [web-download,copy-image,glance-direct]
-          enabled_backends = ceph:rbd,az1:rbd,az2:rbd
+          enabled_backends = az0:rbd,az1:rbd,az2:rbd
           [glance_store]
           default_backend = az1
           [az1]
@@ -134,9 +134,9 @@ data:
           rbd_store_pool = images
           rbd_store_user = openstack
           rbd_thin_provisioning = True
-          [ceph]
-          rbd_store_ceph_conf = /etc/ceph/ceph.conf
-          store_description = "ceph RBD backend"
+          [az0]
+          rbd_store_ceph_conf = /etc/ceph/az0.conf
+          store_description = "az0 RBD backend"
           rbd_store_pool = images
           rbd_store_user = openstack
           rbd_thin_provisioning = True
@@ -168,7 +168,7 @@ data:
         customServiceConfig: |
           [DEFAULT]
           enabled_import_methods = [web-download,copy-image,glance-direct]
-          enabled_backends = ceph:rbd,az1:rbd,az2:rbd
+          enabled_backends = az0:rbd,az1:rbd,az2:rbd
           [glance_store]
           default_backend = az2
           [az2]
@@ -177,9 +177,9 @@ data:
           rbd_store_pool = images
           rbd_store_user = openstack
           rbd_thin_provisioning = True
-          [ceph]
-          rbd_store_ceph_conf = /etc/ceph/ceph.conf
-          store_description = "ceph RBD backend"
+          [az0]
+          rbd_store_ceph_conf = /etc/ceph/az0.conf
+          store_description = "az0 RBD backend"
           rbd_store_pool = images
           rbd_store_user = openstack
           rbd_thin_provisioning = True
