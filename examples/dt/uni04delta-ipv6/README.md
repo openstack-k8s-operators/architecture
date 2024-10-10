@@ -54,6 +54,7 @@ and Manila OpenStack services configured with Ceph.
 | Horizon          | N/A             | Must have          |
 | Barbican         |                 | Must have          |
 | Ironic           |                 | Must have          |
+| Telemetry        |                 | Must have          |
 
 #### Support services
 
@@ -66,10 +67,14 @@ work properly and can be deployed with any/default configuration.
 | Neutron          | needed by other services   |
 | Nova             | needed by scenario testing |
 | Keystone         | needed by all services     |
+| Ceilometer       | needed by Telemetry        |
+| Heat             | needed by Telemetry        |
+| Prometheus       | needed by Telemetry        |
 
 #### Additional configuration
 
-Default settings: TLSe
+- Default settings: TLSe
+- Cluster Observability Operator is installed on the platform.
 
 ## Considerations/Constraints
 

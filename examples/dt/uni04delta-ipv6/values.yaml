@@ -151,3 +151,4 @@ data:
       - neutron-metadata
       - libvirt
       - nova-custom-ceph
+      - telemetry

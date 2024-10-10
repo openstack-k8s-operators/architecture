@@ -4,5 +4,6 @@ kind: Kustomization
 components:
   - ../../../../dt/uni04delta-ipv6
 resources:
+  - coo-sub.yaml
   - nncp/values.yaml
   - service-values.yaml
