@@ -228,3 +228,4 @@ data:
   lbServiceType: LoadBalancer
   storageClass: local-storage
   bridgeName: ospbr
+
