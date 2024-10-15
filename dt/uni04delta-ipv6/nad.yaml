@@ -9,3 +9,14 @@ metadata:
 spec:
   config: |
     _replaced_
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: octavia
+  labels:
+    osp/net: octavia
+    osp/net-attach-def-type: standard
+spec:
+  config: |
+    _replaced_
