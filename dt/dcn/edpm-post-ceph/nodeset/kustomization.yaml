@@ -1,0 +1,263 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+transformers:
+  # Set namespace to OpenStack on all namespaced objects without a namespace
+  - |-
+    apiVersion: builtin
+    kind: NamespaceTransformer
+    metadata:
+      name: _ignored_
+      namespace: openstack
+    setRoleBindingSubjects: none
+    unsetOnly: true
+    fieldSpecs:
+      - path: metadata/name
+        kind: Namespace
+        create: true
+
+components:
+  - ../../../../lib/control-plane
+  - ../../../../lib/dataplane/nodeset
+
+resources:
+  - ceph_secret.yaml
+  - nova_ceph.yaml
+
+patches:
+  - target:
+      kind: OpenStackDataPlaneNodeSet
+      name: .*
+    path: extra_mounts.yaml
+
+replacements:
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values-post-ceph
+      fieldPath: data.nodeset_name
+    targets:
+      - select:
+          kind: OpenStackDataPlaneNodeSet
+        fieldPaths:
+          - metadata.name
+        options:
+          create: true
+
+  # Control plane custom service configs
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.nova.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.nova.template.apiServiceTemplate.customServiceConfig
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.neutron.template.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.neutron.template.customServiceConfig
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.cinderBackup.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.cinder.template.cinderBackup.customServiceConfig
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.cinderVolumes
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.cinder.template.cinderVolumes
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.cinderAPI.replicas
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.cinder.template.cinderAPI.replicas
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.cinderAPI.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.cinder.template.cinderAPI.customServiceConfig
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.cinderBackup.replicas
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.cinder.template.cinderBackup.replicas
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.glance.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.glance.template.customServiceConfig
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.glance.glanceAPIs
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.glance.template.glanceAPIs
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.manila.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.manila.enabled
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.manila.manilaAPI.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.manila.template.manilaAPI.customServiceConfig
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.manila.manilaShares.share1.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.manila.template.manilaShares.share1.customServiceConfig
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.extraMounts
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.extraMounts
+        options:
+          create: true
+  # Ceph keyring
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values-post-ceph
+      fieldPath: data.ceph_conf
+    targets:
+      - select:
+          kind: Secret
+          name: ceph-conf-files
+        fieldPaths:
+          - data
+        options:
+          create: true
+  # Nova Ceph conf
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values-post-ceph
+      fieldPath: data.nova.ceph.conf
+    targets:
+      - select:
+          kind: ConfigMap
+          name: ceph-nova
+        fieldPaths:
+          - data.03-ceph-nova\.conf
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values-post-ceph
+      fieldPath: data.nova.name
+    targets:
+      - select:
+          kind: ConfigMap
+          name: ceph-nova
+        fieldPaths:
+          - metadata.name
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values-post-ceph
+      fieldPath: data.nova.dataSources
+    targets:
+      - select:
+          kind: OpenStackDataPlaneService
+        fieldPaths:
+          - spec.dataSources
+        options:
+          create: true
+  # Dataplane services override (overrides ../../../lib/dataplane which
+  # is using edpm-nodeset-values ConfigMap)
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values-post-ceph
+      fieldPath: data.nodeset.services
+    targets:
+      - select:
+          kind: OpenStackDataPlaneNodeSet
+        fieldPaths:
+          - spec.services
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values-post-ceph
+      fieldPath: data.customDataplanService.name
+    targets:
+      - select:
+          kind: OpenStackDataPlaneService
+        fieldPaths:
+          - metadata.name
+        options:
+          create: true
