@@ -12,3 +12,4 @@ resources:
   - nmstate_namespace.yaml
   - nmstate_operatorgroup.yaml
   - nmstate_subscription.yaml
+  - coo_subscription.yaml
