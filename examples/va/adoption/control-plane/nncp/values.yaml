@@ -1,0 +1,195 @@
+apiVersion: v1
+data:
+    bridgeName: ospbr
+    ctlplane:
+        dnsDomain: ctlplane.example.com
+        endpoint_annotations:
+            metallb.universe.tf/address-pool: ctlplane
+            metallb.universe.tf/allow-shared-ip: ctlplane
+            metallb.universe.tf/loadBalancerIPs: 192.168.122.80
+        iface: enp7s0
+        lb_addresses:
+        - 192.168.122.80-192.168.122.90
+        mtu: 1500
+        net-attach-def: "{\n  \"cniVersion\": \"0.3.1\",\n  \"name\": \"ctlplane\",\n
+            \ \"type\": \"macvlan\",\n  \"master\": \"ospbr\",\n  \"ipam\": {\n    \"type\":
+            \"whereabouts\",\n    \"range\": \"192.168.122.0/24\",\n    \"range_start\":
+            \"192.168.122.30\",\n    \"range_end\": \"192.168.122.70\"\n  }\n}\n"
+        prefix-length: 24
+        subnets:
+        -   allocationRanges:
+            -   end: 192.168.122.120
+                start: 192.168.122.100
+            -   end: 192.168.122.170
+                start: 192.168.122.150
+            cidr: 192.168.122.0/24
+            gateway: 192.168.122.1
+            name: subnet1
+    datacentre:
+        net-attach-def: "{\n  \"cniVersion\": \"0.3.1\",\n  \"name\": \"datacentre\",\n
+            \ \"type\": \"bridge\",\n  \"bridge\": \"ospbr\",\n  \"ipam\": {}\n}\n"
+    dns-resolver:
+        config:
+            search: []
+            server:
+            - 192.168.122.1
+        options:
+        -   key: server
+            values:
+            - 192.168.122.1
+    external:
+        dnsDomain: external.example.com
+        mtu: 1496
+        prefix-length: 24
+        subnets:
+        -   allocationRanges:
+            -   end: 172.21.0.250
+                start: 172.21.0.100
+            cidr: 172.21.0.0/24
+            name: subnet1
+            vlan: 44
+        vlan: 44
+    internalapi:
+        base_iface: enp7s0
+        dnsDomain: internalapi.example.com
+        endpoint_annotations:
+            metallb.universe.tf/address-pool: internalapi
+            metallb.universe.tf/allow-shared-ip: internalapi
+            metallb.universe.tf/loadBalancerIPs: 172.17.0.80
+        iface: internalapi
+        lb_addresses:
+        - 172.17.0.80-172.17.0.90
+        mtu: 1496
+        net-attach-def: "{\n  \"cniVersion\": \"0.3.1\",\n  \"name\": \"internalapi\",\n
+            \ \"type\": \"macvlan\",\n  \"master\": \"internalapi\",\n  \"ipam\":
+            {\n    \"type\": \"whereabouts\",\n    \"range\": \"172.17.0.0/24\",\n
+            \   \"range_start\": \"172.17.0.30\",\n    \"range_end\": \"172.17.0.70\"\n
+            \ }\n}\n"
+        prefix-length: 24
+        subnets:
+        -   allocationRanges:
+            -   end: 172.17.0.250
+                start: 172.17.0.100
+            cidr: 172.17.0.0/24
+            name: subnet1
+            vlan: 20
+        vlan: 20
+    lbServiceType: LoadBalancer
+    node_0:
+        ctlplane_ip: 192.168.122.10
+        internalapi_ip: 172.17.0.10
+        name: master-0
+        storage_ip: 172.18.0.10
+        tenant_ip: 172.19.0.10
+    node_1:
+        ctlplane_ip: 192.168.122.11
+        internalapi_ip: 172.17.0.11
+        name: master-1
+        storage_ip: 172.18.0.11
+        tenant_ip: 172.19.0.11
+    node_2:
+        ctlplane_ip: 192.168.122.12
+        internalapi_ip: 172.17.0.12
+        name: master-2
+        storage_ip: 172.18.0.12
+        tenant_ip: 172.19.0.12
+    ocpbm:
+        dnsDomain: ocpbm.example.com
+        mtu: 1500
+        prefix-length: 24
+    rabbitmq:
+        endpoint_annotations:
+            metallb.universe.tf/address-pool: internalapi
+            metallb.universe.tf/loadBalancerIPs: 172.17.0.85
+    rabbitmq-cell1:
+        endpoint_annotations:
+            metallb.universe.tf/address-pool: internalapi
+            metallb.universe.tf/loadBalancerIPs: 172.17.0.86
+    routes:
+        config: []
+    storage:
+        base_iface: enp7s0
+        dnsDomain: storage.example.com
+        endpoint_annotations:
+            metallb.universe.tf/address-pool: storage
+            metallb.universe.tf/allow-shared-ip: storage
+            metallb.universe.tf/loadBalancerIPs: 172.18.0.80
+        iface: storage
+        lb_addresses:
+        - 172.18.0.80-172.18.0.90
+        mtu: 1496
+        net-attach-def: "{\n  \"cniVersion\": \"0.3.1\",\n  \"name\": \"storage\",\n
+            \ \"type\": \"macvlan\",\n  \"master\": \"storage\",\n  \"ipam\": {\n
+            \   \"type\": \"whereabouts\",\n    \"range\": \"172.18.0.0/24\",\n    \"range_start\":
+            \"172.18.0.30\",\n    \"range_end\": \"172.18.0.70\"\n  }\n}\n"
+        prefix-length: 24
+        subnets:
+        -   allocationRanges:
+            -   end: 172.18.0.250
+                start: 172.18.0.100
+            cidr: 172.18.0.0/24
+            name: subnet1
+            vlan: 21
+        vlan: 21
+    storageClass: lvms-local-storage
+    storagemgmt:
+        dnsDomain: storagemgmt.example.com
+        mtu: 1500
+        prefix-length: 24
+        subnets:
+        -   allocationRanges:
+            -   end: 172.20.0.250
+                start: 172.20.0.100
+            cidr: 172.20.0.0/24
+            name: subnet1
+            vlan: 23
+        vlan: 23
+    swift:
+        base_iface: enp6s0
+        dnsDomain: swift.example.com
+        iface: swift
+        lb_addresses:
+        - 172.22.0.80-172.22.0.90
+        mtu: 1500
+        net-attach-def: "{\n  \"cniVersion\": \"0.3.1\",\n  \"name\": \"swift\",\n
+            \ \"type\": \"macvlan\",\n  \"master\": \"swift\",\n  \"ipam\": {\n    \"type\":
+            \"whereabouts\",\n    \"range\": \"172.22.0.0/24\",\n    \"range_start\":
+            \"172.22.0.30\",\n    \"range_end\": \"172.22.0.70\"\n  }\n}\n"
+        prefix-length: 24
+        subnets:
+        -   allocationRanges:
+            -   end: 172.22.0.250
+                start: 172.22.0.100
+            cidr: 172.22.0.0/24
+            name: subnet1
+            vlan: 25
+        vlan: 25
+    tenant:
+        base_iface: enp7s0
+        dnsDomain: tenant.example.com
+        endpoint_annotations:
+            metallb.universe.tf/address-pool: tenant
+            metallb.universe.tf/allow-shared-ip: tenant
+            metallb.universe.tf/loadBalancerIPs: 172.19.0.80
+        iface: tenant
+        lb_addresses:
+        - 172.19.0.80-172.19.0.90
+        mtu: 1496
+        net-attach-def: "{\n  \"cniVersion\": \"0.3.1\",\n  \"name\": \"tenant\",\n
+            \ \"type\": \"macvlan\",\n  \"master\": \"tenant\",\n  \"ipam\": {\n    \"type\":
+            \"whereabouts\",\n    \"range\": \"172.19.0.0/24\",\n    \"range_start\":
+            \"172.19.0.30\",\n    \"range_end\": \"172.19.0.70\"\n  }\n}\n"
+        prefix-length: 24
+        subnets:
+        -   allocationRanges:
+            -   end: 172.19.0.250
+                start: 172.19.0.100
+            cidr: 172.19.0.0/24
+            name: subnet1
+            vlan: 22
+        vlan: 22
+kind: ConfigMap
+metadata:
+    annotations:
+        config.kubernetes.io/local-config: 'true'
+    name: network-values
