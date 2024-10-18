@@ -1,0 +1,60 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: leaf0-0-preprovision-network-data
+  namespace: openstack
+type: Opaque
+stringData: {}
+---
+apiVersion: metal3.io/v1alpha1
+kind: BareMetalHost
+metadata:
+  labels: {}
+  name: leaf0-0
+  namespace: openstack
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: leaf0-1-preprovision-network-data
+  namespace: openstack
+type: Opaque
+stringData: {}
+---
+apiVersion: metal3.io/v1alpha1
+kind: BareMetalHost
+metadata:
+  labels: {}
+  name: leaf0-1
+  namespace: openstack
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: leaf1-0-preprovision-network-data
+  namespace: openstack
+type: Opaque
+stringData: {}
+---
+apiVersion: metal3.io/v1alpha1
+kind: BareMetalHost
+metadata:
+  labels: {}
+  name: leaf1-0
+  namespace: openstack
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: leaf1-1-preprovision-network-data
+  namespace: openstack
+type: Opaque
+stringData: {}
+---
+apiVersion: metal3.io/v1alpha1
+kind: BareMetalHost
+metadata:
+  labels: {}
+  name: leaf1-1
+  namespace: openstack

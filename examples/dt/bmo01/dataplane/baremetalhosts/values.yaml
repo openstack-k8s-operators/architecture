@@ -1,0 +1,131 @@
+---
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: baremetalhost-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+
+data:
+  metal3_inspection: disabled
+  leaf0-0:
+    name: leaf0-0
+    labels:
+      app: openstack
+      nodeset: leaf0
+    bmc:
+      address: redfish-virtualmedia+http://sushy.utility:8000/redfish/v1/Systems/df2bf92f-3e2c-47e1-b1fa-0d2e06bd1b1d
+    bootMACAddress: 52:54:04:15:a8:d9
+    rootDeviceHints:
+      deviceName: /dev/sda
+    preprovisioningNetworkData:
+      nmstate: |
+        interfaces:
+          - name: enp5s0
+            type: ethernet
+            state: up
+            ipv4:
+              enabled: true
+              address:
+                - ip: 192.168.130.100
+                  prefix-length: 24
+        dns-resolver:
+          config:
+            server:
+              - 192.168.122.1
+        routes:
+          config:
+            - destination: 0.0.0.0/0
+              next-hop-address: 192.168.130.1
+              next-hop-interface: enp5s0
+  leaf0-1:
+    name: leaf0-1
+    labels:
+      app: openstack
+      nodeset: leaf0
+    bmc:
+      address: redfish-virtualmedia+http://sushy.utility:8000/redfish/v1/Systems/455a0036-11f9-4417-a150-9ee858cd7b3d
+    bootMACAddress: 52:54:05:59:03:e9
+    rootDeviceHints:
+      deviceName: /dev/sda
+    preprovisioningNetworkData:
+      nmstate: |
+        interfaces:
+          - name: enp5s0
+            type: ethernet
+            state: up
+            ipv4:
+              enabled: true
+              address:
+                - ip: 192.168.130.101
+                  prefix-length: 24
+        dns-resolver:
+          config:
+            server:
+              - 192.168.122.1
+        routes:
+          config:
+            - destination: 0.0.0.0/0
+              next-hop-address: 192.168.130.1
+              next-hop-interface: enp5s0
+  leaf1-0:
+    name: leaf1-0
+    labels:
+      app: openstack
+      nodeset: leaf1
+    bmc:
+      address: redfish-virtualmedia+http://sushy.utility:8000/redfish/v1/Systems/adbcfb62-afe9-488d-8e67-c3fd711e46e8
+    bootMACAddress: 52:54:06:49:2a:d2
+    rootDeviceHints:
+      deviceName: /dev/sda
+    preprovisioningNetworkData:
+      nmstate: |
+        interfaces:
+          - name: enp5s0
+            type: ethernet
+            state: up
+            ipv4:
+              enabled: true
+              address:
+                - ip: 192.168.131.100
+                  prefix-length: 24
+        dns-resolver:
+          config:
+            server:
+              - 192.168.122.1
+        routes:
+          config:
+            - destination: 0.0.0.0/0
+              next-hop-address: 192.168.131.1
+              next-hop-interface: enp5s0
+  leaf1-1:
+    name: leaf1-1
+    labels:
+      app: openstack
+      nodeset: leaf1
+    bmc:
+      address: redfish-virtualmedia+http://sushy.utility:8000/redfish/v1/Systems/f5da12a3-b71d-4b81-9805-ebd5a2cd7bdf
+    bootMACAddress: 52:54:07:5f:0c:f4
+    rootDeviceHints:
+      deviceName: /dev/sda
+    preprovisioningNetworkData:
+      nmstate: |
+        interfaces:
+          - name: enp5s0
+            type: ethernet
+            state: up
+            ipv4:
+              enabled: true
+              address:
+                - ip: 192.168.131.101
+                  prefix-length: 24
+        dns-resolver:
+          config:
+            server:
+              - 192.168.122.1
+        routes:
+          config:
+            - destination: 0.0.0.0/0
+              next-hop-address: 192.168.131.1
+              next-hop-interface: enp5s0
