@@ -12,3 +12,17 @@
       - ^examples/common
       - ^examples/dt/hci
       - ^va/hci
+
+- job:
+    name: architecture-downstream-uni02beta-upstream-trigger-job
+    parent: downstream-uni02beta-upstream-trigger-job
+    description: |
+      This job will trigger a uni02beta-upstream job downstream.
+      We can invoke this job by adding following comment
+      `\trigger github-experimental` in the github pull request comment.
+      These jobs runs in github-experimental-trigger pipeline.
+    files:
+      - ^dt/uni02beta
+      - ^lib
+      - ^automation/vars/uni02beta.yaml
+
