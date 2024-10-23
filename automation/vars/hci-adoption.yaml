@@ -1,8 +1,8 @@
 ---
 vas:
-  adoption:
+  hci-adoption:
     stages:
-      - path: examples/va/adoption/control-plane/nncp
+      - path: examples/va/hci/control-plane/nncp
         wait_conditions:
           - >-
             oc -n openstack wait nncp
@@ -14,7 +14,7 @@ vas:
             src_file: values.yaml
         build_output: nncp.yaml
 
-      - path: examples/va/adoption/control-plane
+      - path: examples/va/hci/control-plane
         wait_conditions:
           - >-
             oc -n openstack wait nncp
@@ -24,4 +24,4 @@ vas:
         values:
           - name: network-values
             src_file: nncp/values.yaml
-        build_output: ../networking.yaml
+        build_output: networking.yaml
