@@ -27,6 +27,18 @@
       cifmw_architecture_scenario: bgp_dt01
 - job:
     files:
+    - automation/net-env/dcn.yaml
+    - dt/dcn
+    - examples/dt/dcn/control-plane
+    - examples/dt/dcn/control-plane/nncp
+    - lib
+    name: rhoso-architecture-validate-dcn
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: dcn
+      cifmw_networking_env_def_file: automation/net-env/dcn.yaml
+- job:
+    files:
     - examples/va/hci
     - examples/va/hci/control-plane
     - examples/va/hci/control-plane/nncp

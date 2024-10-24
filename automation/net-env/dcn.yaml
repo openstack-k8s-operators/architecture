@@ -1,0 +1,1275 @@
+---
+instances:
+  compute-0:
+    hostname: compute-0
+    name: compute-0
+    networks:
+      ctlplane:
+        interface_name: eth1
+        ip_v4: 192.168.122.100
+        is_trunk_parent: true
+        mac_addr: 52:54:03:ac:01:f4
+        mtu: 1500
+        netmask_v4: 255.255.255.0
+        network_name: ctlplane
+        prefix_length_v4: 24
+        skip_nm: false
+      internalapi:
+        interface_name: eth1.20
+        ip_v4: 172.17.0.100
+        is_trunk_parent: false
+        mac_addr: 52:54:00:3b:e1:d5
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: internalapi
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 20
+      storage:
+        interface_name: eth1.21
+        ip_v4: 172.18.0.100
+        is_trunk_parent: false
+        mac_addr: 52:54:00:3c:f7:19
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: storage
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 21
+      storagemgmt:
+        interface_name: eth1.23
+        ip_v4: 172.20.0.100
+        is_trunk_parent: false
+        mac_addr: 52:54:00:57:fd:4c
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: storagemgmt
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 23
+      tenant:
+        interface_name: eth1.22
+        ip_v4: 172.19.0.100
+        is_trunk_parent: false
+        mac_addr: 52:54:00:45:99:a4
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: tenant
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 22
+  compute-1:
+    hostname: compute-1
+    name: compute-1
+    networks:
+      ctlplane:
+        interface_name: eth1
+        ip_v4: 192.168.122.101
+        is_trunk_parent: true
+        mac_addr: 52:54:04:e8:64:37
+        mtu: 1500
+        netmask_v4: 255.255.255.0
+        network_name: ctlplane
+        prefix_length_v4: 24
+        skip_nm: false
+      internalapi:
+        interface_name: eth1.20
+        ip_v4: 172.17.0.101
+        is_trunk_parent: false
+        mac_addr: 52:54:00:11:59:d4
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: internalapi
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 20
+      storage:
+        interface_name: eth1.21
+        ip_v4: 172.18.0.101
+        is_trunk_parent: false
+        mac_addr: 52:54:00:42:5f:7b
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: storage
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 21
+      storagemgmt:
+        interface_name: eth1.23
+        ip_v4: 172.20.0.101
+        is_trunk_parent: false
+        mac_addr: 52:54:00:38:d4:7c
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: storagemgmt
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 23
+      tenant:
+        interface_name: eth1.22
+        ip_v4: 172.19.0.101
+        is_trunk_parent: false
+        mac_addr: 52:54:00:6e:d5:28
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: tenant
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 22
+  compute-2:
+    hostname: compute-2
+    name: compute-2
+    networks:
+      ctlplane:
+        interface_name: eth1
+        ip_v4: 192.168.122.102
+        is_trunk_parent: true
+        mac_addr: 52:54:05:30:97:80
+        mtu: 1500
+        netmask_v4: 255.255.255.0
+        network_name: ctlplane
+        prefix_length_v4: 24
+        skip_nm: false
+      internalapi:
+        interface_name: eth1.20
+        ip_v4: 172.17.0.102
+        is_trunk_parent: false
+        mac_addr: 52:54:00:6c:59:57
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: internalapi
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 20
+      storage:
+        interface_name: eth1.21
+        ip_v4: 172.18.0.102
+        is_trunk_parent: false
+        mac_addr: 52:54:00:49:aa:16
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: storage
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 21
+      storagemgmt:
+        interface_name: eth1.23
+        ip_v4: 172.20.0.102
+        is_trunk_parent: false
+        mac_addr: 52:54:00:0b:ee:4a
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: storagemgmt
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 23
+      tenant:
+        interface_name: eth1.22
+        ip_v4: 172.19.0.102
+        is_trunk_parent: false
+        mac_addr: 52:54:00:60:be:e1
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: tenant
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 22
+  controller-0:
+    hostname: controller-0
+    name: controller-0
+    networks:
+      ctlplane:
+        interface_name: eth1
+        ip_v4: 192.168.122.9
+        mac_addr: 52:54:06:f2:16:04
+        mtu: 1500
+        netmask_v4: 255.255.255.0
+        network_name: ctlplane
+        prefix_length_v4: 24
+        skip_nm: false
+  dcn1-compute-0:
+    hostname: dcn1-compute-0
+    name: dcn1-compute-0
+    networks:
+      ctlplanedcn1:
+        interface_name: eth1
+        ip_v4: 192.168.133.111
+        is_trunk_parent: true
+        mac_addr: 52:54:07:7e:1b:ec
+        mtu: 1500
+        netmask_v4: 255.255.255.0
+        network_name: ctlplanedcn1
+        prefix_length_v4: 24
+        skip_nm: false
+      internalapidcn1:
+        interface_name: eth1.30
+        ip_v4: 172.17.10.111
+        is_trunk_parent: false
+        mac_addr: 52:54:00:5c:b4:2c
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: internalapidcn1
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplanedcn1
+        vlan_id: 30
+      storagedcn1:
+        interface_name: eth1.31
+        ip_v4: 172.18.10.111
+        is_trunk_parent: false
+        mac_addr: 52:54:00:63:94:25
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: storagedcn1
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplanedcn1
+        vlan_id: 31
+      storagemgmtdcn1:
+        interface_name: eth1.33
+        ip_v4: 172.20.10.111
+        is_trunk_parent: false
+        mac_addr: 52:54:00:2b:ef:87
+        mtu: 1500
+        netmask_v4: 255.255.255.0
+        network_name: storagemgmtdcn1
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplanedcn1
+        vlan_id: 33
+      tenantdcn1:
+        interface_name: eth1.32
+        ip_v4: 172.19.10.111
+        is_trunk_parent: false
+        mac_addr: 52:54:00:69:37:d4
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: tenantdcn1
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplanedcn1
+        vlan_id: 32
+  dcn1-compute-1:
+    hostname: dcn1-compute-1
+    name: dcn1-compute-1
+    networks:
+      ctlplanedcn1:
+        interface_name: eth1
+        ip_v4: 192.168.133.112
+        is_trunk_parent: true
+        mac_addr: 52:54:08:6d:2a:68
+        mtu: 1500
+        netmask_v4: 255.255.255.0
+        network_name: ctlplanedcn1
+        prefix_length_v4: 24
+        skip_nm: false
+      internalapidcn1:
+        interface_name: eth1.30
+        ip_v4: 172.17.10.112
+        is_trunk_parent: false
+        mac_addr: 52:54:00:53:f5:eb
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: internalapidcn1
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplanedcn1
+        vlan_id: 30
+      storagedcn1:
+        interface_name: eth1.31
+        ip_v4: 172.18.10.112
+        is_trunk_parent: false
+        mac_addr: 52:54:00:05:ac:04
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: storagedcn1
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplanedcn1
+        vlan_id: 31
+      storagemgmtdcn1:
+        interface_name: eth1.33
+        ip_v4: 172.20.10.112
+        is_trunk_parent: false
+        mac_addr: 52:54:00:08:03:dc
+        mtu: 1500
+        netmask_v4: 255.255.255.0
+        network_name: storagemgmtdcn1
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplanedcn1
+        vlan_id: 33
+      tenantdcn1:
+        interface_name: eth1.32
+        ip_v4: 172.19.10.112
+        is_trunk_parent: false
+        mac_addr: 52:54:00:22:d1:18
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: tenantdcn1
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplanedcn1
+        vlan_id: 32
+  dcn1-compute-2:
+    hostname: dcn1-compute-2
+    name: dcn1-compute-2
+    networks:
+      ctlplanedcn1:
+        interface_name: eth1
+        ip_v4: 192.168.133.113
+        is_trunk_parent: true
+        mac_addr: 52:54:09:2a:63:17
+        mtu: 1500
+        netmask_v4: 255.255.255.0
+        network_name: ctlplanedcn1
+        prefix_length_v4: 24
+        skip_nm: false
+      internalapidcn1:
+        interface_name: eth1.30
+        ip_v4: 172.17.10.113
+        is_trunk_parent: false
+        mac_addr: 52:54:00:53:bc:3b
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: internalapidcn1
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplanedcn1
+        vlan_id: 30
+      storagedcn1:
+        interface_name: eth1.31
+        ip_v4: 172.18.10.113
+        is_trunk_parent: false
+        mac_addr: 52:54:00:5b:29:28
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: storagedcn1
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplanedcn1
+        vlan_id: 31
+      storagemgmtdcn1:
+        interface_name: eth1.33
+        ip_v4: 172.20.10.113
+        is_trunk_parent: false
+        mac_addr: 52:54:00:56:55:3c
+        mtu: 1500
+        netmask_v4: 255.255.255.0
+        network_name: storagemgmtdcn1
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplanedcn1
+        vlan_id: 33
+      tenantdcn1:
+        interface_name: eth1.32
+        ip_v4: 172.19.10.113
+        is_trunk_parent: false
+        mac_addr: 52:54:00:33:d3:fc
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: tenantdcn1
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplanedcn1
+        vlan_id: 32
+  dcn2-compute-0:
+    hostname: dcn2-compute-0
+    name: dcn2-compute-0
+    networks:
+      ctlplanedcn2:
+        interface_name: eth1
+        ip_v4: 192.168.144.121
+        is_trunk_parent: true
+        mac_addr: 52:54:10:7a:c8:2f
+        mtu: 1500
+        netmask_v4: 255.255.255.0
+        network_name: ctlplanedcn2
+        prefix_length_v4: 24
+        skip_nm: false
+      internalapidcn2:
+        interface_name: eth1.40
+        ip_v4: 172.17.20.121
+        is_trunk_parent: false
+        mac_addr: 52:54:00:34:c1:ec
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: internalapidcn2
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplanedcn2
+        vlan_id: 40
+      storagedcn2:
+        interface_name: eth1.41
+        ip_v4: 172.18.20.121
+        is_trunk_parent: false
+        mac_addr: 52:54:00:44:5f:22
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: storagedcn2
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplanedcn2
+        vlan_id: 41
+      storagemgmtdcn2:
+        interface_name: eth1.43
+        ip_v4: 172.20.20.121
+        is_trunk_parent: false
+        mac_addr: 52:54:00:23:0d:a7
+        mtu: 1500
+        netmask_v4: 255.255.255.0
+        network_name: storagemgmtdcn2
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplanedcn2
+        vlan_id: 43
+      tenantdcn2:
+        interface_name: eth1.42
+        ip_v4: 172.19.20.121
+        is_trunk_parent: false
+        mac_addr: 52:54:00:00:0a:c3
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: tenantdcn2
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplanedcn2
+        vlan_id: 42
+  dcn2-compute-1:
+    hostname: dcn2-compute-1
+    name: dcn2-compute-1
+    networks:
+      ctlplanedcn2:
+        interface_name: eth1
+        ip_v4: 192.168.144.122
+        is_trunk_parent: true
+        mac_addr: 52:54:11:f1:b1:fc
+        mtu: 1500
+        netmask_v4: 255.255.255.0
+        network_name: ctlplanedcn2
+        prefix_length_v4: 24
+        skip_nm: false
+      internalapidcn2:
+        interface_name: eth1.40
+        ip_v4: 172.17.20.122
+        is_trunk_parent: false
+        mac_addr: 52:54:00:1d:94:b3
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: internalapidcn2
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplanedcn2
+        vlan_id: 40
+      storagedcn2:
+        interface_name: eth1.41
+        ip_v4: 172.18.20.122
+        is_trunk_parent: false
+        mac_addr: 52:54:00:64:45:b1
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: storagedcn2
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplanedcn2
+        vlan_id: 41
+      storagemgmtdcn2:
+        interface_name: eth1.43
+        ip_v4: 172.20.20.122
+        is_trunk_parent: false
+        mac_addr: 52:54:00:44:09:b3
+        mtu: 1500
+        netmask_v4: 255.255.255.0
+        network_name: storagemgmtdcn2
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplanedcn2
+        vlan_id: 43
+      tenantdcn2:
+        interface_name: eth1.42
+        ip_v4: 172.19.20.122
+        is_trunk_parent: false
+        mac_addr: 52:54:00:66:5b:58
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: tenantdcn2
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplanedcn2
+        vlan_id: 42
+  dcn2-compute-2:
+    hostname: dcn2-compute-2
+    name: dcn2-compute-2
+    networks:
+      ctlplanedcn2:
+        interface_name: eth1
+        ip_v4: 192.168.144.123
+        is_trunk_parent: true
+        mac_addr: 52:54:12:21:7e:91
+        mtu: 1500
+        netmask_v4: 255.255.255.0
+        network_name: ctlplanedcn2
+        prefix_length_v4: 24
+        skip_nm: false
+      internalapidcn2:
+        interface_name: eth1.40
+        ip_v4: 172.17.20.123
+        is_trunk_parent: false
+        mac_addr: 52:54:00:37:54:c8
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: internalapidcn2
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplanedcn2
+        vlan_id: 40
+      storagedcn2:
+        interface_name: eth1.41
+        ip_v4: 172.18.20.123
+        is_trunk_parent: false
+        mac_addr: 52:54:00:79:45:dc
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: storagedcn2
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplanedcn2
+        vlan_id: 41
+      storagemgmtdcn2:
+        interface_name: eth1.43
+        ip_v4: 172.20.20.123
+        is_trunk_parent: false
+        mac_addr: 52:54:00:7e:97:f4
+        mtu: 1500
+        netmask_v4: 255.255.255.0
+        network_name: storagemgmtdcn2
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplanedcn2
+        vlan_id: 43
+      tenantdcn2:
+        interface_name: eth1.42
+        ip_v4: 172.19.20.123
+        is_trunk_parent: false
+        mac_addr: 52:54:00:56:1d:fe
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: tenantdcn2
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplanedcn2
+        vlan_id: 42
+  ocp-master-0:
+    hostname: master-0
+    name: ocp-master-0
+    networks:
+      ctlplane:
+        interface_name: enp7s0
+        ip_v4: 192.168.122.10
+        is_trunk_parent: true
+        mac_addr: 52:54:00:e2:8a:66
+        mtu: 1500
+        netmask_v4: 255.255.255.0
+        network_name: ctlplane
+        prefix_length_v4: 24
+        skip_nm: false
+      internalapi:
+        interface_name: enp7s0.20
+        ip_v4: 172.17.0.10
+        is_trunk_parent: false
+        mac_addr: 52:54:00:68:4b:ce
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: internalapi
+        parent_interface: enp7s0
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 20
+      storage:
+        interface_name: enp7s0.21
+        ip_v4: 172.18.0.10
+        is_trunk_parent: false
+        mac_addr: 52:54:00:05:23:2c
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: storage
+        parent_interface: enp7s0
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 21
+      tenant:
+        interface_name: enp7s0.22
+        ip_v4: 172.19.0.10
+        is_trunk_parent: false
+        mac_addr: 52:54:00:06:80:f0
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: tenant
+        parent_interface: enp7s0
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 22
+  ocp-master-1:
+    hostname: master-1
+    name: ocp-master-1
+    networks:
+      ctlplane:
+        interface_name: enp7s0
+        ip_v4: 192.168.122.11
+        is_trunk_parent: true
+        mac_addr: 52:54:01:60:ed:69
+        mtu: 1500
+        netmask_v4: 255.255.255.0
+        network_name: ctlplane
+        prefix_length_v4: 24
+        skip_nm: false
+      internalapi:
+        interface_name: enp7s0.20
+        ip_v4: 172.17.0.11
+        is_trunk_parent: false
+        mac_addr: 52:54:00:71:78:e6
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: internalapi
+        parent_interface: enp7s0
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 20
+      storage:
+        interface_name: enp7s0.21
+        ip_v4: 172.18.0.11
+        is_trunk_parent: false
+        mac_addr: 52:54:00:76:3d:ba
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: storage
+        parent_interface: enp7s0
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 21
+      tenant:
+        interface_name: enp7s0.22
+        ip_v4: 172.19.0.11
+        is_trunk_parent: false
+        mac_addr: 52:54:00:7a:5d:1d
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: tenant
+        parent_interface: enp7s0
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 22
+  ocp-master-2:
+    hostname: master-2
+    name: ocp-master-2
+    networks:
+      ctlplane:
+        interface_name: enp7s0
+        ip_v4: 192.168.122.12
+        is_trunk_parent: true
+        mac_addr: 52:54:02:8b:28:77
+        mtu: 1500
+        netmask_v4: 255.255.255.0
+        network_name: ctlplane
+        prefix_length_v4: 24
+        skip_nm: false
+      internalapi:
+        interface_name: enp7s0.20
+        ip_v4: 172.17.0.12
+        is_trunk_parent: false
+        mac_addr: 52:54:00:66:a0:7c
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: internalapi
+        parent_interface: enp7s0
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 20
+      storage:
+        interface_name: enp7s0.21
+        ip_v4: 172.18.0.12
+        is_trunk_parent: false
+        mac_addr: 52:54:00:09:45:3b
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: storage
+        parent_interface: enp7s0
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 21
+      tenant:
+        interface_name: enp7s0.22
+        ip_v4: 172.19.0.12
+        is_trunk_parent: false
+        mac_addr: 52:54:00:22:70:9f
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: tenant
+        parent_interface: enp7s0
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 22
+networks:
+  ctlplane:
+    dns_v4:
+      - 192.168.122.1
+    dns_v6: []
+    gw_v4: 192.168.122.1
+    mtu: 1500
+    network_name: ctlplane
+    network_v4: 192.168.122.0/24
+    search_domain: ctlplane.example.com
+    tools:
+      metallb:
+        ipv4_ranges:
+          - end: 192.168.122.90
+            end_host: 90
+            length: 11
+            start: 192.168.122.80
+            start_host: 80
+        ipv6_ranges: []
+      multus:
+        ipv4_ranges:
+          - end: 192.168.122.70
+            end_host: 70
+            length: 41
+            start: 192.168.122.30
+            start_host: 30
+        ipv4_routes: []
+        ipv6_ranges: []
+        ipv6_routes: []
+      netconfig:
+        ipv4_ranges:
+          - end: 192.168.122.120
+            end_host: 120
+            length: 21
+            start: 192.168.122.100
+            start_host: 100
+          - end: 192.168.122.170
+            end_host: 170
+            length: 21
+            start: 192.168.122.150
+            start_host: 150
+        ipv6_ranges: []
+  ctlplanedcn1:
+    dns_v4:
+      - 192.168.133.1
+    dns_v6: []
+    gw_v4: 192.168.133.1
+    mtu: 1500
+    network_name: ctlplanedcn1
+    network_v4: 192.168.133.0/24
+    search_domain: ctlplanedcn1.example.com
+    tools:
+      metallb:
+        ipv4_ranges:
+          - end: 192.168.133.90
+            end_host: 90
+            length: 11
+            start: 192.168.133.80
+            start_host: 80
+        ipv6_ranges: []
+      multus:
+        ipv4_ranges:
+          - end: 192.168.133.70
+            end_host: 70
+            length: 41
+            start: 192.168.133.30
+            start_host: 30
+        ipv4_routes: []
+        ipv6_ranges: []
+        ipv6_routes: []
+      netconfig:
+        ipv4_ranges:
+          - end: 192.168.133.120
+            end_host: 120
+            length: 21
+            start: 192.168.133.100
+            start_host: 100
+          - end: 192.168.133.170
+            end_host: 170
+            length: 21
+            start: 192.168.133.150
+            start_host: 150
+        ipv6_ranges: []
+  ctlplanedcn2:
+    dns_v4:
+      - 192.168.144.1
+    dns_v6: []
+    gw_v4: 192.168.144.1
+    mtu: 1500
+    network_name: ctlplanedcn2
+    network_v4: 192.168.144.0/24
+    search_domain: ctlplanedcn2.example.com
+    tools:
+      metallb:
+        ipv4_ranges:
+          - end: 192.168.144.90
+            end_host: 90
+            length: 11
+            start: 192.168.144.80
+            start_host: 80
+        ipv6_ranges: []
+      multus:
+        ipv4_ranges:
+          - end: 192.168.144.70
+            end_host: 70
+            length: 41
+            start: 192.168.144.30
+            start_host: 30
+        ipv4_routes: []
+        ipv6_ranges: []
+        ipv6_routes: []
+      netconfig:
+        ipv4_ranges:
+          - end: 192.168.144.120
+            end_host: 120
+            length: 21
+            start: 192.168.144.100
+            start_host: 100
+          - end: 192.168.144.170
+            end_host: 170
+            length: 21
+            start: 192.168.144.150
+            start_host: 150
+        ipv6_ranges: []
+  external:
+    dns_v4: []
+    dns_v6: []
+    mtu: 1500
+    network_name: external
+    network_v4: 10.0.0.0/24
+    search_domain: external.example.com
+    tools:
+      netconfig:
+        ipv4_ranges:
+          - end: 10.0.0.250
+            end_host: 250
+            length: 151
+            start: 10.0.0.100
+            start_host: 100
+        ipv6_ranges: []
+    vlan_id: 22
+  internalapi:
+    dns_v4: []
+    dns_v6: []
+    mtu: 1496
+    network_name: internalapi
+    network_v4: 172.17.0.0/24
+    search_domain: internalapi.example.com
+    tools:
+      metallb:
+        ipv4_ranges:
+          - end: 172.17.0.90
+            end_host: 90
+            length: 11
+            start: 172.17.0.80
+            start_host: 80
+        ipv6_ranges: []
+      multus:
+        ipv4_ranges:
+          - end: 172.17.0.70
+            end_host: 70
+            length: 41
+            start: 172.17.0.30
+            start_host: 30
+        ipv4_routes: []
+        ipv6_ranges: []
+        ipv6_routes: []
+      netconfig:
+        ipv4_ranges:
+          - end: 172.17.0.250
+            end_host: 250
+            length: 151
+            start: 172.17.0.100
+            start_host: 100
+        ipv6_ranges: []
+    vlan_id: 20
+  internalapidcn1:
+    dns_v4: []
+    dns_v6: []
+    mtu: 1496
+    network_name: internalapidcn1
+    network_v4: 172.17.10.0/24
+    search_domain: internalapidcn1.example.com
+    tools:
+      metallb:
+        ipv4_ranges:
+          - end: 172.17.10.90
+            end_host: 90
+            length: 11
+            start: 172.17.10.80
+            start_host: 80
+        ipv6_ranges: []
+      multus:
+        ipv4_ranges:
+          - end: 172.17.10.70
+            end_host: 70
+            length: 41
+            start: 172.17.10.30
+            start_host: 30
+        ipv4_routes: []
+        ipv6_ranges: []
+        ipv6_routes: []
+      netconfig:
+        ipv4_ranges:
+          - end: 172.17.10.250
+            end_host: 250
+            length: 151
+            start: 172.17.10.100
+            start_host: 100
+        ipv6_ranges: []
+    vlan_id: 30
+  internalapidcn2:
+    dns_v4: []
+    dns_v6: []
+    mtu: 1496
+    network_name: internalapidcn2
+    network_v4: 172.17.20.0/24
+    search_domain: internalapidcn2.example.com
+    tools:
+      metallb:
+        ipv4_ranges:
+          - end: 172.17.20.90
+            end_host: 90
+            length: 11
+            start: 172.17.20.80
+            start_host: 80
+        ipv6_ranges: []
+      multus:
+        ipv4_ranges:
+          - end: 172.17.20.70
+            end_host: 70
+            length: 41
+            start: 172.17.20.30
+            start_host: 30
+        ipv4_routes: []
+        ipv6_ranges: []
+        ipv6_routes: []
+      netconfig:
+        ipv4_ranges:
+          - end: 172.17.20.250
+            end_host: 250
+            length: 151
+            start: 172.17.20.100
+            start_host: 100
+        ipv6_ranges: []
+    vlan_id: 40
+  storage:
+    dns_v4: []
+    dns_v6: []
+    mtu: 1496
+    network_name: storage
+    network_v4: 172.18.0.0/24
+    search_domain: storage.example.com
+    tools:
+      metallb:
+        ipv4_ranges:
+          - end: 172.18.0.90
+            end_host: 90
+            length: 11
+            start: 172.18.0.80
+            start_host: 80
+        ipv6_ranges: []
+      multus:
+        ipv4_ranges:
+          - end: 172.18.0.70
+            end_host: 70
+            length: 41
+            start: 172.18.0.30
+            start_host: 30
+        ipv4_routes: []
+        ipv6_ranges: []
+        ipv6_routes: []
+      netconfig:
+        ipv4_ranges:
+          - end: 172.18.0.250
+            end_host: 250
+            length: 151
+            start: 172.18.0.100
+            start_host: 100
+        ipv6_ranges: []
+    vlan_id: 21
+  storagedcn1:
+    dns_v4: []
+    dns_v6: []
+    mtu: 1496
+    network_name: storagedcn1
+    network_v4: 172.18.10.0/24
+    search_domain: storagedcn1.example.com
+    tools:
+      metallb:
+        ipv4_ranges:
+          - end: 172.18.10.90
+            end_host: 90
+            length: 11
+            start: 172.18.10.80
+            start_host: 80
+        ipv6_ranges: []
+      multus:
+        ipv4_ranges:
+          - end: 172.18.10.70
+            end_host: 70
+            length: 41
+            start: 172.18.10.30
+            start_host: 30
+        ipv4_routes: []
+        ipv6_ranges: []
+        ipv6_routes: []
+      netconfig:
+        ipv4_ranges:
+          - end: 172.18.10.250
+            end_host: 250
+            length: 151
+            start: 172.18.10.100
+            start_host: 100
+        ipv6_ranges: []
+    vlan_id: 31
+  storagedcn2:
+    dns_v4: []
+    dns_v6: []
+    mtu: 1496
+    network_name: storagedcn2
+    network_v4: 172.18.20.0/24
+    search_domain: storagedcn2.example.com
+    tools:
+      metallb:
+        ipv4_ranges:
+          - end: 172.18.20.90
+            end_host: 90
+            length: 11
+            start: 172.18.20.80
+            start_host: 80
+        ipv6_ranges: []
+      multus:
+        ipv4_ranges:
+          - end: 172.18.20.70
+            end_host: 70
+            length: 41
+            start: 172.18.20.30
+            start_host: 30
+        ipv4_routes: []
+        ipv6_ranges: []
+        ipv6_routes: []
+      netconfig:
+        ipv4_ranges:
+          - end: 172.18.20.250
+            end_host: 250
+            length: 151
+            start: 172.18.20.100
+            start_host: 100
+        ipv6_ranges: []
+    vlan_id: 41
+  storagemgmt:
+    dns_v4: []
+    dns_v6: []
+    network_name: storagemgmt
+    network_v4: 172.20.0.0/24
+    search_domain: storagemgmt.example.com
+    tools:
+      netconfig:
+        ipv4_ranges:
+          - end: 172.20.0.250
+            end_host: 250
+            length: 151
+            start: 172.20.0.100
+            start_host: 100
+        ipv6_ranges: []
+    vlan_id: 23
+  storagemgmtdcn1:
+    dns_v4: []
+    dns_v6: []
+    mtu: 1500
+    network_name: storagemgmtdcn1
+    network_v4: 172.20.10.0/24
+    search_domain: storagemgmtdcn1.example.com
+    tools:
+      netconfig:
+        ipv4_ranges:
+          - end: 172.20.10.250
+            end_host: 250
+            length: 151
+            start: 172.20.10.100
+            start_host: 100
+        ipv6_ranges: []
+    vlan_id: 33
+  storagemgmtdcn2:
+    dns_v4: []
+    dns_v6: []
+    mtu: 1500
+    network_name: storagemgmtdcn2
+    network_v4: 172.20.20.0/24
+    search_domain: storagemgmtdcn2.example.com
+    tools:
+      netconfig:
+        ipv4_ranges:
+          - end: 172.20.20.250
+            end_host: 250
+            length: 151
+            start: 172.20.20.100
+            start_host: 100
+        ipv6_ranges: []
+    vlan_id: 43
+  tenant:
+    dns_v4: []
+    dns_v6: []
+    mtu: 1496
+    network_name: tenant
+    network_v4: 172.19.0.0/24
+    search_domain: tenant.example.com
+    tools:
+      metallb:
+        ipv4_ranges:
+          - end: 172.19.0.90
+            end_host: 90
+            length: 11
+            start: 172.19.0.80
+            start_host: 80
+        ipv6_ranges: []
+      multus:
+        ipv4_ranges:
+          - end: 172.19.0.70
+            end_host: 70
+            length: 41
+            start: 172.19.0.30
+            start_host: 30
+        ipv4_routes: []
+        ipv6_ranges: []
+        ipv6_routes: []
+      netconfig:
+        ipv4_ranges:
+          - end: 172.19.0.250
+            end_host: 250
+            length: 151
+            start: 172.19.0.100
+            start_host: 100
+        ipv6_ranges: []
+    vlan_id: 22
+  tenantdcn1:
+    dns_v4: []
+    dns_v6: []
+    mtu: 1496
+    network_name: tenantdcn1
+    network_v4: 172.19.10.0/24
+    search_domain: tenantdcn1.example.com
+    tools:
+      metallb:
+        ipv4_ranges:
+          - end: 172.19.10.90
+            end_host: 90
+            length: 11
+            start: 172.19.10.80
+            start_host: 80
+        ipv6_ranges: []
+      multus:
+        ipv4_ranges:
+          - end: 172.19.10.70
+            end_host: 70
+            length: 41
+            start: 172.19.10.30
+            start_host: 30
+        ipv4_routes: []
+        ipv6_ranges: []
+        ipv6_routes: []
+      netconfig:
+        ipv4_ranges:
+          - end: 172.19.10.250
+            end_host: 250
+            length: 151
+            start: 172.19.10.100
+            start_host: 100
+        ipv6_ranges: []
+    vlan_id: 32
+  tenantdcn2:
+    dns_v4: []
+    dns_v6: []
+    mtu: 1496
+    network_name: tenantdcn2
+    network_v4: 172.19.20.0/24
+    search_domain: tenantdcn2.example.com
+    tools:
+      metallb:
+        ipv4_ranges:
+          - end: 172.19.20.90
+            end_host: 90
+            length: 11
+            start: 172.19.20.80
+            start_host: 80
+        ipv6_ranges: []
+      multus:
+        ipv4_ranges:
+          - end: 172.19.20.70
+            end_host: 70
+            length: 41
+            start: 172.19.20.30
+            start_host: 30
+        ipv4_routes: []
+        ipv6_ranges: []
+        ipv6_routes: []
+      netconfig:
+        ipv4_ranges:
+          - end: 172.19.20.250
+            end_host: 250
+            length: 151
+            start: 172.19.20.100
+            start_host: 100
+        ipv6_ranges: []
+    vlan_id: 42
+routers: {}
