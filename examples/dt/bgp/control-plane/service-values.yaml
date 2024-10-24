@@ -34,15 +34,28 @@ data:
     octaviaAPI:
       networkAttachments:
         - internalapi
+      customServiceConfig: |
+        [controller_worker]
+        loadbalancer_topology=ACTIVE_STANDBY
     octaviaHousekeeping:
       networkAttachments:
         - octavia
+      customServiceConfig: |
+        [controller_worker]
+        loadbalancer_topology=ACTIVE_STANDBY
     octaviaHealthManager:
       networkAttachments:
         - octavia
+      customServiceConfig: |
+        [controller_worker]
+        loadbalancer_topology=ACTIVE_STANDBY
     octaviaWorker:
       networkAttachments:
         - octavia
+      customServiceConfig: |
+        [controller_worker]
+        loadbalancer_topology=ACTIVE_STANDBY
+
 
   ovn:
     ovnController:
