@@ -1,0 +1,20 @@
+# local-config: referenced, but not emitted by kustomize
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: edpm-nodeset-values-post-ceph
+  annotations:
+    config.kubernetes.io/local-config: "true"
+data:
+  nodeset:
+    services:
+      - install-certs
+      - ceph-client
+      - ovn
+      - neutron-metadata
+      - libvirt
+      - nova
+  ceph:
+    conf: CHANGEME_CEPH_CONF
+    keyring: CHANGEME_CEPH_KEYRING
