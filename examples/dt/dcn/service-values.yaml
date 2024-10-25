@@ -66,19 +66,9 @@ data:
         rbd_cluster_name = az2
         backend_availability_zone = az2
   glance:
-    customServiceConfig: |
-      [DEFAULT]
-      enabled_backends = default_backend:rbd
-      [glance_store]
-      default_backend = default_backend
-      [default_backend]
-      rbd_store_ceph_conf = /etc/ceph/az0.conf
-      store_description = "RBD backend"
-      rbd_store_pool = images
-      rbd_store_user = openstack
-      rbd_thin_provisioning = True
+    keystoneEndpoint: az0
     glanceAPIs:
-      default:
+      az0:
         customServiceConfig: |
           [DEFAULT]
           enabled_import_methods = [web-download,copy-image,glance-direct]
@@ -121,7 +111,7 @@ data:
         customServiceConfig: |
           [DEFAULT]
           enabled_import_methods = [web-download,copy-image,glance-direct]
-          enabled_backends = az0:rbd,az1:rbd,az2:rbd
+          enabled_backends = az0:rbd,az1:rbd
           [glance_store]
           default_backend = az1
           [az1]
@@ -154,7 +144,7 @@ data:
         customServiceConfig: |
           [DEFAULT]
           enabled_import_methods = [web-download,copy-image,glance-direct]
-          enabled_backends = az0:rbd,az1:rbd,az2:rbd
+          enabled_backends = az0:rbd,az2:rbd
           [glance_store]
           default_backend = az2
           [az2]
