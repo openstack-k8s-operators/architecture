@@ -467,7 +467,19 @@ data:
         }
       }
   octavia:
-    dnsDomain: octavia.openstack.lab
+    dnsDomain: octavia.example.com
+    subnets:
+      - allocationRanges:
+          - end: 172.23.0.250
+            # we need some extra offset to avoid overlapping with octavia
+            # controlplane IPs
+            start: 172.23.0.115
+        cidr: 172.23.0.0/24
+        name: subnet1
+        vlan: 23
+        routes:
+          - destination: 172.24.0.0/16
+            nexthop: 172.23.0.150
     mtu: 1500
     vlan: 23
     base_iface: enp7s0

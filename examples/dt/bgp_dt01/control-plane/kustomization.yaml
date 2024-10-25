@@ -152,16 +152,29 @@ replacements:
           name: bgpnet-worker-3
         fieldPaths:
           - spec.config
-  # disable OCP workers as gateway nodes
+  # configure OVN AZs
   - source:
       kind: ConfigMap
       name: service-values
-      fieldPath: data.ovn.ovnController.external-ids
+      fieldPath: data.ovn.ovnController.availability-zones
     targets:
       - select:
           kind: OpenStackControlPlane
         fieldPaths:
-          - spec.ovn.template.ovnController.external-ids
+          - spec.ovn.template.ovnController.external-ids.availability-zones
+        options:
+          create: true
+  # configure OVN nicMappings
+  # OVN control plane SRIOV customization
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.ovn.ovnController.nicMappings
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.ovn.template.ovnController.nicMappings
         options:
           create: true
   # configure neutron customServiceConfig

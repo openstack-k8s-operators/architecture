@@ -37,6 +37,13 @@ This DT configures both compute and networker EDPM nodes. So far, networker
 nodes are needed when BGP is used on RHOSO, in order to expose routes to SNAT
 traffic (OVN Gateway IPs). In other words, when RHOSO is used with BGP, the OCP
 workers cannot be configured as OVN Gateways.
+On the other hand, Octavia needs to use OCP workers as OVN Gateways for
+its management network.
+To resolve this conflict, BGP DT01 uses Availability Zones:
+* zone-1 is only used for the Octavia management network, which is scheduled on
+  the OCP workers
+* zone-2 is used for the provider networks, whose routers ports will be
+  scheduled on the networker nodes.
 
 The OCP and EDPM nodes deployed with this DT are distributed into three
 different racks. Each rack is connected to two leaves.
@@ -76,14 +83,14 @@ network).
 
 ## Services, enabled features and configurations
 
-| Service          | configuration    | Lock-in coverage?  |
-| ---------------- | ---------------- | ------------------ |
-| Glance           | Swift            | Must have          |
-| Swift            | (default)        | Must have          |
-| Octavia          | (default)        | Must have          |
-| Heat             | (default)        | Must have          |
-| frr              | dataplane        | Must have          |
-| ovn-bgp-agent    | dataplane        | Must have          |
+| Service          | configuration     | Lock-in coverage?  |
+| ---------------- | ----------------- | ------------------ |
+| Glance           | Swift             | Must have          |
+| Swift            | (default)         | Must have          |
+| Octavia          | (default)         | Must have          |
+| Heat             | (default)         | Must have          |
+| frr              | dataplane         | Must have          |
+| ovn-bgp-agent    | dataplane         | Must have          |
 
 ## Considerations/Constraints
 

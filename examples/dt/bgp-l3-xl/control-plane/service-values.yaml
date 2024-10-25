@@ -30,6 +30,11 @@ data:
     enabled: false
     amphoraImageContainerImage: quay.io/gthiemonge/octavia-amphora-image
     apacheContainerImage: registry.redhat.io/ubi9/httpd-24:latest
+    lbMgmtNetwork:
+      availabilityZones:
+        - zone-1
+      createDefaultLbMgmtNetwork: true
+      manageLbMgmtNetworks: true
     octaviaAPI:
       networkAttachments:
         - internalapi

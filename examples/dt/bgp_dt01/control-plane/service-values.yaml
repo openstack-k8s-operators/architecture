@@ -30,6 +30,11 @@ data:
     enabled: true
     amphoraImageContainerImage: quay.io/gthiemonge/octavia-amphora-image
     apacheContainerImage: registry.redhat.io/ubi9/httpd-24:latest
+    lbMgmtNetwork:
+      availabilityZones:
+        - zone-1
+      createDefaultLbMgmtNetwork: true
+      manageLbMgmtNetworks: true
     octaviaAPI:
       networkAttachments:
         - internalapi
@@ -58,14 +63,17 @@ data:
   ovn:
     ovnController:
       nicMappings:
-        datacentre: ocpbr
-        # octavia: octbr TODO(eolivare): enable octavia
-      external-ids:
-        enable-chassis-as-gateway: false
+        # datacentre: ospbr
+        octavia: octavia
+      availability-zones:
+        - zone-1
   neutron:
     customServiceConfig: |
       [DEFAULT]
       vlan_transparent = true
       debug = true
+      default_availability_zones = zone-2
       [ovs]
       igmp_snooping_enable = true
+      [ovn]
+      ovn_emit_need_to_frag = true
