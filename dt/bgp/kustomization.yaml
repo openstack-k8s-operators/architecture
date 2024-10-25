@@ -212,6 +212,18 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
+      fieldPath: data.octavia.lbMgmtNetwork
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.lbMgmtNetwork
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
       fieldPath: data.octavia.octaviaAPI.networkAttachments
     targets:
       - select:
