@@ -1,0 +1,237 @@
+# local-config: referenced, but not emitted by kustomize
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: service-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+data:
+  preserveJobs: false
+  cinderAPI:
+    replicas: 3
+    customServiceConfig: |
+      [DEFAULT]
+      default_availability_zone = az0
+  cinderBackup:
+    replicas: 3
+    customServiceConfig: |
+      [DEFAULT]
+      backup_driver = cinder.backup.drivers.ceph.CephBackupDriver
+      backup_ceph_pool = backups
+      backup_ceph_user = openstack
+  cinderVolumes:
+    az0:
+      customServiceConfig: |
+        [DEFAULT]
+        enabled_backends = ceph
+        [ceph]
+        volume_backend_name = ceph
+        volume_driver = cinder.volume.drivers.rbd.RBDDriver
+        rbd_ceph_conf = /etc/ceph/az0.conf
+        rbd_user = openstack
+        rbd_pool = volumes
+        rbd_flatten_volume_from_snapshot = False
+        rbd_secret_uuid = CHANGEME
+        rbd_cluster_name = az0
+        backend_availability_zone = az0
+    az1:
+      customServiceConfig: |
+        [DEFAULT]
+        enabled_backends = ceph
+        glance_api_servers = https://glance-az1-internal.openstack.svc:9292
+        [ceph]
+        volume_backend_name = ceph
+        volume_driver = cinder.volume.drivers.rbd.RBDDriver
+        rbd_ceph_conf = /etc/ceph/az1.conf
+        rbd_user = openstack
+        rbd_pool = volumes
+        rbd_flatten_volume_from_snapshot = False
+        rbd_secret_uuid = CHANGEME
+        rbd_cluster_name = az1
+        backend_availability_zone = az1
+    az2:
+      customServiceConfig: |
+        [DEFAULT]
+        enabled_backends = ceph
+        glance_api_servers = https://glance-az2-internal.openstack.svc:9292
+        [ceph]
+        volume_backend_name = ceph
+        volume_driver = cinder.volume.drivers.rbd.RBDDriver
+        rbd_ceph_conf = /etc/ceph/az2.conf
+        rbd_user = openstack
+        rbd_pool = volumes
+        rbd_flatten_volume_from_snapshot = False
+        rbd_secret_uuid = CHANGEME
+        rbd_cluster_name = az2
+        backend_availability_zone = az2
+  glance:
+    customServiceConfig: |
+      [DEFAULT]
+      enabled_backends = default_backend:rbd
+      [glance_store]
+      default_backend = default_backend
+      [default_backend]
+      rbd_store_ceph_conf = /etc/ceph/az0.conf
+      store_description = "RBD backend"
+      rbd_store_pool = images
+      rbd_store_user = openstack
+      rbd_thin_provisioning = True
+    glanceAPIs:
+      default:
+        customServiceConfig: |
+          [DEFAULT]
+          enabled_import_methods = [web-download,copy-image,glance-direct]
+          enabled_backends = az0:rbd,az1:rbd,az2:rbd
+          [glance_store]
+          default_backend = az0
+          [az0]
+          rbd_store_ceph_conf = /etc/ceph/az0.conf
+          store_description = "az0 RBD backend"
+          rbd_store_pool = images
+          rbd_store_user = openstack
+          rbd_thin_provisioning = True
+          [az1]
+          rbd_store_ceph_conf = /etc/ceph/az1.conf
+          store_description = "az1 RBD backend"
+          rbd_store_pool = images
+          rbd_store_user = openstack
+          rbd_thin_provisioning = True
+          [az2]
+          rbd_store_ceph_conf = /etc/ceph/az2.conf
+          store_description = "az2 RBD backend"
+          rbd_store_pool = images
+          rbd_store_user = openstack
+          rbd_thin_provisioning = True
+        networkAttachments:
+          - storage
+        override:
+          service:
+            internal:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: internalapi
+                  metallb.universe.tf/allow-shared-ip: internalapi
+                  metallb.universe.tf/loadBalancerIPs: 172.17.0.80
+              spec:
+                type: LoadBalancer
+        replicas: 3
+        type: split
+      az1:
+        customServiceConfig: |
+          [DEFAULT]
+          enabled_import_methods = [web-download,copy-image,glance-direct]
+          enabled_backends = az0:rbd,az1:rbd,az2:rbd
+          [glance_store]
+          default_backend = az1
+          [az1]
+          rbd_store_ceph_conf = /etc/ceph/az1.conf
+          store_description = "az1 RBD backend"
+          rbd_store_pool = images
+          rbd_store_user = openstack
+          rbd_thin_provisioning = True
+          [az0]
+          rbd_store_ceph_conf = /etc/ceph/az0.conf
+          store_description = "az0 RBD backend"
+          rbd_store_pool = images
+          rbd_store_user = openstack
+          rbd_thin_provisioning = True
+        networkAttachments:
+          - storage
+        override:
+          service:
+            internal:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: internalapi
+                  metallb.universe.tf/allow-shared-ip: internalapi
+                  metallb.universe.tf/loadBalancerIPs: 172.17.0.81
+              spec:
+                type: LoadBalancer
+        replicas: 3
+        type: edge
+      az2:
+        customServiceConfig: |
+          [DEFAULT]
+          enabled_import_methods = [web-download,copy-image,glance-direct]
+          enabled_backends = az0:rbd,az1:rbd,az2:rbd
+          [glance_store]
+          default_backend = az2
+          [az2]
+          rbd_store_ceph_conf = /etc/ceph/az2.conf
+          store_description = "az2 RBD backend"
+          rbd_store_pool = images
+          rbd_store_user = openstack
+          rbd_thin_provisioning = True
+          [az0]
+          rbd_store_ceph_conf = /etc/ceph/az0.conf
+          store_description = "az0 RBD backend"
+          rbd_store_pool = images
+          rbd_store_user = openstack
+          rbd_thin_provisioning = True
+        networkAttachments:
+          - storage
+        override:
+          service:
+            internal:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: internalapi
+                  metallb.universe.tf/allow-shared-ip: internalapi
+                  metallb.universe.tf/loadBalancerIPs: 172.17.0.82
+              spec:
+                type: LoadBalancer
+        replicas: 3
+        type: edge
+  manila:
+    enabled: false
+    manilaAPI:
+      customServiceConfig: |
+        [DEFAULT]
+        enabled_share_protocols=nfs,cephfs
+    manilaShares:
+      share1:
+        customServiceConfig: |
+          [DEFAULT]
+          enabled_share_backends = cephfs
+          enabled_share_protocols = cephfs
+          [cephfs]
+          driver_handles_share_servers = False
+          share_backend_name = cephfs
+          share_driver = manila.share.drivers.cephfs.driver.CephFSDriver
+          cephfs_conf_path = /etc/ceph/ceph.conf
+          cephfs_cluster_name = ceph
+          cephfs_auth_id=openstack
+          cephfs_volume_mode = 0755
+          cephfs_protocol_helper_type = CEPHFS
+  neutron:
+    template:
+      customServiceConfig: |
+        [ml2_type_vlan]
+        network_vlan_ranges = datacentre:1:1000,leaf1:1:1000,leaf2:1:1000
+        [neutron]
+        physnets = datacentre,leaf1,leaf2
+  nova:
+    customServiceConfig: |
+      [DEFAULT]
+      default_schedule_zone=az0
+  extraMounts:
+    - name: v1
+      region: r1
+      extraVol:
+        - propagation:
+            - CinderVolume
+            - CinderBackup
+            - GlanceAPI
+            - ManilaShare
+          extraVolType: Ceph
+          volumes:
+            - name: ceph
+              projected:
+                sources:
+                  - secret:
+                      name: ceph-conf-files
+          mounts:
+            - name: ceph
+              mountPath: /etc/ceph
+              readOnly: true
