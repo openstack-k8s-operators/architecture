@@ -1,0 +1,72 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+transformers:
+  - |-
+    apiVersion: builtin
+    kind: NamespaceTransformer
+    metadata:
+      name: _ignored_
+      namespace: openstack
+    setRoleBindingSubjects: none
+    unsetOnly: true
+    fieldSpecs:
+      - path: metadata/name
+        kind: Namespace
+        create: true
+
+resources:
+  - network-data-secrets.yaml
+  - openstackdataplanenodesets.yaml
+
+replacements:
+  # networkData
+  - source:
+      kind: ConfigMap
+      name: nodeset-values
+      fieldPath: data.nodeset0.baremetalHostsNetworkData.edpm-compute-0-0
+    targets:
+      - select:
+          kind: Secret
+          name: edpm-compute-0-0-network-data
+        fieldPaths:
+          - stringData
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: nodeset-values
+      fieldPath: data.nodeset0.baremetalHostsNetworkData.edpm-compute-0-1
+    targets:
+      - select:
+          kind: Secret
+          name: edpm-compute-0-1-network-data
+        fieldPaths:
+          - stringData
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: nodeset-values
+      fieldPath: data.nodeset1.baremetalHostsNetworkData.edpm-compute-1-0
+    targets:
+      - select:
+          kind: Secret
+          name: edpm-compute-1-0-network-data
+        fieldPaths:
+          - stringData
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: nodeset-values
+      fieldPath: data.nodeset1.baremetalHostsNetworkData.edpm-compute-1-1
+    targets:
+      - select:
+          kind: Secret
+          name: edpm-compute-1-1-network-data
+        fieldPaths:
+          - stringData
+        options:
+          create: true

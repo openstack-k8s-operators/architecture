@@ -1,0 +1,110 @@
+---
+vas:
+  bmo01:
+    stages:
+      - path: examples/dt/bmo01/control-plane/nncp
+        wait_conditions:
+          - >-
+            oc -n openstack wait nncp
+            -l osp/nncm-config-type=standard
+            --for jsonpath='{.status.conditions[0].reason}'=SuccessfullyConfigured
+            --timeout=5m
+        values:
+          - name: network-values
+            src_file: values.yaml
+        build_output: nncp.yaml
+
+      - pre_stage_run:
+          - name: Apply cinder-lvm label on master-0
+            type: cr
+            definition:
+              metadata:
+                labels:
+                  openstack.org/cinder-lvm: ""
+            kind: Node
+            resource_name: master-0
+            state: patched
+        path: examples/dt/bmo01/control-plane
+        wait_conditions:
+          - >-
+            oc -n openstack wait openstackcontrolplane
+            controlplane
+            --for condition=Ready
+            --timeout=60m
+        values:
+          - name: network-values
+            src_file: nncp/values.yaml
+          - name: service-values
+            src_file: service-values.yaml
+        build_output: control-plane.yaml
+
+      - pre_stage_run:
+          - name: Patch Provisioning CR
+            type: cr
+            definition:
+              spec:
+                watchAllNamespaces: true
+                virtualMediaViaExternalNetwork: true
+            namespace: openshift-machine-api
+            api_version: metal3.io/v1alpha1
+            kind: Provisioning
+            resource_name: provisioning-configuration
+            state: patched
+        path: examples/dt/bmo01/dataplane/baremetalhosts
+        wait_conditions:
+          - >-
+            oc -n openstack wait baremetalhosts.metal3.io
+            -l app=openstack
+            --for jsonpath=status.provisioning.state=available
+            --timeout=10m
+        values:
+          - name: baremetalhost-values
+            src_file: values.yaml
+        build_output: baremetalhosts.yaml
+
+      - path: examples/dt/bmo01/dataplane/secrets
+        wait_conditions:
+          - >-
+            oc -n openstack wait secrets dataplane-ansible-ssh-private-key-secret
+            --for jsonpath=metadata.uid
+          - >-
+            oc -n openstack wait secrets nova-migration-ssh-key
+            --for jsonpath=metadata.uid
+        values:
+          - name: secret-values
+            src_file: values.yaml
+        build_output: dataplane-secrets.yaml
+
+      - path: examples/dt/bmo01/dataplane/nodesets
+        wait_conditions:
+          - >-
+            oc -n openstack wait openstackdataplanenodesets
+            nodeset-0
+            --for condition=NodeSetBaremetalProvisionReady
+            --timeout=40m
+          - >-
+            oc -n openstack wait openstackdataplanenodesets
+            nodeset-1
+            --for condition=NodeSetBaremetalProvisionReady
+            --timeout=40m
+        values:
+          - name: nodeset-values
+            src_file: values.yaml
+        build_output: dataplane-nodesets.yaml
+
+      - path: examples/dt/bmo01/dataplane
+        wait_conditions:
+          - >-
+            oc -n openstack wait openstackdataplanenodesets
+            nodeset-0
+            --for condition=Ready
+            --timeout=40m
+          - >-
+            oc -n openstack wait openstackdataplanenodesets
+            nodeset-1
+            --for condition=Ready
+            --timeout=40m
+        values:
+          - name: deployment-values
+            src_file: values.yaml
+        build_output: edpm.yaml

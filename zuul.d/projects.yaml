@@ -4,6 +4,7 @@
       - noop
       - rhoso-architecture-validate-bgp
       - rhoso-architecture-validate-bgp_dt01
+      - rhoso-architecture-validate-bmo01
       - rhoso-architecture-validate-dcn
       - rhoso-architecture-validate-hci
       - rhoso-architecture-validate-nfv-ovs-dpdk-sriov-hci

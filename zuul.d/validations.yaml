@@ -27,6 +27,23 @@
       cifmw_architecture_scenario: bgp_dt01
 - job:
     files:
+    - automation/mocks/bmo01.yaml
+    - automation/net-env/bmo01.yaml
+    - dt/bmo01
+    - examples/dt/bmo01/control-plane
+    - examples/dt/bmo01/control-plane/nncp
+    - examples/dt/bmo01/dataplane
+    - examples/dt/bmo01/dataplane/baremetalhosts
+    - examples/dt/bmo01/dataplane/nodesets
+    - examples/dt/bmo01/dataplane/secrets
+    - lib
+    name: rhoso-architecture-validate-bmo01
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: bmo01
+      cifmw_networking_env_def_file: automation/net-env/bmo01.yaml
+- job:
+    files:
     - automation/net-env/dcn.yaml
     - dt/dcn
     - examples/dt/dcn/control-plane
