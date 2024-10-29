@@ -21,7 +21,15 @@ data:
       ansiblePort: 22
       ansibleVars:
         edpm_ovn_encap_ip: "{{ lookup('vars', 'bgpmainnet_ip') }}"
+        edpm_ovn_bridge_mappings: ['datacentre:br-provider']
         edpm_ovn_bgp_agent_expose_tenant_networks: false
+        edpm_ovn_bgp_agent_local_ovn_routing: true
+        edpm_ovn_bgp_agent_exposing_method: ovn
+        edpm_ovn_bgp_agent_provider_networks_pool_prefixes: '192.168.133.0/24'
+        edpm_ovn_bgp_agent_local_ovn_bridge_mappings:
+          - bgp-openstack:br-provider
+          - bgp-ex:br-ex
+        edpm_ovn_bgp_agent_local_ovn_external_nics: ['eth2', 'eth3']
         edpm_frr_bgp_ipv4_src_network: bgpmainnet
         edpm_frr_bgp_ipv6_src_network: bgpmainnetv6
         edpm_frr_bgp_neighbor_password: f00barZ
@@ -50,44 +58,44 @@ data:
           {% set min_viable_mtu = mtu_list | max %}
           network_config:
           - type: ovs_bridge
-            name: {{ neutron_physical_bridge_name }}
+            name: br-provider
+            use_dhcp: false
+          - type: interface
+            name: nic2
+            mtu: {{ min_viable_mtu }}
             use_dhcp: false
             dns_servers: {{ ctlplane_dns_nameservers }}
             domain: {{ dns_search_domains }}
             addresses:
               - ip_netmask: {{ ctlplane_ip }}/{{ ctlplane_cidr }}
-            routes: []
-            members:
-              - type: interface
-                name: nic2
-                mtu: {{ min_viable_mtu }}
-                # force the MAC address of the bridge to this interface
-                primary: true
           {% for network in nodeset_networks %}
           {%   if not network.lower().startswith('bgp') %}
-              - type: vlan
-                mtu: {{ lookup('vars', networks_lower[network] ~ '_mtu') }}
-                vlan_id: {{ lookup('vars', networks_lower[network] ~ '_vlan_id') }}
-                addresses:
-                  - ip_netmask: >-
-                      {{
-                        lookup('vars', networks_lower[network] ~ '_ip')
-                      }}/{{
-                        lookup('vars', networks_lower[network] ~ '_cidr')
-                      }}
-                routes: {{ lookup('vars', networks_lower[network] ~ '_host_routes') }}
+          - type: vlan
+            mtu: {{ lookup('vars', networks_lower[network] ~ '_mtu') }}
+            vlan_id: {{ lookup('vars', networks_lower[network] ~ '_vlan_id') }}
+            device: nic2
+            addresses:
+              - ip_netmask: >-
+                  {{
+                    lookup('vars', networks_lower[network] ~ '_ip')
+                  }}/{{
+                    lookup('vars', networks_lower[network] ~ '_cidr')
+                  }}
+            routes: {{ lookup('vars', networks_lower[network] ~ '_host_routes') }}
           {% endif %}
           {% endfor %}
-          - type: interface
-            name: nic3
+          - type: ovs_bridge
+            name: {{ neutron_physical_bridge_name }}
             use_dhcp: false
+            routes: []
             addresses:
-            - ip_netmask: {{ lookup('vars', 'bgpnet0_ip') }}/30
-          - type: interface
-            name: nic4
-            use_dhcp: false
-            addresses:
-            - ip_netmask: {{ lookup('vars', 'bgpnet1_ip') }}/30
+              - ip_netmask: {{ lookup('vars', 'bgpnet0_ip') }}/30
+              - ip_netmask: {{ lookup('vars', 'bgpnet1_ip') }}/30
+            members:
+              - type: interface
+                name: nic3
+              - type: interface
+                name: nic4
           - type: interface
             name: lo
             addresses:
