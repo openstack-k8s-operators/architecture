@@ -125,12 +125,12 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
-      fieldPath: data.glance.customServiceConfig
+      fieldPath: data.glance.keystoneEndpoint
     targets:
       - select:
           kind: OpenStackControlPlane
         fieldPaths:
-          - spec.glance.template.customServiceConfig
+          - spec.glance.template.keystoneEndpoint
         options:
           create: true
   - source:
