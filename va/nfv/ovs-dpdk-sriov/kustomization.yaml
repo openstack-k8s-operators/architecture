@@ -109,6 +109,17 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
+      fieldPath: data.telemetry.template.metricStorage
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.telemetry.template.metricStorage
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
       fieldPath: data.extraMounts
     targets:
       - select:
