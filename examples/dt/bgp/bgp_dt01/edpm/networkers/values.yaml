@@ -30,6 +30,9 @@ data:
         edpm_frr_bgp_uplinks:
           - nic3
           - nic4
+        edpm_ovn_bridge_mappings:
+          - "datacentre:br-ex"
+          - "octavia:br-octavia"
         timesync_ntp_servers:
           - hostname: pool.ntp.org
         # conntrack is necessary for some tobiko tests
@@ -66,7 +69,7 @@ data:
                 # force the MAC address of the bridge to this interface
                 primary: true
           {% for network in nodeset_networks %}
-          {%   if not network.lower().startswith('bgp') %}
+          {%   if not network.lower().startswith('bgp') and network.lower() != 'octavia' %}
               - type: vlan
                 mtu: {{ lookup('vars', networks_lower[network] ~ '_mtu') }}
                 vlan_id: {{ lookup('vars', networks_lower[network] ~ '_vlan_id') }}
@@ -80,6 +83,25 @@ data:
                 routes: {{ lookup('vars', networks_lower[network] ~ '_host_routes') }}
           {% endif %}
           {% endfor %}
+          - type: ovs_bridge
+            name: br-octavia
+            use_dhcp: false
+            # dns_servers: {{ ctlplane_dns_nameservers }}
+            # domain: {{ dns_search_domains }}
+            addresses: []
+            routes: []
+            members:
+              - type: vlan
+                mtu: {{ lookup('vars', 'octavia_mtu') }}
+                vlan_id: {{ lookup('vars', 'octavia_vlan_id') }}
+                addresses:
+                  - ip_netmask: >-
+                      {{
+                        lookup('vars', 'octavia_ip')
+                      }}/{{
+                        lookup('vars', 'octavia_cidr')
+                      }}
+                routes: {{ lookup('vars', 'octavia_host_routes') }}
           - type: interface
             name: nic3
             use_dhcp: false
