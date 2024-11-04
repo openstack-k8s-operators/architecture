@@ -102,6 +102,8 @@ data:
               address: 192.168.122.1
     nodes:
       edpm-compute-0-0:
+        bmhLabelSelector:
+          nodeName: leaf0-0
         networkData:
           name: edpm-compute-0-0-network-data
           namespace: openstack
@@ -120,6 +122,8 @@ data:
           - name: tenant
             subnetName: subnet2
       edpm-compute-0-1:
+        bmhLabelSelector:
+          nodeName: leaf0-1
         networkData:
           name: edpm-compute-0-1-network-data
           namespace: openstack
@@ -198,6 +202,8 @@ data:
               address: 192.168.122.1
     nodes:
       edpm-compute-1-0:
+        bmhLabelSelector:
+          nodeName: leaf1-0
         networkData:
           name: edpm-compute-1-0-network-data
           namespace: openstack
@@ -216,6 +222,8 @@ data:
           - name: tenant
             subnetName: subnet3
       edpm-compute-1-1:
+        bmhLabelSelector:
+          nodeName: leaf1-1
         networkData:
           name: edpm-compute-1-1-network-data
           namespace: openstack
