@@ -18,6 +18,7 @@ data:
     customServiceConfig: |
       [DEFAULT]
       backup_driver = cinder.backup.drivers.ceph.CephBackupDriver
+      backup_ceph_conf = /etc/ceph/az0.conf
       backup_ceph_pool = backups
       backup_ceph_user = openstack
   cinderVolumes:
@@ -25,6 +26,7 @@ data:
       customServiceConfig: |
         [DEFAULT]
         enabled_backends = ceph
+        glance_api_servers = https://glance-az0-internal.openstack.svc:9292
         [ceph]
         volume_backend_name = ceph
         volume_driver = cinder.volume.drivers.rbd.RBDDriver
@@ -138,7 +140,7 @@ data:
                   metallb.universe.tf/loadBalancerIPs: 172.17.0.81
               spec:
                 type: LoadBalancer
-        replicas: 3
+        replicas: 1
         type: edge
       az2:
         customServiceConfig: |
@@ -171,7 +173,7 @@ data:
                   metallb.universe.tf/loadBalancerIPs: 172.17.0.82
               spec:
                 type: LoadBalancer
-        replicas: 3
+        replicas: 1
         type: edge
   manila:
     enabled: false
