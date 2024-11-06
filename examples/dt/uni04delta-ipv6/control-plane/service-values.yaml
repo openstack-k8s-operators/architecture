@@ -169,7 +169,7 @@ data:
             computeDriver: ironic.IronicDriver
 
   octavia:
-    enabled: false
+    enabled: true
     amphoraImageContainerImage: quay.io/gthiemonge/octavia-amphora-image
     apacheContainerImage: registry.redhat.io/ubi9/httpd-24:latest
     octaviaAPI:
