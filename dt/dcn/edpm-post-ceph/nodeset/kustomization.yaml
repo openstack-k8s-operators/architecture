@@ -81,6 +81,17 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
+      fieldPath: data.cinder.uniquePodNames
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.cinder.uniquePodNames
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
       fieldPath: data.cinderVolumes
     targets:
       - select:
