@@ -24,6 +24,7 @@ components:
 resources:
   - ceph_secret.yaml
   - nova_ceph.yaml
+  - neutron_metadata.yaml
 
 patches:
   - target:
@@ -54,6 +55,28 @@ replacements:
           kind: OpenStackControlPlane
         fieldPaths:
           - spec.nova.template.apiServiceTemplate.customServiceConfig
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.nova.metadataServiceTemplate
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.nova.template.metadataServiceTemplate
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.nova.cellTemplates
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.nova.template.cellTemplates
         options:
           create: true
   - source:
@@ -191,6 +214,28 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
+      fieldPath: data.galera.templates
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.galera.templates
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.rabbitmq.templates
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.rabbitmq.templates
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
       fieldPath: data.extraMounts
     targets:
       - select:
@@ -244,6 +289,7 @@ replacements:
     targets:
       - select:
           kind: OpenStackDataPlaneService
+          name: nova-custom-ceph
         fieldPaths:
           - spec.dataSources
         options:
@@ -264,10 +310,35 @@ replacements:
   - source:
       kind: ConfigMap
       name: edpm-nodeset-values-post-ceph
-      fieldPath: data.customDataplanService.name
+      fieldPath: data.nova.customDataplaneService.name
     targets:
       - select:
           kind: OpenStackDataPlaneService
+          name: nova-custom-ceph
+        fieldPaths:
+          - metadata.name
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values-post-ceph
+      fieldPath: data.neutron-metadata.dataSources
+    targets:
+      - select:
+          kind: OpenStackDataPlaneService
+          name: neutron-metadata
+        fieldPaths:
+          - spec.dataSources
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values-post-ceph
+      fieldPath: data.neutron-metadata.customDataplaneService.name
+    targets:
+      - select:
+          kind: OpenStackDataPlaneService
+          name: neutron-metadata
         fieldPaths:
           - metadata.name
         options:
