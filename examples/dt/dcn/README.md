@@ -9,6 +9,8 @@ This is a collection of CR templates that represent a Red Hat OpenStack Services
 - 3 master/worker combo-node OpenShift cluster
 - 3-replica Galera database
 - RabbitMQ
+- Multicells with a dedicated cell per DCN site
+    - Each cell uses dedicated rabbitmq, Galera and nova services 
 - Spine and leaf network architecture
 - Network isolation
 - OVN networking

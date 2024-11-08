@@ -69,6 +69,24 @@ data:
         rbd_secret_uuid = CHANGEME
         rbd_cluster_name = az2
         backend_availability_zone = az2
+  galera:
+    templates:
+      openstack:
+        replicas: 1
+        secret: osp-secret
+        storageRequest: 5G
+      openstack-cell1:
+        replicas: 1
+        secret: osp-secret
+        storageRequest: 5G
+      openstack-cell2:
+        replicas: 1
+        secret: osp-secret
+        storageRequest: 5G
+      openstack-cell3:
+        replicas: 1
+        secret: osp-secret
+        storageRequest: 5G
   glance:
     keystoneEndpoint: az0
     glanceAPIs:
@@ -209,6 +227,111 @@ data:
     customServiceConfig: |
       [DEFAULT]
       default_schedule_zone=az0
+    metadataServiceTemplate:
+      enabled: false
+    cellTemplates:
+      cell0:
+        cellDatabaseAccount: nova-cell0
+        hasAPIAccess: true
+      cell1:
+        cellDatabaseInstance: openstack-cell1
+        cellDatabaseAccount: nova-cell1
+        cellMessageBusInstance: rabbitmq-cell1
+        conductorServiceTemplate:
+          replicas: 1
+        hasAPIAccess: true
+        metadataServiceTemplate:
+          enabled: true
+          override:
+            service:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: internalapi
+                  metallb.universe.tf/allow-shared-ip: internalapi
+                  metallb.universe.tf/loadBalancerIPs: 172.17.0.81
+              spec:
+                type: LoadBalancer
+          replicas: 3
+      cell2:
+        cellDatabaseInstance: openstack-cell2
+        cellDatabaseAccount: nova-cell2
+        cellMessageBusInstance: rabbitmq-cell2
+        conductorServiceTemplate:
+          replicas: 1
+        hasAPIAccess: true
+        metadataServiceTemplate:
+          enabled: true
+          override:
+            service:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: internalapi
+                  metallb.universe.tf/allow-shared-ip: internalapi
+                  metallb.universe.tf/loadBalancerIPs: 172.17.0.82
+              spec:
+                type: LoadBalancer
+          replicas: 3
+      cell3:
+        cellDatabaseInstance: openstack-cell3
+        cellDatabaseAccount: nova-cell3
+        cellMessageBusInstance: rabbitmq-cell3
+        conductorServiceTemplate:
+          replicas: 1
+        hasAPIAccess: true
+        metadataServiceTemplate:
+          enabled: true
+          override:
+            service:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: internalapi
+                  metallb.universe.tf/allow-shared-ip: internalapi
+                  metallb.universe.tf/loadBalancerIPs: 172.17.0.83
+              spec:
+                type: LoadBalancer
+          replicas: 3
+  rabbitmq:
+    templates:
+      rabbitmq:
+        override:
+          service:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: internalapi
+                metallb.universe.tf/loadBalancerIPs: 172.17.0.85
+            spec:
+              type: LoadBalancer
+        replicas: 3
+      rabbitmq-cell1:
+        override:
+          service:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: internalapi
+                metallb.universe.tf/loadBalancerIPs: 172.17.0.86
+            spec:
+              type: LoadBalancer
+        replicas: 3
+      rabbitmq-cell2:
+        override:
+          service:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: internalapi
+                metallb.universe.tf/loadBalancerIPs: 172.17.0.87
+            spec:
+              type: LoadBalancer
+        replicas: 3
+      rabbitmq-cell3:
+        override:
+          service:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: internalapi
+                metallb.universe.tf/loadBalancerIPs: 172.17.0.88
+            spec:
+              type: LoadBalancer
+        replicas: 3
   extraMounts:
     - name: v1
       region: r1
