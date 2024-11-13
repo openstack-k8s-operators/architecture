@@ -41,7 +41,7 @@ data:
         name: subnet1
     prefix-length: 24
     iface: enp6s0
-    mtu: 9000
+    mtu: 1500
     lb_addresses:
       - 192.168.122.80-192.168.122.90
     endpoint_annotations:
@@ -103,7 +103,7 @@ data:
         cidr: 172.18.0.0/24
         name: subnet1
         vlan: 21
-    mtu: 9000
+    mtu: 1500
     prefix-length: 24
     iface: storage
     vlan: 21
