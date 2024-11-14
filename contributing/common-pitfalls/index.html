@@ -665,55 +665,68 @@
 
 
 <h1 id="common-design-pitfalls">Common Design Pitfalls<a class="headerlink" href="#common-design-pitfalls" title="Permanent link">#</a></h1>
-<p>This document lists common pitfalls that have been observed in the process of creating 
-and modifying VAs and DTs.</p>
+<p>This document lists common pitfalls that have been observed in the process of
+creating and modifying VAs and DTs.</p>
 <h2 id="accidental-openstackcontrolplane-overwrites">Accidental OpenStackControlPlane Overwrites<a class="headerlink" href="#accidental-openstackcontrolplane-overwrites" title="Permanent link">#</a></h2>
-<p>In general, it is a best practice to keep all kustomizations (<code>patches</code>, <code>replacements</code>, etc) 
-for a particular resource in one <code>kustomization.yaml</code> file.  Sometimes, however, it is 
-necessary to only perform a subset of <code>OpenStackControlPlane</code> kustomizations at a certain stage 
-of the deployment process.  For instance, you might not want to kustomize an <code>OpenStackControlPlane</code>
-CR with certain data during its initial creation stage because that data is not yet available
-for use.  Thus it would make sense to have a later stage and <code>kustomization.yaml</code> file to
-add those kustomzations once the requisite data is available (perhaps during the data plane
-deployment stage).</p>
-<p><strong>What is crucial to keep in mind is that any kustomizations to a resource in an earlier stage
-will be lost/overwritten in later stages where that same resource is modified <em>if</em> those stages
-do not reference the same <code>kustomization.yaml</code> that the earlier stage utilized.</strong>  Thus it is
-best to have a base <code>kustomization.yaml</code> for a given resource for all kustomizations common to
-all stages -- and all those stages should thus reference that <code>kustomization.yaml</code>.  Then, if
-later stages need specific changes for that resource, a separate <code>kustomization.yaml</code> can be also
-used to apply those additional kustomizations beyond the base ones.  This approach is also
-preferred to creating two somewhat-or-mostly duplicate <code>kustomization.yaml</code>s, one for the earlier
-stage and one for a later stage.  Keeping things DRY by using a common base will make future
-potential changes to the <code>kustomization.yaml</code>s less prone to error, as changes to the common file
-will automatically be picked up by all deployment stages.</p>
-<p>As an illustrative example of the best practice mentioned above, consider the following directory
-structure:</p>
+<p>In general, it is a best practice to keep all kustomizations (<code>patches</code>,
+<code>replacements</code>, etc) for a particular resource in one <code>kustomization.yaml</code>
+file.</p>
+<p>In some cases it is necessary to only perform a subset of
+<code>OpenStackControlPlane</code> kustomizations at a certain stage of the deployment
+process. For instance, you might not want to kustomize an
+<code>OpenStackControlPlane</code> CR with certain data during its initial creation stage
+because that data is not yet available for use. In the case of a multi-stage
+deployment, it would make sense to have a separate <code>kustomization.yaml</code> file to
+add those kustomizations once the requisite data is available (perhaps during
+the data plane deployment stage).</p>
+<p><strong>What is crucial to keep in mind is that any kustomizations to a resource in
+an earlier stage will be lost/overwritten in later stages where that same
+resource is modified <em>if</em> those stages do not reference the same
+<code>kustomization.yaml</code> that the earlier stage utilized.</strong></p>
+<p>It is best to have a base <code>kustomization.yaml</code> for a given resource for all
+kustomizations common to all stages -- and all those stages should reference
+that <code>kustomization.yaml</code>. If later stages need specific changes for that
+resource, a separate <code>kustomization.yaml</code> can used to apply those additional
+kustomizations beyond the base ones.</p>
+<p>The use of common base files is preferred to creating two nearly-identical
+<code>kustomization.yaml</code> files; one for the earlier stage and one for a later
+stage. Keeping things DRY by using a common base will make future potential
+changes to the <code>kustomization.yaml</code> files less prone to error, as changes to
+the common file will automatically be picked up by all deployment stages.</p>
+<p>As an illustrative example of the best practice mentioned above, consider the
+following directory structure:</p>
 <div class="highlight"><pre><span></span><code>some_dt_or_va/control_plane/kustomization.yaml
 some_dt_or_va/data_plane/kustomization.yaml
 </code></pre></div>
-<p>If the <code>data_plane/kustomization.yaml</code> needs to modify the <code>OpenStackControlPlane</code>, then it should
-reference <code>../control_plane/kustomization.yaml</code> as a <code>Component</code> and then add additional <code>replacements</code>
-and/or <code>patches</code> as needed.  If it were to instead reference this repo's <a href="../../lib/control-plane">lib/control-plane</a>
-directory as its base <code>OpenStackControlPlane</code> <code>Component</code>, then the <code>../control_plane/kustomization.yaml</code> 
-kustomizations would be lost, since the <code>OpenStackControlPlane</code> CR would be generated and applied without 
-them.</p>
-<p>It also follows in this scenario that, as mentioned above, the <code>OpenStackControlPlane</code> kustomizations for
-its initial creation stage should be located in one and only one <code>kustomization.yaml</code>.  Thus you would
-want to avoid something like this...</p>
+<p>If the <code>data_plane/kustomization.yaml</code> needs to modify the
+<code>OpenStackControlPlane</code>, then it should reference
+<code>../control_plane/kustomization.yaml</code> as a <code>Component</code> and then add additional
+<code>replacements</code> and/or <code>patches</code> as needed. </p>
+<p>If it were to instead reference this repositories
+<a href="../../lib/control-plane">lib/control-plane</a> directory as its base
+<code>OpenStackControlPlane</code> <code>Component</code>, then the
+<code>../control_plane/kustomization.yaml</code> kustomizations would be lost, since the
+<code>OpenStackControlPlane</code> CR would be generated and applied without them.</p>
+<p>The kustomizations for an <code>OpenStackControlPlane</code> resource should be within a
+single <code>kustomization.yaml</code> that contains the kustomizations for the initial
+creation stage. You want to avoid the use of multiple files, such as creating
+an additional sub-directory within the same base directory containing the
+configuration. The following would be an example to avoid:</p>
 <div class="highlight"><pre><span></span><code>some_dt_or_va/control_plane/kustomization.yaml
 some_dt_or_va/control_plane/some_subdir/kustomization.yaml
 some_dt_or_va/data_plane/kustomization.yaml
 </code></pre></div>
-<p>...<em>if</em> <code>some_dt_or_va/control_plane/some_subdir/kustomization.yaml</code> has further kustomizations to the
-<code>OpenStackControlPlane</code> beyond <code>some_dt_or_va/control_plane/kustomization.yaml</code>.  (It would be fine, for
-instance, if that subdirectory was modifying some other resource like <code>NodeNetworkConfigurationPolicy</code>).
-The reason for this is again that, if later stages do not want to accidentally overwrite earlier
-<code>OpenStackControlPlane</code> kustomizations, those later stages will need to reference both
-<code>../control_plane/kustomization.yaml</code> and <code>../control_plane/some_subdir/kustomization.yaml</code> in the case
-that those stages are modifying the <code>OpenStackControlPlane</code>.  It would be better for the two directories
-to be collapsed into one, such that a single <code>kustomization.yaml</code> can be referenced as a <code>Component</code> to
-include all the previous stage's kustomizations and not inadvertently overwrite them.</p>
+<p>In some cases having an additional nested directory may be valid, in the case a
+subdirectory was modifying some other resource like
+<code>NodeNetworkConfigurationPolicy</code>.</p>
+<p>If later stages do not want to accidentally overwrite earlier
+<code>OpenStackControlPlane</code> kustomizations, those later stages need to reference
+both <code>../control_plane/kustomization.yaml</code> and
+<code>../control_plane/some_subdir/kustomization.yaml</code> so that those stages are
+modifying the <code>OpenStackControlPlane</code>.</p>
+<p>It would be better for the two directories to be collapsed into one, such that
+a single <code>kustomization.yaml</code> can be referenced as a <code>Component</code> to include all
+the previous stage's kustomizations and not inadvertently overwrite them.</p>
 
 
 
@@ -734,7 +747,7 @@ include all the previous stage's kustomizations and not inadvertently overwrite 
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    2024-11-11
+    2024-11-13
   </span>
 
     
