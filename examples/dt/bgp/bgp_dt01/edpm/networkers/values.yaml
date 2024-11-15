@@ -26,9 +26,11 @@ data:
         edpm_ovn_bgp_agent_local_ovn_routing: true
         edpm_ovn_bgp_agent_exposing_method: ovn
         edpm_ovn_bgp_agent_provider_networks_pool_prefixes: '192.168.133.0/24'
-        edpm_ovn_bgp_agent_local_ovn_bridge_mappings:
-          - bgp-openstack:br-provider
-          - bgp-ex:br-ex
+        # edpm_ovn_bgp_agent_local_ovn_bridge_mappings:
+        #   - bgp-openstack:br-provider
+        #   - bgp-ex:br-ex
+        # using default value:
+        # https://github.com/openstack-k8s-operators/edpm-ansible/blob/c67d3853e588c9db425ea1e6d59b412bfb4a41e9/roles/edpm_ovn_bgp_agent/defaults/main.yml#L103-L107
         edpm_ovn_bgp_agent_local_ovn_external_nics: ['eth2', 'eth3']
         edpm_frr_bgp_ipv4_src_network: bgpmainnet
         edpm_frr_bgp_ipv6_src_network: bgpmainnetv6
@@ -90,10 +92,16 @@ data:
             routes: []
             addresses:
               - ip_netmask: {{ lookup('vars', 'bgpnet0_ip') }}/30
-              - ip_netmask: {{ lookup('vars', 'bgpnet1_ip') }}/30
             members:
               - type: interface
                 name: nic3
+          - type: ovs_bridge
+            name: {{ neutron_physical_bridge_name }}-2
+            use_dhcp: false
+            routes: []
+            addresses:
+              - ip_netmask: {{ lookup('vars', 'bgpnet1_ip') }}/30
+            members:
               - type: interface
                 name: nic4
           - type: interface
