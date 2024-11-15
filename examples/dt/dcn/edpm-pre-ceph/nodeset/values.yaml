@@ -88,6 +88,8 @@ data:
         gather_facts: false
         neutron_physical_bridge_name: br-ctl
         neutron_public_interface_name: eth0
+        edpm_enable_chassis_gw: false
+        edpm_ovn_availability_zones: []
         edpm_ceph_hci_pre_enabled_services:
           - ceph_mon
           - ceph_mgr
