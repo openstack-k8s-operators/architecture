@@ -9,3 +9,26 @@ metadata:
 
 data:
   preserveJobs: false
+
+  galera:
+    templates:
+      openstack-cell2:
+        storageRequest: 5G
+        secret: osp-secret
+        replicas: 3
+
+  nova:
+    template:
+      cellTemplates:
+        cell2:
+          cellDatabaseAccount: nova-cell2
+          cellDatabaseInstance: openstack-cell2
+          cellMessageBusInstance: rabbitmq-cell2
+          conductorServiceTemplate:
+            replicas: 1
+          hasAPIAccess: true
+
+  rabbitmq:
+    templates:
+      rabbitmq-cell2:
+        replicas: 3

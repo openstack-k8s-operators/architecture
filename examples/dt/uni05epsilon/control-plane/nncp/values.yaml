@@ -226,6 +226,10 @@ data:
     endpoint_annotations:
       metallb.universe.tf/address-pool: internalapi
       metallb.universe.tf/loadBalancerIPs: 172.17.0.86
+  rabbitmq-cell2:
+    endpoint_annotations:
+      metallb.universe.tf/address-pool: internalapi
+      metallb.universe.tf/loadBalancerIPs: 172.17.0.87
 
   lbServiceType: LoadBalancer
   storageClass: local-storage
