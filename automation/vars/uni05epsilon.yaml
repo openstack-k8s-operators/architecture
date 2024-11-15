@@ -40,6 +40,18 @@ vas:
             src_file: values.yaml
         build_output: nodeset-pre-ceph.yaml
 
+      - path: examples/dt/uni05epsilon/nodeset2/edpm-pre-ceph
+        wait_conditions:
+          - >-
+            oc -n openstack wait osdpns
+            openstack-edpm-2
+            --for condition=SetupReady
+            --timeout=10m
+        values:
+          - name: edpm-nodeset2-values
+            src_file: values.yaml
+        build_output: nodeset2-pre-ceph.yaml
+
       - path: examples/dt/uni05epsilon/edpm-pre-ceph/deployment
         wait_conditions:
           - >-
@@ -71,6 +83,18 @@ vas:
             src_file: values.yaml
         build_output: nodeset-post-ceph.yaml
 
+      - path: examples/dt/uni05epsilon/nodeset2
+        wait_conditions:
+          - >-
+            oc -n openstack wait osdpns
+            openstack-edpm-2
+            --for condition=SetupReady
+            --timeout=10m
+        values:
+          - name: edpm-nodeset2-values-post-ceph
+            src_file: values.yaml
+        build_output: nodeset2-post-ceph.yaml
+
       - path: examples/dt/uni05epsilon/deployment
         wait_conditions:
           - >-
@@ -82,3 +106,15 @@ vas:
           - name: edpm-deployment-values-post-ceph
             src_file: values.yaml
         build_output: deployment-post-ceph.yaml
+
+      - path: examples/dt/uni05epsilon/nodeset2/deployment
+        wait_conditions:
+          - >-
+            oc -n openstack wait osdpd
+            edpm-deployment-post-ceph-2
+            --for condition=Ready
+            --timeout=40m
+        values:
+          - name: edpm-deployment-values-post-ceph-2
+            src_file: values.yaml
+        build_output: deployment-post-ceph-2.yaml

@@ -98,13 +98,13 @@ data:
         subnetName: subnet1
 
     nodes:
-      edpm-compute-0:
+      edpm-compute-2:
         ansible:
-          ansibleHost: 192.168.122.100
-        hostName: edpm-compute-0
+          ansibleHost: 192.168.122.102
+        hostName: edpm-compute-2
         networks:
           - defaultRoute: true
-            fixedIP: 192.168.122.100
+            fixedIP: 192.168.122.102
             name: ctlplane
             subnetName: subnet1
           - name: internalapi
@@ -115,25 +115,6 @@ data:
             subnetName: subnet1
           - name: tenant
             subnetName: subnet1
-
-      edpm-compute-1:
-        ansible:
-          ansibleHost: 192.168.122.101
-        hostName: edpm-compute-1
-        networks:
-          - defaultRoute: true
-            fixedIP: 192.168.122.101
-            name: ctlplane
-            subnetName: subnet1
-          - name: internalapi
-            subnetName: subnet1
-          - name: storage
-            subnetName: subnet1
-          - name: storagemgmt
-            subnetName: subnet1
-          - name: tenant
-            subnetName: subnet1
-
     # The nova-custom service is omitted since it is not yet
     # defined. It will be defined and set after Ceph is deployed.
     # See deployment servicesOverride for effective services list.

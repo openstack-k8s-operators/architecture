@@ -237,6 +237,9 @@
     - examples/dt/uni05epsilon/deployment
     - examples/dt/uni05epsilon/edpm-pre-ceph/deployment
     - examples/dt/uni05epsilon/edpm-pre-ceph/nodeset
+    - examples/dt/uni05epsilon/nodeset2
+    - examples/dt/uni05epsilon/nodeset2/deployment
+    - examples/dt/uni05epsilon/nodeset2/edpm-pre-ceph
     - lib
     name: rhoso-architecture-validate-uni05epsilon
     parent: rhoso-architecture-base-job
