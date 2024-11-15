@@ -223,6 +223,15 @@ data:
         network_vlan_ranges = datacentre:1:1000,leaf1:1:1000,leaf2:1:1000
         [neutron]
         physnets = datacentre,leaf1,leaf2
+  ovn:
+    template:
+      ovnController:
+        external-ids:
+          availability-zones: []
+          enable-chassis-as-gateway: true
+          ovn-bridge: br-int
+          ovn-encap-type: geneve
+          system-id: random
   nova:
     customServiceConfig: |
       [DEFAULT]

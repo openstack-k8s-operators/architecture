@@ -93,6 +93,17 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
+      fieldPath: data.ovn.template.ovnController.external-ids
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.ovn.template.ovnController.external-ids
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
       fieldPath: data.cinderBackup.customServiceConfig
     targets:
       - select:
