@@ -3,10 +3,9 @@
 All VAs and DTs assume that these CRs have been created.
 
 ## OLM
-
 The [olm](olm) directory contains a kustomization which will generate
 Namespace, OperatorGroup, and Subscription CRs. Creating these CRs
-will install the OpenStack K8S operators and their dependencies.
+will install the base OpenStack K8s operator.
 
 Observe CRs which will be generated.
 ```
@@ -16,14 +15,12 @@ Create the CRs.
 ```
 oc apply -k examples/common/olm/
 ```
-Watch the OpenStack operator pods start.
-```
-oc get pods -w -n openstack-operators
-```
 The following commands can be used to confirm that each step of this
 procedure is complete.
 ```
-while ! (oc get pod --no-headers=true -l name=cert-manager-operator -n cert-manager-operator| grep "cert-manager-operator"); do sleep 10; done
+while ! (oc get pod --no-headers=true -l openstack.org/operator-name=openstack-controller -n openstack-operators | grep "controller-operator"); do sleep 10; done
+oc wait pod -n openstack-operators --for condition=Ready -l openstack.org/operator-name=openstack-controller --timeout=300s
+while ! (oc get pod --no-headers=true -l name=cert-manager-operator -n cert-manager-operator | grep "cert-manager-operator"); do sleep 10; done
 oc wait pod -n cert-manager-operator --for condition=Ready -l name=cert-manager-operator --timeout=300s
 while ! (oc get pod --no-headers=true -l app=cainjector -n cert-manager | grep "cert-manager-cainjector"); do sleep 10; done
 oc wait pod -n cert-manager -l app=cainjector --for condition=Ready --timeout=300s
@@ -75,4 +72,24 @@ timeout 300 bash -c "while ! (oc get pod --no-headers=true -l component=kubernet
 oc wait pod -n openshift-nmstate -l component=kubernetes-nmstate-handler --for condition=Ready --timeout=300s
 timeout 300 bash -c "while ! (oc get deployments/nmstate-webhook -n openshift-nmstate); do sleep 10; done"
 oc wait deployments/nmstate-webhook -n openshift-nmstate --for condition=Available --timeout=300s
+```
+
+# OpenStack
+
+The [openstack](openstack) directory contains a kustomization which will generate
+the `OpenStack` initialization CR.  Creating this CR will install the remaining
+OpenStack K8s operators.
+
+Observe CRs which will be generated.
+```
+kustomize build examples/common/openstack/
+```
+Create the CRs.
+```
+oc apply -k examples/common/openstack/
+```
+The following command can be used to confirm that each step of this
+procedure is complete.
+```
+oc wait -n openstack-operators openstack openstack --for condition=Ready --timeout=300s
 ```
