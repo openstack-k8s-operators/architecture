@@ -3,6 +3,7 @@
 ## Assumptions
 
 - A storage class called `local-storage` should already exist.
+- Cluster observability operator is already deployed.
 
 ## Initialize
 

@@ -113,3 +113,10 @@ data:
       nicMappings:
         datacentre: ocpbr
         octavia: octbr
+
+  telemetry:
+    enabled: true
+    metricStorage:
+      enabled: true
+    ceilometer:
+      enabled: true

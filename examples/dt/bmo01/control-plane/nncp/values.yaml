@@ -9,10 +9,6 @@ metadata:
 data:
   openstack-operator-image: "quay.io/openstack-k8s-operators/openstack-operator-index:latest"
 
-  ocp:
-    cluster_network_cidr: 192.168.16.0/20
-    service_network_cidr: 172.30.0.0/16
-
   node_0:
     name: master-0
     internalapi_ip: 172.17.0.10
