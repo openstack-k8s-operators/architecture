@@ -23,6 +23,7 @@ data:
       backup_ceph_conf = /etc/ceph/az0.conf
       backup_ceph_pool = backups
       backup_ceph_user = openstack
+      storage_availability_zone = az0
   cinderVolumes:
     az0:
       customServiceConfig: |
