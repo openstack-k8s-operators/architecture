@@ -5,3 +5,277 @@ components:
   - ../../../../../dt/uni04delta-ipv6/nncp
 resources:
   - values.yaml
+  - ocp_worker_nodes.yaml
+
+patches:
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: node-3
+    patch: |-
+      - op: add
+        path: /spec/desiredState/interfaces/-
+        value:
+          description: Ironic bridge
+          ipv6:
+            enabled: true
+            address:
+              - ip: _replaced_
+                prefix-length: _replaced_
+          ipv4:
+             enabled: false
+          mtu: 1500
+          name: ironic
+          type: linux-bridge
+          bridge:
+            options:
+              stp:
+                enabled: false
+            port:
+              - name: _replaced_
+
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: node-3
+    patch: |-
+      - op: add
+        path: /spec/desiredState/interfaces/-
+        value:
+          description: Ironic VRF
+          name: ironicvrf
+          type: vrf
+          state: up
+          vrf:
+            port:
+              - ironic
+            route-table-id: 10
+
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: node-3
+    patch: |-
+      - op: add
+        path: /spec/desiredState/routes/config/-
+        value:
+          destination: "::/0"
+          metric: 150
+          next-hop-address: _replaced_
+          next-hop-interface: ironic
+          table-id: 10
+      - op: add
+        path: /spec/desiredState/routes/config/-
+        value:
+          destination: _replaced_
+          metric: 150
+          next-hop-address: _replaced_
+          next-hop-interface: ospbr
+      - op: add
+        path: /spec/desiredState/routes/config/-
+        value:
+          destination: "::/0"
+          metric: 150
+          next-hop-address: _replaced_
+          next-hop-interface: ospbr
+
+  # master roles:
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: master-0
+    patch: |-
+      - op: add
+        path: /spec/nodeSelector/node-role.kubernetes.io~1master
+        value: ""
+      - op: remove
+        path: /spec/nodeSelector/node-role.kubernetes.io~1worker
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: master-1
+    patch: |-
+      - op: add
+        path: /spec/nodeSelector/node-role.kubernetes.io~1master
+        value: ""
+      - op: remove
+        path: /spec/nodeSelector/node-role.kubernetes.io~1worker
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: master-2
+    patch: |-
+      - op: add
+        path: /spec/nodeSelector/node-role.kubernetes.io~1master
+        value: ""
+      - op: remove
+        path: /spec/nodeSelector/node-role.kubernetes.io~1worker
+
+replacements:
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ironic.base_iface
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: node-3
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=ironic].bridge.port.0.name
+
+  # Static Node IPs: node-3
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_3.internalapi_ip
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: node-3
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=internalapi].ipv6.address.0.ip
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_3.tenant_ip
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: node-3
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=tenant].ipv6.address.0.ip
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_3.ctlplane_ip
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: node-3
+        fieldPaths:
+          - spec.desiredState.interfaces.[type=linux-bridge].ipv6.address.0.ip
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_3.storage_ip
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: node-3
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=storage].ipv6.address.0.ip
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_3.ironic_ip
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: node-3
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=ironic].ipv6.address.0.ip
+
+
+  # prefix-length: node-3
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ctlplane.prefix-length
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: node-3
+        fieldPaths:
+          - spec.desiredState.interfaces.[type=linux-bridge].ipv6.address.0.prefix-length
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.internalapi.prefix-length
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: node-3
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=internalapi].ipv6.address.0.prefix-length
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.tenant.prefix-length
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: node-3
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=tenant].ipv6.address.0.prefix-length
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storage.prefix-length
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: node-3
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=storage].ipv6.address.0.prefix-length
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ironic.prefix-length
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name:
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=ironic].ipv6.address.0.prefix-length
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_3.name
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: node-3
+        fieldPaths:
+          - metadata.name
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_3.node_name
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: node-3
+        fieldPaths:
+          - spec.nodeSelector.[kubernetes.io/hostname]
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ironic.gateway
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: node-3
+        fieldPaths:
+          - spec.desiredState.routes.config.0.next-hop-address
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ctlplane.subnets.0.gateway
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: node-3
+        fieldPaths:
+          - spec.desiredState.routes.config.1.next-hop-address
+          - spec.desiredState.routes.config.2.next-hop-address
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ironic.cidr
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: node-3
+        fieldPaths:
+          - spec.desiredState.routes.config.1.destination
