@@ -1,0 +1,23 @@
+---
+# tasks file for docs_generator
+- name: Find common component directories
+  ansible.builtin.find:
+    paths: "{{ playbook_dir }}/../../lib/"
+    recurse: yes
+    patterns: 'kustomization.yaml'
+  register: common_components_index
+
+- name: Set common component path list
+  ansible.builtin.set_fact:
+    common_components: "{{ common_components_index.files | map(attribute='path') | list }}"
+
+- name: Show common components
+  ansible.builtin.debug:
+    msg: "{{ item }}"
+  loop: "{{ common_components }}"
+
+- name: Generate component interface documentation
+  loop: "{{ common_components }}"
+  ansible.builtin.include_tasks: generate_component_interface.yaml
+  loop_control:
+    loop_var: component_path
