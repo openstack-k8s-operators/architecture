@@ -11,6 +11,7 @@
       - rhoso-architecture-validate-nfv-ovs-dpdk-sriov-adoption
       - rhoso-architecture-validate-nfv-ovs-dpdk-sriov-hci
       - rhoso-architecture-validate-osasinfra
+      - rhoso-architecture-validate-osasinfra-ipv6
       - rhoso-architecture-validate-ovs-dpdk
       - rhoso-architecture-validate-ovs-dpdk-sriov
       - rhoso-architecture-validate-pidone

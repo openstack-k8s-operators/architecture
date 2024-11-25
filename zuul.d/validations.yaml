@@ -115,6 +115,20 @@
       cifmw_architecture_scenario: osasinfra
 - job:
     files:
+    - dt/osasinfra-ipv6
+    - examples/dt/osasinfra-ipv6
+    - examples/dt/osasinfra-ipv6/control-plane
+    - examples/dt/osasinfra-ipv6/control-plane/nncp
+    - examples/dt/osasinfra-ipv6/deployment
+    - examples/dt/osasinfra-ipv6/edpm-pre-ceph/deployment
+    - examples/dt/osasinfra-ipv6/edpm-pre-ceph/nodeset
+    - lib
+    name: rhoso-architecture-validate-osasinfra-ipv6
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: osasinfra-ipv6
+- job:
+    files:
     - automation/mocks/ovs-dpdk.yaml
     - examples/va/nfv/ovs-dpdk
     - examples/va/nfv/ovs-dpdk/edpm/deployment

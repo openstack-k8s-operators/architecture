@@ -1,4 +1,4 @@
-# OpenShift on OpenStack
+# OpenShift on OpenStack (IPv6)
 
 This is a collection of CR templates that represent a validated Red Hat
 OpenStack Services on OpenShift deployment following the recommendations from
