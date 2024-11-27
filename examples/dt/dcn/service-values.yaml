@@ -197,7 +197,7 @@ data:
         replicas: 1
         type: edge
   manila:
-    enabled: false
+    enabled: true
     manilaAPI:
       customServiceConfig: |
         [DEFAULT]
