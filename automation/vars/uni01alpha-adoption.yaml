@@ -1,0 +1,39 @@
+---
+vas:
+  uni01alpha-adoption:
+    stages:
+      - path: examples/dt/uni01alpha/control-plane/nncp
+        wait_conditions:
+          - >-
+            oc -n openstack wait nncp
+            -l osp/nncm-config-type=standard
+            --for jsonpath='{.status.conditions[0].reason}'=SuccessfullyConfigured
+            --timeout=5m
+        values:
+          - name: network-values
+            src_file: values.yaml
+        build_output: nncp.yaml
+
+      - pre_stage_run:
+          - name: Apply cinder-lvm label on master-0
+            type: cr
+            definition:
+              metadata:
+                labels:
+                  openstack.org/cinder-lvm: ""
+            kind: Node
+            resource_name: master-0
+            state: patched
+        path: examples/dt/uni01alpha/control-plane
+        wait_conditions:
+          - >-
+            oc -n openstack wait openstackcontrolplane
+            controlplane
+            --for condition=Ready
+            --timeout=60m
+        values:
+          - name: network-values
+            src_file: nncp/values.yaml
+          - name: service-values
+            src_file: service-values.yaml
+        build_output: control-plane.yaml

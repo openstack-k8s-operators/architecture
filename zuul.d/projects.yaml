@@ -17,6 +17,7 @@
       - rhoso-architecture-validate-pidone
       - rhoso-architecture-validate-sriov
       - rhoso-architecture-validate-uni01alpha
+      - rhoso-architecture-validate-uni01alpha-adoption
       - rhoso-architecture-validate-uni02beta
       - rhoso-architecture-validate-uni04delta
       - rhoso-architecture-validate-uni04delta-ipv6

@@ -195,6 +195,17 @@
       cifmw_networking_env_def_file: automation/net-env/uni01alpha.yaml
 - job:
     files:
+    - automation/net-env/uni01alpha-adoption.yaml
+    - examples/dt/uni01alpha/control-plane
+    - examples/dt/uni01alpha/control-plane/nncp
+    - lib
+    name: rhoso-architecture-validate-uni01alpha-adoption
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: uni01alpha-adoption
+      cifmw_networking_env_def_file: automation/net-env/uni01alpha-adoption.yaml
+- job:
+    files:
     - automation/net-env/uni02beta.yaml
     - dt/uni02beta
     - examples/dt/uni02beta
