@@ -56,6 +56,66 @@ replacements:
 
   - source:
       kind: ConfigMap
+      name: service-values
+      fieldPath: data.galera.templates.openstack-cell2
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.galera.templates.openstack-cell2
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.rabbitmq-cell2.endpoint_annotations
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.rabbitmq.templates.rabbitmq-cell2.override.service.metadata.annotations
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.rabbitmq.templates.rabbitmq-cell2.replicas
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.rabbitmq.templates.rabbitmq-cell2.replicas
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.lbServiceType
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.rabbitmq.templates.rabbitmq-cell2.override.service.spec.type
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.nova.template.cellTemplates.cell2
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.nova.template.cellTemplates.cell2
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
       name: network-values
       fieldPath: data.storagemgmt.mtu
     targets:
