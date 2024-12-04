@@ -1,0 +1,41 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ovs-dpdk-sriov-cpu-pinning-nova-2
+data:
+  25-cpu-pinning-nova.conf: _replaced_
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sriov-nova-2
+data:
+  03-sriov-nova.conf: _replaced_
+---
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneService
+metadata:
+  name: nova-custom-ovsdpdksriov-2
+spec:
+  label: nova-custom-ovsdpdksriov-2
+  edpmServiceType: nova
+  dataSources:
+    - configMapRef:
+        name: ovs-dpdk-sriov-cpu-pinning-nova-2
+    - configMapRef:
+        name: sriov-nova-2
+    - secretRef:
+        name: nova-cell1-compute-config
+    - secretRef:
+        name: nova-migration-ssh-key
+  playbook: osp.edpm.nova
+  tlsCerts:
+    default:
+      contents:
+        - dnsnames
+        - ips
+      networks:
+        - ctlplane
+      issuer: osp-rootca-issuer-internal
+  caCerts: combined-ca-bundle
