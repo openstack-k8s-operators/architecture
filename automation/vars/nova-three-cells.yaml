@@ -1,0 +1,60 @@
+---
+vas:
+  nova-three-cells:
+    stages:
+      - path: examples/dt/nova/nova-three-cells/control-plane/nncp
+        wait_conditions:
+          - >-
+            oc -n openstack wait nncp
+            -l osp/nncm-config-type=standard
+            --for jsonpath='{.status.conditions[0].reason}'=SuccessfullyConfigured
+            --timeout=60s
+        values:
+          - name: network-values
+            src_file: values.yaml
+        build_output: nncp.yaml
+
+      - path: examples/dt/nova/nova-three-cells/control-plane
+        wait_conditions:
+          - >-
+            oc -n openstack wait osctlplane controlplane --for condition=Ready
+            --timeout=1800s
+        values:
+          - name: network-values
+            src_file: nncp/values.yaml
+          - name: service-values
+            src_file: service-values.yaml
+        build_output: control-plane.yaml
+
+      - path: examples/dt/nova/nova-three-cells/edpm/nodeset
+        wait_conditions:
+          - >-
+            oc -n openstack wait
+            osdpns openstack-edpm --for condition=SetupReady
+            --timeout=60m
+        values:
+          - name: edpm-nodeset-values
+            src_file: values.yaml
+        build_output: nodeset.yaml
+
+      - path: examples/dt/nova/nova-three-cells/edpm/nodeset2
+        wait_conditions:
+          - >-
+            oc -n openstack wait
+            osdpns openstack-edpm-2 --for condition=SetupReady
+            --timeout=60m
+        values:
+          - name: edpm-nodeset2-values
+            src_file: values.yaml
+        build_output: nodeset2.yaml
+
+      - path: examples/dt/nova/nova-three-cells/edpm/deployment
+        wait_conditions:
+          - >-
+            oc -n openstack wait openstackdataplanedeployment
+            edpm-deployment --for condition=Ready
+            --timeout=60m
+        values:
+          - name: edpm-deployment-values
+            src_file: values.yaml
+        build_output: deployment.yaml
