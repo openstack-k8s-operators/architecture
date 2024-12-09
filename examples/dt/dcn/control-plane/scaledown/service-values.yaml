@@ -1,4 +1,3 @@
-# local-config: referenced, but not emitted by kustomize
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -9,12 +8,12 @@ metadata:
 data:
   preserveJobs: false
   cinder:
-    customServiceConfig: |
-      [DEFAULT]
-      storage_availability_zone = az0
     uniquePodNames: false
   cinderAPI:
     replicas: 3
+    customServiceConfig: |
+      [DEFAULT]
+      default_availability_zone = az0
   cinderBackup:
     replicas: 3
     customServiceConfig: |
@@ -23,6 +22,7 @@ data:
       backup_ceph_conf = /etc/ceph/az0.conf
       backup_ceph_pool = backups
       backup_ceph_user = openstack
+      storage_availability_zone = az0
   cinderVolumes:
     az0:
       customServiceConfig: |
@@ -36,24 +36,9 @@ data:
         rbd_user = openstack
         rbd_pool = volumes
         rbd_flatten_volume_from_snapshot = False
-        rbd_secret_uuid = CHANGEME
+        rbd_secret_uuid = 05e384de-96e3-53f1-800b-ae3d53b6e0df
         rbd_cluster_name = az0
         backend_availability_zone = az0
-    az1:
-      customServiceConfig: |
-        [DEFAULT]
-        enabled_backends = ceph
-        glance_api_servers = https://glance-az1-internal.openstack.svc:9292
-        [ceph]
-        volume_backend_name = ceph
-        volume_driver = cinder.volume.drivers.rbd.RBDDriver
-        rbd_ceph_conf = /etc/ceph/az1.conf
-        rbd_user = openstack
-        rbd_pool = volumes
-        rbd_flatten_volume_from_snapshot = False
-        rbd_secret_uuid = CHANGEME
-        rbd_cluster_name = az1
-        backend_availability_zone = az1
     az2:
       customServiceConfig: |
         [DEFAULT]
@@ -66,7 +51,7 @@ data:
         rbd_user = openstack
         rbd_pool = volumes
         rbd_flatten_volume_from_snapshot = False
-        rbd_secret_uuid = CHANGEME
+        rbd_secret_uuid = 982697f6-a2a2-59b6-bb30-eddc518e1d8b
         rbd_cluster_name = az2
         backend_availability_zone = az2
   galera:
@@ -76,10 +61,6 @@ data:
         secret: osp-secret
         storageRequest: 5G
       openstack-cell1:
-        replicas: 1
-        secret: osp-secret
-        storageRequest: 5G
-      openstack-cell2:
         replicas: 1
         secret: osp-secret
         storageRequest: 5G
@@ -103,12 +84,6 @@ data:
           rbd_store_pool = images
           rbd_store_user = openstack
           rbd_thin_provisioning = True
-          [az1]
-          rbd_store_ceph_conf = /etc/ceph/az1.conf
-          store_description = "az1 RBD backend"
-          rbd_store_pool = images
-          rbd_store_user = openstack
-          rbd_thin_provisioning = True
           [az2]
           rbd_store_ceph_conf = /etc/ceph/az2.conf
           store_description = "az2 RBD backend"
@@ -129,39 +104,6 @@ data:
                 type: LoadBalancer
         replicas: 3
         type: split
-      az1:
-        customServiceConfig: |
-          [DEFAULT]
-          enabled_import_methods = [web-download,copy-image,glance-direct]
-          enabled_backends = az0:rbd,az1:rbd
-          [glance_store]
-          default_backend = az1
-          [az1]
-          rbd_store_ceph_conf = /etc/ceph/az1.conf
-          store_description = "az1 RBD backend"
-          rbd_store_pool = images
-          rbd_store_user = openstack
-          rbd_thin_provisioning = True
-          [az0]
-          rbd_store_ceph_conf = /etc/ceph/az0.conf
-          store_description = "az0 RBD backend"
-          rbd_store_pool = images
-          rbd_store_user = openstack
-          rbd_thin_provisioning = True
-        networkAttachments:
-          - storage
-        override:
-          service:
-            internal:
-              metadata:
-                annotations:
-                  metallb.universe.tf/address-pool: internalapi
-                  metallb.universe.tf/allow-shared-ip: internalapi
-                  metallb.universe.tf/loadBalancerIPs: 172.17.0.81
-              spec:
-                type: LoadBalancer
-        replicas: 1
-        type: edge
       az2:
         customServiceConfig: |
           [DEFAULT]
@@ -169,15 +111,15 @@ data:
           enabled_backends = az0:rbd,az2:rbd
           [glance_store]
           default_backend = az2
-          [az2]
-          rbd_store_ceph_conf = /etc/ceph/az2.conf
-          store_description = "az2 RBD backend"
-          rbd_store_pool = images
-          rbd_store_user = openstack
-          rbd_thin_provisioning = True
           [az0]
           rbd_store_ceph_conf = /etc/ceph/az0.conf
           store_description = "az0 RBD backend"
+          rbd_store_pool = images
+          rbd_store_user = openstack
+          rbd_thin_provisioning = True
+          [az2]
+          rbd_store_ceph_conf = /etc/ceph/az2.conf
+          store_description = "az2 RBD backend"
           rbd_store_pool = images
           rbd_store_user = openstack
           rbd_thin_provisioning = True
@@ -217,12 +159,16 @@ data:
           cephfs_volume_mode = 0755
           cephfs_protocol_helper_type = CEPHFS
   neutron:
-    template:
-      customServiceConfig: |
-        [ml2_type_vlan]
-        network_vlan_ranges = datacentre:1:1000,leaf1:1:1000,leaf2:1:1000
-        [neutron]
-        physnets = datacentre,leaf1,leaf2
+      template:
+        customServiceConfig: |
+          [DEFAULT]
+          router_scheduler_driver = neutron.scheduler.l3_agent_scheduler.AZLeastRoutersScheduler
+          network_scheduler_driver =  neutron.scheduler.dhcp_agent_scheduler.AZAwareWeightScheduler
+          default_availability_zones = az0,az1,az2
+          [ml2_type_vlan]
+          network_vlan_ranges = datacentre:1:1000,leaf1:1:1000,leaf2:1:1000
+          [neutron]
+          physnets = datacentre,leaf1,leaf2
   ovn:
     template:
       ovnController:
@@ -233,72 +179,53 @@ data:
           ovn-encap-type: geneve
           system-id: random
   nova:
-    customServiceConfig: |
-      [DEFAULT]
-      default_schedule_zone=az0
-    metadataServiceTemplate:
-      enabled: false
-    cellTemplates:
-      cell0:
-        cellDatabaseAccount: nova-cell0
-        hasAPIAccess: true
-      cell1:
-        cellDatabaseInstance: openstack-cell1
-        cellDatabaseAccount: nova-cell1
-        cellMessageBusInstance: rabbitmq-cell1
-        conductorServiceTemplate:
-          replicas: 1
-        hasAPIAccess: true
-        metadataServiceTemplate:
-          enabled: true
-          override:
-            service:
-              metadata:
-                annotations:
-                  metallb.universe.tf/address-pool: internalapi
-                  metallb.universe.tf/allow-shared-ip: internalapi
-                  metallb.universe.tf/loadBalancerIPs: 172.17.0.81
-              spec:
-                type: LoadBalancer
-          replicas: 3
-      cell2:
-        cellDatabaseInstance: openstack-cell2
-        cellDatabaseAccount: nova-cell2
-        cellMessageBusInstance: rabbitmq-cell2
-        conductorServiceTemplate:
-          replicas: 1
-        hasAPIAccess: true
-        metadataServiceTemplate:
-          enabled: true
-          override:
-            service:
-              metadata:
-                annotations:
-                  metallb.universe.tf/address-pool: internalapi
-                  metallb.universe.tf/allow-shared-ip: internalapi
-                  metallb.universe.tf/loadBalancerIPs: 172.17.0.82
-              spec:
-                type: LoadBalancer
-          replicas: 3
-      cell3:
-        cellDatabaseInstance: openstack-cell3
-        cellDatabaseAccount: nova-cell3
-        cellMessageBusInstance: rabbitmq-cell3
-        conductorServiceTemplate:
-          replicas: 1
-        hasAPIAccess: true
-        metadataServiceTemplate:
-          enabled: true
-          override:
-            service:
-              metadata:
-                annotations:
-                  metallb.universe.tf/address-pool: internalapi
-                  metallb.universe.tf/allow-shared-ip: internalapi
-                  metallb.universe.tf/loadBalancerIPs: 172.17.0.83
-              spec:
-                type: LoadBalancer
-          replicas: 3
+      customServiceConfig: |
+        [DEFAULT]
+        default_schedule_zone=az0
+      metadataServiceTemplate:
+        enabled: false
+      cellTemplates:
+        cell0:
+          cellDatabaseAccount: nova-cell0
+          hasAPIAccess: true
+        cell1:
+          cellDatabaseInstance: openstack-cell1
+          cellDatabaseAccount: nova-cell1
+          cellMessageBusInstance: rabbitmq-cell1
+          conductorServiceTemplate:
+            replicas: 1
+          hasAPIAccess: true
+          metadataServiceTemplate:
+            enabled: true
+            override:
+              service:
+                metadata:
+                  annotations:
+                    metallb.universe.tf/address-pool: internalapi
+                    metallb.universe.tf/allow-shared-ip: internalapi
+                    metallb.universe.tf/loadBalancerIPs: 172.17.0.81
+                spec:
+                  type: LoadBalancer
+            replicas: 3
+        cell3:
+          cellDatabaseInstance: openstack-cell3
+          cellDatabaseAccount: nova-cell3
+          cellMessageBusInstance: rabbitmq-cell3
+          conductorServiceTemplate:
+            replicas: 1
+          hasAPIAccess: true
+          metadataServiceTemplate:
+            enabled: true
+            override:
+              service:
+                metadata:
+                  annotations:
+                    metallb.universe.tf/address-pool: internalapi
+                    metallb.universe.tf/allow-shared-ip: internalapi
+                    metallb.universe.tf/loadBalancerIPs: 172.17.0.83
+                spec:
+                  type: LoadBalancer
+            replicas: 3
   rabbitmq:
     templates:
       rabbitmq:
@@ -321,16 +248,6 @@ data:
             spec:
               type: LoadBalancer
         replicas: 3
-      rabbitmq-cell2:
-        override:
-          service:
-            metadata:
-              annotations:
-                metallb.universe.tf/address-pool: internalapi
-                metallb.universe.tf/loadBalancerIPs: 172.17.0.87
-            spec:
-              type: LoadBalancer
-        replicas: 3
       rabbitmq-cell3:
         override:
           service:
@@ -346,10 +263,8 @@ data:
       region: r1
       extraVol:
         - propagation:
-            - CinderVolume
+            - az0
             - CinderBackup
-            - GlanceAPI
-            - ManilaShare
           extraVolType: Ceph
           volumes:
             - name: ceph
@@ -359,5 +274,18 @@ data:
                       name: ceph-conf-files
           mounts:
             - name: ceph
+              mountPath: /etc/ceph
+              readOnly: true
+        - propagation:
+            - az2
+          extraVolType: Ceph
+          volumes:
+            - name: ceph-az2
+              projected:
+                sources:
+                  - secret:
+                      name: ceph-conf-files-az2
+          mounts:
+            - name: ceph-az2
               mountPath: /etc/ceph
               readOnly: true
