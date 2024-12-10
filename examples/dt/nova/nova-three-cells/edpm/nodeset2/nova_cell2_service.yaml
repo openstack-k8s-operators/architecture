@@ -1,0 +1,21 @@
+---
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneService
+metadata:
+  name: nova-cell-2
+spec:
+  label: nova-cell-2
+  dataSources:
+    - secretRef:
+        name: nova-cell2-compute-config
+    - secretRef:
+        name: nova-migration-ssh-key
+    - configMapRef:
+        name: nova-extra-config
+        optional: true
+  playbook: osp.edpm.nova
+  caCerts: combined-ca-bundle
+  edpmServiceType: nova
+  containerImageFields:
+    - NovaComputeImage
+    - EdpmIscsidImage
