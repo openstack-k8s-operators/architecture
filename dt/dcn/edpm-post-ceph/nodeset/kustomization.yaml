@@ -148,12 +148,12 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
-      fieldPath: data.cinderAPI.customServiceConfig
+      fieldPath: data.cinder.customServiceConfig
     targets:
       - select:
           kind: OpenStackControlPlane
         fieldPaths:
-          - spec.cinder.template.cinderAPI.customServiceConfig
+          - spec.cinder.template.customServiceConfig
         options:
           create: true
   - source:
