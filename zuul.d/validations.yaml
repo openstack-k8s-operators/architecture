@@ -101,6 +101,18 @@
       cifmw_architecture_scenario: nfv-ovs-dpdk-sriov-hci
 - job:
     files:
+    - examples/dt/nova/nova-three-cells/control-plane
+    - examples/dt/nova/nova-three-cells/control-plane/nncp
+    - examples/dt/nova/nova-three-cells/edpm/deployment
+    - examples/dt/nova/nova-three-cells/edpm/nodeset
+    - examples/dt/nova/nova-three-cells/edpm/nodeset2
+    - lib
+    name: rhoso-architecture-validate-nova-three-cells
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: nova-three-cells
+- job:
+    files:
     - dt/osasinfra
     - examples/dt/osasinfra
     - examples/dt/osasinfra/control-plane
