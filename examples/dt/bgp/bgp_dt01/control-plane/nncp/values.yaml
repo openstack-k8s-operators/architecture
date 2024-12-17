@@ -273,6 +273,7 @@ data:
 
   bgp:
     prefix-length: 30
+    prefix-length-worker-3: 24
     ifaces:
       - enp8s0
       - enp9s0
@@ -434,13 +435,13 @@ data:
         {
           "cniVersion": "0.3.1",
           "name": "bgpnet-worker-3",
-          "type": "host-device",
-          "device": "enp8s0",
+          "type": "macvlan",
+          "master": "enp8s0",
           "ipam": {
             "type": "whereabouts",
-            "range": "100.64.10.0/30",
-            "range_start": "100.64.10.2",
-            "range_end": "100.64.10.2",
+            "range": "100.64.10.0/24",
+            "range_start": "100.64.10.10",
+            "range_end": "100.64.10.19",
             "routes": [{
               "dst": "192.168.133.0/24",
               "gw": "100.64.10.1"
