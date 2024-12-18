@@ -195,26 +195,66 @@ data:
         replicas: 1
         type: edge
   manila:
-    enabled: false
+    customServiceConfig: |
+      [DEFAULT]
+      storage_availability_zone = az0
+    enabled: true
     manilaAPI:
       customServiceConfig: |
         [DEFAULT]
         enabled_share_protocols=nfs,cephfs
     manilaShares:
-      share1:
+      az0:
         customServiceConfig: |
           [DEFAULT]
-          enabled_share_backends = cephfs
+          enabled_share_backends = cephfs_az0
           enabled_share_protocols = cephfs
-          [cephfs]
+          [cephfs_az0]
           driver_handles_share_servers = False
-          share_backend_name = cephfs
+          share_backend_name = cephfs_az0
           share_driver = manila.share.drivers.cephfs.driver.CephFSDriver
-          cephfs_conf_path = /etc/ceph/ceph.conf
-          cephfs_cluster_name = ceph
+          cephfs_conf_path = /etc/ceph/az0.conf
+          cephfs_cluster_name = az0
           cephfs_auth_id=openstack
           cephfs_volume_mode = 0755
           cephfs_protocol_helper_type = CEPHFS
+          backend_availability_zone = az0
+        networkAttachments:
+          - storage
+      az1:
+        customServiceConfig: |
+          [DEFAULT]
+          enabled_share_backends = cephfs_az1
+          enabled_share_protocols = cephfs
+          [cephfs_az1]
+          driver_handles_share_servers = False
+          share_backend_name = cephfs_az1
+          share_driver = manila.share.drivers.cephfs.driver.CephFSDriver
+          cephfs_conf_path = /etc/ceph/az1.conf
+          cephfs_cluster_name = az1
+          cephfs_auth_id=openstack
+          cephfs_volume_mode = 0755
+          cephfs_protocol_helper_type = CEPHFS
+          backend_availability_zone = az1
+        networkAttachments:
+          - storage
+      az2:
+        customServiceConfig: |
+          [DEFAULT]
+          enabled_share_backends = cephfs_az2
+          enabled_share_protocols = cephfs
+          [cephfs_az2]
+          driver_handles_share_servers = False
+          share_backend_name = cephfs_az2
+          share_driver = manila.share.drivers.cephfs.driver.CephFSDriver
+          cephfs_conf_path = /etc/ceph/az2.conf
+          cephfs_cluster_name = az2
+          cephfs_auth_id=openstack
+          cephfs_volume_mode = 0755
+          cephfs_protocol_helper_type = CEPHFS
+          backend_availability_zone = az2
+        networkAttachments:
+          - storage
   neutron:
     template:
       customServiceConfig: |
