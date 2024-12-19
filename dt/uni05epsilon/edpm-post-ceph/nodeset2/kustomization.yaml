@@ -1,0 +1,48 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+transformers:
+  - |-
+    apiVersion: builtin
+    kind: NamespaceTransformer
+    metadata:
+      name: _ignored_
+      namespace: openstack
+    setRoleBindingSubjects: none
+    unsetOnly: true
+    fieldSpecs:
+      - path: metadata/name
+        kind: Namespace
+        create: true
+
+components:
+  - ../../../../lib/dataplane/nodeset
+
+patches:
+  - target:
+      kind: OpenStackDataPlaneNodeSet
+      name: .*
+    path: resources/ceph-extra-mounts.yaml
+
+resources:
+  - resources/nova-custom-config.yaml
+  - resources/nova-custom-service.yaml
+
+replacements:
+  #
+  # Dataplane services override
+  #
+  # (overrides /lib/dataplane which is using edpm-nodeset-values ConfigMap)
+  #
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset2-values-post-ceph
+      fieldPath: data.nodeset.services
+    targets:
+      - select:
+          kind: OpenStackDataPlaneNodeSet
+        fieldPaths:
+          - spec.services
+        options:
+          create: true

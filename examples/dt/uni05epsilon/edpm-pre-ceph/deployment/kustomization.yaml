@@ -8,6 +8,15 @@ components:
 resources:
   - values.yaml
 
+patches:
+  - target:
+      kind: OpenStackDataPlaneDeployment
+      name: edpm-deployment-pre-ceph
+    patch: |
+      - op: add
+        path: /spec/nodeSets/-
+        value: openstack-edpm-2
+
 replacements:
   - source:
       kind: ConfigMap
