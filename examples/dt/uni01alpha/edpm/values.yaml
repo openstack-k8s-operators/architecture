@@ -133,3 +133,4 @@ data:
       - libvirt
       - nova
       - telemetry
+      - telemetry-power-monitoring
