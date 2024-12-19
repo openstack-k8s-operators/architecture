@@ -19,6 +19,7 @@ transformers:
 components:
   - ../../../../lib/control-plane
   - ../../../../lib/dataplane/nodeset
+  - ../../../../dt/uni04delta/nodeset/compute
 
 resources:
   - ceph_secret.yaml
