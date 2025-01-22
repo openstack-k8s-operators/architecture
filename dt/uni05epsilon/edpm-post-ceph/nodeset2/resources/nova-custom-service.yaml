@@ -1,0 +1,29 @@
+---
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneService
+metadata:
+  name: nova-custom
+spec:
+  label: dataplane-deployment-nova-custom
+  dataSources:
+    - configMapRef:
+        name: nova-custom-config
+    - secretRef:
+        name: nova-cell1-compute-config
+    - secretRef:
+        name: nova-migration-ssh-key
+  playbook: osp.edpm.nova
+  caCerts: combined-ca-bundle
+  tlsCerts:
+    default:
+      contents:
+        - dnsnames
+        - ips
+      networks:
+        - ctlplane
+      issuer: osp-rootca-issuer-internal
+      edpmRoleServiceName: nova
+  edpmServiceType: nova
+  containerImageFields:
+    - NovaComputeImage
+    - EdpmIscsidImage
