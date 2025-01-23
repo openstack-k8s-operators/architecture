@@ -10,4 +10,4 @@ spec:
   name: manila-operator
   source: rhoso-testing-operator-catalog
   sourceNamespace: openshift-marketplace
-  startingCSV: manila-operator.v1.0.3
+  startingCSV: manila-operator.v1.0.5
