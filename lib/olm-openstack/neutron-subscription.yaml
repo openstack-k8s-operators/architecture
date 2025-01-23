@@ -10,4 +10,4 @@ spec:
   name: neutron-operator
   source: rhoso-testing-operator-catalog
   sourceNamespace: openshift-marketplace
-  startingCSV: neutron-operator.v1.0.3
+  startingCSV: neutron-operator.v1.0.5
