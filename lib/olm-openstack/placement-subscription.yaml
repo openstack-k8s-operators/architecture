@@ -10,4 +10,4 @@ spec:
   name: placement-operator
   source: rhoso-testing-operator-catalog
   sourceNamespace: openshift-marketplace
-  startingCSV: placement-operator.v1.0.3
+  startingCSV: placement-operator.v1.0.5
