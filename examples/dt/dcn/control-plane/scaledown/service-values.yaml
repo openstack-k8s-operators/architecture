@@ -11,7 +11,6 @@ data:
     customServiceConfig: |
       [DEFAULT]
       default_availability_zone = az0
-    uniquePodNames: false
   cinderAPI:
     replicas: 3
   cinderBackup:
