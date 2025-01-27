@@ -10,4 +10,4 @@ spec:
   name: ovn-operator
   source: rhoso-testing-operator-catalog
   sourceNamespace: openshift-marketplace
-  startingCSV: ovn-operator.v1.0.5
+  startingCSV: ovn-operator.v1.0.3

@@ -10,4 +10,4 @@ spec:
   name: glance-operator
   source: rhoso-testing-operator-catalog
   sourceNamespace: openshift-marketplace
-  startingCSV: glance-operator.v1.0.5
+  startingCSV: glance-operator.v1.0.3

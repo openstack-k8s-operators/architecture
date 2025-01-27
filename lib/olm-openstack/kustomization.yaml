@@ -21,7 +21,6 @@ resources:
   - neutron-subscription.yaml
   - nova-subscription.yaml
   - octavia-subscription.yaml
-  - openstack-ansibleee-subscription.yaml
   - openstack-baremetal-subscription.yaml
   - ovn-subscription.yaml
   - placement-subscription.yaml
