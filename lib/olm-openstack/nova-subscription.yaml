@@ -10,4 +10,4 @@ spec:
   name: nova-operator
   source: rhoso-testing-operator-catalog
   sourceNamespace: openshift-marketplace
-  startingCSV: nova-operator.v1.0.5
+  startingCSV: nova-operator.v1.0.3

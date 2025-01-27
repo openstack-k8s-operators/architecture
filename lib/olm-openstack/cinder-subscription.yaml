@@ -10,4 +10,4 @@ spec:
   name: cinder-operator
   source: rhoso-testing-operator-catalog
   sourceNamespace: openshift-marketplace
-  startingCSV: cinder-operator.v1.0.5
+  startingCSV: cinder-operator.v1.0.3

@@ -10,4 +10,4 @@ spec:
   name: barbican-operator
   source: rhoso-testing-operator-catalog
   sourceNamespace: openshift-marketplace
-  startingCSV: barbican-operator.v1.0.5
+  startingCSV: barbican-operator.v1.0.3
