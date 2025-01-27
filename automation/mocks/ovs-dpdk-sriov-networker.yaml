@@ -1,0 +1,22 @@
+---
+cifmw_baremetal_hosts:
+  networker-0:
+    connection: ipmi://10.10.100.100
+    boot_mode: UEFI
+    nics:
+      - mac: "6c:fe:54:3f:87:00"
+        network: provision
+    credentials_file: "/home/user/foo.yaml"
+    root_device_hint_field: "wwnWithExtension"
+    root_device_hint: "0x6ec2a72046f72f002b65936fbccfe6d7"
+    label: openstack-networker
+  compute-0:
+    connection: ipmi://10.10.100.101
+    boot_mode: UEFI
+    nics:
+      - mac: "6c:fe:54:3f:b4:90"
+        network: provision
+    credentials_file: "/home/user/foo.yaml"
+    root_device_hint_field: "wwnWithExtension"
+    root_device_hint: "0x6ec2a72046f746002b659a0cbb08577e"
+    label: openstack-compute
