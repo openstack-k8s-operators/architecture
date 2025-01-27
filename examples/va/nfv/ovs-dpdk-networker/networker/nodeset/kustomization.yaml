@@ -5,7 +5,7 @@ kind: Kustomization
 components:
   - ../../../../../../va/nfv/ovs-dpdk-networker/networker/nodeset
   # - https://github.com/openstack-k8s-operators/architecture/va/nfv/ovs-dpdk-networker/networker/nodeset?ref=main
-  ## It's possible to replace ../../../../../../va/nfv/ovs-dpdk-networker/networker/nodeset/ with a git checkout URL as per:
+  ## It's possible to replace ../../../../../../va/nfv/ovs-dpdk-networker/networker/nodeset with a git checkout URL as per:
   ## https://github.com/kubernetes-sigs/kustomize/blob/master/examples/remoteBuild.md
 
 resources:

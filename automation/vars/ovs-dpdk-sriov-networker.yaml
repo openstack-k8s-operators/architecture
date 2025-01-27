@@ -1,0 +1,63 @@
+---
+vas:
+  ovs-dpdk-sriov-networker:
+    stages:
+      - path: examples/dt/nfv/nfv-ovs-dpdk-sriov-networker/nncp
+        wait_conditions:
+          - >-
+            oc -n openstack wait nncp
+            -l osp/nncm-config-type=standard
+            --for jsonpath='{.status.conditions[0].reason}'=SuccessfullyConfigured
+            --timeout=60s
+        values:
+          - name: network-values
+            src_file: values.yaml
+        build_output: nncp.yaml
+
+      - path: examples/dt/nfv/nfv-ovs-dpdk-sriov-networker
+        wait_conditions:
+          - >-
+            oc -n openstack wait osctlplane controlplane --for condition=Ready
+            --timeout=20m
+        values:
+          - name: network-values
+            src_file: ./nncp/values.yaml
+          - name: service-values
+            src_file: service-values.yaml
+        build_output: control-plane.yaml
+
+      - path: examples/dt/nfv/nfv-ovs-dpdk-sriov-networker/edpm/networkers
+        wait_conditions:
+          - >-
+            oc -n openstack wait openstackdataplanenodeset
+            networker-nodes
+            --for condition=SetupReady
+            --timeout=30m
+        values:
+          - name: edpm-networker-nodeset-values
+            src_file: values.yaml
+        build_output: edpm-networker-nodeset.yaml
+
+      - path: examples/dt/nfv/nfv-ovs-dpdk-sriov-networker/edpm/computes
+        wait_conditions:
+          - >-
+            oc -n openstack wait openstackdataplanenodeset
+            compute-nodes
+            --for condition=SetupReady
+            --timeout=30m
+        values:
+          - name: edpm-compute-nodeset-values
+            src_file: values.yaml
+        build_output: edpm-compute-nodeset.yaml
+
+      - path: examples/dt/nfv/nfv-ovs-dpdk-sriov-networker/edpm/deployment
+        wait_conditions:
+          - >-
+            oc -n openstack wait openstackdataplanedeployment
+            edpm-deployment
+            --for condition=Ready
+            --timeout=90m
+        values:
+          - name: edpm-deployment-values
+            src_file: values.yaml
+        build_output: edpm-deployment.yaml
