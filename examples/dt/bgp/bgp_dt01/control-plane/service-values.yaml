@@ -27,7 +27,7 @@ data:
     enabled: true
 
   octavia:
-    enabled: true
+    enabled: false  # TODO(eolivare): enable octavia
     amphoraImageContainerImage: quay.io/gthiemonge/octavia-amphora-image
     apacheContainerImage: registry.redhat.io/ubi9/httpd-24:latest
     octaviaAPI:
@@ -59,7 +59,7 @@ data:
     ovnController:
       nicMappings:
         datacentre: ocpbr
-        octavia: octbr
+        # octavia: octbr TODO(eolivare): enable octavia
       external-ids:
         enable-chassis-as-gateway: false
   neutron:

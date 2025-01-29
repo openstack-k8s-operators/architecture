@@ -19,3 +19,20 @@ transformers:
 
 components:
   - ../../../../lib/dataplane/nodeset
+
+patches:
+  - target:
+      kind: OpenStackDataPlaneNodeSet
+      name: .*
+    patch: |-
+      - op: replace
+        path: /spec/env
+        value:
+          - name: ANSIBLE_FORCE_COLOR
+            value: "True"
+          - name: ANSIBLE_TIMEOUT
+            value: "60"
+          - name: ANSIBLE_SSH_TIMEOUT
+            value: "60"
+          - name: ANSIBLE_SSH_RETRIES
+            value: "60"
