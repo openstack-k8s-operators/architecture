@@ -10,6 +10,7 @@
       - rhoso-architecture-validate-hci-adoption
       - rhoso-architecture-validate-nfv-ovs-dpdk-sriov-adoption
       - rhoso-architecture-validate-nfv-ovs-dpdk-sriov-hci
+      - rhoso-architecture-validate-nova01alpha
       - rhoso-architecture-validate-nova-three-cells
       - rhoso-architecture-validate-osasinfra
       - rhoso-architecture-validate-osasinfra-ipv6
