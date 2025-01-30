@@ -10,7 +10,7 @@ components:
   ## https://github.com/kubernetes-sigs/kustomize/blob/master/examples/remoteBuild.md
 
 resources:
-  - control-plane/nncp/values.yaml
+  - control-plane/networking/nncp/values.yaml
   - edpm-pre-ceph/nodeset/values.yaml
   - service-values.yaml
   - values.yaml

@@ -2,7 +2,7 @@
 vas:
   hci:
     stages:
-      - path: examples/va/hci/control-plane/nncp
+      - path: examples/va/hci/control-plane/networking/nncp
         wait_conditions:
           - >-
             oc -n openstack wait nncp
@@ -14,6 +14,18 @@ vas:
             src_file: values.yaml
         build_output: nncp.yaml
 
+      - path: examples/va/hci/control-plane/networking
+        wait_conditions:
+          - >-
+            oc -n metallb-system wait pod
+            -l app=metallb -l component=speaker
+            --for condition=Ready
+            --timeout=5m
+        values:
+          - name: network-values
+            src_file: nncp/values.yaml
+        build_output: network.yaml
+
       - path: examples/va/hci/control-plane
         wait_conditions:
           - >-
@@ -23,7 +35,7 @@ vas:
           - name: service-values
             src_file: service-values.yaml
           - name: network-values
-            src_file: nncp/values.yaml
+            src_file: networking/nncp/values.yaml
         build_output: ../control-plane.yaml
 
       - path: examples/va/hci/edpm-pre-ceph/nodeset
