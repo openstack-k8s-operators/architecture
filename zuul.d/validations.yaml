@@ -416,7 +416,8 @@
     - dt/uni07eta
     - examples/dt/uni07eta
     - examples/dt/uni07eta/control-plane
-    - examples/dt/uni07eta/control-plane/nncp
+    - examples/dt/uni07eta/control-plane/networking
+    - examples/dt/uni07eta/control-plane/networking/nncp
     - examples/dt/uni07eta/edpm
     - examples/dt/uni07eta/networker
     - examples/dt/uni07eta/networker/nodeset
@@ -426,3 +427,12 @@
     vars:
       cifmw_architecture_scenario: uni07eta
       cifmw_networking_env_def_file: automation/net-env/uni07eta.yaml
+- job:
+    files:
+    - examples/dt/uni07eta/control-plane/networking
+    - examples/dt/uni07eta/control-plane/networking/nncp
+    - lib
+    name: rhoso-architecture-validate-uni07eta-adoption
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: uni07eta-adoption
