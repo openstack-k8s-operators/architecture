@@ -36,7 +36,7 @@ vas:
             oc -n openstack wait openstackdataplanedeployment
             edpm-deployment
             --for condition=Ready
-            --timeout=40m
+            --timeout=80m
         values:
           - name: edpm-nodeset-values
             src_file: values.yaml
