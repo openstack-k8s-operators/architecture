@@ -10,4 +10,4 @@ spec:
   name: keystone-operator
   source: rhoso-testing-operator-catalog
   sourceNamespace: openshift-marketplace
-  startingCSV: keystone-operator.v1.0.3
+  startingCSV: keystone-operator.v1.0.6

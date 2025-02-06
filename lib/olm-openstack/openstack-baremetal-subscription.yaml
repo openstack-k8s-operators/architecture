@@ -10,4 +10,4 @@ spec:
   name: openstack-baremetal-operator
   source: rhoso-testing-operator-catalog
   sourceNamespace: openshift-marketplace
-  startingCSV: openstack-baremetal-operator.v1.0.3
+  startingCSV: openstack-baremetal-operator.v1.0.6

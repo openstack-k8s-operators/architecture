@@ -10,4 +10,4 @@ spec:
   name: designate-operator
   source: rhoso-testing-operator-catalog
   sourceNamespace: openshift-marketplace
-  startingCSV: designate-operator.v1.0.3
+  startingCSV: designate-operator.v1.0.6

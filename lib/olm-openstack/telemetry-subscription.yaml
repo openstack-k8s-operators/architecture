@@ -10,4 +10,4 @@ spec:
   name: telemetry-operator
   source: rhoso-testing-operator-catalog
   sourceNamespace: openshift-marketplace
-  startingCSV: telemetry-operator.v1.0.3
+  startingCSV: telemetry-operator.v1.0.6
