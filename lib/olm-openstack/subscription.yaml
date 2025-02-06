@@ -10,4 +10,4 @@ spec:
   name: openstack-operator
   source: rhoso-testing-operator-catalog
   sourceNamespace: openshift-marketplace
-  startingCSV: openstack-operator.v1.0.3
+  startingCSV: openstack-operator.v1.0.6

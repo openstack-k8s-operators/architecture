@@ -10,4 +10,4 @@ spec:
   name: horizon-operator
   source: rhoso-testing-operator-catalog
   sourceNamespace: openshift-marketplace
-  startingCSV: horizon-operator.v1.0.3
+  startingCSV: horizon-operator.v1.0.6
