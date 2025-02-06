@@ -1,0 +1,60 @@
+# local-config: referenced, but not emitted by kustomize
+#
+# CHANGEME:
+#
+# - Change network_vlan_ranges based on EDPM OvS DPDK environment.
+# - change numa_nodes in the neutron and neutron_tunnel section
+# based on DPDK NIC's and NUMA alignment in the OvS DPDK compute node.
+#
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: service-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+data:
+  preserveJobs: false
+  neutron:
+    customServiceConfig: |
+      [DEFAULT]
+      global_physnet_mtu = 9000
+      [ml2]
+      mechanism_drivers = ovn
+      [ovn]
+      vhost_sock_dir = /var/lib/vhost_sockets
+      [ml2_type_vlan]
+      network_vlan_ranges = dpdk1:206:209,dpdk2:206:209 # CHANGEME
+  ovn:
+    ovnController:
+      nicMappings:
+        datacentre: ospbr
+
+
+  glance:
+    customServiceConfig: |
+      [DEFAULT]
+      enabled_backends = default_backend:swift
+      [glance_store]
+      default_backend = default_backend
+      [default_backend]
+      swift_store_create_container_on_put = True
+      swift_store_auth_version = 3
+      swift_store_auth_address = {{ .KeystoneInternalURL }}
+      swift_store_endpoint_type = internalURL
+      swift_store_user = service:glance
+      swift_store_key = {{ .ServicePassword }}
+    default:
+      replicas: 1
+  swift:
+    enabled: true
+  telemetry:
+    enabled: true
+    template:
+      ceilometer:
+        enabled: true
+  nova:
+    schedulerServiceTemplate:
+      customServiceConfig: |
+        [filter_scheduler]
+        enabled_filtes = AvailabilityZoneFilter,ComputeFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,ServerGroupAntiAffinityFilter,ServerGroupAffinityFilter,PciPassthroughFilter,NUMATopologyFilter,AggregateInstanceExtraSpecsFilter
