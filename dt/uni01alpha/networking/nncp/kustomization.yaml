@@ -17,7 +17,7 @@ transformers:
         create: true
 
 components:
-  - ../../../lib/nncp
+  - ../../../../lib/nncp
 
 patches:
   - target:

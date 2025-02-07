@@ -207,7 +207,8 @@
     - dt/uni01alpha
     - examples/dt/uni01alpha
     - examples/dt/uni01alpha/control-plane
-    - examples/dt/uni01alpha/control-plane/nncp
+    - examples/dt/uni01alpha/control-plane/networking
+    - examples/dt/uni01alpha/control-plane/networking/nncp
     - examples/dt/uni01alpha/edpm
     - examples/dt/uni01alpha/networker
     - examples/dt/uni01alpha/networker/nodeset
@@ -220,8 +221,8 @@
 - job:
     files:
     - automation/net-env/uni01alpha-adoption.yaml
-    - examples/dt/uni01alpha/control-plane
-    - examples/dt/uni01alpha/control-plane/nncp
+    - examples/dt/uni01alpha/control-plane/networking
+    - examples/dt/uni01alpha/control-plane/networking/nncp
     - lib
     name: rhoso-architecture-validate-uni01alpha-adoption
     parent: rhoso-architecture-base-job
