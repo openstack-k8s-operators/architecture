@@ -247,7 +247,8 @@
     - dt/uni04delta
     - examples/dt/uni04delta
     - examples/dt/uni04delta/control-plane
-    - examples/dt/uni04delta/control-plane/nncp
+    - examples/dt/uni04delta/control-plane/networking
+    - examples/dt/uni04delta/control-plane/networking/nncp
     - examples/dt/uni04delta/deployment
     - examples/dt/uni04delta/edpm-pre-ceph
     - examples/dt/uni04delta/edpm-pre-ceph/nodeset
@@ -257,6 +258,17 @@
     vars:
       cifmw_architecture_scenario: uni04delta
       cifmw_networking_env_def_file: automation/net-env/uni04delta.yaml
+- job:
+    files:
+    - automation/net-env/uni04delta-adoption.yaml
+    - examples/dt/uni04delta/control-plane/networking
+    - examples/dt/uni04delta/control-plane/networking/nncp
+    - lib
+    name: rhoso-architecture-validate-uni04delta-adoption
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: uni04delta-adoption
+      cifmw_networking_env_def_file: automation/net-env/uni04delta-adoption.yaml
 - job:
     files:
     - automation/mocks/uni04delta-ipv6.yaml
