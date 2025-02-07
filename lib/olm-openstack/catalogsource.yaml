@@ -5,7 +5,7 @@ metadata:
   name: rhoso-testing-operator-catalog
   namespace: openshift-marketplace
 spec:
-  image: brew.registry.redhat.com/rh-osbs/iib:910638
+  image: brew.registry.redhat.io/rh-osbs/iib:910638
   sourceType: grpc
   displayName: RHOSO Operator Test Catalog
   publisher: RHOS Delivery
