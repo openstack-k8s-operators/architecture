@@ -204,12 +204,12 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
-      fieldPath: data.octavia.availabilityZones
+      fieldPath: data.octavia.lbMgmtNetwork
     targets:
       - select:
           kind: OpenStackControlPlane
         fieldPaths:
-          - spec.octavia.template.lbMgmtNetwork.availabilityZones
+          - spec.octavia.template.lbMgmtNetwork
         options:
           create: true
 
