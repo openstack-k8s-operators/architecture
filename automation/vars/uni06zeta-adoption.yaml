@@ -1,6 +1,6 @@
 ---
 vas:
-  uni06zeta:
+  uni06zeta-adoption:
     stages:
       - path: examples/dt/uni06zeta/control-plane/networking/nncp
         wait_conditions:
@@ -9,7 +9,6 @@ vas:
             -l osp/nncm-config-type=standard
             --for jsonpath='{.status.conditions[0].reason}'=SuccessfullyConfigured
             --timeout=5m
-
         values:
           - name: network-values
             src_file: values.yaml
@@ -25,31 +24,4 @@ vas:
         values:
           - name: network-values
             src_file: nncp/values.yaml
-        build_output: network.yaml
-
-      - path: examples/dt/uni06zeta/control-plane
-        wait_conditions:
-          - >-
-            oc -n openstack wait openstackcontrolplane
-            controlplane
-            --for condition=Ready
-            --timeout=60m
-
-        values:
-          - name: network-values
-            src_file: networking/nncp/values.yaml
-          - name: service-values
-            src_file: service-values.yaml
         build_output: control-plane.yaml
-
-      - path: examples/dt/uni06zeta
-        wait_conditions:
-          - >-
-            oc -n openstack wait openstackdataplanedeployment
-            edpm-deployment
-            --for condition=Ready
-            --timeout=80m
-        values:
-          - name: edpm-nodeset-values
-            src_file: values.yaml
-        build_output: edpm.yaml
