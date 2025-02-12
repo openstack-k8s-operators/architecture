@@ -2,7 +2,17 @@
 vas:
   uni01alpha:
     stages:
-      - path: examples/dt/uni01alpha/control-plane/nncp
+      - pre_stage_run:
+          - name: Apply cinder-lvm label on master-0
+            type: cr
+            definition:
+              metadata:
+                labels:
+                  openstack.org/cinder-lvm: ""
+            kind: Node
+            resource_name: master-0
+            state: patched
+        path: examples/dt/uni01alpha/control-plane/networking/nncp
         wait_conditions:
           - >-
             oc -n openstack wait nncp
@@ -14,17 +24,18 @@ vas:
             src_file: values.yaml
         build_output: nncp.yaml
 
-      - pre_stage_run:
-          - name: Apply cinder-lvm label on master-0
-            type: cr
-            definition:
-              metadata:
-                labels:
-                  openstack.org/cinder-lvm: ""
-            kind: Node
-            resource_name: master-0
-            state: patched
-        path: examples/dt/uni01alpha/control-plane
+      - path: examples/dt/uni01alpha/control-plane/networking
+        wait_conditions:
+          - >-
+            oc -n metallb-system wait pod
+            -l app=metallb -l component=speaker
+            --for condition=Ready
+        values:
+          - name: network-values
+            src_file: nncp/values.yaml
+        build_output: networking.yaml
+
+      - path: examples/dt/uni01alpha/control-plane
         wait_conditions:
           - >-
             oc -n openstack wait openstackcontrolplane
@@ -33,7 +44,7 @@ vas:
             --timeout=60m
         values:
           - name: network-values
-            src_file: nncp/values.yaml
+            src_file: networking/nncp/values.yaml
           - name: service-values
             src_file: service-values.yaml
         build_output: control-plane.yaml
