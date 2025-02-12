@@ -6,6 +6,6 @@ components:
   - ../../../dt/uni04delta/edpm/nodeset
 
 resources:
-  - control-plane/nncp/values.yaml
+  - control-plane/networking/nncp/values.yaml
   - control-plane/service-values.yaml
   - values.yaml
