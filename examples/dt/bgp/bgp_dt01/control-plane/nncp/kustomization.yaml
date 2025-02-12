@@ -18,7 +18,7 @@ transformers:
       create: true
 
 components:
-  - ../../../../../../lib/nncp
+  - ../../../../../../lib/nncp-l3
 
 resources:
   - values.yaml
@@ -196,213 +196,6 @@ replacements:
         fieldPaths:
           - metadata.name
           - spec.nodeSelector.[kubernetes.io/hostname]
-
-  # Static Node IPs: node-3/worker-0
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_3.internalapi_ip
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: worker-0
-        fieldPaths:
-          - spec.desiredState.interfaces.[name=internalapi].ipv4.address.0.ip
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_3.tenant_ip
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: worker-0
-        fieldPaths:
-          - spec.desiredState.interfaces.[name=tenant].ipv4.address.0.ip
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_3.ctlplane_ip
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: worker-0
-        fieldPaths:
-          - spec.desiredState.interfaces.[type=linux-bridge].ipv4.address.0.ip
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_3.storage_ip
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: worker-0
-        fieldPaths:
-          - spec.desiredState.interfaces.[name=storage].ipv4.address.0.ip
-
-  # Static Node IPs: node-4 / worker-1
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_4.internalapi_ip
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: worker-1
-        fieldPaths:
-          - spec.desiredState.interfaces.[name=internalapi].ipv4.address.0.ip
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_4.tenant_ip
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: worker-1
-        fieldPaths:
-          - spec.desiredState.interfaces.[name=tenant].ipv4.address.0.ip
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_4.ctlplane_ip
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: worker-1
-        fieldPaths:
-          - spec.desiredState.interfaces.[type=linux-bridge].ipv4.address.0.ip
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_4.storage_ip
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: worker-1
-        fieldPaths:
-          - spec.desiredState.interfaces.[name=storage].ipv4.address.0.ip
-
-  # Static Node IPs: node-5 / worker-2
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_5.internalapi_ip
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: worker-2
-        fieldPaths:
-          - spec.desiredState.interfaces.[name=internalapi].ipv4.address.0.ip
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_5.tenant_ip
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: worker-2
-        fieldPaths:
-          - spec.desiredState.interfaces.[name=tenant].ipv4.address.0.ip
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_5.ctlplane_ip
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: worker-2
-        fieldPaths:
-          - spec.desiredState.interfaces.[type=linux-bridge].ipv4.address.0.ip
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_5.storage_ip
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: worker-2
-        fieldPaths:
-          - spec.desiredState.interfaces.[name=storage].ipv4.address.0.ip
-
-  # Static Node IPs: node-6 / worker-3
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_6.internalapi_ip
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: worker-3
-        fieldPaths:
-          - spec.desiredState.interfaces.[name=internalapi].ipv4.address.0.ip
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_6.tenant_ip
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: worker-3
-        fieldPaths:
-          - spec.desiredState.interfaces.[name=tenant].ipv4.address.0.ip
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_6.ctlplane_ip
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: worker-3
-        fieldPaths:
-          - spec.desiredState.interfaces.[type=linux-bridge].ipv4.address.0.ip
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_6.storage_ip
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: worker-3
-        fieldPaths:
-          - spec.desiredState.interfaces.[name=storage].ipv4.address.0.ip
-
-
-  # prefix-lengths
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.ctlplane.prefix-length
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-        fieldPaths:
-          - spec.desiredState.interfaces.[type=linux-bridge].ipv4.address.0.prefix-length
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.internalapi.prefix-length
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-        fieldPaths:
-          - spec.desiredState.interfaces.[name=internalapi].ipv4.address.0.prefix-length
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.tenant.prefix-length
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-        fieldPaths:
-          - spec.desiredState.interfaces.[name=tenant].ipv4.address.0.prefix-length
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.storage.prefix-length
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-        fieldPaths:
-          - spec.desiredState.interfaces.[name=storage].ipv4.address.0.prefix-length
 
   # BGP master-0/node-0 IPs
   - source:
@@ -919,22 +712,6 @@ replacements:
           kind: NodeNetworkConfigurationPolicy
         fieldPaths:
           - spec.desiredState.interfaces.[name=octavia].vlan.id
-  # Overwrite worker-3 base interface
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_6.base_if
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: worker-3
-        fieldPaths:
-          - spec.desiredState.interfaces.[name=internalapi].vlan.base-iface
-          - spec.desiredState.interfaces.[name=tenant].vlan.base-iface
-          - spec.desiredState.interfaces.[name=storage].vlan.base-iface
-          - spec.desiredState.interfaces.[description=^ctlplane.*].name
-          - spec.desiredState.interfaces.[description=^linux-bridge.*].bridge.port.0.name
-          - spec.desiredState.interfaces.[name=octavia].vlan.base-iface
   # Overwrite worker-3 base routes
   - source:
       kind: ConfigMap
@@ -944,5 +721,72 @@ replacements:
       - select:
           kind: NodeNetworkConfigurationPolicy
           name: worker-3
+        fieldPaths:
+          - spec.desiredState.routes
+
+  # NEW L3 ROUTES
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_0.routes
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-0
+        fieldPaths:
+          - spec.desiredState.routes
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_1.routes
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-1
+        fieldPaths:
+          - spec.desiredState.routes
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_2.routes
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-2
+        fieldPaths:
+          - spec.desiredState.routes
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_3.routes
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-0
+        fieldPaths:
+          - spec.desiredState.routes
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_4.routes
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-1
+        fieldPaths:
+          - spec.desiredState.routes
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_5.routes
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-2
         fieldPaths:
           - spec.desiredState.routes
