@@ -1,0 +1,40 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+transformers:
+  # Set namespace to OpenStack on all namespaced objects without a namespace
+  - |-
+    apiVersion: builtin
+    kind: NamespaceTransformer
+    metadata:
+      name: _ignored_
+      namespace: openstack
+    setRoleBindingSubjects: none
+    unsetOnly: true
+    fieldSpecs:
+    - path: metadata/name
+      kind: Namespace
+      create: true
+
+components:
+  - ../../../../../lib/dataplane/nodeset
+
+resources:
+  - baremetalset-password-secret.yaml
+  - nova_pinning.yaml
+
+replacements:
+  # Nova compute CPU pinning customization
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values
+      fieldPath: data.nova.compute.conf
+    targets:
+      - select:
+          kind: ConfigMap
+          name: cpu-pinning-nova
+        fieldPaths:
+          - data.25-cpu-pinning-nova\.conf
+        options:
+          create: true
