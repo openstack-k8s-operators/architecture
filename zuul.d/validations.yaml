@@ -312,7 +312,8 @@
     - dt/uni07eta
     - examples/dt/uni07eta
     - examples/dt/uni07eta/control-plane
-    - examples/dt/uni07eta/control-plane/nncp
+    - examples/dt/uni07eta/control-plane/networking
+    - examples/dt/uni07eta/control-plane/networking/nncp
     - examples/dt/uni07eta/edpm
     - examples/dt/uni07eta/networker
     - examples/dt/uni07eta/networker/nodeset
