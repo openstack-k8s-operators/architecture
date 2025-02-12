@@ -58,7 +58,8 @@
     files:
     - examples/va/hci
     - examples/va/hci/control-plane
-    - examples/va/hci/control-plane/nncp
+    - examples/va/hci/control-plane/networking
+    - examples/va/hci/control-plane/networking/nncp
     - examples/va/hci/deployment
     - examples/va/hci/edpm-pre-ceph/deployment
     - examples/va/hci/edpm-pre-ceph/nodeset
@@ -70,8 +71,8 @@
       cifmw_architecture_scenario: hci
 - job:
     files:
-    - examples/va/hci/control-plane
-    - examples/va/hci/control-plane/nncp
+    - examples/va/hci/control-plane/networking
+    - examples/va/hci/control-plane/networking/nncp
     - lib
     name: rhoso-architecture-validate-hci-adoption
     parent: rhoso-architecture-base-job
