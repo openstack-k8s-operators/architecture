@@ -24,13 +24,10 @@ transformers:
           create: true
 
 components:
-  - ../../lib/networking/metallb
-  - ../../lib/networking/netconfig
-  - ../../lib/networking/nad
   - ../../lib/control-plane
 
 resources:
-  - resources/octavia-network-attachment-definition.yaml
+  - networking/resources/octavia-network-attachment-definition.yaml
 
 replacements:
   - source:
@@ -259,14 +256,3 @@ replacements:
           - spec.neutron.template.customServiceConfig
         options:
           create: true
-
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.octavia.net-attach-def
-    targets:
-      - select:
-          kind: NetworkAttachmentDefinition
-          name: octavia
-        fieldPaths:
-          - spec.config
