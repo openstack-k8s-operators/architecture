@@ -83,7 +83,7 @@ Apply the networking CRs
 oc apply -f networking.yaml
 ```
 
-## Apply the control-plane configurastion.
+## Apply the control-plane configuration.
 
 Generate the control-plane CRs.
 ```bash
