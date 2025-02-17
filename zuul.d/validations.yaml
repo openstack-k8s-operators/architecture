@@ -243,6 +243,19 @@
       cifmw_networking_env_def_file: automation/net-env/uni02beta.yaml
 - job:
     files:
+    - automation/net-env/uni02beta-adoption.yaml
+    - dt/uni02beta
+    - examples/dt/uni02beta
+    - examples/dt/uni02beta/control-plane
+    - examples/dt/uni02beta/control-plane/nncp
+    - lib
+    name: rhoso-architecture-validate-uni02beta-adoption
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: uni02beta-adoption
+      cifmw_networking_env_def_file: automation/net-env/uni02beta-adoption.yaml
+- job:
+    files:
     - automation/net-env/uni04delta.yaml
     - dt/uni04delta
     - examples/dt/uni04delta
