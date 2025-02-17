@@ -21,13 +21,13 @@ cd architecture/examples/dt/uni05epsilon
 ```
 
 Edit [control-plane/service-values.yaml](control-plane/service-values.yaml) and
-[control-plane/nncp/values.yaml](control-plane/nncp/values.yaml).
+[control-plane/networking/nncp/values.yaml](control-plane/nncp/values.yaml).
 
 Apply node network configuration
 
 ```bash
 # Change to the Node Network Configuration folder.
-pushd control-plane/nncp
+pushd control-plane/networking/nncp
 
 # Generate the configuration
 kustomize build > nncp.yaml
