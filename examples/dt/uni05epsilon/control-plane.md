@@ -21,48 +21,49 @@ cd architecture/examples/dt/uni05epsilon
 ```
 
 Edit [control-plane/service-values.yaml](control-plane/service-values.yaml) and
-[control-plane/nncp/values.yaml](control-plane/nncp/values.yaml).
+[control-plane/networking/nncp/values.yaml](control-plane/networking/nncp/values.yaml).
 
-Apply node network configuration
+## Apply node network configuration
 
+Generate the node network configuration
 ```bash
-# Change to the Node Network Configuration folder.
-pushd control-plane/nncp
-
-# Generate the configuration
-kustomize build > nncp.yaml
-
-# Apply the generated configuration
+kustomize build control-plane/networking/nncp > nncp.yaml
+```
+Apply the NNCP CRs
+```
 oc apply -f nncp.yaml
-
-# Wait till the network configuration is applied.
+```
+Wait for NNCPs to be available
+```
 oc wait nncp \
     -l osp/nncm-config-type=standard \
     --for jsonpath='{.status.conditions[0].reason}'=SuccessfullyConfigured \
     --timeout=300s
-
-# Change back the working directory
-popd
 ```
 
-Generate and apply the control-plane configurations.
+## Apply remaining networking configuration
 
+Generate the reminaing networking configuration
+```
+kustomize build control-plane/networking > networking.yaml
+```
+Apply the networking CRs
+```
+oc apply -f networking.yaml
+```
+
+## Apply the control-plane configuration.
+
+Generate the control-plane CRs.
 ```bash
-# Navigate to control-panel
-pushd control-plane
-
-# Generate the CR
-kustomize build > control-plane.yaml
-
-# Verify that control-plane.yaml includes the valid access credentials
-# for the NetApp storage and provide the information if missing.
-
-# Apply the CR
+kustomize build control-plane/ > control-plane.yaml
+```
+Apply the CRs
+```bash
 oc apply -f control-plane.yaml
+```
 
-# Wait for control plane to be available
+Wait for control plane to be available
+```bash
 oc wait osctlplane controlplane --for condition=Ready --timeout=600s
-
-# Change back the working directory
-popd
 ```
