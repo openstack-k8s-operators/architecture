@@ -2,7 +2,7 @@
 vas:
   hci-adoption:
     stages:
-      - path: examples/va/hci/control-plane/nncp
+      - path: examples/va/hci/control-plane/networking/nncp
         wait_conditions:
           - >-
             oc -n openstack wait nncp
@@ -14,12 +14,12 @@ vas:
             src_file: values.yaml
         build_output: nncp.yaml
 
-      - path: examples/va/hci/control-plane
+      - path: examples/va/hci/control-plane/networking
         wait_conditions:
           - >-
-            oc -n openstack wait nncp
-            -l osp/nncm-config-type=standard
-            --for jsonpath='{.status.conditions[0].reason}'=SuccessfullyConfigured
+            oc -n metallb-system wait pod
+            -l app=metallb -l component=speaker
+            --for condition=Ready
             --timeout=5m
         values:
           - name: network-values
