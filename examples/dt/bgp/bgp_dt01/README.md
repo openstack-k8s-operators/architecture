@@ -41,9 +41,9 @@ workers cannot be configured as OVN Gateways.
 The OCP and EDPM nodes deployed with this DT are distributed into three
 different racks. Each rack is connected to two leaves.
 Hence, the distribution of the nodes in the racks is the following one:
-* rack0: compute-0, networker-0, ocp-master-0, ocp-worker-0, leaf-0, leaf-1
-* rack1: compute-1, networker-1, ocp-master-1, ocp-worker-1, leaf-2, leaf-3
-* rack2: compute-2, networker-2, ocp-master-2, ocp-worker-2, leaf-4, leaf-5
+* rack0: r0-compute-0, r0-networker-0, ocp-master-0, ocp-worker-0, leaf-0, leaf-1
+* rack1: r1-compute-0, r1-networker-0, ocp-master-1, ocp-worker-1, leaf-2, leaf-3
+* rack2: r2-compute-0, r2-networker-0, ocp-master-2, ocp-worker-2, leaf-4, leaf-5
 
 The OCP tester (ocp-worker-3) is not included into any rack. It is not
 connected to any leaves, but to a router connected to the spines, due to the
@@ -66,7 +66,9 @@ network).
 
 | Name                     | Type     | CIDR             |
 | ------------------------ | -------- | ---------------- |
-| Provisioning             | untagged | 192.168.122.0/24 |
+| Controlplane rack0       | untagged | 192.168.122.0/24 |
+| Controlplane rack1       | untagged | 192.168.123.0/24 |
+| Controlplane rack2       | untagged | 192.168.124.0/24 |
 | Provider network         | untagged | 192.168.133.0/24 |
 | RH OSP                   | untagged | 192.168.111.0/24 |
 | edpm/ocp to left leaves  | untagged | 100.64.x.y/30    |
@@ -89,13 +91,17 @@ network).
 2. All the VMs that are neither Openstack nor Openshift nodes, i.e. those that
    act as routers, need to be properly configured in order to support the BGP
    protocol.
-3. The spine/leaf topology separates the overcloud nodes into different L2
+3. The spine/leaf topology separates the nodes into different L2
    network segments, called racks. Each rack includes two leaves, some OCP
    nodes and some EDPM nodes.
-4. A separate provisioning network is necessary to install Openstack on those
-   nodes.
-5. Once Openstack is installed on them, dataplane connectivity is achieved
-   using the BGP protocol.
+4. The Openstack services running on the EDPM nodes are installed using the BGP
+   network, i.e. the Openstack services running on OCP nodes connect to the
+   Openstack services running on EDPM nodes using BGP. There is no direct L2
+   network connectivity between them. OCP version 4.18 or higher is required
+   because the Openstack Operators use the frr-k8s feature for this and frr-k8s
+   is not available in OCP 4.16.
+5. Once Openstack is installed on them, both dataplane and controlplane
+   connections are achieved using the BGP protocol.
 6. Tests are executed from the OCP worker to verify external connectivity.
 
 ## Stages
@@ -103,7 +109,9 @@ network).
 All stages must be executed in the order listed below. Everything is required unless otherwise indicated.
 
 1. [Configure taints on the OCP worker](configure-taints.md)
-2. [Install the OpenStack K8S operators and their dependencies](../../../common/)
-3. [Apply metallb customization required to run a speaker pod on the OCP tester node](metallb/)
-4. [Configuring networking and deploy the OpenStack control plane](control-plane.md)
-5. [Configure and deploy the dataplane - networker and compute nodes](data-plane.md)
+2. [Disable RP filters on OCP nodes](disable-rp-filters.md)
+3. [Install the OpenStack K8S operators and their dependencies](../../../common/)
+4. [Apply metallb customization required to run a speaker pod on the OCP tester node](metallb/)
+5. [Configuring networking and deploy the OpenStack control plane](control-plane.md)
+6. [Create BGPConfiguration after controplane is deployed](bgp-configuration.md)
+7. [Configure and deploy the dataplane - networker and compute nodes](data-plane.md)
