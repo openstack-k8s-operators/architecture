@@ -18,8 +18,10 @@ transformers:
 
 components:
   - ../../lib/networking/metallb
+  - networking/metallb
   - ../../lib/networking/netconfig
   - ../../lib/networking/nad
+  - networking/nad
   - ../../lib/control-plane
 
 patches:
@@ -33,6 +35,19 @@ patches:
         value:
           dnsDomain: _replaced_
           name: storagemgmt
+          subnets:
+            - _replaced_
+          mtu: 1500
+  - target:
+      version: v1beta1
+      kind: NetConfig
+      name: netconfig
+    patch: |-
+      - op: add
+        path: /spec/networks/-
+        value:
+          dnsDomain: _replaced_
+          name: nfs
           subnets:
             - _replaced_
           mtu: 1500
@@ -67,6 +82,36 @@ replacements:
           kind: NetConfig
         fieldPaths:
           - spec.networks.[name=storagemgmt].subnets
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.nfs.dnsDomain
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=nfs].dnsDomain
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.nfs.mtu
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=nfs].mtu
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.nfs.subnets
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=nfs].subnets
 
   - source:
       kind: ConfigMap
