@@ -22,6 +22,7 @@ resources:
   - nova-subscription.yaml
   - octavia-subscription.yaml
   - openstack-baremetal-subscription.yaml
+  - openstack-ansibleee-subscription.yaml
   - ovn-subscription.yaml
   - placement-subscription.yaml
   - rabbitmq-cluster-subscription.yaml
