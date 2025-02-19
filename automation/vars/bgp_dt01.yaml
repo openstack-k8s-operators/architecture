@@ -52,7 +52,7 @@ vas:
             resource_name: openshift-no-reapply-sysctl
             namespace: openshift-cluster-node-tuning-operator
             state: present
-        path: examples/dt/bgp/bgp_dt01/control-plane/nncp
+        path: examples/dt/bgp_dt01/control-plane/nncp
         wait_conditions:
           - >-
             oc -n openstack wait nncp
@@ -65,7 +65,7 @@ vas:
         build_output: nncp.yaml
 
       -  # stage_1
-        path: examples/dt/bgp/bgp_dt01/control-plane
+        path: examples/dt/bgp_dt01/control-plane
         wait_conditions:
           - >-
             oc -n openstack wait openstackcontrolplane
@@ -90,7 +90,7 @@ vas:
             state: present
 
       -  # stage_2
-        path: examples/dt/bgp/bgp_dt01/edpm/computes/r0
+        path: examples/dt/bgp_dt01/edpm/computes/r0
         wait_conditions:
           - >-
             oc -n openstack wait openstackdataplanenodeset
@@ -103,7 +103,7 @@ vas:
         build_output: edpm-r0-compute-nodeset.yaml
 
       -  # stage_3
-        path: examples/dt/bgp/bgp_dt01/edpm/computes/r1
+        path: examples/dt/bgp_dt01/edpm/computes/r1
         wait_conditions:
           - >-
             oc -n openstack wait openstackdataplanenodeset
@@ -116,7 +116,7 @@ vas:
         build_output: edpm-r1-compute-nodeset.yaml
 
       -  # stage_4
-        path: examples/dt/bgp/bgp_dt01/edpm/computes/r2
+        path: examples/dt/bgp_dt01/edpm/computes/r2
         wait_conditions:
           - >-
             oc -n openstack wait openstackdataplanenodeset
@@ -129,7 +129,7 @@ vas:
         build_output: edpm-r2-compute-nodeset.yaml
 
       -  # stage_5
-        path: examples/dt/bgp/bgp_dt01/edpm/networkers/r0
+        path: examples/dt/bgp_dt01/edpm/networkers/r0
         wait_conditions:
           - >-
             oc -n openstack wait openstackdataplanenodeset
@@ -142,7 +142,7 @@ vas:
         build_output: edpm-r0-networker-nodeset.yaml
 
       -  # stage_6
-        path: examples/dt/bgp/bgp_dt01/edpm/networkers/r1
+        path: examples/dt/bgp_dt01/edpm/networkers/r1
         wait_conditions:
           - >-
             oc -n openstack wait openstackdataplanenodeset
@@ -155,7 +155,7 @@ vas:
         build_output: edpm-r1-networker-nodeset.yaml
 
       -  # stage_7
-        path: examples/dt/bgp/bgp_dt01/edpm/networkers/r2
+        path: examples/dt/bgp_dt01/edpm/networkers/r2
         wait_conditions:
           - >-
             oc -n openstack wait openstackdataplanenodeset
@@ -168,7 +168,7 @@ vas:
         build_output: edpm-r2-networker-nodeset.yaml
 
       -  # stage_8
-        path: examples/dt/bgp/bgp_dt01/edpm/deployment
+        path: examples/dt/bgp_dt01/edpm/deployment
         wait_conditions:
           - >-
             oc -n openstack wait openstackdataplanedeployment
