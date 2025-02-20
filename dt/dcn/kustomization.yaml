@@ -82,6 +82,7 @@ replacements:
         fieldPaths:
           - spec.networks.[name=storagemgmt].subnets
 
+  # Octavia support
   - source:
       kind: ConfigMap
       name: network-values

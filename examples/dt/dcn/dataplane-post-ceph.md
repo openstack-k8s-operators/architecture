@@ -105,3 +105,21 @@ of how to DTs should look when AZ1 is removed. To view them run the following co
 ```shell
 kustomize build architecture/examples/dt/dcn/control-plane/scaledown/
 ```
+
+## Octavia with Availability Zones
+
+When using Octavia with Availability Zones, it needs additional configuration for each AZ in the control plane during the post-Ceph deployment.
+
+For instance, after deploying AZ1:
+
+```yaml
+spec:
+  octavia:
+    enabled: true
+    ...
+    lbMgmtNetwork:
+      availabilityZoneCIDRs:
+        az1: 172.34.0.0/16
+```
+
+The availabilityZoneCIDRs setting creates the Octavia management networks that are used between the control plane and the Octavia Amphora VMs in remote AZs.
