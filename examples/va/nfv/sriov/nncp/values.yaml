@@ -72,7 +72,7 @@ data:
         vlan: 20
     mtu: 1500
     prefix-length: 24
-    iface: enp7s0.20
+    iface: internalapi
     vlan: 20
     base_iface: enp7s0
     lb_addresses:
@@ -105,7 +105,7 @@ data:
         vlan: 21
     mtu: 1500
     prefix-length: 24
-    iface: enp7s0.21
+    iface: storage
     vlan: 21
     base_iface: enp7s0
     lb_addresses:
@@ -134,7 +134,7 @@ data:
         vlan: 22
     mtu: 1500
     prefix-length: 24
-    iface: enp7s0.22
+    iface: tenant
     vlan: 22
     base_iface: enp7s0
     lb_addresses:
