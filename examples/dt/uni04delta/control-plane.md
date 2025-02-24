@@ -18,11 +18,14 @@ Change to uni04delta directory
 cd architecture/examples/dt/uni04delta
 ```
 
-Apply the required network configurations.
+# Apply the required node network configurations.
+```bash
+vi control-plane/networking/nncp/values.yaml
+```
 
 ```bash
 # Change the Node Network Configuration folder.
-pushd control-plane/nncp
+pushd control-plane/networking/nncp
 
 # Generate the configuration
 kustomize build > nncp.yaml
@@ -38,8 +41,18 @@ oc wait nncp -l osp/nncm-config-type=standard \
 # change the working directory
 popd
 ```
+# Apply remainig networking configuration
 
-Generate and apply the control-plane configurations.
+Generate the remaining networking configuration
+```bash
+kustomize build control-plane/networking > networking.yaml
+```
+Apply the networking CRs
+```bash
+oc apply -f networking.yaml
+```
+
+# Generate and apply the control-plane configurations.
 
 ```bash
 # Navigate to control-panel
@@ -56,4 +69,3 @@ oc wait openstackcontrolplane --for condition=Ready --timeout=600s
 
 # change the work_dir
 popd
-```
