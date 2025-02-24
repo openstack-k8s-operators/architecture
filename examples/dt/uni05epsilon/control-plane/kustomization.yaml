@@ -6,5 +6,5 @@ components:
   - ../../../../dt/uni05epsilon
 
 resources:
-  - nncp/values.yaml
+  - networking/nncp/values.yaml
   - service-values.yaml

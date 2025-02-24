@@ -2,7 +2,7 @@
 vas:
   uni05epsilon:
     stages:
-      - path: examples/dt/uni05epsilon/control-plane/nncp
+      - path: examples/dt/uni05epsilon/control-plane/networking/nncp
         wait_conditions:
           - >-
             oc -n openstack wait nncp
@@ -13,6 +13,17 @@ vas:
           - name: network-values
             src_file: values.yaml
         build_output: nncp.yaml
+
+      - path: examples/dt/uni05epsilon/control-plane/networking
+        wait_conditions:
+          - >-
+            oc -n metallb-system wait pod
+            -l app=metallb -l component=speaker
+            --for condition=Ready
+        values:
+          - name: network-values
+            src_file: nncp/values.yaml
+        build_output: networking.yaml
 
       - path: examples/dt/uni05epsilon/control-plane
         wait_conditions:
