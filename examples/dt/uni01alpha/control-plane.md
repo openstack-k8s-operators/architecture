@@ -22,7 +22,7 @@ metadata:
   labels:
     operators.coreos.com/observability-operator.openshift-operators: ""
 spec:
-  channel: development
+  channel: stable
   installPlanApproval: Automatic
   name: cluster-observability-operator
   source: redhat-operators
