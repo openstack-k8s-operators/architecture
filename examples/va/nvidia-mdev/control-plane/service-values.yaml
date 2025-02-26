@@ -1,0 +1,44 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: service-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+data:
+  preserveJobs: false
+  neutron:
+    customServiceConfig: |
+      [DEFAULT]
+      service_plugins=qos,ovn-router,trunk,segments,port_forwarding,log,placement
+      [ml2]
+      mechanism_drivers=sriovnicswitch,ovn
+      extension_drivers=port_security,router,qos,segments,trunk,placement,port_numa_affinity_policy
+      [ml2_type_vlan]
+      network_vlan_ranges=datacentre:1:1000,physnet1:2000:2005
+  ovn:
+    ovnController:
+      nicMappings:
+        datacentre: enp6s0
+  glance:
+    customServiceConfig: |
+      [DEFAULT]
+      enabled_backends = default_backend:swift
+      [glance_store]
+      default_backend = default_backend
+      [default_backend]
+      swift_store_create_container_on_put = True
+      swift_store_auth_version = 3
+      swift_store_auth_address = {{ .KeystoneInternalURL }}
+      swift_store_endpoint_type = internalURL
+      swift_store_user = service:glance
+      swift_store_key = {{ .ServicePassword }}
+    default:
+      replicas: 1
+  swift:
+    enabled: true
+  nova:
+    schedulerServiceTemplate:
+      customServiceConfig: |
+        [filter_scheduler]
+        enabled_filtes = AvailabilityZoneFilter,ComputeFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,ServerGroupAntiAffinityFilter,ServerGroupAffinityFilter,PciPassthroughFilter,NUMATopologyFilter,AggregateInstanceExtraSpecsFilter
