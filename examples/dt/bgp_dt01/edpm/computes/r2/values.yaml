@@ -32,12 +32,8 @@ data:
           dnf -y install conntrack-tools
         edpm_network_config_hide_sensitive_logs: false
         edpm_network_config_os_net_config_mappings:
-          edpm-compute-0:
+          edpm-r2-compute-0:
             nic2: 6a:fe:54:3f:8a:02  # CHANGEME
-          edpm-compute-1:
-            nic2: 6b:fe:54:3f:8a:02  # CHANGEME
-          edpm-compute-2:
-            nic2: 6c:fe:54:3f:8a:02  # CHANGEME
         edpm_network_config_template: |
           ---
           {% set mtu_list = [ctlplane_mtu] %}
@@ -122,10 +118,10 @@ data:
       - name: BgpMainNetV6
         subnetName: subnet2
     nodes:
-      edpm-compute-2:
-        hostName: edpm-compute-2
+      edpm-r2-compute-0:
+        hostName: edpm-r2-compute-0
         ansible:
-          ansibleHost: 192.168.122.102
+          ansibleHost: 192.168.124.100
           ansibleVars:
             edpm_ovn_bgp_agent_local_ovn_peer_ips:
               - 100.64.2.1
@@ -135,7 +131,7 @@ data:
               - 100.65.2.1
         networks:
           - defaultRoute: true
-            fixedIP: 192.168.122.102
+            fixedIP: 192.168.124.100
             name: CtlPlane
             subnetName: subnet1
           - name: InternalApi
