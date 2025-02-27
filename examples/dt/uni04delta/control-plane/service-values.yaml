@@ -98,8 +98,6 @@ data:
       region_name = regionOne
       [ovs]
       igmp_snooping_enable = true
-      [ovn]
-      ovn_emit_need_to_frag = true
       [ml2]
       type_drivers = geneve,vlan,flat,local
       tenant_network_types = vlan,flat
