@@ -25,6 +25,7 @@ data:
         edpm_frr_bgp_ipv4_src_network: bgpmainnet
         edpm_frr_bgp_ipv6_src_network: bgpmainnetv6
         edpm_frr_bgp_neighbor_password: f00barZ
+        edpm_frr_bfd: false
         timesync_ntp_servers:
           - hostname: pool.ntp.org
         # conntrack is necessary for some tobiko tests
@@ -32,12 +33,8 @@ data:
           dnf -y install conntrack-tools
         edpm_network_config_hide_sensitive_logs: false
         edpm_network_config_os_net_config_mappings:
-          edpm-networker-0:
+          edpm-r0-networker-0:
             nic2: 6d:fe:54:3f:8a:02  # CHANGEME
-          edpm-networker-1:
-            nic2: 6e:fe:54:3f:8a:02  # CHANGEME
-          edpm-networker-2:
-            nic2: 6f:fe:54:3f:8a:02  # CHANGEME
         edpm_network_config_template: |
           ---
           {% set mtu_list = [ctlplane_mtu] %}
@@ -122,10 +119,10 @@ data:
       - name: BgpMainNetV6
         subnetName: subnet2
     nodes:
-      edpm-networker-0:
-        hostName: edpm-networker-0
+      edpm-r0-networker-0:
+        hostName: edpm-r0-networker-0
         ansible:
-          ansibleHost: 192.168.122.105
+          ansibleHost: 192.168.122.200
           ansibleVars:
             edpm_ovn_bgp_agent_local_ovn_peer_ips:
               - 100.64.0.5
@@ -135,7 +132,7 @@ data:
               - 100.65.0.5
         networks:
           - defaultRoute: true
-            fixedIP: 192.168.122.105
+            fixedIP: 192.168.122.200
             name: CtlPlane
             subnetName: subnet1
           - name: InternalApi
