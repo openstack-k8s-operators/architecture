@@ -303,13 +303,23 @@
     - dt/uni06zeta
     - examples/dt/uni06zeta
     - examples/dt/uni06zeta/control-plane
-    - examples/dt/uni06zeta/control-plane/nncp
+    - examples/dt/uni06zeta/control-plane/networking
+    - examples/dt/uni06zeta/control-plane/networking/nncp
     - lib
     name: rhoso-architecture-validate-uni06zeta
     parent: rhoso-architecture-base-job
     vars:
       cifmw_architecture_scenario: uni06zeta
       cifmw_networking_env_def_file: automation/net-env/uni06zeta.yaml
+- job:
+    files:
+    - examples/dt/uni06zeta/control-plane/networking
+    - examples/dt/uni06zeta/control-plane/networking/nncp
+    - lib
+    name: rhoso-architecture-validate-uni06zeta-adoption
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: uni06zeta-adoption
 - job:
     files:
     - automation/net-env/uni07eta.yaml

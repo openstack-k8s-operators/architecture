@@ -19,12 +19,12 @@ cd architecture/examples/dt/uni06zeta
 ```
 
 Edit [control-plane/service-values.yaml](control-plane/service-values.yaml) and
-[control-plane/nncp/values.yaml](control-plane/nncp/values.yaml).
+[control-plane/networking/nncp/values.yaml](control-plane/networking/nncp/values.yaml).
 
 Apply node network configuration
 
 ```bash
-pushd control-plane/nncp
+pushd control-plane/networking/nncp
 kustomize build > nncp.yaml
 oc apply -f nncp.yaml
 oc wait nncp \
@@ -34,14 +34,25 @@ oc wait nncp \
 popd
 ```
 
-Generate the control-plane and networking CRs.
+Generate the reminaing networking configuration
+```
+kustomize build control-plane/networking > networking.yaml
+```
+Apply the networking CRs
+```
+oc apply -f networking.yaml
+```
+
+## Apply control-plane configuration
+
+Generate the control-plane CR.
 
 ```bash
 pushd control-plane
 kustomize build > control-plane.yaml
 ```
 
-## Create CRs
+## Create CR
 
 ```bash
 oc apply -f control-plane.yaml

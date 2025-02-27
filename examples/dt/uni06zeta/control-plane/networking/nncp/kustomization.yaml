@@ -17,7 +17,7 @@ transformers:
         create: true
 
 components:
-  - ../../../../../dt/uni06zeta/nncp
+  - ../../../../../../dt/uni06zeta/nncp
 
 resources:
   - values.yaml
