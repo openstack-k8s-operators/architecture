@@ -22,7 +22,7 @@ metadata:
   labels:
     operators.coreos.com/observability-operator.openshift-operators: ""
 spec:
-  channel: development
+  channel: stable
   installPlanApproval: Automatic
   name: cluster-observability-operator
   source: redhat-operators
@@ -52,33 +52,46 @@ cd architecture/examples/dt/uni01alpha
 ```
 
 Edit [service-values.yaml](control-plane/service-values.yaml) and
-[control-plane/nncp/values.yaml](control-plane/nncp/values.yaml).
+[control-plane/networking/nncp/values.yaml](control-plane/networking/nncp/values.yaml).
 
-Apply node network configuration
+## Apply node network configuration
 
+Generate the node network configuration
 ```bash
-pushd control-plane/nncp
-kustomize build > nncp.yaml
+kustomize build control-plane/networking/nncp > nncp.yaml
+```
+Apply the NNCP CRs
+```
 oc apply -f nncp.yaml
+```
+Wait for NNCPs to be available
+```
 oc wait nncp \
     -l osp/nncm-config-type=standard \
     --for jsonpath='{.status.conditions[0].reason}'=SuccessfullyConfigured \
     --timeout=300s
-popd
 ```
 
-Generate the control-plane and networking CRs.
+## Apply remaining networking configuration
 
+Generate the reminaing networking configuration
+```
+kustomize build control-plane/networking > networking.yaml
+```
+Apply the networking CRs
+```
+oc apply -f networking.yaml
+```
+
+## Apply the control-plane configuration.
+
+Generate the control-plane CRs.
 ```bash
-pushd control-plane
-kustomize build > control-plane.yaml
+kustomize build control-plane/ > control-plane.yaml
 ```
-
-## Create CRs
-
+Apply the CRs
 ```bash
 oc apply -f control-plane.yaml
-popd
 ```
 
 Wait for control plane to be available

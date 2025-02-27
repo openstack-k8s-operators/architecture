@@ -1,25 +1,15 @@
 - job:
     files:
-    - automation/net-env/bgp.yaml
-    - dt/bgp
-    - examples/dt/bgp/control-plane
-    - examples/dt/bgp/control-plane/nncp
-    - examples/dt/bgp/edpm/deployment
-    - examples/dt/bgp/edpm/nodeset
-    - lib
-    name: rhoso-architecture-validate-bgp
-    parent: rhoso-architecture-base-job
-    vars:
-      cifmw_architecture_scenario: bgp
-      cifmw_networking_env_def_file: automation/net-env/bgp.yaml
-- job:
-    files:
     - automation/mocks/bgp_dt01.yaml
-    - examples/dt/bgp/bgp_dt01/control-plane
-    - examples/dt/bgp/bgp_dt01/control-plane/nncp
-    - examples/dt/bgp/bgp_dt01/edpm/computes
-    - examples/dt/bgp/bgp_dt01/edpm/deployment
-    - examples/dt/bgp/bgp_dt01/edpm/networkers
+    - examples/dt/bgp_dt01/control-plane
+    - examples/dt/bgp_dt01/control-plane/nncp
+    - examples/dt/bgp_dt01/edpm/computes/r0
+    - examples/dt/bgp_dt01/edpm/computes/r1
+    - examples/dt/bgp_dt01/edpm/computes/r2
+    - examples/dt/bgp_dt01/edpm/deployment
+    - examples/dt/bgp_dt01/edpm/networkers/r0
+    - examples/dt/bgp_dt01/edpm/networkers/r1
+    - examples/dt/bgp_dt01/edpm/networkers/r2
     - lib
     name: rhoso-architecture-validate-bgp_dt01
     parent: rhoso-architecture-base-job
@@ -58,7 +48,8 @@
     files:
     - examples/va/hci
     - examples/va/hci/control-plane
-    - examples/va/hci/control-plane/nncp
+    - examples/va/hci/control-plane/networking
+    - examples/va/hci/control-plane/networking/nncp
     - examples/va/hci/deployment
     - examples/va/hci/edpm-pre-ceph/deployment
     - examples/va/hci/edpm-pre-ceph/nodeset
@@ -70,8 +61,8 @@
       cifmw_architecture_scenario: hci
 - job:
     files:
-    - examples/va/hci/control-plane
-    - examples/va/hci/control-plane/nncp
+    - examples/va/hci/control-plane/networking
+    - examples/va/hci/control-plane/networking/nncp
     - lib
     name: rhoso-architecture-validate-hci-adoption
     parent: rhoso-architecture-base-job
@@ -207,7 +198,8 @@
     - dt/uni01alpha
     - examples/dt/uni01alpha
     - examples/dt/uni01alpha/control-plane
-    - examples/dt/uni01alpha/control-plane/nncp
+    - examples/dt/uni01alpha/control-plane/networking
+    - examples/dt/uni01alpha/control-plane/networking/nncp
     - examples/dt/uni01alpha/edpm
     - examples/dt/uni01alpha/networker
     - examples/dt/uni01alpha/networker/nodeset
@@ -220,8 +212,8 @@
 - job:
     files:
     - automation/net-env/uni01alpha-adoption.yaml
-    - examples/dt/uni01alpha/control-plane
-    - examples/dt/uni01alpha/control-plane/nncp
+    - examples/dt/uni01alpha/control-plane/networking
+    - examples/dt/uni01alpha/control-plane/networking/nncp
     - lib
     name: rhoso-architecture-validate-uni01alpha-adoption
     parent: rhoso-architecture-base-job
@@ -247,7 +239,8 @@
     - dt/uni04delta
     - examples/dt/uni04delta
     - examples/dt/uni04delta/control-plane
-    - examples/dt/uni04delta/control-plane/nncp
+    - examples/dt/uni04delta/control-plane/networking
+    - examples/dt/uni04delta/control-plane/networking/nncp
     - examples/dt/uni04delta/deployment
     - examples/dt/uni04delta/edpm-pre-ceph
     - examples/dt/uni04delta/edpm-pre-ceph/nodeset
@@ -257,6 +250,17 @@
     vars:
       cifmw_architecture_scenario: uni04delta
       cifmw_networking_env_def_file: automation/net-env/uni04delta.yaml
+- job:
+    files:
+    - automation/net-env/uni04delta-adoption.yaml
+    - examples/dt/uni04delta/control-plane/networking
+    - examples/dt/uni04delta/control-plane/networking/nncp
+    - lib
+    name: rhoso-architecture-validate-uni04delta-adoption
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: uni04delta-adoption
+      cifmw_networking_env_def_file: automation/net-env/uni04delta-adoption.yaml
 - job:
     files:
     - automation/mocks/uni04delta-ipv6.yaml

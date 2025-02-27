@@ -1,11 +1,11 @@
 ---
 cifmw_networking_env_definition:
   instances:
-    compute-0:
-      hostname: compute-0
-      name: compute-0
+    r0-compute-0:
+      hostname: r0-compute-0
+      name: r0-compute-0
       networks:
-        ctlplane:
+        ctlplaner0:
           interface_name: eth1
           ip_v4: 192.168.122.100
           mac_addr: 52:54:00:6a:4a:25
@@ -47,13 +47,13 @@ cifmw_networking_env_definition:
           prefix_length_v4: 24
           skip_nm: false
           vlan_id: 22
-    compute-1:
-      hostname: compute-1
-      name: compute-1
+    r1-compute-0:
+      hostname: r1-compute-0
+      name: r1-compute-0
       networks:
-        ctlplane:
+        ctlplaner1:
           interface_name: eth1
-          ip_v4: 192.168.122.101
+          ip_v4: 192.168.123.101
           mac_addr: 52:54:00:9b:e6:98
           mtu: 1500
           netmask_v4: 255.255.255.0
@@ -93,13 +93,13 @@ cifmw_networking_env_definition:
           prefix_length_v4: 24
           skip_nm: false
           vlan_id: 22
-    compute-2:
-      hostname: compute-2
-      name: compute-2
+    r2-compute-0:
+      hostname: r2-compute-0
+      name: r2-compute-0
       networks:
-        ctlplane:
+        ctlplaner2:
           interface_name: eth1
-          ip_v4: 192.168.122.102
+          ip_v4: 192.168.124.102
           mac_addr: 52:54:00:98:a6:ae
           mtu: 1500
           netmask_v4: 255.255.255.0
@@ -152,11 +152,11 @@ cifmw_networking_env_definition:
           network_name: ctlplane
           prefix_length_v4: 24
           skip_nm: false
-    networker-0:
-      hostname: networker-0
-      name: networker-0
+    r0-networker-0:
+      hostname: r0-networker-0
+      name: r0-networker-0
       networks:
-        ctlplane:
+        ctlplaner0:
           interface_name: eth1
           ip_v4: 192.168.122.106
           mac_addr: 52:54:00:15:d3:88
@@ -187,11 +187,11 @@ cifmw_networking_env_definition:
           prefix_length_v4: 24
           skip_nm: false
           vlan_id: 22
-    networker-1:
-      hostname: networker-1
-      name: networker-1
+    r1-networker-0:
+      hostname: r1-networker-0
+      name: r1-networker-0
       networks:
-        ctlplane:
+        ctlplaner1:
           interface_name: eth1
           ip_v4: 192.168.122.107
           mac_addr: 52:54:00:de:46:aa
@@ -222,11 +222,11 @@ cifmw_networking_env_definition:
           prefix_length_v4: 24
           skip_nm: false
           vlan_id: 22
-    networker-2:
-      hostname: networker-2
-      name: networker-2
+    r2-networker-0:
+      hostname: r2-networker-0
+      name: r2-networker-0
       networks:
-        ctlplane:
+        ctlplaner2:
           interface_name: eth1
           ip_v4: 192.168.122.108
           mac_addr: 52:54:00:3f:b8:15
@@ -694,6 +694,123 @@ cifmw_networking_env_definition:
               end_host: 200
               length: 51
               start: 192.168.122.150
+              start_host: 150
+          ipv6_ranges: []
+    ctlplaner0:
+      dns_v4:
+        - 192.168.122.1
+      dns_v6: []
+      gw_v4: 192.168.122.1
+      mtu: 1500
+      network_name: ctlplaner0
+      network_v4: 192.168.122.0/24
+      search_domain: ctlplaner0.example.com
+      tools:
+        metallb:
+          ipv4_ranges:
+            - end: 192.168.122.90
+              end_host: 90
+              length: 11
+              start: 192.168.122.80
+              start_host: 80
+          ipv6_ranges: []
+        multus:
+          ipv4_ranges:
+            - end: 192.168.122.70
+              end_host: 70
+              length: 41
+              start: 192.168.122.30
+              start_host: 30
+          ipv6_ranges: []
+        netconfig:
+          ipv4_ranges:
+            - end: 192.168.122.120
+              end_host: 120
+              length: 21
+              start: 192.168.122.100
+              start_host: 100
+            - end: 192.168.122.200
+              end_host: 200
+              length: 51
+              start: 192.168.122.150
+              start_host: 150
+          ipv6_ranges: []
+    ctlplaner1:
+      dns_v4:
+        - 192.168.123.1
+      dns_v6: []
+      gw_v4: 192.168.123.1
+      mtu: 1500
+      network_name: ctlplaner1
+      network_v4: 192.168.123.0/24
+      search_domain: ctlplaner1.example.com
+      tools:
+        metallb:
+          ipv4_ranges:
+            - end: 192.168.123.90
+              end_host: 90
+              length: 11
+              start: 192.168.123.80
+              start_host: 80
+          ipv6_ranges: []
+        multus:
+          ipv4_ranges:
+            - end: 192.168.123.70
+              end_host: 70
+              length: 41
+              start: 192.168.123.30
+              start_host: 30
+          ipv6_ranges: []
+        netconfig:
+          ipv4_ranges:
+            - end: 192.168.123.120
+              end_host: 120
+              length: 21
+              start: 192.168.123.100
+              start_host: 100
+            - end: 192.168.123.200
+              end_host: 200
+              length: 51
+              start: 192.168.123.150
+              start_host: 150
+          ipv6_ranges: []
+    ctlplaner2:
+      dns_v4:
+        - 192.168.124.1
+      dns_v6: []
+      gw_v4: 192.168.124.1
+      mtu: 1500
+      network_name: ctlplaner2
+      network_v4: 192.168.124.0/24
+      search_domain: ctlplaner2.example.com
+      tools:
+        metallb:
+          ipv4_ranges:
+            - end: 192.168.124.90
+              end_host: 90
+              length: 11
+              start: 192.168.124.80
+              start_host: 80
+          ipv6_ranges: []
+        multus:
+          ipv4_ranges:
+            - end: 192.168.124.70
+              end_host: 70
+              length: 41
+              start: 192.168.124.30
+              start_host: 30
+          ipv6_ranges: []
+        netconfig:
+          ipv4_ranges:
+            - end: 192.168.124.120
+              end_host: 120
+              length: 21
+              start: 192.168.124.100
+              start_host: 100
+            - end: 192.168.124.200
+              end_host: 200
+              length: 51
+              start: 192.168.124.150
               start_host: 150
           ipv6_ranges: []
     external:

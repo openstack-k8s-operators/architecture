@@ -2,7 +2,6 @@
     github-check:
       jobs: &id001
       - noop
-      - rhoso-architecture-validate-bgp
       - rhoso-architecture-validate-bgp_dt01
       - rhoso-architecture-validate-bmo01
       - rhoso-architecture-validate-dcn
@@ -22,6 +21,7 @@
       - rhoso-architecture-validate-uni01alpha-adoption
       - rhoso-architecture-validate-uni02beta
       - rhoso-architecture-validate-uni04delta
+      - rhoso-architecture-validate-uni04delta-adoption
       - rhoso-architecture-validate-uni04delta-ipv6
       - rhoso-architecture-validate-uni05epsilon
       - rhoso-architecture-validate-uni06zeta

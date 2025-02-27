@@ -95,3 +95,13 @@ oc rsh openstackclient openstack aggregate add host az0 edpm-compute-0.ctlplane.
 The above will result in `az0` with 3 compute nodes and one ceph cluster being deployed. To deploy additional AZs, e.g. `az1` and `az2`, each with 3 more compute nodes and one more ceph cluster, create updated values files and re-apply the kustomizations. An Ansible role which does this in our CI system for testing is available to be reviewed for details.
 
 <https://github.com/openstack-k8s-operators/ci-framework/tree/main/roles/ci_dcn_site>
+
+## Availability Zone scale down
+
+This DT includes an example of how to scale down one of the deployed AZs. The example 
+values in examples/dt/dcn/control-plane/scaledown/service-values.yaml have an example
+of how to DTs should look when AZ1 is removed. To view them run the following command.
+
+```shell
+kustomize build architecture/examples/dt/dcn/control-plane/scaledown/
+```
