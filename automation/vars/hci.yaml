@@ -27,6 +27,7 @@ vas:
         build_output: network.yaml
 
       - path: examples/va/hci/control-plane
+        name: control-plane-deployment
         wait_conditions:
           - >-
             oc -n openstack wait osctlplane controlplane --for condition=Ready
