@@ -9,5 +9,5 @@ components:
   - ../../../../dt/uni02beta
 
 resources:
-  - nncp/values.yaml
+  - networking/nncp/values.yaml
   - service-values.yaml
