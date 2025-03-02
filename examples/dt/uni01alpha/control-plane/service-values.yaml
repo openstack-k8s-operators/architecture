@@ -120,6 +120,15 @@ data:
     enabled: true
     metricStorage:
       enabled: true
+      dashboardsEnabled: true
+      monitoringStack:
+        alertingEnabled: true
+        scrapeInterval: 30s
+        storage:
+          strategy: persistent
+          retention: 24h
+          persistent:
+            pvcStorageRequest: 20G
     autoscaling:
       enabled: true
     ceilometer:
@@ -175,3 +184,16 @@ data:
       [ml2]
       type_drivers = geneve,vxlan,vlan,flat,local
       tenant_network_types = geneve,flat
+
+---
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: cluster-observability-operator
+  namespace: openshift-operators
+spec:
+  channel: development
+  installPlanApproval: Automatic
+  name: cluster-observability-operator
+  source: redhat-operators
+  sourceNamespace: openshift-marketplace
