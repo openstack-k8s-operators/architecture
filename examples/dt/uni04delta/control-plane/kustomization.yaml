@@ -6,5 +6,5 @@ components:
   - ../../../../dt/uni04delta/
 
 resources:
-  - nncp/values.yaml
+  - networking/nncp/values.yaml
   - service-values.yaml
