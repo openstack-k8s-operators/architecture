@@ -26,3 +26,8 @@ spec:
       subnets:
         - _replaced_
       mtu: 1500
+    - dnsDomain: _replaced_
+      name: octavia
+      subnets:
+        - _replaced_
+      mtu: 1500
