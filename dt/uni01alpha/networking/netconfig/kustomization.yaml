@@ -43,6 +43,15 @@ replacements:
           kind: NetConfig
         fieldPaths:
           - spec.networks.[name=tenant].dnsDomain
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.octavia.dnsDomain
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=octavia].dnsDomain
 
   # NetConfig MTU
   - source:
@@ -81,6 +90,15 @@ replacements:
           kind: NetConfig
         fieldPaths:
           - spec.networks.[name=tenant].mtu
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.octavia.mtu
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=octavia].mtu
 
   # NetConfig subnets
   - source:
@@ -119,3 +137,12 @@ replacements:
           kind: NetConfig
         fieldPaths:
           - spec.networks.[name=tenant].subnets
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.octavia.subnets
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=octavia].subnets
