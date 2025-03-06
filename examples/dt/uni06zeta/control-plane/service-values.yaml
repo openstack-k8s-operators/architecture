@@ -130,7 +130,6 @@ data:
       [ovs]
       igmp_snooping_enable = true
       [ovn]
-      ovn_emit_need_to_frag = true
       enable_distributed_floating_ip = false
       [ml2]
       type_drivers = geneve,vlan,flat,local
