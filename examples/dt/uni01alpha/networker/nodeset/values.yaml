@@ -90,6 +90,8 @@ data:
         subnetName: subnet1
       - name: tenant
         subnetName: subnet1
+      - name: octavia
+        subnetName: subnet1
 
     nodes:
       edpm-networker-0:
@@ -105,6 +107,8 @@ data:
             subnetName: subnet1
           - name: tenant
             subnetName: subnet1
+          - name: octavia
+            subnetName: subnet1
       edpm-networker-1:
         hostName: edpm-networker-1
         ansible:
@@ -118,6 +122,8 @@ data:
             subnetName: subnet1
           - name: tenant
             subnetName: subnet1
+          - name: octavia
+            subnetName: subnet1
       edpm-networker-2:
         hostName: edpm-networker-2
         ansible:
@@ -130,6 +136,8 @@ data:
           - name: internalapi
             subnetName: subnet1
           - name: tenant
+            subnetName: subnet1
+          - name: octavia
             subnetName: subnet1
 
     services:
