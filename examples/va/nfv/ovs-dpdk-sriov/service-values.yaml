@@ -56,6 +56,8 @@ data:
     template:
       ceilometer:
         enabled: true
+      metricStorage:
+        enabled: true
   extraMounts:
     - name: v1
       region: r1
