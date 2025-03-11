@@ -711,6 +711,31 @@ data:
               name: subnet1
               vlan: 42
         vlan: 42
+    octavia:
+        dnsDomain: octavia.openstack.lab
+        mtu: 1496
+        vlan: 24
+        base_iface: enp7s0
+        net-attach-def: |
+            {
+              "cniVersion": "0.3.1",
+              "name": "octavia",
+              "type": "bridge",
+              "bridge": "octbr",
+              "ipam": {
+                "type": "whereabouts",
+                "range": "172.23.0.0/24",
+                "range_start": "172.23.0.30",
+                "range_end": "172.23.0.70",
+                "routes": [
+                  {
+                    "dst": "172.24.0.0/16",
+                    "gw": "172.23.0.150"
+                  }
+                ]
+              }
+            }
+
 kind: ConfigMap
 metadata:
     annotations:
