@@ -2,7 +2,8 @@
 vas:
   hci:
     stages:
-      - path: examples/va/hci/control-plane/networking/nncp
+      - name: nncp-configuration
+        path: examples/va/hci/control-plane/networking/nncp
         wait_conditions:
           - >-
             oc -n openstack wait nncp
@@ -14,7 +15,8 @@ vas:
             src_file: values.yaml
         build_output: nncp.yaml
 
-      - path: examples/va/hci/control-plane/networking
+      - name: network-configuration
+        path: examples/va/hci/control-plane/networking
         wait_conditions:
           - >-
             oc -n metallb-system wait pod
@@ -26,7 +28,8 @@ vas:
             src_file: nncp/values.yaml
         build_output: network.yaml
 
-      - path: examples/va/hci/control-plane
+      - name: control-plane
+        path: examples/va/hci/control-plane
         wait_conditions:
           - >-
             oc -n openstack wait osctlplane controlplane --for condition=Ready
@@ -38,7 +41,8 @@ vas:
             src_file: networking/nncp/values.yaml
         build_output: ../control-plane.yaml
 
-      - path: examples/va/hci/edpm-pre-ceph/nodeset
+      - name: edpm-pre-ceph-nodeset
+        path: examples/va/hci/edpm-pre-ceph/nodeset
         wait_conditions:
           - >-
             oc -n openstack wait
@@ -49,7 +53,8 @@ vas:
             src_file: values.yaml
         build_output: nodeset-pre-ceph.yaml
 
-      - path: examples/va/hci/edpm-pre-ceph/deployment
+      - name: edpm-pre-ceph-deployment
+        path: examples/va/hci/edpm-pre-ceph/deployment
         wait_conditions:
           - >-
             oc -n openstack wait
@@ -65,7 +70,8 @@ vas:
             source: "../../playbooks/ceph.yml"
             inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
 
-      - path: examples/va/hci
+      - name: edpm-post-ceph-nodeset
+        path: examples/va/hci
         wait_conditions:
           - >-
             oc -n openstack wait
@@ -78,7 +84,8 @@ vas:
             src_file: values.yaml
         build_output: nodeset-post-ceph.yaml
 
-      - path: examples/va/hci/deployment
+      - name: edpm-post-ceph-deployment
+        path: examples/va/hci/deployment
         wait_conditions:
           - >-
             oc -n openstack wait
