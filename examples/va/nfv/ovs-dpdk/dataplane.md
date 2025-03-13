@@ -14,7 +14,7 @@ Change to the nfv/ovs-dpdk/edpm directory
 ```
 cd architecture/examples/va/nfv/ovs-dpdk/edpm
 ```
-Edit the [nodeset/values.yaml](nodeset/values.yaml) and [deployment/values.yaml](deployment/values.yaml) files to suit 
+Edit the [nodeset/values.yaml](edpm/nodeset/values.yaml) and [deployment/values.yaml](edpm/deployment/values.yaml) files to suit
 your environment.
 ```
 vi nodeset/values.yaml
