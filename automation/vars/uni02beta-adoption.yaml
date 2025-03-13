@@ -1,6 +1,6 @@
 ---
 vas:
-  uni02beta:
+  uni02beta-adoption:
     stages:
       - path: examples/dt/uni02beta/control-plane/networking/nncp
         wait_conditions:
@@ -23,8 +23,7 @@ vas:
             --timeout=5m
         values:
           - name: network-values
-            src_file: networking/nncp/values.yaml
-        build_output: network.yaml
+            src_file: nncp/values.yaml
 
       - path: examples/dt/uni02beta/control-plane
         wait_conditions:
