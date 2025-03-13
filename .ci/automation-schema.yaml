@@ -26,6 +26,7 @@ _hook:
   kind: str(required=False)
 ---
 _stage:
+  name: str(required=False)
   path: str()
   wait_conditions: list(str(matches='^(oc|kubectl) .* wait .*'), min=1)
   values: list(include('_values'), min=1)
