@@ -2,7 +2,8 @@
 vas:
   uni06zeta:
     stages:
-      - path: examples/dt/uni06zeta/control-plane/networking/nncp
+      - name: nncp-configuration
+        path: examples/dt/uni06zeta/control-plane/networking/nncp
         wait_conditions:
           - >-
             oc -n openstack wait nncp
@@ -15,7 +16,8 @@ vas:
             src_file: values.yaml
         build_output: nncp.yaml
 
-      - path: examples/dt/uni06zeta/control-plane/networking
+      - name: network-configuration
+        path: examples/dt/uni06zeta/control-plane/networking
         wait_conditions:
           - >-
             oc -n metallb-system wait pod
@@ -27,7 +29,8 @@ vas:
             src_file: nncp/values.yaml
         build_output: network.yaml
 
-      - path: examples/dt/uni06zeta/control-plane
+      - name: control-plane
+        path: examples/dt/uni06zeta/control-plane
         wait_conditions:
           - >-
             oc -n openstack wait openstackcontrolplane
@@ -42,7 +45,8 @@ vas:
             src_file: service-values.yaml
         build_output: control-plane.yaml
 
-      - path: examples/dt/uni06zeta
+      - name: edpm-deployment
+        path: examples/dt/uni06zeta
         wait_conditions:
           - >-
             oc -n openstack wait openstackdataplanedeployment
