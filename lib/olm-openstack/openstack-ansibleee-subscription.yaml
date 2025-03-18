@@ -10,4 +10,4 @@ spec:
   name: openstack-ansibleee-operator
   source: rhoso-testing-operator-catalog
   sourceNamespace: openshift-marketplace
-  startingCSV: openstack-ansibleee-operator.v1.0.3
+  startingCSV: openstack-ansibleee-operator.v1.0.6
