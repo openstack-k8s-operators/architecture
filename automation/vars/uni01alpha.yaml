@@ -12,6 +12,7 @@ vas:
             kind: Node
             resource_name: master-0
             state: patched
+        name: nncp-configuration
         path: examples/dt/uni01alpha/control-plane/networking/nncp
         wait_conditions:
           - >-
@@ -24,7 +25,8 @@ vas:
             src_file: values.yaml
         build_output: nncp.yaml
 
-      - path: examples/dt/uni01alpha/control-plane/networking
+      - name: network-configuration
+        path: examples/dt/uni01alpha/control-plane/networking
         wait_conditions:
           - >-
             oc -n metallb-system wait pod
@@ -35,7 +37,8 @@ vas:
             src_file: nncp/values.yaml
         build_output: networking.yaml
 
-      - path: examples/dt/uni01alpha/control-plane
+      - name: control-plane
+        path: examples/dt/uni01alpha/control-plane
         wait_conditions:
           - >-
             oc -n openstack wait openstackcontrolplane
@@ -49,7 +52,8 @@ vas:
             src_file: service-values.yaml
         build_output: control-plane.yaml
 
-      - path: examples/dt/uni01alpha/networker/nodeset
+      - name: edpm-networker-nodeset
+        path: examples/dt/uni01alpha/networker/nodeset
         wait_conditions:
           - >-
             oc -n openstack wait openstackdataplanenodeset
@@ -61,7 +65,8 @@ vas:
             src_file: values.yaml
         build_output: edpm-networker.yaml
 
-      - path: examples/dt/uni01alpha/networker
+      - name: edpm-networker-deployment
+        path: examples/dt/uni01alpha/networker
         wait_conditions:
           - >-
             oc -n openstack wait openstackdataplanedeployment
@@ -73,7 +78,8 @@ vas:
             src_file: values.yaml
         build_output: edpm-networker.yaml
 
-      - path: examples/dt/uni01alpha/edpm
+      - name: edpm-nodeset
+        path: examples/dt/uni01alpha/edpm
         wait_conditions:
           - >-
             oc -n openstack wait openstackdataplanenodeset
@@ -85,7 +91,8 @@ vas:
             src_file: values.yaml
         build_output: edpm.yaml
 
-      - path: examples/dt/uni01alpha
+      - name: edpm-deployment
+        path: examples/dt/uni01alpha
         wait_conditions:
           - >-
             oc -n openstack wait openstackdataplanedeployment

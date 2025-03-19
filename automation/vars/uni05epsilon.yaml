@@ -2,7 +2,8 @@
 vas:
   uni05epsilon:
     stages:
-      - path: examples/dt/uni05epsilon/control-plane/networking/nncp
+      - name: nncp-configuration
+        path: examples/dt/uni05epsilon/control-plane/networking/nncp
         wait_conditions:
           - >-
             oc -n openstack wait nncp
@@ -14,7 +15,8 @@ vas:
             src_file: values.yaml
         build_output: nncp.yaml
 
-      - path: examples/dt/uni05epsilon/control-plane/networking
+      - name: network-configuration
+        path: examples/dt/uni05epsilon/control-plane/networking
         wait_conditions:
           - >-
             oc -n metallb-system wait pod
@@ -25,7 +27,8 @@ vas:
             src_file: nncp/values.yaml
         build_output: networking.yaml
 
-      - path: examples/dt/uni05epsilon/control-plane
+      - name: control-plane
+        path: examples/dt/uni05epsilon/control-plane
         wait_conditions:
           - >-
             oc -n openstack wait openstackcontrolplane
@@ -39,7 +42,8 @@ vas:
             src_file: service-values.yaml
         build_output: control-plane.yaml
 
-      - path: examples/dt/uni05epsilon/edpm-pre-ceph/nodeset
+      - name: edpm-nodeset-pre-ceph
+        path: examples/dt/uni05epsilon/edpm-pre-ceph/nodeset
         wait_conditions:
           - >-
             oc -n openstack wait osdpns
@@ -51,7 +55,8 @@ vas:
             src_file: values.yaml
         build_output: nodeset-pre-ceph.yaml
 
-      - path: examples/dt/uni05epsilon/nodeset2/edpm-pre-ceph
+      - name: edpm-nodeset2-pre-ceph
+        path: examples/dt/uni05epsilon/nodeset2/edpm-pre-ceph
         wait_conditions:
           - >-
             oc -n openstack wait osdpns
@@ -63,7 +68,8 @@ vas:
             src_file: values.yaml
         build_output: nodeset2-pre-ceph.yaml
 
-      - path: examples/dt/uni05epsilon/edpm-pre-ceph/deployment
+      - name: edpm-deployment-pre-ceph
+        path: examples/dt/uni05epsilon/edpm-pre-ceph/deployment
         wait_conditions:
           - >-
             oc -n openstack wait osdpd
@@ -80,7 +86,8 @@ vas:
             source: "../../playbooks/ceph.yml"
             inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
 
-      - path: examples/dt/uni05epsilon
+      - name: edpm-nodeset-post-ceph
+        path: examples/dt/uni05epsilon
         wait_conditions:
           - >-
             oc -n openstack wait osdpns
@@ -94,7 +101,8 @@ vas:
             src_file: values.yaml
         build_output: nodeset-post-ceph.yaml
 
-      - path: examples/dt/uni05epsilon/nodeset2
+      - name: edpm-nodeset2-post-ceph
+        path: examples/dt/uni05epsilon/nodeset2
         wait_conditions:
           - >-
             oc -n openstack wait osdpns
@@ -106,7 +114,8 @@ vas:
             src_file: values.yaml
         build_output: nodeset2-post-ceph.yaml
 
-      - path: examples/dt/uni05epsilon/deployment
+      - name: edpm-deployment-post-ceph
+        path: examples/dt/uni05epsilon/deployment
         wait_conditions:
           - >-
             oc -n openstack wait osdpd
@@ -118,7 +127,8 @@ vas:
             src_file: values.yaml
         build_output: deployment-post-ceph.yaml
 
-      - path: examples/dt/uni05epsilon/nodeset2/deployment
+      - name: edpm-deployment-post-ceph-2
+        path: examples/dt/uni05epsilon/nodeset2/deployment
         wait_conditions:
           - >-
             oc -n openstack wait osdpd
