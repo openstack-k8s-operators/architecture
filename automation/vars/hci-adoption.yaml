@@ -2,7 +2,8 @@
 vas:
   hci-adoption:
     stages:
-      - path: examples/va/hci/control-plane/networking/nncp
+      - name: nncp-configuration
+        path: examples/va/hci/control-plane/networking/nncp
         wait_conditions:
           - >-
             oc -n openstack wait nncp
@@ -14,7 +15,8 @@ vas:
             src_file: values.yaml
         build_output: nncp.yaml
 
-      - path: examples/va/hci/control-plane/networking
+      - name: network-configuration
+        path: examples/va/hci/control-plane/networking
         wait_conditions:
           - >-
             oc -n metallb-system wait pod

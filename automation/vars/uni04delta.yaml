@@ -2,7 +2,8 @@
 vas:
   uni04delta:
     stages:
-      - path: examples/dt/uni04delta/control-plane/networking/nncp
+      - name: nncp-configuration
+        path: examples/dt/uni04delta/control-plane/networking/nncp
         wait_conditions:
           - >-
             oc -n openstack wait nncp
@@ -14,7 +15,8 @@ vas:
             src_file: values.yaml
         build_output: nncp.yaml
 
-      - path: examples/dt/uni04delta/control-plane/networking
+      - name: network-configuration
+        path: examples/dt/uni04delta/control-plane/networking
         wait_conditions:
           - >-
             oc -n metallb-system wait pod
@@ -26,7 +28,8 @@ vas:
             src_file: nncp/values.yaml
         build_output: network.yaml
 
-      - path: examples/dt/uni04delta/control-plane
+      - name: control-plane
+        path: examples/dt/uni04delta/control-plane
         wait_conditions:
           - >-
             oc -n openstack wait osctlplane controlplane
@@ -39,7 +42,8 @@ vas:
             src_file: service-values.yaml
         build_output: control-plane.yaml
 
-      - path: examples/dt/uni04delta/edpm-pre-ceph/nodeset
+      - name: edpm-nodeset-pre-ceph
+        path: examples/dt/uni04delta/edpm-pre-ceph/nodeset
         wait_conditions:
           - >-
             oc -n openstack wait
@@ -50,7 +54,8 @@ vas:
             src_file: values.yaml
         build_output: nodeset-pre-ceph.yaml
 
-      - path: examples/dt/uni04delta/edpm-pre-ceph
+      - name: edpm-deployment-pre-ceph
+        path: examples/dt/uni04delta/edpm-pre-ceph
         wait_conditions:
           - >-
             oc -n openstack wait
@@ -66,7 +71,8 @@ vas:
             source: "../../playbooks/ceph.yml"
             inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
 
-      - path: examples/dt/uni04delta
+      - name: edpm-nodeset
+        path: examples/dt/uni04delta
         wait_conditions:
           - >-
             oc -n openstack wait osdpns
@@ -80,7 +86,8 @@ vas:
             src_file: values.yaml
         build_output: edpm-nodeset.yaml
 
-      - path: examples/dt/uni04delta/deployment
+      - name: edpm-deployment
+        path: examples/dt/uni04delta/deployment
         wait_conditions:
           - >-
             oc -n openstack wait osdpd
