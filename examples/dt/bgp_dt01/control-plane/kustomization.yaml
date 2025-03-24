@@ -56,6 +56,14 @@ patches:
       kind: NetworkAttachmentDefinition
       labelSelector: "osp/net-attach-def-type=bgp"
     path: ocp_network_template.yaml
+  # All L2Advertisements are removed
+  - target:
+      kind: L2Advertisement
+    patch: |-
+      kind: L2Advertisement
+      metadata:
+        name: .*
+      $patch: delete
 
 replacements:
   # BGP peer IP addresses
