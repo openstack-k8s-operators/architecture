@@ -13,15 +13,16 @@ transformers:
     setRoleBindingSubjects: none
     unsetOnly: true
     fieldSpecs:
-      - path: metadata/name
-        kind: Namespace
-        create: true
+    - path: metadata/name
+      kind: Namespace
+      create: true
 
 components:
   - ../../../../../lib/dataplane/networker-nodeset
 
 resources:
   - baremetalset-password-secret.yaml
+  - neutron_igmp.yaml
 
 replacements:
   - source:
@@ -40,12 +41,38 @@ replacements:
   - source:
       kind: ConfigMap
       name: edpm-nodeset-values
+      fieldPath: data.preProvisioned
+    targets:
+      - select:
+          kind: OpenStackDataPlaneNodeSet
+          name: openstack-edpm
+        fieldPaths:
+          - spec.preProvisioned
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values
       fieldPath: data.baremetalSetTemplate
     targets:
       - select:
           kind: OpenStackDataPlaneNodeSet
-          name: openstack-networker
+          name: openstack-edpm
         fieldPaths:
           - spec.baremetalSetTemplate
+        options:
+          create: true
+
+  # Neutron IGMP configuration
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values
+      fieldPath: data.neutron.igmp.conf
+    targets:
+      - select:
+          kind: ConfigMap
+          name: neutron-igmp
+        fieldPaths:
+          - data.25-igmp\.conf
         options:
           create: true
