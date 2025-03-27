@@ -25,7 +25,6 @@ data:
         edpm_frr_bgp_ipv4_src_network: bgpmainnet
         edpm_frr_bgp_ipv6_src_network: bgpmainnetv6
         edpm_frr_bgp_neighbor_password: f00barZ
-        edpm_frr_bfd: false
         timesync_ntp_servers:
           - hostname: pool.ntp.org
         # conntrack is necessary for some tobiko tests
