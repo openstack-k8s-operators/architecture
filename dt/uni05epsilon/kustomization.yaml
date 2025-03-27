@@ -17,43 +17,9 @@ transformers:
         create: true
 
 components:
-  - ../../lib/networking/metallb
-  - ../../lib/networking/netconfig
-  - ../../lib/networking/nad
   - ../../lib/control-plane
 
-patches:
-  #
-  # The storagemgmt network template needed for CephHCI
-  #
-  - target:
-      version: v1beta1
-      kind: NetConfig
-      name: netconfig
-    patch: |-
-      - op: add
-        path: /spec/networks/-
-        value:
-          dnsDomain: _replaced_
-          name: storagemgmt
-          subnets:
-            - _replaced_
-          mtu: 1500
-
 replacements:
-  #
-  # The storagemgmt network replacements
-  #
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.storagemgmt.dnsDomain
-    targets:
-      - select:
-          kind: NetConfig
-        fieldPaths:
-          - spec.networks.[name=storagemgmt].dnsDomain
-
   - source:
       kind: ConfigMap
       name: service-values
@@ -113,23 +79,3 @@ replacements:
           - spec.nova.template.cellTemplates.cell2
         options:
           create: true
-
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.storagemgmt.mtu
-    targets:
-      - select:
-          kind: NetConfig
-        fieldPaths:
-          - spec.networks.[name=storagemgmt].mtu
-
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.storagemgmt.subnets
-    targets:
-      - select:
-          kind: NetConfig
-        fieldPaths:
-          - spec.networks.[name=storagemgmt].subnets
