@@ -25,6 +25,7 @@
       - rhoso-architecture-validate-uni04delta-ipv6
       - rhoso-architecture-validate-uni05epsilon
       - rhoso-architecture-validate-uni06zeta
+      - rhoso-architecture-validate-uni06zeta-adoption
       - rhoso-architecture-validate-uni07eta
     github-experimental-trigger:
       jobs:
