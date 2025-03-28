@@ -82,6 +82,7 @@ replacements:
           - spec.neutron.template.customServiceConfig
         options:
           create: true
+
   - source:
       kind: ConfigMap
       name: network-values
