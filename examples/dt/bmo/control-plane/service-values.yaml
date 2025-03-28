@@ -1,0 +1,114 @@
+---
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: service-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+
+data:
+  preserveJobs: false
+  cinderVolumes:
+    lvm-iscsi:
+      replicas: 1
+      nodeSelector:
+        openstack.org/cinder-lvm: ""
+      customServiceConfig: |
+        [lvm]
+        image_volume_cache_enabled = false
+        volume_driver = cinder.volume.drivers.lvm.LVMVolumeDriver
+        volume_group = cinder-volumes
+        target_protocol = iscsi
+        target_helper = lioadm
+        volume_backend_name = lvm_iscsi
+        target_ip_address=172.18.0.10
+        target_secondary_ip_addresses = 172.19.0.10
+
+  cinderBackup:
+    replicas: 0
+
+  glance:
+    customServiceConfig: |
+      [DEFAULT]
+      debug = True
+      enabled_backends = default_backend:swift
+
+      [glance_store]
+      default_backend = default_backend
+
+      [default_backend]
+      swift_store_create_container_on_put = True
+      swift_store_auth_version = 3
+      swift_store_auth_address = {{ .KeystoneInternalURL }}
+      swift_store_endpoint_type = internalURL
+      swift_store_user = service:glance
+      swift_store_key = {{ .ServicePassword }}
+    default:
+      replicas: 3
+
+  nova:
+    cellTemplates:
+      cell0:
+        cellDatabaseInstance: openstack
+        cellDatabaseAccount: nova-cell0
+        cellMessageBusInstance: rabbitmq
+        hasAPIAccess: true
+
+  swift:
+    enabled: true
+
+  octavia:
+    enabled: false
+
+  heat:
+    enabled: false
+
+  telemetry:
+    enabled: false
+
+  ovn:
+    ovnController:
+      nicMappings:
+        datacentre: ocpbr
+
+  neutron:
+    customServiceConfig: |
+      [DEFAULT]
+      vlan_transparent = true
+      agent_down_time = 600
+      router_distributed = true
+      router_scheduler_driver = neutron.scheduler.l3_agent_scheduler.ChanceScheduler
+      allow_automatic_l3agent_failover = true
+      debug = true
+
+      [agent]
+      report_interval = 300
+
+      [database]
+      max_retries = -1
+      db_max_retries = -1
+
+      [keystone_authtoken]
+      region_name = regionOne
+      memcache_use_advanced_pool = True
+
+      [oslo_messaging_notifications]
+      driver = noop
+
+      [oslo_middleware]
+      enable_proxy_headers_parsing = true
+
+      [oslo_policy]
+      policy_file = /etc/neutron/policy.yaml
+
+      [ovs]
+      igmp_snooping_enable = true
+
+      [ovn]
+      ovsdb_probe_interval = 60000
+      ovn_emit_need_to_frag = true
+
+      [ml2]
+      type_drivers = geneve,vxlan,vlan,flat,local
+      tenant_network_types = geneve,flat
