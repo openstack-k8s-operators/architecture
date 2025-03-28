@@ -1,0 +1,13 @@
+provision:
+    how: beaker
+    image: RHEL-9.4.0
+    hardware:
+      memory: '>= 200 GB'
+      disk:
+        size: '>= 450 GB'
+      cpu:
+        processors: '>= 64'
+summary: Basic smoke test
+execute:
+    how: tmt
+    script: tmt --help
