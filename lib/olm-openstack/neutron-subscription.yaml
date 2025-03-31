@@ -2,12 +2,12 @@
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
 metadata:
-  name: openstack
+  name: neutron
   namespace: openstack-operators
 spec:
   channel: stable-v1.0
   installPlanApproval: Manual
-  name: openstack-operator
+  name: neutron-operator
   source: rhoso-testing-operator-catalog
   sourceNamespace: openshift-marketplace
-  startingCSV: openstack-operator.v1.0.3
+  startingCSV: neutron-operator.v1.0.3
