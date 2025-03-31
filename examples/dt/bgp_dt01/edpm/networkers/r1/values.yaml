@@ -158,9 +158,9 @@ data:
       - bootstrap
       - configure-network
       - validate-network
-      - frr
       - install-os
       - configure-os
+      - frr
       - ssh-known-hosts
       - run-os
       - reboot-os
