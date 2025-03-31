@@ -157,9 +157,9 @@ data:
       - bootstrap
       - configure-network
       - validate-network
-      - frr
       - install-os
       - configure-os
+      - frr
       - run-os
       - reboot-os
       - install-certs
