@@ -2,6 +2,7 @@
     github-check:
       jobs: &id001
       - noop
+      - rhoso-architecture-validate-bgp-l3-xl
       - rhoso-architecture-validate-bgp_dt01
       - rhoso-architecture-validate-bmo01
       - rhoso-architecture-validate-dcn

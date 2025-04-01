@@ -34,15 +34,14 @@ spec:
         state: up
         type: linux-bridge
         mtu: 1500
-        ipv4:
-          enabled: false
       - description: ctlplane interface
         name: _replaced_
         state: up
         type: ethernet
         mtu: 1500
         ipv4:
-          enabled: false
+          enabled: true
+          dhcp: true
         ipv6:
           enabled: false
   nodeSelector:
