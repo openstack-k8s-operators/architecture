@@ -1,5 +1,22 @@
 - job:
     files:
+    - automation/mocks/bgp-l3-xl.yaml
+    - examples/dt/bgp-l3-xl/control-plane
+    - examples/dt/bgp-l3-xl/control-plane/nncp
+    - examples/dt/bgp-l3-xl/edpm/computes/r0
+    - examples/dt/bgp-l3-xl/edpm/computes/r1
+    - examples/dt/bgp-l3-xl/edpm/computes/r2
+    - examples/dt/bgp-l3-xl/edpm/deployment
+    - examples/dt/bgp-l3-xl/edpm/networkers/r0
+    - examples/dt/bgp-l3-xl/edpm/networkers/r1
+    - examples/dt/bgp-l3-xl/edpm/networkers/r2
+    - lib
+    name: rhoso-architecture-validate-bgp-l3-xl
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: bgp-l3-xl
+- job:
+    files:
     - automation/mocks/bgp_dt01.yaml
     - examples/dt/bgp_dt01/control-plane
     - examples/dt/bgp_dt01/control-plane/nncp
