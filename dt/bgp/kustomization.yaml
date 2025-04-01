@@ -307,18 +307,6 @@ replacements:
 
   - source:
       kind: ConfigMap
-      name: service-values
-      fieldPath: data.ovn.ovnController.nicMappings
-    targets:
-      - select:
-          kind: OpenStackControlPlane
-        fieldPaths:
-          - spec.ovn.template.ovnController.nicMappings
-        options:
-          create: true
-
-  - source:
-      kind: ConfigMap
       name: network-values
       fieldPath: data.octavia.net-attach-def
     targets:

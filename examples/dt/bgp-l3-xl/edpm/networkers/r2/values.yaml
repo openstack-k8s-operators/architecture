@@ -1,0 +1,175 @@
+# yamllint disable rule:line-length
+# local-config: referenced, but not emitted by kustomize
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: edpm-nodeset-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+data:
+  ssh_keys:
+    # Authorized keys that will have access to the dataplane computes via SSH
+    authorized: CHANGEME
+    # The private key that will have access to the dataplane computes via SSH
+    private: CHANGEME2
+    # The public key that will have access to the dataplane computes via SSH
+    public: CHANGEME3
+  nodeset:
+    ansible:
+      ansibleUser: cloud-admin
+      ansiblePort: 22
+      ansibleVars:
+        edpm_ovn_encap_ip: "{{ lookup('vars', 'bgpmainnet_ip') }}"
+        edpm_ovn_bgp_agent_expose_tenant_networks: false
+        edpm_frr_bgp_ipv4_src_network: bgpmainnet
+        edpm_frr_bgp_ipv6_src_network: bgpmainnetv6
+        edpm_frr_bgp_neighbor_password: f00barZ
+        edpm_frr_bfd: false
+        timesync_ntp_servers:
+          - hostname: pool.ntp.org
+        # conntrack is necessary for some tobiko tests
+        edpm_bootstrap_command: |
+          dnf -y install conntrack-tools
+        edpm_network_config_hide_sensitive_logs: false
+        edpm_network_config_os_net_config_mappings:
+          edpm-r2-networker-0:
+            nic2: 6d:fe:54:3f:8a:02  # CHANGEME
+        edpm_network_config_template: |
+          ---
+          {% set mtu_list = [ctlplane_mtu] %}
+          {% for network in nodeset_networks %}
+          {{ mtu_list.append(lookup('vars', networks_lower[network] ~ '_mtu')) }}
+          {%- endfor %}
+          {% set min_viable_mtu = mtu_list | max %}
+          network_config:
+          - type: ovs_bridge
+            name: {{ neutron_physical_bridge_name }}
+            use_dhcp: false
+          - type: interface
+            name: nic1
+            use_dhcp: true
+            defroute: false
+          - type: interface
+            name: nic2
+            use_dhcp: false
+            defroute: false
+            dns_servers: {{ ctlplane_dns_nameservers }}
+            domain: {{ dns_search_domains }}
+            addresses:
+              - ip_netmask: {{ ctlplane_ip }}/{{ ctlplane_cidr }}
+          - type: interface
+            name: nic3
+            use_dhcp: false
+            addresses:
+            - ip_netmask: {{ lookup('vars', 'bgpnet0_ip') }}/30
+          - type: interface
+            name: nic4
+            use_dhcp: false
+            addresses:
+            - ip_netmask: {{ lookup('vars', 'bgpnet1_ip') }}/30
+          - type: interface
+            name: lo
+            addresses:
+            - ip_netmask: {{ lookup('vars', 'bgpmainnet_ip') }}/32
+            - ip_netmask: {{ lookup('vars', 'bgpmainnetv6_ip') }}/128
+            - ip_netmask: {{ lookup('vars', 'internalapi_ip') }}/32
+            - ip_netmask: {{ lookup('vars', 'tenant_ip') }}/32
+        edpm_nodes_validation_validate_controllers_icmp: false
+        edpm_nodes_validation_validate_gateway_icmp: false
+        edpm_enable_chassis_gw: true
+        edpm_sshd_allowed_ranges:
+          - 192.168.122.0/24
+        edpm_sshd_configure_firewall: true
+        gather_facts: false
+        neutron_physical_bridge_name: br-ex
+        neutron_public_interface_name: eth1
+    networks:
+      - defaultRoute: true
+        name: CtlPlane
+        subnetName: subnet1
+      - name: InternalApi
+        subnetName: subnet1
+      - name: Storage
+        subnetName: subnet1
+      - name: Tenant
+        subnetName: subnet1
+      - name: BgpNet0
+        subnetName: subnet0
+      - name: BgpNet1
+        subnetName: subnet0
+      - name: BgpMainNet
+        subnetName: subnet0
+      - name: BgpMainNetV6
+        subnetName: subnet0
+      - name: BgpNet0
+        subnetName: subnet1
+      - name: BgpNet1
+        subnetName: subnet1
+      - name: BgpMainNet
+        subnetName: subnet1
+      - name: BgpMainNetV6
+        subnetName: subnet1
+      - name: BgpNet0
+        subnetName: subnet2
+      - name: BgpNet1
+        subnetName: subnet2
+      - name: BgpMainNet
+        subnetName: subnet2
+      - name: BgpMainNetV6
+        subnetName: subnet2
+    nodes:
+      edpm-r2-networker-0:
+        hostName: edpm-r2-networker-0
+        ansible:
+          ansibleHost: 192.168.124.200
+          ansibleVars:
+            edpm_ovn_bgp_agent_local_ovn_peer_ips:
+              - 100.64.2.9
+              - 100.65.2.9
+            edpm_frr_bgp_peers:
+              - 100.64.2.9
+              - 100.65.2.9
+        networks:
+          - defaultRoute: true
+            fixedIP: 192.168.124.200
+            name: CtlPlane
+            subnetName: subnet1
+          - name: InternalApi
+            subnetName: subnet1
+          - name: Storage
+            subnetName: subnet1
+          - name: Tenant
+            subnetName: subnet1
+          - name: Bgpnet0
+            subnetName: subnet2
+            fixedIP: 100.64.2.10
+          - name: Bgpnet1
+            subnetName: subnet2
+            fixedIP: 100.65.2.10
+          - name: Bgpmainnet
+            subnetName: subnet1
+            fixedIP: 99.99.2.4
+          - name: BgpmainnetV6
+            subnetName: subnet1
+            fixedIP: f00d:f00d:f00d:f00d:f00d:f00d:f00d:0034
+    services:
+      - download-cache
+      - bootstrap
+      - configure-network
+      - validate-network
+      - install-os
+      - configure-os
+      - frr
+      - ssh-known-hosts
+      - run-os
+      - reboot-os
+      - install-certs
+      - ovn
+      - neutron-metadata
+      - ovn-bgp-agent
+  nova:
+    migration:
+      ssh_keys:
+        private: CHANGEME4
+        public: CHANGEME5
