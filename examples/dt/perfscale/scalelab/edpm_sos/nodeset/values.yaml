@@ -1,0 +1,171 @@
+# yamllint disable rule:line-length
+# local-config: referenced, but not emitted by kustomize
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: edpm-nodeset-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+data:
+  ssh_keys:
+    # Authorized keys that will have access to the dataplane computes via SSH
+    authorized: CHANGEME
+    # The private key that will have access to the dataplane computes via SSH
+    private: CHANGEME2
+    # The public key that will have access to the dataplane computes via SSH
+    public: CHANGEME3
+  nodeset:
+    ansible:
+      ansibleUser: cloud-admin
+      ansiblePort: 22
+      ansibleVars:
+        timesync_ntp_servers:
+          - hostname: pool.ntp.org
+        # CHANGEME -- see https://access.redhat.com/solutions/253273
+        # edpm_bootstrap_command: |
+        #       subscription-manager register --username <subscription_manager_username> \
+        #         --password <subscription_manager_password>
+        #       podman login -u <registry_username> -p <registry_password> registry.redhat.io
+        edpm_network_config_hide_sensitive_logs: false
+        edpm_network_config_os_net_config_mappings:
+          edpm-compute-0:
+            nic2: 6a:fe:54:3f:8a:02  # CHANGEME
+          edpm-compute-1:
+            nic2: 6b:fe:54:3f:8a:02  # CHANGEME
+          edpm-compute-2:
+            nic2: 6c:fe:54:3f:8a:02  # CHANGEME
+        edpm_network_config_template: |
+          ---
+          {% set mtu_list = [ctlplane_mtu] %}
+          {% for network in nodeset_networks %}
+          {{ mtu_list.append(lookup('vars', networks_lower[network] ~ '_mtu')) }}
+          {%- endfor %}
+          {% set min_viable_mtu = mtu_list | max %}
+          network_config:
+          - type: interface
+            name: nic1
+            use_dhcp: true
+            mtu: {{ min_viable_mtu }}
+          - type: ovs_bridge
+            name: {{ neutron_physical_bridge_name }}
+            mtu: {{ min_viable_mtu }}
+            use_dhcp: false
+            dns_servers: {{ ctlplane_dns_nameservers }}
+            domain: {{ dns_search_domains }}
+            addresses:
+            - ip_netmask: {{ ctlplane_ip }}/{{ ctlplane_cidr }}
+            routes: {{ ctlplane_host_routes }}
+            members:
+            - type: interface
+              name: nic2
+              mtu: {{ min_viable_mtu }}
+              # force the MAC address of the bridge to this interface
+              primary: true
+          {% for network in nodeset_networks %}
+            - type: vlan
+              mtu: {{ lookup('vars', networks_lower[network] ~ '_mtu') }}
+              vlan_id: {{ lookup('vars', networks_lower[network] ~ '_vlan_id') }}
+              addresses:
+              - ip_netmask:
+                  {{ lookup('vars', networks_lower[network] ~ '_ip') }}/{{ lookup('vars', networks_lower[network] ~ '_cidr') }}
+              routes: {{ lookup('vars', networks_lower[network] ~ '_host_routes') }}
+          {% endfor %}
+        edpm_nodes_validation_validate_controllers_icmp: false
+        edpm_nodes_validation_validate_gateway_icmp: false
+        edpm_sshd_allowed_ranges:
+          - 192.168.122.0/24
+        edpm_sshd_configure_firewall: true
+        gather_facts: false
+        neutron_physical_bridge_name: br-ex
+        neutron_public_interface_name: eth0
+        edpm_ceph_hci_pre_enabled_services:
+          - ceph_mon
+          - ceph_mgr
+          - ceph_osd
+          - ceph_rgw
+          - ceph_nfs
+          - ceph_rgw_frontend
+          - ceph_nfs_frontend
+        storage_mtu: 9000
+        storage_mgmt_mtu: 9000
+        storage_mgmt_vlan_id: 23
+        storage_mgmt_cidr: "24"
+        storage_mgmt_host_routes: []
+    networks:
+      - defaultRoute: true
+        name: ctlplane
+        subnetName: subnet1
+      - name: internalapi
+        subnetName: subnet1
+      - name: storage
+        subnetName: subnet1
+      - name: tenant
+        subnetName: subnet1
+    nodes:
+      edpm-compute-0:
+        ansible:
+          ansibleHost: 192.168.122.100
+        hostName: edpm-compute-0
+        networks:
+          - defaultRoute: true
+            fixedIP: 192.168.122.100
+            name: ctlplane
+            subnetName: subnet1
+          - name: internalapi
+            subnetName: subnet1
+          - name: storage
+            subnetName: subnet1
+          - name: storagemgmt
+            subnetName: subnet1
+          - name: tenant
+            subnetName: subnet1
+      edpm-compute-1:
+        ansible:
+          ansibleHost: 192.168.122.101
+        hostName: edpm-compute-1
+        networks:
+          - defaultRoute: true
+            fixedIP: 192.168.122.101
+            name: ctlplane
+            subnetName: subnet1
+          - name: internalapi
+            subnetName: subnet1
+          - name: storage
+            subnetName: subnet1
+          - name: storagemgmt
+            subnetName: subnet1
+          - name: tenant
+            subnetName: subnet1
+      edpm-compute-2:
+        ansible:
+          ansibleHost: 192.168.122.102
+        hostName: edpm-compute-2
+        networks:
+          - defaultRoute: true
+            fixedIP: 192.168.122.102
+            name: ctlplane
+            subnetName: subnet1
+          - name: internalapi
+            subnetName: subnet1
+          - name: storage
+            subnetName: subnet1
+          - name: storagemgmt
+            subnetName: subnet1
+          - name: tenant
+            subnetName: subnet1
+    services:
+      - bootstrap
+      - configure-network
+      - validate-network
+      - install-os
+      - ceph-hci-pre
+      - configure-os
+      - ssh-known-hosts
+      - run-os
+      - reboot-os
+  nova:
+    migration:
+      ssh_keys:
+        private: CHANGEME4
+        public: CHANGEME5

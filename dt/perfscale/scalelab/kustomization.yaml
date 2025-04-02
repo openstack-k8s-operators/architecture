@@ -1,0 +1,171 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+resources:
+  - externalapi.yaml
+
+transformers:
+  # Set namespace to OpenStack on all namespaced objects without a namespace
+  - |-
+    apiVersion: builtin
+    kind: NamespaceTransformer
+    metadata:
+      name: _ignored_
+      namespace: openstack
+    setRoleBindingSubjects: none
+    unsetOnly: true
+    fieldSpecs:
+      - path: metadata/name
+        kind: Namespace
+        create: true
+
+components:
+  - ../../../lib/networking/metallb
+  - ../../../lib/networking/netconfig
+  - ../../../lib/networking/nad
+  - ../../../lib/control-plane
+
+patches:
+  - target:
+      group: metallb.io
+      version: v1beta1
+      kind: L2Advertisement
+      name: ctlplane
+      namespace: metallb-system
+    patch: |-
+      apiVersion: metallb.io/v1beta1
+      kind: L2Advertisement
+      metadata:
+        name: ctlplane
+        namespace: metallb-system
+      $patch: delete
+  - target:
+      group: metallb.io
+      version: v1beta1
+      kind: IPAddressPool 
+      name: ctlplane
+      namespace: metallb-system
+    patch: |-
+      apiVersion: metallb.io/v1beta1
+      kind: IPAddressPool
+      metadata:
+        name: ctlplane
+        namespace: metallb-system
+      $patch: delete
+  
+   
+replacements:
+  # Neutron control plane OvS DPDK customization
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.neutron.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.neutron.template.customServiceConfig
+        options:
+          create: true
+  # OVN control plane OvS DPDK customization
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.ovn.ovnController.nicMappings
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.ovn.template.ovnController.nicMappings
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.glance.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.glance.template.customServiceConfig
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.glance.default.replicas
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.glance.template.glanceAPIs.default.replicas
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.swift.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.swift.enabled
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.telemetry.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.telemetry.enabled
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.telemetry.template.ceilometer.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.telemetry.template.ceilometer.enabled
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.nova.schedulerServiceTemplate.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.nova.template.schedulerServiceTemplate.customServiceConfig
+        options:
+          create: true
+
+# Add external 
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.external.iface
+    targets:
+      - select:
+          group: metallb.io
+          kind: L2Advertisement
+          name: external
+        fieldPaths:
+          - spec.interfaces.0
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.external.lb_addresses
+    targets:
+      - select:
+          kind: IPAddressPool
+          name: external
+        fieldPaths:
+          - spec.addresses

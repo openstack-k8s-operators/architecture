@@ -1,0 +1,75 @@
+---
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: _ignored_
+spec:
+  desiredState:
+    interfaces:
+      - description: internalapi vlan interface
+        ipv4:
+          address:
+            - ip: _replaced_
+              prefix-length: _replaced_
+          enabled: true
+          dhcp: false
+        ipv6:
+          enabled: false
+        name: internalapi
+        state: up
+        type: vlan
+        vlan:
+          base-iface: _replaced_
+          id: _replaced_
+        mtu: 1500
+      - description: storage vlan interface
+        ipv4:
+          address:
+            - ip: _replaced_
+              prefix-length: _replaced_
+          enabled: true
+          dhcp: false
+        ipv6:
+          enabled: false
+        name: storage
+        state: up
+        type: vlan
+        vlan:
+          base-iface: _replaced_
+          id: _replaced_
+        mtu: 1500
+      - description: tenant vlan interface
+        ipv4:
+          address:
+            - ip: _replaced_
+              prefix-length: _replaced_
+          enabled: true
+          dhcp: false
+        ipv6:
+          enabled: false
+        name: tenant
+        state: up
+        type: vlan
+        vlan:
+          base-iface: _replaced_
+          id: _replaced_
+        mtu: 1500
+      - description: external vlan interface
+        ipv4:
+          address:
+            - ip: _replaced_
+              prefix-length: _replaced_
+          enabled: true
+          dhcp: false
+        ipv6:
+          enabled: false
+        name: external
+        state: up
+        type: vlan
+        vlan:
+          base-iface: _replaced_
+          id: _replaced_
+        mtu: 1500
+  nodeSelector:
+    kubernetes.io/hostname: _replaced_
+    node-role.kubernetes.io/worker: ""

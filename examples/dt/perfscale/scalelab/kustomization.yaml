@@ -1,0 +1,13 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../../dt/perfscale/scalelab/
+  # - https://github.com/openstack-k8s-operators/architecture/va/nfv/ovs-dpdk?ref=main
+  ## It's possible to replace ../../../va/nfv/ovs-dpdk/ with a git checkout URL as per:
+  ## https://github.com/kubernetes-sigs/kustomize/blob/master/examples/remoteBuild.md
+
+resources:
+  - nncp/values.yaml
+  - service-values.yaml
