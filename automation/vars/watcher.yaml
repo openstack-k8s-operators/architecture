@@ -1,0 +1,16 @@
+---
+vars:
+  watcher:
+    stages:
+      - name: control-plane
+        path: examples/dt/watcher/control-plane
+        wait_conditions:
+          - >-
+            oc -n openstack wait openstackcontrolplane
+            controlplane
+            --for condition=Ready
+            --timeout=60m
+        values:
+          - name: service-values
+            src_file: service-values.yaml
+        build_output: control-plane.yaml
