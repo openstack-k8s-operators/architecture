@@ -365,3 +365,13 @@
     vars:
       cifmw_architecture_scenario: uni07eta
       cifmw_networking_env_def_file: automation/net-env/uni07eta.yaml
+- job:
+    files:
+    - dt/watcher
+    - examples/dt/watcher/control-plane
+    - examples/dt/watcher/control-plane/nncp
+    - lib
+    name: rhoso-architecture-validate-watcher
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: watcher
