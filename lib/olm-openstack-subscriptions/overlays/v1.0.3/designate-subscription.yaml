@@ -1,0 +1,15 @@
+---
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: designate
+  namespace: openstack-operators
+  labels:
+    category: openstack-subscription
+spec:
+  channel: alpha
+  installPlanApproval: Automatic
+  name: designate-operator
+  source: openstack-operator-index
+  sourceNamespace: openshift-marketplace
+  startingCSV: designate-operator.v1.0.3

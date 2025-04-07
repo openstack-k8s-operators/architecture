@@ -1,0 +1,15 @@
+---
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: neutron
+  namespace: openstack-operators
+  labels:
+    category: openstack-subscription
+spec:
+  channel: alpha
+  installPlanApproval: Automatic
+  name: neutron-operator
+  source: openstack-operator-index
+  sourceNamespace: openshift-marketplace
+  startingCSV: neutron-operator.v1.0.3
