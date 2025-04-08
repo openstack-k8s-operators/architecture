@@ -110,3 +110,26 @@ data:
 
   heat:
     enabled: true
+
+  octavia:
+    enabled: true
+    amphoraImageContainerImage: quay.io/gthiemonge/octavia-amphora-image
+    apacheContainerImage: registry.redhat.io/ubi9/httpd-24:latest
+    octaviaAPI:
+      networkAttachments:
+        - internalapi
+    octaviaHousekeeping:
+      networkAttachments:
+        - octavia
+    octaviaHealthManager:
+      networkAttachments:
+        - octavia
+    octaviaWorker:
+      networkAttachments:
+        - octavia
+
+  ovn:
+    ovnController:
+      nicMappings:
+        octavia: octbr
+        datacentre: ospbr
