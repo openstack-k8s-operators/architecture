@@ -28,7 +28,7 @@ data:
   ovn:
     ovnController:
       nicMappings:
-        datacentre: ospbr
+        datacentre: ens2f0np0
 
 
   glance:

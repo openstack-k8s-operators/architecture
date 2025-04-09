@@ -26,60 +26,19 @@ components:
   - ../../../lib/networking/nad
   - ../../../lib/control-plane
 
+   
 patches:
   - target:
-      group: metallb.io
-      version: v1beta1
-      kind: L2Advertisement
-      name: ctlplane
-      namespace: metallb-system
+      kind: NetworkAttachmentDefinition
+      name: datacentre
     patch: |-
-      apiVersion: metallb.io/v1beta1
-      kind: L2Advertisement
+      apiVersion: k8s.cni.cncf.io/v1
+      kind: NetworkAttachmentDefinition
       metadata:
-        name: ctlplane
-        namespace: metallb-system
+        name: datacentre
       $patch: delete
-  - target:
-      group: metallb.io
-      version: v1beta1
-      kind: IPAddressPool 
-      name: ctlplane
-      namespace: metallb-system
-    patch: |-
-      apiVersion: metallb.io/v1beta1
-      kind: IPAddressPool
-      metadata:
-        name: ctlplane
-        namespace: metallb-system
-      $patch: delete
-  
-   
+
 replacements:
-  # Neutron control plane OvS DPDK customization
-  - source:
-      kind: ConfigMap
-      name: service-values
-      fieldPath: data.neutron.customServiceConfig
-    targets:
-      - select:
-          kind: OpenStackControlPlane
-        fieldPaths:
-          - spec.neutron.template.customServiceConfig
-        options:
-          create: true
-  # OVN control plane OvS DPDK customization
-  - source:
-      kind: ConfigMap
-      name: service-values
-      fieldPath: data.ovn.ovnController.nicMappings
-    targets:
-      - select:
-          kind: OpenStackControlPlane
-        fieldPaths:
-          - spec.ovn.template.ovnController.nicMappings
-        options:
-          create: true
   - source:
       kind: ConfigMap
       name: service-values
@@ -169,3 +128,27 @@ replacements:
           name: external
         fieldPaths:
           - spec.addresses
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.external.net-attach-def
+    targets:
+      - select:
+          kind: NetworkAttachmentDefinition
+          name: external
+        fieldPaths:
+          - spec.config
+
+# Replace ctlplane interfacename instead of bridge name.
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ctlplane.iface
+    targets:
+      - select:
+          kind: L2Advertisement
+          name: ctlplane
+        fieldPaths:
+          - spec.interfaces.0
+
