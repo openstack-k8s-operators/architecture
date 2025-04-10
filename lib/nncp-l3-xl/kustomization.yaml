@@ -1,0 +1,81 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+resources:
+  - ocp_nodes_nncp.yaml
+
+patches:
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      labelSelector: "osp/nncm-config-type=standard"
+    path: ocp_node_template.yaml
+
+replacements:
+  # ctlplane type is ethernet (not vlan)
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ctlplane.iface
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+        fieldPaths:
+          - spec.desiredState.interfaces.[type=ethernet].name
+
+  # Node names
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_0.name
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: node-0
+        fieldPaths:
+          - metadata.name
+          - spec.nodeSelector.[kubernetes.io/hostname]
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_1.name
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: node-1
+        fieldPaths:
+          - metadata.name
+          - spec.nodeSelector.[kubernetes.io/hostname]
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_2.name
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: node-2
+        fieldPaths:
+          - metadata.name
+          - spec.nodeSelector.[kubernetes.io/hostname]
+
+  # DNS
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.dns-resolver.config
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+        fieldPaths:
+          - spec.desiredState.dns-resolver.config
+
+  # Routes
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.routes
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+        fieldPaths:
+          - spec.desiredState.routes
