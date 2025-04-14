@@ -1,0 +1,25 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+
+resources:
+  - lvms-namespace.yaml
+  - lvms-og.yaml
+  - lvms-cluster.yaml
+  - lvms-sub.yaml 
+  - values.yaml
+
+replacements:
+  - source:
+      kind: ConfigMap
+      name: lvms-values
+      fieldPath: data.paths
+    targets:
+      - select:
+          kind: LVMCluster
+        fieldPaths:
+          - spec.storage.deviceClasses.[name=vg1].deviceSelector.paths
+
+sortOptions:
+  order: fifo
