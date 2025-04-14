@@ -1,0 +1,194 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cpu-pinning-nova-2
+data:
+  25-cpu-pinning-nova.conf: _replaced_
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sriov-nova-2
+data:
+  03-sriov-nova.conf: _replaced_
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nvidia-sriov-config
+data:
+  nvidia_driver_url: _replaced_
+  nvidia_pci_address: _replaced_
+---
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneService
+metadata:
+  name: nova-custom-sriov-2
+spec:
+  label: dataplane-deployment-nova-custom-sriov
+  edpmServiceType: nova
+  dataSources:
+    - configMapRef:
+        name: cpu-pinning-nova-2
+    - configMapRef:
+        name: sriov-nova-2
+    - secretRef:
+        name: nova-cell1-compute-config
+    - secretRef:
+        name: nova-migration-ssh-key
+  playbook: osp.edpm.nova
+  tlsCerts:
+    default:
+      contents:
+        - dnsnames
+        - ips
+      networks:
+        - ctlplane
+      issuer: osp-rootca-issuer-internal
+  caCerts: combined-ca-bundle
+---
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneService
+metadata:
+  name: install-nvidia-sriov
+  namespace: openstack
+spec:
+  dataSources:
+    - configMapRef:
+        name: nvidia-sriov-config
+  playbookContents: |
+    - name: Install Nvidia Driver
+      hosts: all
+      tasks:
+        - name: Blacklist nouveau
+          become: true
+          ansible.builtin.copy:
+            dest: "/etc/modprobe.d/blacklist-nouveau.conf"
+            mode: "0644"
+            content: |-
+              blacklist nouveau
+              options nouveau modeset=0
+            force: false
+          register: _blacklist_nouveau
+
+        - name: Create SELinux policy file for NVIDIA SR-IOV
+          copy:
+            dest: "/tmp/nvidia-sriov.te"
+            content: |
+              module nvidia-sriov 1.0;
+
+              require {
+                  type proc_t;
+                  type lib_t;
+                  type init_t;
+                  class file { entrypoint write };
+              }
+
+              #============= init_t ==============
+              allow init_t proc_t:file write;
+              allow init_t lib_t:file entrypoint;
+          register: policy_file
+
+        - name: Compile SELinux policy module
+          command: checkmodule -M -m -o /tmp/nvidia-sriov.mod /tmp/nvidia-sriov.te
+          when: policy_file.changed
+
+        - name: Package SELinux policy module
+          command: semodule_package -o /tmp/nvidia-sriov.pp -m /tmp/nvidia-sriov.mod
+          when: policy_file.changed
+
+        - name: Install SELinux policy module
+          become: true
+          command: semodule -i /tmp/nvidia-sriov.pp
+          when: policy_file.changed
+
+        - name: Clean up temporary policy files
+          file:
+            path: "{{ item }}"
+            state: absent
+          loop:
+            - "/tmp/nvidia-sriov.te"
+            - "/tmp/nvidia-sriov.mod"
+            - "/tmp/nvidia-sriov.pp"
+          when: policy_file.changed
+
+        - name: Get the Nvidia Driver URL
+          delegate_to: localhost
+          ansible.builtin.set_fact:
+            nvidia_rpm_url: "{{ lookup('file', '/var/lib/openstack/configs/install-nvidia-sriov/nvidia_driver_url') | from_yaml }}"
+            nvidia_pci_address: "{{ lookup('file', '/var/lib/openstack/configs/install-nvidia-sriov/nvidia_pci_address') | from_yaml }}"
+
+        - name: Gather the package facts
+          ansible.builtin.package_facts:
+            manager: auto
+
+        - name: Install nvidia driver RPM either from path or URL
+          become: true
+          ansible.builtin.dnf:
+            name: "{{ nvidia_rpm_url }}"
+            state: present
+            disable_gpg_check: true
+          when: nvidia_rpm_url not in ansible_facts.packages
+          register: _nvidia_driver_install
+
+        - name: Create sriov-manage service
+          ansible.builtin.copy:
+            content: |
+              [Unit]
+              After = nvidia-vgpu-mgr.service
+              After = nvidia-vgpud.service
+              Description = Enable Nvidia GPU virtual functions
+              [Service]
+              Type = oneshot
+              User = root
+              Group = root
+              ExecStart = /usr/lib/nvidia/sriov-manage -e %i
+              # Give a reasonable amount of time for the server to start up/shut down
+              TimeoutSec = 120
+              # This creates a specific slice which all services will operate from
+              #  The accounting options give us the ability to see resource usage
+              #  through the `systemd-cgtop` command.
+              Slice = system.slice
+              # Set Accounting
+              CPUAccounting = True
+              BlockIOAccounting = True
+              MemoryAccounting = True
+              TasksAccounting = True
+              RemainAfterExit = True
+              ExecStartPre = /usr/bin/sleep 30
+              [Install]
+              WantedBy = multi-user.target
+            dest: /etc/systemd/system/nvidia-sriov-manage@.service
+          become: yes
+
+        - name: Enable sriov-manage service and ensure it is not masked
+          become: yes
+          ansible.builtin.systemd_service:
+            name: nvidia-sriov-manage@{{ nvidia_pci_address }}.service
+            enabled: true
+            masked: false
+
+        - name: Ensure nvidia driver loads on boot
+          ansible.builtin.copy:
+            content: nvidia_vgpu_vfio
+            dest: /etc/modules-load.d/nvidia.conf
+          become: yes
+
+        - name: Check if grub2-mkconfig has --update-bls-cmdline option
+          ansible.builtin.shell:
+            cmd: grub2-mkconfig --help | grep '\-\-update-bls-cmdline'
+          ignore_errors: true
+          register: check_update_bls_cmdline
+          changed_when: false
+        - name: Regenerate initramfs
+          become: true
+          ansible.builtin.command: "{{ item }}"
+          loop:
+            - 'dracut --force'
+            - >-
+              grub2-mkconfig -o /boot/grub2/grub.cfg
+              {{ '--update-bls-cmdline'
+              if check_update_bls_cmdline.rc == 0
+              else '' }}
+          when: _blacklist_nouveau.changed or _nvidia_driver_install.changed
