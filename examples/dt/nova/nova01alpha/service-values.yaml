@@ -1,0 +1,45 @@
+# local-config: referenced, but not emitted by kustomize
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: service-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+data:
+  preserveJobs: false
+  glance:
+    customServiceConfig: |
+      [DEFAULT]
+      enabled_backends = default_backend:swift
+      [glance_store]
+      default_backend = default_backend
+      [default_backend]
+      swift_store_create_container_on_put = True
+      swift_store_auth_version = 3
+      swift_store_auth_address = {{ .KeystoneInternalURL }}
+      swift_store_endpoint_type = internalURL
+      swift_store_user = service:glance
+      swift_store_key = {{ .ServicePassword }}
+    default:
+      replicas: 1
+  nova:
+    apiServiceTemplate:
+      customServiceConfig: |
+        [quota]
+        driver = nova.quota.UnifiedLimitsDriver
+        unified_limits_resource_strategy = require
+        unified_limits_resource_list=
+        [oslo_limit]
+        auth_url =  https://keystone-internal.openstack.svc:5000
+        auth_type = password
+        user_domain_name = Default
+        username = nova
+        password = 12345678
+        system_scope = all
+    schedulerServiceTemplate:
+      customServiceConfig: |
+        [filter_scheduler]
+        enabled_filtes = AvailabilityZoneFilter,ComputeFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,ServerGroupAntiAffinityFilter,ServerGroupAffinityFilter,NUMATopologyFilter,AggregateInstanceExtraSpecsFilter
+  swift:
+    enabled: true
