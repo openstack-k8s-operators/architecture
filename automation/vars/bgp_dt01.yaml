@@ -2,8 +2,7 @@
 vas:
   bgp_dt01:
     stages:
-      -  # stage_0
-        pre_stage_run:
+      - pre_stage_run:
           - name: Apply taint on worker-3
             type: cr
             definition:
@@ -52,6 +51,7 @@ vas:
             resource_name: openshift-no-reapply-sysctl
             namespace: openshift-cluster-node-tuning-operator
             state: present
+        name: nncp-configuration
         path: examples/dt/bgp_dt01/control-plane/nncp
         wait_conditions:
           - >-
@@ -64,7 +64,7 @@ vas:
             src_file: values.yaml
         build_output: nncp.yaml
 
-      -  # stage_1
+      - name: control-plane
         path: examples/dt/bgp_dt01/control-plane
         wait_conditions:
           - >-
@@ -89,7 +89,7 @@ vas:
             namespace: openstack
             state: present
 
-      -  # stage_2
+      - name: edpm-computes-r0-nodeset
         path: examples/dt/bgp_dt01/edpm/computes/r0
         wait_conditions:
           - >-
@@ -102,7 +102,7 @@ vas:
             src_file: values.yaml
         build_output: edpm-r0-compute-nodeset.yaml
 
-      -  # stage_3
+      - name: edpm-computes-r1-nodeset
         path: examples/dt/bgp_dt01/edpm/computes/r1
         wait_conditions:
           - >-
@@ -115,7 +115,7 @@ vas:
             src_file: values.yaml
         build_output: edpm-r1-compute-nodeset.yaml
 
-      -  # stage_4
+      - name: edpm-computes-r2-nodeset
         path: examples/dt/bgp_dt01/edpm/computes/r2
         wait_conditions:
           - >-
@@ -128,7 +128,7 @@ vas:
             src_file: values.yaml
         build_output: edpm-r2-compute-nodeset.yaml
 
-      -  # stage_5
+      - name: edpm-networkers-r0-nodeset
         path: examples/dt/bgp_dt01/edpm/networkers/r0
         wait_conditions:
           - >-
@@ -141,7 +141,7 @@ vas:
             src_file: values.yaml
         build_output: edpm-r0-networker-nodeset.yaml
 
-      -  # stage_6
+      - name: edpm-networkers-r1-nodeset
         path: examples/dt/bgp_dt01/edpm/networkers/r1
         wait_conditions:
           - >-
@@ -154,7 +154,7 @@ vas:
             src_file: values.yaml
         build_output: edpm-r1-networker-nodeset.yaml
 
-      -  # stage_7
+      - name: edpm-networkers-r2-nodeset
         path: examples/dt/bgp_dt01/edpm/networkers/r2
         wait_conditions:
           - >-
@@ -167,7 +167,7 @@ vas:
             src_file: values.yaml
         build_output: edpm-r2-networker-nodeset.yaml
 
-      -  # stage_8
+      - name: edpm-deployment
         path: examples/dt/bgp_dt01/edpm/deployment
         wait_conditions:
           - >-
