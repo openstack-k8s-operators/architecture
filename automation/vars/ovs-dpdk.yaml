@@ -31,7 +31,7 @@ vas:
           - >-
             oc -n openstack wait
             osdpns openstack-edpm --for condition=SetupReady
-            --timeout=60m
+            --timeout=90m
         values:
           - name: edpm-nodeset-values
             src_file: values.yaml
