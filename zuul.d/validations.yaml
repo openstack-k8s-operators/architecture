@@ -185,6 +185,19 @@
       cifmw_architecture_scenario: ovs-dpdk-sriov-2nodesets
 - job:
     files:
+    - automation/mocks/ovs-dpdk-sriov-networker.yaml
+    - examples/dt/nfv/nfv-ovs-dpdk-sriov-networker
+    - examples/dt/nfv/nfv-ovs-dpdk-sriov-networker/edpm/computes
+    - examples/dt/nfv/nfv-ovs-dpdk-sriov-networker/edpm/deployment
+    - examples/dt/nfv/nfv-ovs-dpdk-sriov-networker/edpm/networkers
+    - examples/dt/nfv/nfv-ovs-dpdk-sriov-networker/nncp
+    - lib
+    name: rhoso-architecture-validate-ovs-dpdk-sriov-networker
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: ovs-dpdk-sriov-networker
+- job:
+    files:
     - automation/net-env/pidone.yaml
     - dt/pidone
     - examples/dt/pidone
