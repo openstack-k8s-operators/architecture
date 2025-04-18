@@ -121,6 +121,20 @@
       cifmw_architecture_scenario: nova-three-cells
 - job:
     files:
+    - examples/va/nvidia-mdev/control-plane
+    - examples/va/nvidia-mdev/control-plane/nncp
+    - examples/va/nvidia-mdev/edpm-post-driver/deployment
+    - examples/va/nvidia-mdev/edpm-post-driver/nodeset
+    - examples/va/nvidia-mdev/edpm/deployment
+    - examples/va/nvidia-mdev/edpm/nodeset
+    - lib
+    - va/nvidia-mdev
+    name: rhoso-architecture-validate-nvidia-mdev
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: nvidia-mdev
+- job:
+    files:
     - dt/osasinfra
     - examples/dt/osasinfra
     - examples/dt/osasinfra/control-plane
