@@ -1,0 +1,23 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+transformers:
+  - |-
+    apiVersion: builtin
+    kind: NamespaceTransformer
+    metadata:
+      name: _ignored_
+      namespace: openstack2
+    setRoleBindingSubjects: none
+    unsetOnly: true
+    fieldSpecs:
+    - path: metadata/name
+      kind: Namespace
+      create: true
+
+components:
+  - ../../../../va/multi-namespace/edpm2
+
+resources:
+  - values.yaml

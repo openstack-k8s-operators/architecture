@@ -70,6 +70,27 @@
       cifmw_architecture_scenario: hci-adoption
 - job:
     files:
+    - automation/net-env/multi-namespace.yaml
+    - examples/va/multi-namespace/control-plane
+    - examples/va/multi-namespace/control-plane/networking
+    - examples/va/multi-namespace/control-plane/networking/nncp
+    - examples/va/multi-namespace/control-plane2
+    - examples/va/multi-namespace/control-plane2/networking
+    - examples/va/multi-namespace/control-plane2/networking/nncp
+    - examples/va/multi-namespace/edpm
+    - examples/va/multi-namespace/edpm/nodeset
+    - examples/va/multi-namespace/edpm2
+    - examples/va/multi-namespace/edpm2/nodeset
+    - examples/va/multi-namespace/namespace
+    - lib
+    - va/multi-namespace
+    name: rhoso-architecture-validate-multi-namespace
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: multi-namespace
+      cifmw_networking_env_def_file: automation/net-env/multi-namespace.yaml
+- job:
+    files:
     - examples/va/nfv/ovs-dpdk-sriov/nncp
     - lib
     name: rhoso-architecture-validate-nfv-ovs-dpdk-sriov-adoption

@@ -7,6 +7,7 @@
       - rhoso-architecture-validate-dcn
       - rhoso-architecture-validate-hci
       - rhoso-architecture-validate-hci-adoption
+      - rhoso-architecture-validate-multi-namespace
       - rhoso-architecture-validate-nfv-ovs-dpdk-sriov-adoption
       - rhoso-architecture-validate-nfv-ovs-dpdk-sriov-hci
       - rhoso-architecture-validate-nova-three-cells

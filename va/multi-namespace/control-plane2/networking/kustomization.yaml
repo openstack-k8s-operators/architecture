@@ -1,0 +1,116 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+transformers:
+  # Set namespace to OpenStack2 on all namespaced objects without a namespace
+  - |-
+    apiVersion: builtin
+    kind: NamespaceTransformer
+    metadata:
+      name: _ignored_
+      namespace: openstack2
+    setRoleBindingSubjects: none
+    unsetOnly: true
+    fieldSpecs:
+      - path: metadata/name
+        kind: Namespace
+        create: true
+
+components:
+  - ../../../../lib/networking
+
+patches:
+  # IPAddressPools
+  - target:
+      kind: IPAddressPool
+      name: ctlplane
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: ctlplane2
+  - target:
+      kind: IPAddressPool
+      name: internalapi
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: internalapi2
+  - target:
+      kind: IPAddressPool
+      name: storage
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: storage2
+  - target:
+      kind: IPAddressPool
+      name: tenant
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: tenant2
+
+  # L2Advertisements
+  - target:
+      kind: L2Advertisement
+      name: ctlplane
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: ctlplane2
+      - op: replace
+        path: /spec/ipAddressPools
+        value:
+          - ctlplane2
+  - target:
+      kind: L2Advertisement
+      name: internalapi
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: internalapi2
+      - op: replace
+        path: /spec/ipAddressPools
+        value:
+          - internalapi2
+  - target:
+      kind: L2Advertisement
+      name: storage
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: storage2
+      - op: replace
+        path: /spec/ipAddressPools
+        value:
+          - storage2
+  - target:
+      kind: L2Advertisement
+      name: tenant
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: tenant2
+      - op: replace
+        path: /spec/ipAddressPools
+        value:
+          - tenant2
+
+  # NADs
+  - target:
+      kind: NetworkAttachmentDefinition
+      name: .*
+    patch: |-
+      - op: replace
+        path: /metadata/namespace
+        value: openstack2
+
+  # NetConfig
+  - target:
+      kind: NetConfig
+      name: .*
+    patch: |-
+      - op: replace
+        path: /metadata/namespace
+        value: openstack2
