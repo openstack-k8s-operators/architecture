@@ -9,7 +9,7 @@ metadata:
     config.kubernetes.io/local-config: "true"
 data:
   root_password: cmVkaGF0Cg==
-  preProvisioned: false
+  preProvisioned: true
   baremetalSetTemplate:
     ctlplaneInterface: eno2  # CHANGEME
     cloudUserName: cloud-admin

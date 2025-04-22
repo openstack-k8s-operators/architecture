@@ -20,8 +20,13 @@ transformers:
 components:
   - ../../../../../lib/dataplane/nodeset
 
-resources:
-  - baremetalset-password-secret.yaml
+patches:
+  - target:
+      kind: Secret
+      name: dataplane-ansible-ssh-private-key-secret
+    patch: |
+      - op: remove
+        path: /data/authorized_keys
 
 replacements:
   - source:
