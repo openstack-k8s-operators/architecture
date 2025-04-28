@@ -45,7 +45,7 @@ Hence, the distribution of the nodes in the racks is the following one:
 * rack1: r1-compute-0, r1-compute-1, r1-networker-0, ocp-master-1, ocp-worker-1, leaf-2, leaf-3
 * rack2: r2-compute-0, r2-compute-1, r2-networker-0, ocp-master-2, ocp-worker-2, leaf-4, leaf-5
 
-The OCP tester (ocp-worker-3) is not included into any rack. It is not
+The OCP tester (ocp-worker-9) is not included into any rack. It is not
 connected to any leaves, but to a router connected to the spines, due to the
 reasons described before (it needs special connectivity to reach the provider
 network).
