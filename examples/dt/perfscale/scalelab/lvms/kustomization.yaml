@@ -6,8 +6,8 @@ kind: Kustomization
 resources:
   - lvms-namespace.yaml
   - lvms-og.yaml
+  - lvms-sub.yaml
   - lvms-cluster.yaml
-  - lvms-sub.yaml 
   - values.yaml
 
 replacements:
