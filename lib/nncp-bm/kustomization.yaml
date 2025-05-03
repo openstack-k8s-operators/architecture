@@ -122,8 +122,36 @@ replacements:
         fieldPaths:
           - spec.desiredState.interfaces.[name=external].mtu
   # ctlplane type is ethernet (not vlan)
-
-  # Static Node IPs: node-0
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ctlplane.iface
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+        fieldPaths:
+          - spec.desiredState.interfaces.[type=ethernet].name
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ctlplane.mtu
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+        fieldPaths:
+          - spec.desiredState.interfaces.[type=ethernet].mtu
+  
+# Static Node IPs: node-0
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_0.ctlplane_ip
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: node-0
+        fieldPaths:
+          - spec.desiredState.interfaces.[type=ethernet].ipv4.address.0.ip
   - source:
       kind: ConfigMap
       name: network-values
@@ -169,6 +197,16 @@ replacements:
   - source:
       kind: ConfigMap
       name: network-values
+      fieldPath: data.node_1.ctlplane_ip
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: node-1
+        fieldPaths:
+          - spec.desiredState.interfaces.[type=ethernet].ipv4.address.0.ip
+  - source:
+      kind: ConfigMap
+      name: network-values
       fieldPath: data.node_1.internalapi_ip
     targets:
       - select:
@@ -208,6 +246,16 @@ replacements:
           - spec.desiredState.interfaces.[name=external].ipv4.address.0.ip
 
   # Static Node IPs: node-2
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_2.ctlplane_ip
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: node-2
+        fieldPaths:
+          - spec.desiredState.interfaces.[type=ethernet].ipv4.address.0.ip
   - source:
       kind: ConfigMap
       name: network-values
@@ -253,6 +301,16 @@ replacements:
   - source:
       kind: ConfigMap
       name: network-values
+      fieldPath: data.ctlplane.prefix-length
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: node-0
+        fieldPaths:
+          - spec.desiredState.interfaces.[type=ethernet].ipv4.address.0.prefix-length
+  - source:
+      kind: ConfigMap
+      name: network-values
       fieldPath: data.internalapi.prefix-length
     targets:
       - select:
@@ -295,6 +353,16 @@ replacements:
   - source:
       kind: ConfigMap
       name: network-values
+      fieldPath: data.ctlplane.prefix-length
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: node-1
+        fieldPaths:
+          - spec.desiredState.interfaces.[type=ethernet].ipv4.address.0.prefix-length
+  - source:
+      kind: ConfigMap
+      name: network-values
       fieldPath: data.internalapi.prefix-length
     targets:
       - select:
@@ -334,6 +402,16 @@ replacements:
           - spec.desiredState.interfaces.[name=external].ipv4.address.0.prefix-length
 
   # prefix-length: node-2
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ctlplane.prefix-length
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: node-2
+        fieldPaths:
+          - spec.desiredState.interfaces.[type=ethernet].ipv4.address.0.prefix-length
   - source:
       kind: ConfigMap
       name: network-values

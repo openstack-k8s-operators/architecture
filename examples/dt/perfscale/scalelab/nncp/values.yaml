@@ -14,18 +14,23 @@ data:
     tenant_ip: 172.18.0.50
     external_ip: 172.19.0.50
     storage_ip: 172.20.0.50
+    ctlplane_ip: 172.16.0.50
   node_1:
     name: e31-h05-000-r640
     internalapi_ip: 172.17.0.51
     tenant_ip: 172.18.0.51
     external_ip: 172.19.0.51
     storage_ip: 172.20.0.51
+    ctlplane_ip: 172.16.0.52
+  node_1:
   node_2:
     name: e31-h06-000-r640
     internalapi_ip: 172.17.0.52
     tenant_ip: 172.18.0.52
     external_ip: 172.19.0.52
     storage_ip: 172.20.0.52
+    ctlplane_ip: 172.16.0.52
+  node_1:
 
   # networks
   internalapi:

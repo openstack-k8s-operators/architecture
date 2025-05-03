@@ -54,6 +54,19 @@ spec:
           base-iface: _replaced_
           id: _replaced_
         mtu: 1500
+      - description: ctlplane interface
+        name: _replaced_
+        state: up
+        type: ethernet
+        mtu: 1500
+        ipv6:
+          enabled: false
+        ipv4:
+          address:
+            - ip: _replaced_
+              prefix-length: _replaced_
+          enabled: true
+          dhcp: false
       - description: external vlan interface
         ipv4:
           address:
