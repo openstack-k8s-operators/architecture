@@ -541,7 +541,6 @@ networks:
             start: 2620:cf:cf:cf02::130
             start_host: 130
         ipv4_ranges: []
-    vlan_id: 22
   internalapi:
     dns_v4: []
     dns_v6: []
