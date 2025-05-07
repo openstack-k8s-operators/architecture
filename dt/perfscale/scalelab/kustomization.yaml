@@ -42,6 +42,15 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
+      fieldPath: data.ovn.ovnController
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.ovn.template.ovnController
+  - source:
+      kind: ConfigMap
+      name: service-values
       fieldPath: data.glance.customServiceConfig
     targets:
       - select:

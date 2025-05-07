@@ -27,10 +27,14 @@ data:
       network_vlan_ranges = dpdk1:206:209,dpdk2:206:209 # CHANGEME
   ovn:
     ovnController:
-      nicMappings:
-        datacentre: ens2f0np0
-
-
+      external-ids:
+        enable-chassis-as-gateway: true
+        ovn-bridge: br-int
+        ovn-encap-type: geneve
+        system-id: random
+      networkAttachment: tenant
+      resources: {}
+      tls: {}
   glance:
     customServiceConfig: |
       [DEFAULT]
