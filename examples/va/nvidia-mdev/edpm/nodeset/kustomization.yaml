@@ -72,3 +72,15 @@ replacements:
           - data.03-sriov-nova\.conf
         options:
           create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values
+      fieldPath: data.nova.mdev.nvidia_mdev_driver_url
+    targets:
+      - select:
+          kind: ConfigMap
+          name: nvidia-url
+        fieldPaths:
+          - data.nvidia_mdev_driver_url
+        options:
+          create: true
