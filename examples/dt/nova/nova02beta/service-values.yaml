@@ -38,8 +38,20 @@ data:
   nova:
     apiServiceTemplate:
       customServiceConfig: |
-         [pci]
-         alias = { "vendor_id":"8086", "product_id":"154d", "device_type":"type-PCI", "name":"a1" }
+        [pci]
+        alias = { "vendor_id":"8086", "product_id":"154d", "device_type":"type-PCI", "name":"a1" }
+        [filter_scheduler]
+        pci_in_placement = True
+    cell0:
+      conductorServiceTemplate:
+        customServiceConfig: |
+          [filter_scheduler]
+          pci_in_placement = True
+    cell1:
+      conductorServiceTemplate:
+        customServiceConfig: |
+          [filter_scheduler]
+          pci_in_placement = True
     schedulerServiceTemplate:
       customServiceConfig: |
         [filter_scheduler]

@@ -37,17 +37,6 @@ vas:
             src_file: values.yaml
         build_output: nodeset.yaml
 
-      - path: examples/dt/nova/nova02beta/edpm/nodeset2
-        wait_conditions:
-          - >-
-            oc -n openstack wait
-            osdpns openstack-edpm-2 --for condition=SetupReady
-            --timeout=60m
-        values:
-          - name: edpm-nodeset-values
-            src_file: values.yaml
-        build_output: nodeset2.yaml
-
       - path: examples/dt/nova/nova02beta/edpm/deployment
         wait_conditions:
           - >-
