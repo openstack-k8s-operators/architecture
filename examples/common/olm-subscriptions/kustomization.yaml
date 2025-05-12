@@ -1,0 +1,6 @@
+---
+components:
+  - ../../../lib/olm-deps
+  - ../../../lib/olm-openstack-subscriptions/overlays/default
+resources:
+  - values.yaml
