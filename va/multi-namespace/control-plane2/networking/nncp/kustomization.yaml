@@ -1,0 +1,66 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+transformers:
+  # Set namespace to OpenStack on all namespaced objects without a namespace
+  - |-
+    apiVersion: builtin
+    kind: NamespaceTransformer
+    metadata:
+      name: _ignored_
+      namespace: openstack2
+    setRoleBindingSubjects: none
+    unsetOnly: true
+    fieldSpecs:
+      - path: metadata/name
+        kind: Namespace
+        create: true
+
+components:
+  - ../../../../../lib/nncp
+
+patches:
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: .*master-0
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: master-0-2
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: .*master-1
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: master-1-2
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: .*master-2
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: master-2-2
+
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: .*
+    patch: |-
+      - op: replace
+        path: /spec/desiredState/interfaces/0/name
+        value: internalapi2
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: .*
+    patch: |-
+      - op: replace
+        path: /spec/desiredState/interfaces/1/name
+        value: storage2
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: .*
+    patch: |-
+      - op: replace
+        path: /spec/desiredState/interfaces/2/name
+        value: tenant2
