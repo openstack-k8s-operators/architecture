@@ -51,6 +51,7 @@ data:
       cinder_store_project_name = service
       cinder_catalog_info = volumev3::internalURL
       cinder_use_multipath = true
+      cinder_volume_type = multiattach
       [oslo_concurrency]
       lock_path = /var/lib/glance/tmp
     databaseInstance: openstack
