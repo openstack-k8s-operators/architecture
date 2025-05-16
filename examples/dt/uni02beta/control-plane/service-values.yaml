@@ -9,6 +9,15 @@ metadata:
 
 data:
   preserveJobs: false
+
+  cinderBackup:
+    customServiceConfig: |
+      [DEFAULT]
+      backup_driver = cinder.backup.drivers.nfs.NFSBackupDriver
+      backup_share = _replaced_
+      backup_mount_point_base = _replaced_
+    replicas: 1
+
   cinderVolumes:
     ontap-nfs:
       customServiceConfig: |
