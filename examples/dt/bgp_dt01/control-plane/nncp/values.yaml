@@ -404,6 +404,13 @@ data:
     mtu: 1500
     vlan: 23
     base_iface: enp6s0
+    subnets:
+      - allocationRanges:
+          - end: 172.123.0.250
+            start: 172.123.0.100
+        cidr: 172.123.0.0/24
+        gateway: 172.123.0.1
+        name: subnet1
     net-attach-def: |
       {
         "cniVersion": "0.3.1",
