@@ -20,6 +20,7 @@ data:
       ansibleUser: cloud-admin
       ansiblePort: 22
       ansibleVars:
+        edpm_ovn_bridge_mappings: ["datacentre:br-ex", "octavia:br-octavia"]
         edpm_ovn_encap_ip: "{{ lookup('vars', 'bgpmainnet_ip') }}"
         edpm_ovn_bgp_agent_expose_tenant_networks: false
         edpm_frr_bgp_ipv4_src_network: bgpmainnet
@@ -45,6 +46,9 @@ data:
           network_config:
           - type: ovs_bridge
             name: {{ neutron_physical_bridge_name }}
+            use_dhcp: false
+          - type: ovs_bridge
+            name: br-octavia
             use_dhcp: false
           - type: interface
             name: nic1
@@ -75,6 +79,7 @@ data:
             - ip_netmask: {{ lookup('vars', 'bgpmainnetv6_ip') }}/128
             - ip_netmask: {{ lookup('vars', 'internalapi_ip') }}/32
             - ip_netmask: {{ lookup('vars', 'tenant_ip') }}/32
+            - ip_netmask: {{ lookup('vars', 'octavia_ip') }}/32
         edpm_enable_chassis_gw: true
         edpm_sshd_allowed_ranges:
           - 192.168.122.0/24
@@ -91,6 +96,8 @@ data:
       - name: Storage
         subnetName: subnet1
       - name: Tenant
+        subnetName: subnet1
+      - name: Octavia
         subnetName: subnet1
       - name: BgpNet0
         subnetName: subnet0
@@ -138,6 +145,8 @@ data:
           - name: Storage
             subnetName: subnet1
           - name: Tenant
+            subnetName: subnet1
+          - name: Octavia
             subnetName: subnet1
           - name: Bgpnet0
             subnetName: subnet2

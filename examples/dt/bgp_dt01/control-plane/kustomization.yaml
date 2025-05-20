@@ -64,6 +64,19 @@ patches:
       metadata:
         name: .*
       $patch: delete
+  # Add octavia network to NetConfig
+  - target:
+      kind: NetConfig
+      name: netconfig
+    patch: |-
+      - op: add
+        path: /spec/networks/-
+        value:
+          dnsDomain: _replaced_
+          name: octavia
+          subnets:
+            - _replaced_
+          mtu: 1500
 
 replacements:
   # BGP peer IP addresses
@@ -176,3 +189,31 @@ replacements:
           - spec.neutron.template.customServiceConfig
         options:
           create: true
+  # octavia Netconfig
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.octavia.dnsDomain
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=octavia].dnsDomain
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.octavia.mtu
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=octavia].mtu
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.octavia.subnets
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=octavia].subnets
