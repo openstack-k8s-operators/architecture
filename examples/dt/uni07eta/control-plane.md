@@ -28,12 +28,12 @@ cd architecture/examples/dt/uni07eta
 ```
 
 Edit [control-plane/service-values.yaml](control-plane/service-values.yaml) and
-[control-plane/nncp/values.yaml](control-plane/nncp/values.yaml).
+[control-plane/networking/nncp/values.yaml](control-plane/networking/nncp/values.yaml).
 
 Apply node network configuration
 
 ```bash
-pushd control-plane/nncp
+pushd control-plane/networking/nncp
 kustomize build > nncp.yaml
 oc apply -f nncp.yaml
 oc wait nncp \
@@ -42,6 +42,18 @@ oc wait nncp \
     --timeout=300s
 popd
 ```
+
+## Apply remaining networking configuration
+
+Generate the reminaing networking configuration
+```
+kustomize build control-plane/networking > networking.yaml
+```
+Apply the networking CRs
+```
+oc apply -f networking.yaml
+```
+
 
 Generate the control-plane and networking CRs.
 
