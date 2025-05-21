@@ -187,6 +187,17 @@ cifmw_networking_env_definition:
           prefix_length_v4: 24
           skip_nm: false
           vlan_id: 22
+        octavia:
+          interface_name: eth1.23
+          ip_v4: 172.23.0.106
+          mac_addr: '52:54:00:42:17:57'
+          mtu: 1500
+          netmask_v4: 255.255.255.0
+          network_name: octavia
+          parent_interface: eth1
+          prefix_length_v4: 24
+          skip_nm: false
+          vlan_id: 23
     r1-networker-0:
       hostname: r1-networker-0
       name: r1-networker-0
@@ -222,6 +233,17 @@ cifmw_networking_env_definition:
           prefix_length_v4: 24
           skip_nm: false
           vlan_id: 22
+        octavia:
+          interface_name: eth1.23
+          ip_v4: 172.23.0.107
+          mac_addr: '52:54:00:42:17:58'
+          mtu: 1500
+          netmask_v4: 255.255.255.0
+          network_name: octavia
+          parent_interface: eth1
+          prefix_length_v4: 24
+          skip_nm: false
+          vlan_id: 23
     r2-networker-0:
       hostname: r2-networker-0
       name: r2-networker-0
@@ -257,6 +279,17 @@ cifmw_networking_env_definition:
           prefix_length_v4: 24
           skip_nm: false
           vlan_id: 22
+        octavia:
+          interface_name: eth1.23
+          ip_v4: 172.23.0.108
+          mac_addr: '52:54:00:42:17:59'
+          mtu: 1500
+          netmask_v4: 255.255.255.0
+          network_name: octavia
+          parent_interface: eth1
+          prefix_length_v4: 24
+          skip_nm: false
+          vlan_id: 23
     ocp-0:
       hostname: master-0
       name: ocp-0
@@ -281,17 +314,6 @@ cifmw_networking_env_definition:
           prefix_length_v4: 24
           skip_nm: false
           vlan_id: 20
-        octavia:
-          interface_name: enp8s0.23
-          ip_v4: 172.23.0.10
-          mac_addr: 52:54:00:01:fb:71
-          mtu: 1500
-          netmask_v4: 255.255.255.0
-          network_name: octavia
-          parent_interface: enp8s0
-          prefix_length_v4: 24
-          skip_nm: false
-          vlan_id: 23
         storage:
           interface_name: enp8s0.21
           ip_v4: 172.18.0.10
@@ -338,17 +360,6 @@ cifmw_networking_env_definition:
           prefix_length_v4: 24
           skip_nm: false
           vlan_id: 20
-        octavia:
-          interface_name: enp8s0.23
-          ip_v4: 172.23.0.11
-          mac_addr: 52:54:00:4c:f6:5b
-          mtu: 1500
-          netmask_v4: 255.255.255.0
-          network_name: octavia
-          parent_interface: enp8s0
-          prefix_length_v4: 24
-          skip_nm: false
-          vlan_id: 23
         storage:
           interface_name: enp8s0.21
           ip_v4: 172.18.0.11
@@ -395,17 +406,6 @@ cifmw_networking_env_definition:
           prefix_length_v4: 24
           skip_nm: false
           vlan_id: 20
-        octavia:
-          interface_name: enp8s0.23
-          ip_v4: 172.23.0.12
-          mac_addr: 52:54:00:64:39:96
-          mtu: 1500
-          netmask_v4: 255.255.255.0
-          network_name: octavia
-          parent_interface: enp8s0
-          prefix_length_v4: 24
-          skip_nm: false
-          vlan_id: 23
         storage:
           interface_name: enp8s0.21
           ip_v4: 172.18.0.12
@@ -452,17 +452,6 @@ cifmw_networking_env_definition:
           prefix_length_v4: 24
           skip_nm: false
           vlan_id: 20
-        octavia:
-          interface_name: enp8s0.23
-          ip_v4: 172.23.0.13
-          mac_addr: 52:54:00:13:5a:96
-          mtu: 1500
-          netmask_v4: 255.255.255.0
-          network_name: octavia
-          parent_interface: enp8s0
-          prefix_length_v4: 24
-          skip_nm: false
-          vlan_id: 23
         storage:
           interface_name: enp8s0.21
           ip_v4: 172.18.0.13
@@ -509,17 +498,6 @@ cifmw_networking_env_definition:
           prefix_length_v4: 24
           skip_nm: false
           vlan_id: 20
-        octavia:
-          interface_name: enp8s0.23
-          ip_v4: 172.23.0.14
-          mac_addr: 52:54:00:06:6b:f0
-          mtu: 1500
-          netmask_v4: 255.255.255.0
-          network_name: octavia
-          parent_interface: enp8s0
-          prefix_length_v4: 24
-          skip_nm: false
-          vlan_id: 23
         storage:
           interface_name: enp8s0.21
           ip_v4: 172.18.0.14
@@ -566,17 +544,6 @@ cifmw_networking_env_definition:
           prefix_length_v4: 24
           skip_nm: false
           vlan_id: 20
-        octavia:
-          interface_name: enp8s0.23
-          ip_v4: 172.23.0.15
-          mac_addr: 52:54:00:13:4e:27
-          mtu: 1500
-          netmask_v4: 255.255.255.0
-          network_name: octavia
-          parent_interface: enp8s0
-          prefix_length_v4: 24
-          skip_nm: false
-          vlan_id: 23
         storage:
           interface_name: enp8s0.21
           ip_v4: 172.18.0.15
@@ -623,17 +590,6 @@ cifmw_networking_env_definition:
           prefix_length_v4: 24
           skip_nm: false
           vlan_id: 20
-        octavia:
-          interface_name: enp7s0.23
-          ip_v4: 172.23.0.16
-          mac_addr: 52:54:00:2f:28:7e
-          mtu: 1500
-          netmask_v4: 255.255.255.0
-          network_name: octavia
-          parent_interface: enp7s0
-          prefix_length_v4: 24
-          skip_nm: false
-          vlan_id: 23
         storage:
           interface_name: enp7s0.21
           ip_v4: 172.18.0.16
@@ -871,17 +827,6 @@ cifmw_networking_env_definition:
       network_v4: 172.23.0.0/24
       search_domain: octavia.example.com
       tools:
-        multus:
-          ipv4_ranges:
-            - end: 172.23.0.70
-              end_host: 70
-              length: 41
-              start: 172.23.0.30
-              start_host: 30
-          ipv6_ranges: []
-          ipv4_routes:
-            - destination: "172.24.0.0/16"
-              gateway: "172.23.0.150"
         netconfig:
           ipv4_ranges:
             - end: 172.23.0.250
