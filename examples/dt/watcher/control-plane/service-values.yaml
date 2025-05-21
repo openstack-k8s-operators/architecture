@@ -1,0 +1,18 @@
+---
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: service-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+
+data:
+  telemetry:
+    enabled: true
+    metricStorage:
+      enabled: true
+    autoscaling:
+      enabled: true
+    ceilometer:
+      enabled: true
