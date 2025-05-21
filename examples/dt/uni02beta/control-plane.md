@@ -19,12 +19,12 @@ cd architecture/examples/dt/uni02beta
 ```
 
 Edit [control-plane/service-values.yaml](control-plane/service-values.yaml) and
-[control-plane/nncp/values.yaml](control-plane/nncp/values.yaml).
+[control-plane/networking/nncp/values.yaml](control-plane/networking/nncp/values.yaml).
 
 Apply node network configuration
 
 ```bash
-pushd control-plane/nncp
+pushd control-plane/networking/nncp
 kustomize build > nncp.yaml
 oc apply -f nncp.yaml
 oc wait nncp \
