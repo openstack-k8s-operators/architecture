@@ -1,6 +1,6 @@
 ---
 vas:
-  uni02beta:
+  uni02beta-adoption:
     stages:
       - name: nncp-configuration
         path: examples/dt/uni02beta/control-plane/networking/nncp
@@ -27,31 +27,3 @@ vas:
           - name: network-values
             src_file: nncp/values.yaml
         build_output: network.yaml
-
-      - name: control-plane
-        path: examples/dt/uni02beta/control-plane
-        wait_conditions:
-          - >-
-            oc -n openstack wait openstackcontrolplane
-            controlplane
-            --for condition=Ready
-            --timeout=60m
-        values:
-          - name: network-values
-            src_file: networking/nncp/values.yaml
-          - name: service-values
-            src_file: service-values.yaml
-        build_output: control-plane.yaml
-
-      - name: edpm-deployment
-        path: examples/dt/uni02beta
-        wait_conditions:
-          - >-
-            oc -n openstack wait openstackdataplanedeployment
-            edpm-deployment
-            --for condition=Ready
-            --timeout=40m
-        values:
-          - name: edpm-nodeset-values
-            src_file: values.yaml
-        build_output: edpm.yaml
