@@ -228,7 +228,6 @@ replacements:
           - spec.telemetry.enabled
         options:
           create: true
-
   - source:
       kind: ConfigMap
       name: service-values
@@ -240,7 +239,6 @@ replacements:
           - spec.telemetry.template.metricStorage.enabled
         options:
           create: true
-
   - source:
       kind: ConfigMap
       name: service-values
@@ -252,7 +250,6 @@ replacements:
           - spec.telemetry.template.autoscaling.enabled
         options:
           create: true
-
   - source:
       kind: ConfigMap
       name: service-values
@@ -264,7 +261,6 @@ replacements:
           - spec.telemetry.template.ceilometer.enabled
         options:
           create: true
-
   - source:
       kind: ConfigMap
       name: service-values
@@ -276,7 +272,6 @@ replacements:
           - spec.keystone.template.customServiceConfig
         options:
           create: true
-  
   - source:
       kind: ConfigMap
       name: service-values
@@ -288,7 +283,6 @@ replacements:
           - spec.telemetry.enabled
         options:
           create: true
-
   - source:
       kind: ConfigMap
       name: service-values
@@ -300,7 +294,6 @@ replacements:
           - spec.telemetry.template.metricStorage.enabled
         options:
           create: true
-
   - source:
       kind: ConfigMap
       name: service-values
@@ -312,7 +305,6 @@ replacements:
           - spec.telemetry.template.autoscaling.enabled
         options:
           create: true
-
   - source:
       kind: ConfigMap
       name: service-values
@@ -324,7 +316,6 @@ replacements:
           - spec.telemetry.template.ceilometer.enabled
         options:
           create: true
-
   - source:
       kind: ConfigMap
       name: service-values
