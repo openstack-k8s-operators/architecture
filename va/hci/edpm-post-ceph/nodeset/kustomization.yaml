@@ -228,11 +228,7 @@ replacements:
           - spec.telemetry.enabled
         options:
           create: true
-<<<<<<< HEAD
   - source:
-=======
-   - source:
->>>>>>> df2ea2618e9ba3b0d7d951fe476038e3b6bc37c0
       kind: ConfigMap
       name: service-values
       fieldPath: data.telemetry.metricStorage.enabled
