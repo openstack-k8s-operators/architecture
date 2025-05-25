@@ -90,11 +90,3 @@ data:
             - name: ceph
               mountPath: /etc/ceph
               readOnly: true
-   telemetry:
-     enabled: true
-     metricStorage:
-       enabled: true
-     autoscaling:
-       enabled: true
-     ceilometer:
-       enabled: true
