@@ -98,3 +98,7 @@ data:
       enabled: true
     ceilometer:
       enabled: true
+  keystone:
+    customServiceConfig: |
+      [token]
+      expiration = 28800
