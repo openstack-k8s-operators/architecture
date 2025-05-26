@@ -8,11 +8,11 @@ metadata:
 data:
   preserveJobs: false
 
-  telemetry:
-    enabled: true
-    metricStorage:
-      enabled: true
-    autoscaling:
-      enabled: true
-    ceilometer:
-      enabled: true
+    #  telemetry:
+    #    enabled: true
+    #    metricStorage:
+    #      enabled: true
+    #    autoscaling:
+    #      enabled: true
+    #    ceilometer:
+    #      enabled: true
