@@ -102,3 +102,5 @@ data:
     customServiceConfig: |
       [token]
       expiration = 28800
+  heat:
+    enable: true
