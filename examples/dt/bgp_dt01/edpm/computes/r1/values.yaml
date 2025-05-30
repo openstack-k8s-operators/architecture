@@ -22,6 +22,9 @@ data:
       ansibleVars:
         edpm_ovn_encap_ip: "{{ lookup('vars', 'bgpmainnet_ip') }}"
         edpm_ovn_bgp_agent_expose_tenant_networks: false
+        edpm_ovn_bridge_mappings:
+          - "datacentre:br-ex"
+          - "octavia:br-octavia"
         edpm_frr_bgp_ipv4_src_network: bgpmainnet
         edpm_frr_bgp_ipv6_src_network: bgpmainnetv6
         edpm_frr_bgp_neighbor_password: f00barZ
@@ -31,9 +34,6 @@ data:
         edpm_bootstrap_command: |
           dnf -y install conntrack-tools
         edpm_network_config_hide_sensitive_logs: false
-        edpm_network_config_os_net_config_mappings:
-          edpm-r1-compute-0:
-            nic2: 6a:fe:54:3f:8a:02  # CHANGEME
         edpm_network_config_template: |
           ---
           {% set mtu_list = [ctlplane_mtu] %}
@@ -44,6 +44,9 @@ data:
           network_config:
           - type: ovs_bridge
             name: {{ neutron_physical_bridge_name }}
+            use_dhcp: false
+          - type: ovs_bridge
+            name: br-octavia
             use_dhcp: false
           - type: interface
             name: nic1
@@ -75,6 +78,7 @@ data:
             - ip_netmask: {{ lookup('vars', 'internalapi_ip') }}/32
             - ip_netmask: {{ lookup('vars', 'storage_ip') }}/32
             - ip_netmask: {{ lookup('vars', 'tenant_ip') }}/32
+            - ip_netmask: {{ lookup('vars', 'octavia_ip') }}/32
         edpm_sshd_allowed_ranges:
           - 192.168.122.0/24
         edpm_sshd_configure_firewall: true
