@@ -136,6 +136,7 @@ data:
       - neutron-sriov
       - libvirt
       - nova-custom-sriov
+      - install-nvidia
   nova:
     compute:
       conf: |
@@ -158,3 +159,5 @@ data:
         # CHANGEME
         [pci]
         device_spec = {"vendor_id":"8086", "product_id":"1572", "address": "0000:19:00.3", "physical_network":"sriov-phy4", "trusted":"true"}
+    mdev:
+      nvidia_mdev_driver_url: http://example.nvidia.com/path/to/driver/example-rhel-host-driver-xyz.rpm

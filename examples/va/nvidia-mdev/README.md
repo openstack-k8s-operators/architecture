@@ -45,7 +45,9 @@ virtualization and requires real baremetal hosts.
 #### Nova Mdev Configuration
 
 To deploy vGPU devices comprised of different types as well as the capacity to 
-live migrate, you would need the below configuration applied to Nova.
+live migrate, define what mdev types should be enabled and map the respective
+mdev types to their pci address(es). Example below using nivida-228 and
+nvidia-229 as the types.
 
 ```YAML
 ---
@@ -70,94 +72,32 @@ metadata:
   namespace: openstack
 ```
 
+#### Openstack Dataplane Composable Service
+
+An Openstack Dataplane service can used to customize how the GPU cards need to
+be installed on the EDPM nodes. An example of OSPDS service can be seen
+[here](../../../va/nvidia-mdev/edpm/nodeset/nova_sriov.yaml). With the OSDPS
+configured, the operator would need to make sure to include the service to the
+list of services for the Openstack Dataplane NodeSet.
+
+**Note:** The example listed is not an officially supported procedure for
+installing Nvidia GPU's in RHOSO and is meant to be purely an example of how
+to leverage OSDPS. Please reference Nvidia's documentation when creating a
+procedure to install GPU's.
+
 #### Provider.yaml
 
 In order to easily take advantage of multiple Mdev types in an environment when
 creating flavors, we can associate traits to specific resource providers. With
-provier.yaml we can map those traits and apply them as part of a deployment.
-
-```YAML
----
-apiVersion: v1
-data:
-  provider.yaml: |
-    meta:
-      schema_version: "1.0"
-    providers:
-      - identification:
-          name: edpm-compute-0.ctlplane.example.com_pci_0000_04_00_0
-        traits:
-          additional:
-            - CUSTOM_NVIDIA_229
-      - identification:
-          name: edpm-compute-0.ctlplane.example.com_pci_0000_82_00_0
-        traits:
-          additional:
-            - CUSTOM_NVIDIA_228
-      - identification:
-          name: edpm-compute-1.ctlplane.example.com_pci_0000_04_00_0
-        traits:
-          additional:
-            - CUSTOM_NVIDIA_229
-      - identification:
-          name: edpm-compute-1.ctlplane.example.com_pci_0000_82_00_0
-        traits:
-          additional:
-            - CUSTOM_NVIDIA_228
-kind: ConfigMap
-  name: compute-provider
-  namespace: openstack
----
-apiVersion: dataplane.openstack.org/v1beta1
-kind: OpenStackDataPlaneService
-metadata:
-  name: compute-provider
-  namespace: openstack
-spec:
-  addCertMounts: false
-  caCerts: combined-ca-bundle
-  dataSources:
-  - configMapRef:
-      name: compute-provider
-  - configMapRef:
-      name: cpu-pinning-nova
-  - configMapRef:
-      name: sriov-nova
-  - secretRef:
-      name: nova-cell1-compute-config
-  - secretRef:
-      name: nova-migration-ssh-key
-  edpmServiceType: nova
-  playbook: osp.edpm.nova
-  tlsCerts:
-    default:
-      contents:
-      - dnsnames
-      - ips
-      issuer: osp-rootca-issuer-internal
-      networks:
-      - ctlplane
----
-apiVersion: dataplane.openstack.org/v1beta1
-kind: OpenStackDataPlaneDeployment
-metadata:
-  name: edpm-deployment-post-driver
-  namespace: openstack
-spec:
-  ansibleExtraVars:
-    edpm_reboot_strategy: force
-  nodeSets:
-  - openstack-edpm
-  preserveJobs: true
-  servicesOverride:
-  - reboot-os
-  - compute-provider
-```
+provider.yaml we can map those traits and apply them as part of a deployment.
+An example definition can be found [here](edpm-post-driver/nodeset/values.yaml)
+that associates different custom traits to different RPs.
 
 ## Stages
-All stages must be executed in the order listed below. Everything is required unless otherwise indicated.
+All stages must be executed in the order listed below. Everything is required
+unless otherwise indicated.
 
 1. [Install the OpenStack K8S operators and their dependencies](../../common/)
 2. [Configuring networking and deploy the OpenStack control plane](control-plane.md)
 3. [Configure and deploy the initial dataplane](edpm-pre.md)
-4. [Update Dataplane to deploy necessary vGPU MDev requirements](edpm-post.md)
+4. [Update Dataplane to reboot EDPM nodes and optionally apply provider.yaml](edpm-post.md)
