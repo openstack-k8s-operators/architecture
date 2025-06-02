@@ -3,7 +3,7 @@ vas:
   uni07eta:
     stages:
       - name: nncp-configuration
-        path: examples/dt/uni07eta/control-plane/nncp
+        path: examples/dt/uni07eta/control-plane/networking/nncp
         wait_conditions:
           - >-
             oc -n openstack wait nncp
@@ -15,6 +15,19 @@ vas:
             src_file: values.yaml
         build_output: nncp.yaml
 
+      - name: network-configuration
+        path: examples/dt/uni07eta/control-plane/networking
+        wait_conditions:
+          - >-
+            oc -n metallb-system wait pod
+            -l app=metallb -l component=speaker
+            --for condition=Ready
+            --timeout=5m
+        values:
+          - name: network-values
+            src_file: nncp/values.yaml
+        build_output: networking.yaml
+
       - name: control-plane
         path: examples/dt/uni07eta/control-plane
         wait_conditions:
@@ -25,7 +38,7 @@ vas:
             --timeout=60m
         values:
           - name: network-values
-            src_file: nncp/values.yaml
+            src_file: networking/nncp/values.yaml
           - name: service-values
             src_file: service-values.yaml
         build_output: control-plane.yaml
