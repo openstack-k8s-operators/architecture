@@ -42,6 +42,43 @@ spec:
       cinderVolumes: {}
       databaseInstance: openstack
       secret: osp-secret
+  designate:
+    enabled: false
+    template:
+      customServiceConfig: |
+        [DEFAULT]
+        debug = true
+      designateAPI:
+        replicas: 3
+      designateBackendbind9:
+        networkAttachments:
+          - designate
+        replicas: 3
+        storageClass: _replaced_
+        storageRequest: 10G
+      designateCentral:
+        replicas: 1
+      designateMdns:
+        replicas: 3
+        networkAttachments:
+          - designate
+      designateProducer:
+        replicas: 2
+        networkAttachments:
+          - designate
+      designateWorker:
+        replicas: 3
+        networkAttachments:
+          - designate
+      designateUnbound:
+        replicas: 1
+        networkAttachments:
+          - designate
+      nsRecords:
+        - hostname: ns1.example.org.
+          priority: 1
+        - hostname: ns2.example.org.
+          priority: 2
   dns:
     template:
       options: []

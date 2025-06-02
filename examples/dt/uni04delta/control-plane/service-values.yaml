@@ -32,6 +32,9 @@ data:
         rbd_flatten_volume_from_snapshot = False
         rbd_secret_uuid = _replaced_
 
+  designate:
+    enabled: false
+
   glance:
     customServiceConfig: |
       [DEFAULT]
