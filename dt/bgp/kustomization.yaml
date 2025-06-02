@@ -33,6 +33,19 @@ resources:
   - ocp_networks_octavia_netattach.yaml
 
 patches:
+  # Add octavia network to NetConfig
+  - target:
+      kind: NetConfig
+      name: netconfig
+    patch: |-
+      - op: add
+        path: /spec/networks/-
+        value:
+          dnsDomain: octavia.example.com
+          name: octavia
+          subnets:
+            - _replaced_
+          mtu: 1500
   # Add BGP networks to NetConfig
   - target:
       kind: NetConfig
@@ -101,6 +114,16 @@ patches:
           networkAttachment: internalapi
 
 replacements:
+  # octavia NetConfig customizations
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.octavia.subnets
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=octavia].subnets
   # BGP NetConfig customizations
   - source:
       kind: ConfigMap
@@ -206,6 +229,18 @@ replacements:
           kind: OpenStackControlPlane
         fieldPaths:
           - spec.octavia.template.apacheContainerImage
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.lbMgmtNetwork
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.lbMgmtNetwork
         options:
           create: true
 
