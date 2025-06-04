@@ -290,7 +290,7 @@ replacements:
     targets:
       - select:
           kind: OpenStackDataPlaneNodeSet
-        filedPath:
+        fieldPath:
           - spec.nodeTemplate.ansible.ansibleVars.edpm_container_registry_logins
         options:
           create: true
@@ -301,7 +301,7 @@ replacements:
     targets:
       - select:
           kind: OpenStackDataPlaneNodeSet
-        filedPath: 
+        fieldPath:
           - spec.nodeTemplate.ansible.ansibleVars.edpm_telemetry_node_exporter_image
         options:
           create: true
