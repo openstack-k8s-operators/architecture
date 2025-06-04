@@ -283,25 +283,3 @@ replacements:
           - spec.heat.enabled
         options:
           create: true
-  - source:
-      kind: ConfigMap
-      name: edpm-nodeset-values-post-ceph
-      fieldPath: data.nodeset.ansible.ansibleVars.edpm_telemetry_node_exporter_image
-    targets:
-      - select:
-          kind: OpenStackDataPlaneNodeSet
-        fieldPaths:
-          - spec.nodeTemplate.ansible.ansibleVars.edpm_telemetry_node_exporter_image
-        options:
-          create: true
-  - source:
-      kind: ConfigMap
-      name: edpm-nodeset-values-post-ceph
-      fieldPath: data.nodeset.ansible.ansibleVars.edpm_container_registry_logins
-    targets:
-      - select:
-          kind: OpenStackDataPlaneNodeSet
-        fieldPaths:
-          - spec.nodeTemplate.ansible.ansibleVars.edpm_container_registry_logins
-        options:
-          create: true
