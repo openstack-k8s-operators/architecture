@@ -294,7 +294,7 @@ replacements:
           - spec.nodeTemplate.ansible.ansibleVars.edpm_container_registry_logins
         options:
           create: true
-   source:
+  - source:
       kind: ConfigMap
       name: edpm-nodeset-values-post-ceph
       fieldPath: data.nodeset.ansible.ansibleVars.edpm_telemetry_node_exporter_image
