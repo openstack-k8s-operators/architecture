@@ -1,0 +1,28 @@
+---
+apiVersion: metal3.io/v1alpha1
+kind: BareMetalHost
+metadata:
+  labels: {}
+  name: leaf0-0
+  namespace: openstack
+---
+apiVersion: metal3.io/v1alpha1
+kind: BareMetalHost
+metadata:
+  labels: {}
+  name: leaf0-1
+  namespace: openstack
+---
+apiVersion: metal3.io/v1alpha1
+kind: BareMetalHost
+metadata:
+  labels: {}
+  name: leaf1-0
+  namespace: openstack
+---
+apiVersion: metal3.io/v1alpha1
+kind: BareMetalHost
+metadata:
+  labels: {}
+  name: leaf1-1
+  namespace: openstack
