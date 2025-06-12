@@ -24,6 +24,7 @@ data:
       - neutron-metadata
       - libvirt
       - nova-custom-ceph
+      - telemetry
   ceph:
     conf: CHANGEME_CEPH_CONF
     keyring: CHANGEME_CEPH_KEYRING
