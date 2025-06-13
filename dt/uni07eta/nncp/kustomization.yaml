@@ -185,3 +185,14 @@ replacements:
           name: master-2
         fieldPaths:
           - spec.desiredState.interfaces.[name=octavia].vlan.id
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.octavia.net-attach-def
+    targets:
+      - select:
+          kind: NetworkAttachmentDefinition
+          name: octavia
+        fieldPaths:
+          - spec.config

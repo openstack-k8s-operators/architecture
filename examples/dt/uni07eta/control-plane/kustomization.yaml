@@ -6,5 +6,5 @@ components:
   - ../../../../dt/uni07eta
 
 resources:
-  - nncp/values.yaml
+  - networking/nncp/values.yaml
   - service-values.yaml
