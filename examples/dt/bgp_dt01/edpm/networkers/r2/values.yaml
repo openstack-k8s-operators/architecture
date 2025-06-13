@@ -21,6 +21,8 @@ data:
       ansiblePort: 22
       ansibleVars:
         edpm_ovn_encap_ip: "{{ lookup('vars', 'bgpmainnet_ip') }}"
+        edpm_ovn_availability_zones:
+          - zone-2
         edpm_ovn_bgp_agent_expose_tenant_networks: false
         edpm_frr_bgp_ipv4_src_network: bgpmainnet
         edpm_frr_bgp_ipv6_src_network: bgpmainnetv6
@@ -31,9 +33,6 @@ data:
         edpm_bootstrap_command: |
           dnf -y install conntrack-tools
         edpm_network_config_hide_sensitive_logs: false
-        edpm_network_config_os_net_config_mappings:
-          edpm-r2-networker-0:
-            nic2: 6d:fe:54:3f:8a:02  # CHANGEME
         edpm_network_config_template: |
           ---
           {% set mtu_list = [ctlplane_mtu] %}
