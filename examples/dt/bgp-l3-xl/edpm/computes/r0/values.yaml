@@ -37,6 +37,7 @@ data:
             nic2: 6a:fe:54:3f:8a:02  # CHANGEME
           edpm-r0-compute-1:
             nic2: 6b:fe:54:3f:8a:02  # CHANGEME
+        edpm_network_config_nmstate: false
         edpm_network_config_template: |
           ---
           {% set mtu_list = [ctlplane_mtu] %}

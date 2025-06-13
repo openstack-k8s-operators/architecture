@@ -35,6 +35,7 @@ data:
         edpm_network_config_os_net_config_mappings:
           edpm-r1-networker-0:
             nic2: 6d:fe:54:3f:8a:02  # CHANGEME
+        edpm_network_config_nmstate: false
         edpm_network_config_template: |
           ---
           {% set mtu_list = [ctlplane_mtu] %}
