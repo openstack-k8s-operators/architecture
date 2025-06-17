@@ -360,7 +360,7 @@ replacements:
   #
   - source:
       kind: ConfigMap
-      name: service-values
+      name: edpm-nodeset-values-post-ceph
       fieldPath: data.nova-extra-config
     targets:
       - select:
