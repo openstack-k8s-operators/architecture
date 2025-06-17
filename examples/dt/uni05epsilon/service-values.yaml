@@ -144,8 +144,5 @@ data:
       rabbitmq-cell2:
         replicas: 3
 
-  nova-extra-config: |
-    # Additional overrides that can be set in environment-specific cases
-
   swift:
     enabled: true

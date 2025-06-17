@@ -30,3 +30,6 @@ data:
       - neutron-metadata
       - libvirt
       - nova-custom-cell2
+
+  nova-extra-config: |
+    # Additional overrides that can be set in environment-specific cases
