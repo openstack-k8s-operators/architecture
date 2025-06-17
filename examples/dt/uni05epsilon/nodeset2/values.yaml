@@ -30,3 +30,10 @@ data:
       - neutron-metadata
       - libvirt
       - nova-custom-cell2
+  nova-custom-config: |
+    [DEFAULT]
+    # Override our defaults in this dt to get coverage for metadata-api based
+    # cloud-init scenarios
+    force_config_drive = True
+  nova-extra-config: |
+    # Additional overrides that can be set in environment-specific cases
