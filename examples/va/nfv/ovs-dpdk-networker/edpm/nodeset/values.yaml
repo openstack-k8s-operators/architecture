@@ -155,9 +155,9 @@ data:
       - reboot-os
       - configure-ovs-dpdk
       - configure-network
-      - validate-network
       - install-os
       - configure-os
+      - validate-network
       - ssh-known-hosts
       - run-os
       - install-certs
