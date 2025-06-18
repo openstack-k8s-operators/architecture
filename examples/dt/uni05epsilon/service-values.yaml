@@ -95,6 +95,8 @@ data:
   glance:
     customServiceConfig: |
       [DEFAULT]
+      use_keystone_limits = True
+      enforce_secure_rbac = true
       debug = True
       enabled_backends = primary:cinder,secondary:rbd,tertiary:swift
       [glance_store]
