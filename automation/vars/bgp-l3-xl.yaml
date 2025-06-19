@@ -64,7 +64,7 @@ vas:
             namespace: openshift-cluster-node-tuning-operator
             state: present
         name: nncp-configuration
-        path: examples/dt/bgp-l3-xl/control-plane/nncp
+        path: examples/dt/bgp-l3-xl/control-plane/networking/nncp
         wait_conditions:
           - >-
             oc -n openstack wait nncp
@@ -76,6 +76,18 @@ vas:
             src_file: values.yaml
         build_output: nncp.yaml
 
+      - name: networking
+        path: examples/dt/bgp-l3-xl/control-plane/networking
+        wait_conditions:
+          - >-
+            oc -n metallb-system wait pod
+            -l app=metallb -l component=speaker
+            --for condition=Ready
+        values:
+          - name: network-values
+            src_file: nncp/values.yaml
+        build_output: networking.yaml
+
       - name: control-plane
         path: examples/dt/bgp-l3-xl/control-plane
         wait_conditions:
@@ -86,7 +98,7 @@ vas:
             --timeout=30m
         values:
           - name: network-values
-            src_file: nncp/values.yaml
+            src_file: networking/nncp/values.yaml
           - name: service-values
             src_file: service-values.yaml
         build_output: control-plane.yaml

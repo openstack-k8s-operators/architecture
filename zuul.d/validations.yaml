@@ -2,7 +2,8 @@
     files:
     - automation/mocks/bgp-l3-xl.yaml
     - examples/dt/bgp-l3-xl/control-plane
-    - examples/dt/bgp-l3-xl/control-plane/nncp
+    - examples/dt/bgp-l3-xl/control-plane/networking
+    - examples/dt/bgp-l3-xl/control-plane/networking/nncp
     - examples/dt/bgp-l3-xl/edpm/computes/r0
     - examples/dt/bgp-l3-xl/edpm/computes/r1
     - examples/dt/bgp-l3-xl/edpm/computes/r2

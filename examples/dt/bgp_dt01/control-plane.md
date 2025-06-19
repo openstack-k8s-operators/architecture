@@ -52,7 +52,7 @@ oc apply -f networking.yaml
 
 ## Apply control-plane configuration
 
-Generate the control-plane and networking CRs.
+Generate the control-plane CRs
 ```
 kustomize build > control-plane.yaml
 ```
