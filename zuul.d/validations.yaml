@@ -2,7 +2,8 @@
     files:
     - automation/mocks/bgp-l3-xl.yaml
     - examples/dt/bgp-l3-xl/control-plane
-    - examples/dt/bgp-l3-xl/control-plane/nncp
+    - examples/dt/bgp-l3-xl/control-plane/networking
+    - examples/dt/bgp-l3-xl/control-plane/networking/nncp
     - examples/dt/bgp-l3-xl/edpm/computes/r0
     - examples/dt/bgp-l3-xl/edpm/computes/r1
     - examples/dt/bgp-l3-xl/edpm/computes/r2
@@ -19,7 +20,8 @@
     files:
     - automation/mocks/bgp_dt01.yaml
     - examples/dt/bgp_dt01/control-plane
-    - examples/dt/bgp_dt01/control-plane/nncp
+    - examples/dt/bgp_dt01/control-plane/networking
+    - examples/dt/bgp_dt01/control-plane/networking/nncp
     - examples/dt/bgp_dt01/edpm/computes/r0
     - examples/dt/bgp_dt01/edpm/computes/r1
     - examples/dt/bgp_dt01/edpm/computes/r2

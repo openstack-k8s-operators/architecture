@@ -1,0 +1,125 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+transformers:
+  # Set namespace to OpenStack on all namespaced objects without a namespace
+  - |-
+    apiVersion: builtin
+    kind: NamespaceTransformer
+    metadata:
+      name: _ignored_
+      namespace: openstack
+    setRoleBindingSubjects: none
+    unsetOnly: true
+    fieldSpecs:
+      - path: metadata/name
+        kind: Namespace
+        create: true
+
+components:
+  - ../../../lib/networking
+  - bgpmetallb
+
+resources:
+  - ocp_networks_octavia_netattach.yaml
+
+patches:
+  # Add BGP networks to NetConfig
+  - target:
+      kind: NetConfig
+      name: netconfig
+    patch: |-
+      - op: add
+        path: /spec/networks/-
+        value:
+          dnsDomain: bgpnet0.example.com
+          name: bgpnet0
+          subnets:
+            - _replaced_
+          mtu: 1500
+  - target:
+      kind: NetConfig
+      name: netconfig
+    patch: |-
+      - op: add
+        path: /spec/networks/-
+        value:
+          dnsDomain: bgpnet1.example.com
+          name: bgpnet1
+          subnets:
+            - _replaced_
+          mtu: 1500
+  - target:
+      kind: NetConfig
+      name: netconfig
+    patch: |-
+      - op: add
+        path: /spec/networks/-
+        value:
+          dnsDomain: bgpmainnet.example.com
+          name: bgpmainnet
+          subnets:
+            - _replaced_
+          mtu: 1500
+  - target:
+      kind: NetConfig
+      name: netconfig
+    patch: |-
+      - op: add
+        path: /spec/networks/-
+        value:
+          dnsDomain: bgpmainnetv6.example.com
+          name: bgpmainnetv6
+          subnets:
+            - _replaced_
+          mtu: 1500
+
+replacements:
+  # BGP NetConfig customizations
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.bgp.subnets.bgpnet0
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=bgpnet0].subnets
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.bgp.subnets.bgpnet1
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=bgpnet1].subnets
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.bgp.subnets.bgpmainnet
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=bgpmainnet].subnets
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.bgp.subnets.bgpmainnetv6
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=bgpmainnetv6].subnets
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.octavia.net-attach-def
+    targets:
+      - select:
+          kind: NetworkAttachmentDefinition
+          name: octavia
+        fieldPaths:
+          - spec.config
