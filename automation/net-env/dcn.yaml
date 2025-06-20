@@ -634,6 +634,19 @@ instances:
         skip_nm: false
         trunk_parent: ctlplane
         vlan_id: 20
+      octavia:
+        interface_name: enp7s0.24
+        ip_v4: 172.23.0.10
+        is_trunk_parent: false
+        mac_addr: '52:54:00:53:17:30'
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: octavia
+        parent_interface: enp7s0
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 24
       storage:
         interface_name: enp7s0.21
         ip_v4: 172.18.0.10
@@ -687,6 +700,19 @@ instances:
         skip_nm: false
         trunk_parent: ctlplane
         vlan_id: 20
+      octavia:
+        interface_name: enp7s0.24
+        ip_v4: 172.23.0.11
+        is_trunk_parent: false
+        mac_addr: '52:54:00:53:17:31'
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: octavia
+        parent_interface: enp7s0
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 24
       storage:
         interface_name: enp7s0.21
         ip_v4: 172.18.0.11
@@ -740,6 +766,19 @@ instances:
         skip_nm: false
         trunk_parent: ctlplane
         vlan_id: 20
+      octavia:
+        interface_name: enp7s0.24
+        ip_v4: 172.23.0.12
+        is_trunk_parent: false
+        mac_addr: '52:54:00:53:17:32'
+        mtu: 1496
+        netmask_v4: 255.255.255.0
+        network_name: octavia
+        parent_interface: enp7s0
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 24
       storage:
         interface_name: enp7s0.21
         ip_v4: 172.18.0.12
@@ -1012,6 +1051,31 @@ networks:
             start_host: 100
         ipv6_ranges: []
     vlan_id: 40
+  octavia:
+    dns_v4: []
+    dns_v6: []
+    mtu: 1496
+    network_name: octavia
+    network_v4: 172.23.0.0/24
+    search_domain: octavia.example.com
+    tools:
+      multus:
+        ipv4_ranges:
+          - end: 172.23.0.70
+            end_host: 70
+            length: 41
+            start: 172.23.0.30
+            start_host: 30
+        ipv6_ranges: []
+      netconfig:
+        ipv4_ranges:
+          - end: 172.23.0.250
+            end_host: 250
+            length: 151
+            start: 172.23.0.100
+            start_host: 100
+        ipv6_ranges: []
+    vlan_id: 24
   storage:
     dns_v4: []
     dns_v6: []
