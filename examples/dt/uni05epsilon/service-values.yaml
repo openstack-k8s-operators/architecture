@@ -100,7 +100,6 @@ data:
       [glance_store]
       default_backend = primary
       [primary]
-      rootwrap_config = /etc/glance/rootwrap.conf
       description = NFS based cinder store
       cinder_store_auth_address = {{ .KeystoneInternalURL }}
       cinder_store_user_name = {{ .ServiceUser }}
