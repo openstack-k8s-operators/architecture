@@ -158,11 +158,11 @@ vas:
           - >-
             oc -n openstack wait
             osdpns openstack-edpm --for condition=Ready
-            --timeout=30m
+            --timeout=60m
           - >-
             oc -n openstack2 wait
             osdpns openstack-edpm --for condition=Ready
-            --timeout=30m
+            --timeout=60m
         values:
           - name: edpm-deployment2-values
             src_file: values.yaml
