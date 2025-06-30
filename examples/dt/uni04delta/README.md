@@ -38,6 +38,8 @@ and Manila OpenStack services configured with Ceph.
 | Storage | VLAN tagged |
 | Tenant | VLAN tagged |
 | StorageManagement | VLAN tagged |
+| Designate | VLAN tagged |
+| Designateext | VLAN tagged |
 
 ### Services, enabled features and configurations
 
@@ -50,6 +52,7 @@ and Manila OpenStack services configured with Ceph.
 | RGW as Swift     | ---             | Must have          |
 | Horizon          | N/A             | Must have          |
 | Barbican         |                 | Must have          |
+| Designate        |                 | Must have          |
 
 #### Support services
 
