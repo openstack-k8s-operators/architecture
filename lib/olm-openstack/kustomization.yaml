@@ -7,6 +7,27 @@ resources:
   - namespaces.yaml
   - operatorgroup.yaml
   - subscription.yaml
+  - barbican-subscription.yaml
+  - cinder-subscription.yaml
+  - designate-subscription.yaml
+  - glance-subscription.yaml
+  - heat-subscription.yaml
+  - horizon-subscription.yaml
+  - infra-subscription.yaml
+  - ironic-subscription.yaml
+  - keystone-subscription.yaml
+  - manila-subscription.yaml
+  - mariadb-subscription.yaml
+  - neutron-subscription.yaml
+  - nova-subscription.yaml
+  - octavia-subscription.yaml
+  - openstack-baremetal-subscription.yaml
+  - openstack-ansibleee-subscription.yaml
+  - ovn-subscription.yaml
+  - placement-subscription.yaml
+  - rabbitmq-cluster-subscription.yaml
+  - swift-subscription.yaml
+  - telemetry-subscription.yaml
 
 replacements:
   - source:
