@@ -1,0 +1,363 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+transformers:
+  - |-
+    apiVersion: builtin
+    kind: NamespaceTransformer
+    metadata:
+      name: _ignored_
+      namespace: openstack
+    setRoleBindingSubjects: none
+    unsetOnly: true
+    fieldSpecs:
+      - path: metadata/name
+        kind: Namespace
+        create: true
+
+components:
+  - ../../../../lib/nncp
+
+patches:
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: master-0
+    patch: |-
+      - op: add
+        path: /spec/desiredState/interfaces/-
+        value:
+          description: Designate vlan host interface
+          ipv4:
+            address:
+              - ip: _replaced_
+                prefix-length: "24"
+            enabled: true
+            dhcp: false
+          ipv6:
+            enabled: false
+          name: designate
+          state: up
+          type: vlan
+          vlan:
+            base-iface: _replaced_
+            id: _replaced_
+
+
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: master-1
+    patch: |-
+      - op: add
+        path: /spec/desiredState/interfaces/-
+        value:
+          description: Designate vlan host interface
+          ipv4:
+            address:
+              - ip: _replaced_
+                prefix-length: "24"
+            enabled: true
+            dhcp: false
+          ipv6:
+            enabled: false
+          name: designate
+          state: up
+          type: vlan
+          vlan:
+            base-iface: _replaced_
+            id: _replaced_
+
+
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: master-2
+    patch: |-
+      - op: add
+        path: /spec/desiredState/interfaces/-
+        value:
+          description: Designate vlan host interface
+          ipv4:
+            address:
+              - ip: _replaced_
+                prefix-length: "24"
+            enabled: true
+            dhcp: false
+          ipv6:
+            enabled: false
+          name: designate
+          state: up
+          type: vlan
+          vlan:
+            base-iface: _replaced_
+            id: _replaced_
+
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: master-0
+    patch: |-
+      - op: add
+        path: /spec/desiredState/interfaces/-
+        value:
+          description: Designate external vlan host interface
+          ipv4:
+            address:
+              - ip: _replaced_
+                prefix-length: "24"
+            enabled: true
+            dhcp: false
+          ipv6:
+            enabled: false
+          name: designateext
+          state: up
+          type: vlan
+          vlan:
+            base-iface: _replaced_
+            id: _replaced_
+
+
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: master-1
+    patch: |-
+      - op: add
+        path: /spec/desiredState/interfaces/-
+        value:
+          description: Designate external vlan host interface
+          name: designateext
+          ipv4:
+            address:
+              - ip: _replaced_
+                prefix-length: "24"
+            enabled: true
+            dhcp: false
+          ipv6:
+            enabled: false
+          state: up
+          type: vlan
+          vlan:
+            base-iface: _replaced_
+            id: _replaced_
+
+
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: master-2
+    patch: |-
+      - op: add
+        path: /spec/desiredState/interfaces/-
+        value:
+          description: Designate external vlan host interface
+          ipv4:
+            address:
+              - ip: _replaced_
+                prefix-length: "24"
+            enabled: true
+            dhcp: false
+          ipv6:
+            enabled: false
+          name: designateext
+          state: up
+          type: vlan
+          vlan:
+            base-iface: _replaced_
+            id: _replaced_
+
+
+replacements:
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.designate.base_iface
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-0
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=designate].vlan.base-iface
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.designate.vlan
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-0
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=designate].vlan.id
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_0.designate_ip
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-0
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=designate].ipv4.address.0.ip
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.designate.base_iface
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-1
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=designate].vlan.base-iface
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.designate.vlan
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-1
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=designate].vlan.id
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_1.designate_ip
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-1
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=designate].ipv4.address.0.ip
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.designate.base_iface
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-2
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=designate].vlan.base-iface
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.designate.vlan
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-2
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=designate].vlan.id
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_2.designate_ip
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-2
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=designate].ipv4.address.0.ip
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.designateext.base_iface
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-0
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=designateext].vlan.base-iface
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.designateext.vlan
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-0
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=designateext].vlan.id
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_0.designateext_ip
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-0
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=designateext].ipv4.address.0.ip
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.designateext.base_iface
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-1
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=designateext].vlan.base-iface
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.designateext.vlan
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-1
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=designateext].vlan.id
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_1.designateext_ip
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-1
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=designateext].ipv4.address.0.ip
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.designateext.base_iface
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-2
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=designateext].vlan.base-iface
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.designateext.vlan
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-2
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=designateext].vlan.id
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_2.designateext_ip
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-2
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=designateext].ipv4.address.0.ip
