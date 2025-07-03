@@ -45,7 +45,7 @@ replacements:
       fieldPath: data.openstack-operator-publisher
     targets:
       - select:
-          kind: CatalagSource
+          kind: CatalogSource
           labelSelector: category=openstack-catalog
         fieldPaths:
           - spec.publisher
