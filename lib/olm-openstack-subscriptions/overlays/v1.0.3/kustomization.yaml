@@ -42,6 +42,16 @@ replacements:
   - source:
       kind: ConfigMap
       name: olm-values
+      fieldPath: data.openstack-catalog-namespace
+    targets:
+      - select:
+          kind: CatalogSource
+          labelSelector: category=openstack-catalog
+        fieldPaths:
+          - metadata.namespace
+  - source:
+      kind: ConfigMap
+      name: olm-values
       fieldPath: data.openstack-operator-publisher
     targets:
       - select:
@@ -110,3 +120,13 @@ replacements:
           labelSelector: category=openstack-subscription
         fieldPaths:
           - spec.source
+  - source:
+      kind: ConfigMap
+      name: olm-values
+      fieldPath: data.openstack-catalog-namespace
+    targets:
+      - select:
+          kind: Subscription
+          labelSelector: category=openstack-subscription
+        fieldPaths:
+          - spec.sourceNamespace
