@@ -35,7 +35,6 @@ data:
         edpm_network_config_os_net_config_mappings:
           edpm-r2-networker-0:
             nic2: 6d:fe:54:3f:8a:02  # CHANGEME
-        edpm_network_config_nmstate: false
         edpm_network_config_template: |
           ---
           {% set mtu_list = [ctlplane_mtu] %}
@@ -47,6 +46,7 @@ data:
           - type: ovs_bridge
             name: {{ neutron_physical_bridge_name }}
             use_dhcp: false
+            use_dhcpv6: true  # needed to enable IPv6 on bridges
           - type: interface
             name: nic1
             use_dhcp: true
