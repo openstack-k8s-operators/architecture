@@ -45,6 +45,7 @@ data:
           - type: ovs_bridge
             name: {{ neutron_physical_bridge_name }}
             use_dhcp: false
+            use_dhcpv6: true  # needed to enable IPv6 on bridges
           - type: interface
             name: nic1
             use_dhcp: true
