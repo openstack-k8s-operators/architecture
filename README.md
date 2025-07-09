@@ -8,7 +8,7 @@ compatible templates and custom resources.
 
 Deployment topologies are only to be used for testing environments. Validated
 architectures are intended to represent production-style deployment
-environments
+environments.
 
 The [automation](automation) directory contains YAML files which
 define the stages for each VA/DT including the path to the CR
