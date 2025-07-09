@@ -26,7 +26,6 @@ components:
   - ../../../lib/networking/nad
   - ../../../lib/control-plane
 
-   
 patches:
   - target:
       kind: NetworkAttachmentDefinition
@@ -115,7 +114,7 @@ replacements:
         options:
           create: true
 
-# Add external 
+  # Add external interface and loadbalancer addresses
   - source:
       kind: ConfigMap
       name: network-values
@@ -149,7 +148,7 @@ replacements:
         fieldPaths:
           - spec.config
 
-# Replace ctlplane interfacename instead of bridge name.
+  # Replace ctlplane interfacename instead of bridge name.
   - source:
       kind: ConfigMap
       name: network-values
@@ -160,4 +159,3 @@ replacements:
           name: ctlplane
         fieldPaths:
           - spec.interfaces.0
-

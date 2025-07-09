@@ -1,11 +1,3 @@
-# local-config: referenced, but not emitted by kustomize
-#
-# CHANGEME:
-#
-# - Change network_vlan_ranges based on EDPM OvS DPDK environment.
-# - change numa_nodes in the neutron and neutron_tunnel section
-# based on DPDK NIC's and NUMA alignment in the OvS DPDK compute node.
-#
 ---
 apiVersion: v1
 kind: ConfigMap

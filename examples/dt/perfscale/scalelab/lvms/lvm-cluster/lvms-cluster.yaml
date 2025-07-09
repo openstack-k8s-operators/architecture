@@ -1,3 +1,4 @@
+---
 apiVersion: lvm.topolvm.io/v1alpha1
 kind: LVMCluster
 metadata:
@@ -6,13 +7,13 @@ metadata:
 spec:
   storage:
     deviceClasses:
-    - name: vg1
-      default: true
-      deviceSelector:
-        paths:
-        - replaced
-        forceWipeDevicesAndDestroyAllData: true
-      thinPoolConfig:
-        name: thin-pool-1
-        sizePercent: 90
-        overprovisionRatio: 10
+      - name: vg1
+        default: true
+        deviceSelector:
+          paths:
+            - replaced
+          forceWipeDevicesAndDestroyAllData: true
+        thinPoolConfig:
+          name: thin-pool-1
+          sizePercent: 90
+          overprovisionRatio: 10

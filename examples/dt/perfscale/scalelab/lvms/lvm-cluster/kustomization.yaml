@@ -17,4 +17,3 @@ replacements:
           kind: LVMCluster
         fieldPaths:
           - spec.storage.deviceClasses.[name=vg1].deviceSelector.paths
-
