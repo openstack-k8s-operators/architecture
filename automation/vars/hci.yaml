@@ -90,7 +90,7 @@ vas:
           - >-
             oc -n openstack wait
             osdpns openstack-edpm --for condition=Ready
-            --timeout=60m
+            --timeout=80m
         values:
           - name: edpm-deployment-values-post-ceph
             src_file: values.yaml
