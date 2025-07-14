@@ -15,3 +15,4 @@ data:
     openstack-operator-catalog-source: "openstack-operator-index"
     openstack-operator-subscription-namespace: "openstack-operators"
     openstack-operator-version: "latest"
+    openstack-catalog-namespace: "openstack-operators"
