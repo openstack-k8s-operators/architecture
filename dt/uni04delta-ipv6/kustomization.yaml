@@ -19,6 +19,9 @@ transformers:
 components:
   - control-plane
 
+resources:
+  - glance-s3-backend-secrets.yaml
+
 replacements:
   - source:
       kind: ConfigMap
@@ -89,5 +92,18 @@ replacements:
           kind: OpenStackControlPlane
         fieldPaths:
           - spec.keystone.template.customServiceConfig
+        options:
+          create: true
+
+  - source:
+        kind: ConfigMap
+        name: service-values
+        fieldPath: data.s3glance\.conf
+    targets:
+      - select:
+          kind: Secret
+          name: s3glance
+        fieldPaths:
+          - stringData.s3glance\.conf
         options:
           create: true
