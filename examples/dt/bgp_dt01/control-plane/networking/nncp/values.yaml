@@ -25,10 +25,10 @@ data:
     routes:
       config:
         - destination: 99.99.0.0/16
-          next-hop-address: 100.64.0.1
+          next-hop-address: 100.64.0.9
           next-hop-interface: enp7s0
         - destination: 99.99.0.0/16
-          next-hop-address: 100.65.0.1
+          next-hop-address: 100.65.0.9
           next-hop-interface: enp8s0
   node_1:
     name: master-1
@@ -47,10 +47,10 @@ data:
     routes:
       config:
         - destination: 99.99.0.0/16
-          next-hop-address: 100.64.1.1
+          next-hop-address: 100.64.1.9
           next-hop-interface: enp7s0
         - destination: 99.99.0.0/16
-          next-hop-address: 100.65.1.1
+          next-hop-address: 100.65.1.9
           next-hop-interface: enp8s0
   node_2:
     name: master-2
@@ -69,10 +69,10 @@ data:
     routes:
       config:
         - destination: 99.99.0.0/16
-          next-hop-address: 100.64.2.1
+          next-hop-address: 100.64.2.9
           next-hop-interface: enp7s0
         - destination: 99.99.0.0/16
-          next-hop-address: 100.65.2.1
+          next-hop-address: 100.65.2.9
           next-hop-interface: enp8s0
   node_3:
     name: worker-0
@@ -84,17 +84,17 @@ data:
       - 100.64.0.14
       - 100.65.0.14
     bgp_peers:
-      - 100.64.0.12
-      - 100.65.0.12
+      - 100.64.0.13
+      - 100.65.0.13
     loopback_ip: 99.99.0.4
     loopback_ipv6: f00d:f00d:f00d:f00d:f00d:f00d:f00d:14
     routes:
       config:
         - destination: 99.99.0.0/16
-          next-hop-address: 100.64.0.1
+          next-hop-address: 100.64.0.13
           next-hop-interface: enp7s0
         - destination: 99.99.0.0/16
-          next-hop-address: 100.65.0.1
+          next-hop-address: 100.65.0.13
           next-hop-interface: enp8s0
   node_4:
     name: worker-1
@@ -113,10 +113,10 @@ data:
     routes:
       config:
         - destination: 99.99.0.0/16
-          next-hop-address: 100.64.1.1
+          next-hop-address: 100.64.1.13
           next-hop-interface: enp7s0
         - destination: 99.99.0.0/16
-          next-hop-address: 100.65.1.1
+          next-hop-address: 100.65.1.13
           next-hop-interface: enp8s0
   node_5:
     name: worker-2
@@ -135,10 +135,10 @@ data:
     routes:
       config:
         - destination: 99.99.0.0/16
-          next-hop-address: 100.64.2.1
+          next-hop-address: 100.64.2.13
           next-hop-interface: enp7s0
         - destination: 99.99.0.0/16
-          next-hop-address: 100.65.2.1
+          next-hop-address: 100.65.2.13
           next-hop-interface: enp8s0
   node_6:
     name: worker-3
@@ -552,10 +552,10 @@ data:
         routes:
           config:
             - destination: 99.99.0.0/16
-              next-hop-address: 100.64.0.1
+              next-hop-address: 100.64.0.9
               next-hop-interface: enp7s0
             - destination: 99.99.0.0/16
-              next-hop-address: 100.65.0.1
+              next-hop-address: 100.65.0.9
               next-hop-interface: enp8s0
       node1:
         bgpnet0:
@@ -567,10 +567,10 @@ data:
         routes:
           config:
             - destination: 99.99.0.0/16
-              next-hop-address: 100.64.1.1
+              next-hop-address: 100.64.1.9
               next-hop-interface: enp7s0
             - destination: 99.99.0.0/16
-              next-hop-address: 100.65.1.1
+              next-hop-address: 100.65.1.9
               next-hop-interface: enp8s0
       node2:
         bgpnet0:
@@ -582,10 +582,10 @@ data:
         routes:
           config:
             - destination: 99.99.0.0/16
-              next-hop-address: 100.64.2.1
+              next-hop-address: 100.64.2.9
               next-hop-interface: enp7s0
             - destination: 99.99.0.0/16
-              next-hop-address: 100.65.2.1
+              next-hop-address: 100.65.2.9
               next-hop-interface: enp8s0
       node3:
         bgpnet0:
@@ -597,10 +597,10 @@ data:
         routes:
           config:
             - destination: 99.99.0.0/16
-              next-hop-address: 100.64.0.1
+              next-hop-address: 100.64.0.13
               next-hop-interface: enp7s0
             - destination: 99.99.0.0/16
-              next-hop-address: 100.65.0.1
+              next-hop-address: 100.65.0.13
               next-hop-interface: enp8s0
       node4:
         bgpnet0:
@@ -612,10 +612,10 @@ data:
         routes:
           config:
             - destination: 99.99.0.0/16
-              next-hop-address: 100.64.1.1
+              next-hop-address: 100.64.1.13
               next-hop-interface: enp7s0
             - destination: 99.99.0.0/16
-              next-hop-address: 100.65.1.1
+              next-hop-address: 100.65.1.13
               next-hop-interface: enp8s0
       node5:
         bgpnet0:
@@ -627,10 +627,10 @@ data:
         routes:
           config:
             - destination: 99.99.0.0/16
-              next-hop-address: 100.64.2.1
+              next-hop-address: 100.64.2.13
               next-hop-interface: enp7s0
             - destination: 99.99.0.0/16
-              next-hop-address: 100.65.2.1
+              next-hop-address: 100.65.2.13
               next-hop-interface: enp8s0
       node6:
         bgpnet0:
