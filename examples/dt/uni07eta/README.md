@@ -17,7 +17,7 @@ multiple backends and networker.
 | Role              | Machine Type | Count |
 | ----------------- | ------------ | ----- |
 | Compact OpenShift | vm           | 3     |
-| OpenStack Compute | vm           | 2     |
+| OpenStack Compute | vm           | 3     |
 | Networker         | vm           | 3     |
 
 ### Networks
