@@ -30,11 +30,11 @@ data:
         edpm_network_config_hide_sensitive_logs: false
         edpm_network_config_os_net_config_mappings:
           edpm-compute-0:
-            nic2: 6a:fe:54:3f:8a:02  # CHANGEME
+            nic2: 6a:fe:54:3f:8a:02  # CHANGEME - should connect to same network as control plane enp6s0
           edpm-compute-1:
-            nic2: 6b:fe:54:3f:8a:02  # CHANGEME
+            nic2: 6b:fe:54:3f:8a:02  # CHANGEME - should connect to same network as control plane enp6s0
           edpm-compute-2:
-            nic2: 6c:fe:54:3f:8a:02  # CHANGEME
+            nic2: 6c:fe:54:3f:8a:02  # CHANGEME - should connect to same network as control plane enp6s0
         edpm_network_config_template: |
           ---
           {% set mtu_list = [ctlplane_mtu] %}
