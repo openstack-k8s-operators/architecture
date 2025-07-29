@@ -1,0 +1,14 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+secretGenerator:
+  - name: osp-secret
+    behavior: create
+    envs:
+      - osp-secrets.env
+    options:
+      disableNameSuffixHash: true
+
+resources:
+  - openstackcontrolplane.yaml

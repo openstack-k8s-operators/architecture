@@ -18,7 +18,9 @@ transformers:
         create: true
 
 components:
-  - ../../../lib/networking/metallb
+  - ../../../lib/networking/metallb/base
+  - ../../../lib/networking/metallb/ip-addresses
+  - ../../../lib/networking/metallb/l2-single-nic
   - ../../../lib/networking/netconfig
   - ../../../lib/networking/nad
 

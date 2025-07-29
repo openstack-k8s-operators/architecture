@@ -18,7 +18,12 @@ transformers:
         create: true
 
 components:
-  - ../../../../lib/control-plane
+  - ../../../../lib/control-plane/base
+  - ../../../../lib/control-plane/service-endpoints
+  - ../../../../lib/control-plane/dns
+  - ../../../../lib/control-plane/storage
+  - ../../../../lib/control-plane/ovn-nic
+  - ../../../../lib/control-plane/job-settings
   - ../../../../lib/dataplane/nodeset
 
 resources:
