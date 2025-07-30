@@ -1,0 +1,32 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+replacements:
+  # Service preservation job settings
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.preserveJobs
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.barbican.template.preserveJobs
+          - spec.cinder.template.preserveJobs
+          - spec.designate.template.preserveJobs
+          - spec.glance.template.preserveJobs
+          - spec.heat.template.preserveJobs
+          - spec.horizon.template.preserveJobs
+          - spec.ironic.template.ironicInspector.preserveJobs
+          - spec.ironic.template.preserveJobs
+          - spec.keystone.template.preserveJobs
+          - spec.manila.template.preserveJobs
+          - spec.neutron.template.preserveJobs
+          - spec.nova.template.preserveJobs
+          - spec.octavia.template.octaviaAPI.preserveJobs
+          - spec.octavia.template.preserveJobs
+          - spec.placement.template.preserveJobs
+          - spec.telemetry.template.autoscaling.aodh.preserveJobs
+        options:
+          create: true

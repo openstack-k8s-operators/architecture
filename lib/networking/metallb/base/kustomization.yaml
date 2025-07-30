@@ -1,0 +1,13 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+resources:
+  - metallb_l2advertisement.yaml
+  - ocp_ip_pools.yaml
+
+patches:
+  - target:
+      kind: IPAddressPool
+      labelSelector: "osp/lb-addresses-type=standard"
+    path: ocp_ip_pool_template.yaml

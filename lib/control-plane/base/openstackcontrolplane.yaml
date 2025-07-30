@@ -1,0 +1,294 @@
+---
+apiVersion: core.openstack.org/v1beta1
+kind: OpenStackControlPlane
+metadata:
+  name: controlplane
+spec:
+  barbican:
+    apiOverride:
+      route: {}
+    template:
+      databaseInstance: openstack
+      secret: osp-secret
+      barbicanAPI:
+        replicas: 3
+      barbicanWorker:
+        replicas: 3
+      barbicanKeystoneListener:
+        replicas: 1
+  ceilometer:
+    template:
+      passwordSelector:
+        service: CeilometerPassword
+      secret: osp-secret
+      serviceUser: ceilometer
+  cinder:
+    uniquePodNames: true
+    apiOverride:
+      route: {"haproxy.router.openshift.io/timeout": "60s"}
+    template:
+      cinderAPI:
+        replicas: 3
+      customServiceConfig: |
+        # Debug logs by default, jobs can override as needed.
+        [DEFAULT]
+        debug = true
+      cinderBackup:
+        networkAttachments:
+          - storage
+        replicas: 0
+      cinderScheduler:
+        replicas: 1
+      cinderVolumes: {}
+      databaseInstance: openstack
+      secret: osp-secret
+  designate:
+    enabled: false
+    template:
+      customServiceConfig: |
+        [DEFAULT]
+        debug = true
+      designateAPI:
+        replicas: 3
+      designateBackendbind9:
+        networkAttachments:
+          - designate
+        replicas: 3
+        storageClass: _replaced_
+        storageRequest: 10G
+      designateCentral:
+        replicas: 1
+      designateMdns:
+        replicas: 3
+        networkAttachments:
+          - designate
+      designateProducer:
+        replicas: 2
+        networkAttachments:
+          - designate
+      designateWorker:
+        replicas: 3
+        networkAttachments:
+          - designate
+      designateUnbound:
+        replicas: 1
+        networkAttachments:
+          - designate
+      nsRecords:
+        - hostname: ns1.example.org.
+          priority: 1
+        - hostname: ns2.example.org.
+          priority: 2
+  dns:
+    template:
+      options: []
+      replicas: 2
+  galera:
+    enabled: true
+    templates:
+      openstack:
+        replicas: 3
+        secret: osp-secret
+        storageRequest: 5G
+      openstack-cell1:
+        replicas: 3
+        secret: osp-secret
+        storageRequest: 5G
+  glance:
+    uniquePodNames: true
+    apiOverrides:
+      default:
+        route: {"haproxy.router.openshift.io/timeout": "60s"}
+    template:
+      databaseInstance: openstack
+      glanceAPIs:
+        default:
+          replicas: 0
+          networkAttachments:
+            - storage
+      storage:
+        storageClass: _replaced_
+        storageRequest: 10G
+  heat:
+    apiOverride:
+      route: {}
+    cnfAPIOverride:
+      route: {}
+    enabled: false
+    template:
+      databaseInstance: openstack
+      heatAPI:
+        replicas: 1
+      heatEngine:
+        replicas: 1
+      secret: osp-secret
+  horizon:
+    apiOverride:
+      route: {}
+    template:
+      replicas: 1
+      secret: osp-secret
+    enabled: true
+  ironic:
+    enabled: false
+    template:
+      databaseInstance: openstack
+      ironicAPI:
+        replicas: 1
+      ironicConductors:
+        - replicas: 1
+          storageRequest: 10G
+      ironicInspector:
+        replicas: 1
+      ironicNeutronAgent:
+        replicas: 1
+      secret: osp-secret
+  keystone:
+    apiOverride:
+      route: {}
+    template:
+      databaseInstance: openstack
+      secret: osp-secret
+      replicas: 3
+  manila:
+    apiOverride:
+      route: {"haproxy.router.openshift.io/timeout": "60s"}
+    enabled: false
+    template:
+      manilaAPI:
+        networkAttachments:
+          - internalapi
+        replicas: 1
+      manilaScheduler:
+        replicas: 1
+      manilaShares:
+        share1:
+          networkAttachments:
+            - storage
+          replicas: 1
+  memcached:
+    templates:
+      memcached:
+        replicas: 3
+  neutron:
+    apiOverride:
+      route: {}
+    template:
+      databaseInstance: openstack
+      networkAttachments:
+        - internalapi
+      secret: osp-secret
+      replicas: 3
+  nova:
+    apiOverride:
+      route: {}
+    template:
+      secret: osp-secret
+      apiServiceTemplate:
+        replicas: 3
+      metadataServiceTemplate:
+        replicas: 3
+      schedulerServiceTemplate:
+        replicas: 3
+      cellTemplates:
+        cell0:
+          cellDatabaseAccount: nova-cell0
+          cellDatabaseInstance: openstack
+          cellMessageBusInstance: rabbitmq
+          conductorServiceTemplate:
+            replicas: 1
+          hasAPIAccess: true
+        cell1:
+          cellDatabaseAccount: nova-cell1
+          cellDatabaseInstance: openstack-cell1
+          cellMessageBusInstance: rabbitmq-cell1
+          conductorServiceTemplate:
+            replicas: 1
+          hasAPIAccess: true
+  octavia:
+    enabled: false
+    template:
+      databaseInstance: openstack
+      octaviaAPI:
+        replicas: 1
+      octaviaHousekeeping: {}
+      octaviaWorker: {}
+      octaviaHealthManager: {}
+      secret: osp-secret
+  ovn:
+    template:
+      ovnController:
+        networkAttachment: tenant
+        nicMappings:
+          datacentre: _replaced_
+      ovnDBCluster:
+        ovndbcluster-nb:
+          dbType: NB
+          networkAttachment: internalapi
+          storageRequest: 10G
+          replicas: 3
+        ovndbcluster-sb:
+          dbType: SB
+          networkAttachment: internalapi
+          storageRequest: 10G
+          replicas: 3
+      ovnNorthd:
+        logLevel: info
+        nThreads: 1
+        replicas: 1
+        resources: {}
+        tls: {}
+  placement:
+    apiOverride:
+      route: {}
+    template:
+      databaseInstance: openstack
+      secret: osp-secret
+      replicas: 3
+  rabbitmq:
+    templates:
+      rabbitmq:
+        replicas: 3
+      rabbitmq-cell1:
+        replicas: 3
+  secret: osp-secret
+  storageClass: _replaced_
+  swift:
+    enabled: false
+    proxyOverride:
+      route: {}
+    template:
+      swiftProxy:
+        replicas: 1
+      swiftRing:
+        ringReplicas: 1
+      swiftStorage:
+        replicas: 1
+  telemetry:
+    enabled: false
+    template:
+      metricStorage:
+        enabled: false
+        monitoringStack:
+          alertingEnabled: true
+          scrapeInterval: 30s
+          storage:
+            strategy: persistent
+            retention: 24h
+            persistent:
+              pvcStorageRequest: 10Gi
+              pvcStorageClass: _replaced_
+      autoscaling:
+        enabled: false
+        aodh:
+          passwordSelectors:
+          databaseInstance: openstack
+          memcachedInstance: memcached
+          secret: osp-secret
+        heatInstance: heat
+      ceilometer:
+        enabled: false
+        secret: osp-secret
+      logging:
+        enabled: false
+        port: 10514
