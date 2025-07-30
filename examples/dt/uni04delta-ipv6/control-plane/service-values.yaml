@@ -45,6 +45,8 @@ data:
       store_description = "RBD backend"
       rbd_store_pool = images
       rbd_store_user = openstack
+    customServiceConfigSecrets:
+      - s3glance
     glanceAPIs:
       default:
         replicas: 3
