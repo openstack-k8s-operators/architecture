@@ -98,11 +98,12 @@ spec:
     uniquePodNames: true
     apiOverrides:
       default:
-        route: {"haproxy.router.openshift.io/timeout": "60s"}
+        route: {}
     template:
       databaseInstance: openstack
       glanceAPIs:
         default:
+          apiTimeout: 600
           replicas: 0
           networkAttachments:
             - storage
