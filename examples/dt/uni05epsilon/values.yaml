@@ -17,8 +17,8 @@ data:
       - bootstrap
       - download-cache
       - configure-network
-      - validate-network
       - install-os
+      - validate-network
       - ceph-hci-pre
       - configure-os
       - ssh-known-hosts
