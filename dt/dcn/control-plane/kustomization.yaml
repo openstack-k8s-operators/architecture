@@ -80,6 +80,17 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
+      fieldPath: data.ovn.template.ovnController.nicMappings
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.ovn.template.ovnController.nicMappings
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
       fieldPath: data.cinderBackup.customServiceConfig
     targets:
       - select:
@@ -218,5 +229,29 @@ replacements:
           kind: OpenStackControlPlane
         fieldPaths:
           - spec.extraMounts
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.enabled
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.template
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template
         options:
           create: true

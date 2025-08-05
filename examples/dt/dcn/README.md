@@ -20,6 +20,7 @@ This is a collection of CR templates that represent a Red Hat OpenStack Services
     - Cinder Backup using RBD for backend
     - Glance using Multi Store Support and RBD for backend
     - Nova using RBD for ephemeral storage
+- Octavia enabled in DCN sites with split management networks (one management network per DCN site)
 
 ## Considerations
 
