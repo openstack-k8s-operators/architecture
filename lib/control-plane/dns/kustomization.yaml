@@ -1,0 +1,15 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+replacements:
+  # DNS resolver options
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.dns-resolver.options
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.dns.template.options

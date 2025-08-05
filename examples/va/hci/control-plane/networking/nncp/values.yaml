@@ -53,7 +53,7 @@ data:
         "cniVersion": "0.3.1",
         "name": "ctlplane",
         "type": "macvlan",
-        "master": "ospbr",
+        "master": "enp6s0",
         "ipam": {
           "type": "whereabouts",
           "range": "192.168.122.0/24",
@@ -173,12 +173,13 @@ data:
         name: subnet1
     mtu: 1500
   datacentre:
+    iface: enp8s0
     net-attach-def: |
       {
         "cniVersion": "0.3.1",
         "name": "datacentre",
-        "type": "bridge",
-        "bridge": "ospbr",
+        "type": "host-device",
+        "device": "enp8s0",
         "ipam": {}
       }
 
@@ -206,4 +207,3 @@ data:
 
   lbServiceType: LoadBalancer
   storageClass: local-storage
-  bridgeName: ospbr
