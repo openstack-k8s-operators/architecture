@@ -6,6 +6,7 @@
       - rhoso-architecture-validate-bgp_dt01
       - rhoso-architecture-validate-bmo01
       - rhoso-architecture-validate-dcn
+      - rhoso-architecture-validate-dz-storage
       - rhoso-architecture-validate-hci
       - rhoso-architecture-validate-hci-adoption
       - rhoso-architecture-validate-multi-namespace

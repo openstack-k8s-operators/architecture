@@ -1,0 +1,24 @@
+---
+apiVersion: topology.openstack.org/v1beta1
+kind: Topology
+metadata:
+  name: azone-node-affinity
+  namespace: openstack
+spec:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: topology.kubernetes.io/zone
+                operator: In
+                values:
+                  - zoneA
+  # spread the service pods across hosts within the same zone
+  topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: kubernetes.io/hostname
+      whenUnsatisfiable: DoNotSchedule
+      matchLabelKeys:
+        - pod-template-hash
+        - controller-revision-hash

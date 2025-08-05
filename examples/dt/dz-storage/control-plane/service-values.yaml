@@ -1,0 +1,561 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: service-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+data:
+  storageClass: lvms-local-storage
+  topologyRef:
+    name: default-spread-pods
+  preserveJobs: false
+
+  memcached:
+    templates:
+      memcached:
+        replicas: 3
+      memcached-azone:
+        replicas: 3
+        topologyRef:
+          name: azone-node-affinity
+      memcached-bzone:
+        replicas: 3
+        topologyRef:
+          name: bzone-node-affinity
+      memcached-czone:
+        replicas: 3
+        topologyRef:
+          name: czone-node-affinity
+  cinder:
+    customServiceConfig: |
+      [DEFAULT]
+      storage_availability_zone = az0
+  cinderAPI:
+    replicas: 3
+  cinderBackup:
+    replicas: 0
+    topologyRef:
+      name: azone-node-affinity
+    customServiceConfig: |
+      [DEFAULT]
+      # TODO:
+
+  cinderVolumes:
+    ontap-iscsi-az0:
+      topologyRef:
+        name: azone-node-affinity
+      customServiceConfigSecrets:
+        - cinder-volume-secrets-az0
+      customServiceConfig: |
+        [DEFAULT]
+        glance_api_servers = https://glance-az0-internal.openstack.svc:9292
+        [ontap-az0]
+        backend_availability_zone = az0
+        volume_backend_name=ontap-az0
+        volume_driver=cinder.volume.drivers.netapp.common.NetAppDriver
+        netapp_server_hostname=_replaced_
+        netapp_server_port=80
+        netapp_storage_protocol=iscsi
+        netapp_storage_family=ontap_cluster
+        consistencygroup_support=True
+    ontap-iscsi-az1:
+      topologyRef:
+        name: bzone-node-affinity
+      customServiceConfigSecrets:
+        - cinder-volume-secrets-az1
+      customServiceConfig: |
+        [DEFAULT]
+        glance_api_servers = https://glance-az1-internal.openstack.svc:9292
+        [ontap-az1]
+        backend_availability_zone = az1
+        volume_backend_name=ontap-az1
+        volume_driver=cinder.volume.drivers.netapp.common.NetAppDriver
+        netapp_server_hostname=_replaced_
+        netapp_server_port=80
+        netapp_storage_protocol=iscsi
+        netapp_storage_family=ontap_cluster
+        consistencygroup_support=True
+    ontap-iscsi-az2:
+      topologyRef:
+        name: czone-node-affinity
+      customServiceConfigSecrets:
+        - cinder-volume-secrets-az2
+      customServiceConfig: |
+        [DEFAULT]
+        glance_api_servers = https://glance-az2-internal.openstack.svc:9292
+        [ontap-az2]
+        backend_availability_zone = az2
+        volume_backend_name=ontap-az2
+        volume_driver=cinder.volume.drivers.netapp.common.NetAppDriver
+        netapp_server_hostname=_replaced_
+        netapp_server_port=80
+        netapp_storage_protocol=iscsi
+        netapp_storage_family=ontap_cluster
+        consistencygroup_support=True
+
+  glance:
+    # This glance.customServiceConfig is only here
+    # to pacify ../../../../dt/bgp/ and is ignored
+    # since a separate customServiceConfig is in
+    # place for each glance
+    customServiceConfig: ""
+    # This glance.default.replicas is only here
+    # to pacify ../../../../dt/bgp/ and is ignored;
+    # replicas are set separately for each glance
+    default:
+      replicas: 0
+    # Ensure keystoneEndpoint is set
+    keystoneEndpoint: default
+    # There are 4 glanceAPIs keys below (default, az{0,1,2})
+    glanceAPIs:
+      az0:
+        customServiceConfig: |
+          [DEFAULT]
+          enabled_backends = az0:cinder
+          debug = true
+          [glance_store]
+          default_backend = az0
+          [az0]
+          store_description = AZ0 iscsi cinder backend
+          cinder_store_auth_address = {{ .KeystoneInternalURL }}
+          cinder_store_user_name = {{ .ServiceUser }}
+          cinder_store_password = {{ .ServicePassword }}
+          cinder_store_project_name = service
+          cinder_catalog_info = volumev3::internalURL
+          cinder_use_multipath = true
+          cinder_do_extend_attached = true
+          cinder_volume_type = glance-iscsi-az0
+        networkAttachments:
+          - storage
+        override:
+          service:
+            internal:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: internalapi
+                  metallb.universe.tf/allow-shared-ip: internalapi
+                  metallb.universe.tf/loadBalancerIPs: 172.17.0.81
+              spec:
+                type: LoadBalancer
+        replicas: 2
+        topologyRef:
+          name: azone-node-affinity
+        type: edge
+      az1:
+        customServiceConfig: |
+          [DEFAULT]
+          enabled_backends = az0:cinder,az1:cinder
+          [glance_store]
+          default_backend = az1
+          [az1]
+          store_description = AZ1 iscsi cinder backend
+          cinder_store_auth_address = {{ .KeystoneInternalURL }}
+          cinder_store_user_name = {{ .ServiceUser }}
+          cinder_store_password = {{ .ServicePassword }}
+          cinder_store_project_name = service
+          cinder_catalog_info = volumev3::internalURL
+          cinder_use_multipath = true
+          cinder_do_extend_attached = true
+          cinder_volume_type = glance-iscsi-az1
+          [az0]
+          store_description = AZ0 iscsi cinder backend
+          cinder_store_auth_address = {{ .KeystoneInternalURL }}
+          cinder_store_user_name = {{ .ServiceUser }}
+          cinder_store_password = {{ .ServicePassword }}
+          cinder_store_project_name = service
+          cinder_catalog_info = volumev3::internalURL
+          cinder_use_multipath = true
+          cinder_do_extend_attached = true
+          cinder_volume_type = glance-iscsi-az0
+        networkAttachments:
+          - storage
+        override:
+          service:
+            internal:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: internalapi
+                  metallb.universe.tf/allow-shared-ip: internalapi
+                  metallb.universe.tf/loadBalancerIPs: 172.17.0.82
+              spec:
+                type: LoadBalancer
+        replicas: 2
+        topologyRef:
+          name: bzone-node-affinity
+        type: edge
+      az2:
+        customServiceConfig: |
+          [DEFAULT]
+          enabled_backends = az0:cinder,az2:cinder
+          [glance_store]
+          default_backend = az2
+          [az2]
+          store_description = AZ2 iscsi cinder backend
+          cinder_store_auth_address = {{ .KeystoneInternalURL }}
+          cinder_store_user_name = {{ .ServiceUser }}
+          cinder_store_password = {{ .ServicePassword }}
+          cinder_store_project_name = service
+          cinder_catalog_info = volumev3::internalURL
+          cinder_use_multipath = true
+          cinder_do_extend_attached = true
+          cinder_volume_type = glance-iscsi-az2
+          [az0]
+          store_description = AZ0 iscsi cinder backend
+          cinder_store_auth_address = {{ .KeystoneInternalURL }}
+          cinder_store_user_name = {{ .ServiceUser }}
+          cinder_store_password = {{ .ServicePassword }}
+          cinder_store_project_name = service
+          cinder_catalog_info = volumev3::internalURL
+          cinder_use_multipath = true
+          cinder_do_extend_attached = true
+          cinder_volume_type = glance-iscsi-az0
+        networkAttachments:
+          - storage
+        override:
+          service:
+            internal:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: internalapi
+                  metallb.universe.tf/allow-shared-ip: internalapi
+                  metallb.universe.tf/loadBalancerIPs: 172.17.0.83
+              spec:
+                type: LoadBalancer
+        replicas: 2
+        topologyRef:
+          name: czone-node-affinity
+        type: edge
+      default:
+        customServiceConfig: |
+          [DEFAULT]
+          enabled_backends = az0:cinder,az1:cinder,az2:cinder
+          [glance_store]
+          default_backend = az0
+          [az0]
+          store_description = AZ0 iscsi cinder backend
+          cinder_store_auth_address = {{ .KeystoneInternalURL }}
+          cinder_store_user_name = {{ .ServiceUser }}
+          cinder_store_password = {{ .ServicePassword }}
+          cinder_store_project_name = service
+          cinder_catalog_info = volumev3::internalURL
+          cinder_use_multipath = true
+          cinder_do_extend_attached = true
+          cinder_volume_type = glance-iscsi-az0
+          [az1]
+          store_description = AZ1 iscsi cinder backend
+          cinder_store_auth_address = {{ .KeystoneInternalURL }}
+          cinder_store_user_name = {{ .ServiceUser }}
+          cinder_store_password = {{ .ServicePassword }}
+          cinder_store_project_name = service
+          cinder_catalog_info = volumev3::internalURL
+          cinder_use_multipath = true
+          cinder_do_extend_attached = true
+          cinder_volume_type = glance-iscsi-az1
+          [az2]
+          store_description = AZ2 iscsi cinder backend
+          cinder_store_auth_address = {{ .KeystoneInternalURL }}
+          cinder_store_user_name = {{ .ServiceUser }}
+          cinder_store_password = {{ .ServicePassword }}
+          cinder_store_project_name = service
+          cinder_catalog_info = volumev3::internalURL
+          cinder_use_multipath = true
+          cinder_do_extend_attached = true
+          cinder_volume_type = glance-iscsi-az2
+
+  manila:
+    apiOverride:
+      route:
+        haproxy.router.openshift.io/timeout: 60s
+    enabled: true
+    template:
+      manilaAPI:
+        customServiceConfig: |
+          [DEFAULT]
+          storage_availability_zone = az0,az1,az2
+          default_share_type = nfs-multiaz
+          enabled_share_protocols=nfs
+          debug = true
+        networkAttachments:
+          - internalapi
+        override:
+          service:
+            internal:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: internalapi
+                  metallb.universe.tf/allow-shared-ip: internalapi
+                  metallb.universe.tf/loadBalancerIPs: 172.17.0.80
+              spec:
+                type: LoadBalancer
+        replicas: 3
+      manilaScheduler:
+        replicas: 3
+      manilaShares:
+        az0:
+          customServiceConfigSecrets:
+            - osp-secret-manila-az0
+          customServiceConfig: |
+            [DEFAULT]
+            enabled_share_backends = nfs_az0
+            enabled_share_protocols = nfs
+            [nfs_az0]
+            driver_handles_share_servers = True
+            share_backend_name = nfs_az
+            backend_availability_zone = az0
+            share_driver=manila.share.drivers.netapp.common.NetAppDriver
+            netapp_storage_family=ontap_cluster
+            netapp_transport_type=http
+          networkAttachments:
+            - storage
+          replicas: 1
+          topologyRef:
+            name: azone-node-affinity
+        az1:
+          customServiceConfigSecrets:
+            - osp-secret-manila-az1
+          customServiceConfig: |
+            [DEFAULT]
+            enabled_share_backends = nfs_az1
+            enabled_share_protocols = nfs
+            [nfs_az1]
+            driver_handles_share_servers = True
+            share_backend_name = nfs_az
+            backend_availability_zone = az1
+            share_driver=manila.share.drivers.netapp.common.NetAppDriver
+            netapp_storage_family=ontap_cluster
+            netapp_transport_type=http
+          networkAttachments:
+            - storage
+          replicas: 1
+          topologyRef:
+            name: bzone-node-affinity
+        az2:
+          customServiceConfigSecrets:
+            - osp-secret-manila-az2
+          customServiceConfig: |
+            [DEFAULT]
+            enabled_share_backends = nfs_az2
+            enabled_share_protocols = nfs
+            [nfs_az2]
+            driver_handles_share_servers = True
+            share_backend_name = nfs_az
+            backend_availability_zone = az2
+            share_driver=manila.share.drivers.netapp.common.NetAppDriver
+            netapp_storage_family=ontap_cluster
+            netapp_transport_type=http
+          networkAttachments:
+            - storage
+          replicas: 1
+          topologyRef:
+            name: czone-node-affinity
+
+  swift:
+    enabled: false
+
+  octavia:
+    enabled: false
+    amphoraImageContainerImage: quay.io/gthiemonge/octavia-amphora-image
+    apacheContainerImage: registry.redhat.io/ubi9/httpd-24:latest
+    octaviaAPI:
+      networkAttachments:
+        - internalapi
+      customServiceConfig: |
+        [controller_worker]
+        loadbalancer_topology=ACTIVE_STANDBY
+    octaviaHousekeeping:
+      networkAttachments:
+        - octavia
+      customServiceConfig: |
+        [controller_worker]
+        loadbalancer_topology=ACTIVE_STANDBY
+    octaviaHealthManager:
+      networkAttachments:
+        - octavia
+      customServiceConfig: |
+        [controller_worker]
+        loadbalancer_topology=ACTIVE_STANDBY
+    octaviaWorker:
+      networkAttachments:
+        - octavia
+      customServiceConfig: |
+        [controller_worker]
+        loadbalancer_topology=ACTIVE_STANDBY
+
+  ovn:
+    ovnController:
+      external-ids:
+        enable-chassis-as-gateway: false
+
+  neutron:
+    customServiceConfig: |
+      [DEFAULT]
+      vlan_transparent = true
+      debug = true
+      [ovs]
+      igmp_snooping_enable = true
+
+  nova:
+    customServiceConfig: |
+      [DEFAULT]
+      default_schedule_zone=az0
+    metadataServiceTemplate:
+      enabled: true
+      # if cells per zone, set false
+      # enabled: false
+    cellTemplates:
+      cell0:
+        cellDatabaseAccount: nova-cell0
+        hasAPIAccess: true
+      # if cells per zone, uncomment topologyRef
+      cell1:
+        # topologyRef:
+        #   name: azone-node-affinity
+        cellDatabaseInstance: openstack-cell1
+        cellDatabaseAccount: nova-cell1
+        cellMessageBusInstance: rabbitmq-cell1
+        conductorServiceTemplate:
+          replicas: 1
+        hasAPIAccess: true
+        # if cells per zone, uncomment to deploy metadataService per zone
+        # metadataServiceTemplate:
+        #   enabled: true
+        #   replicas: 3
+        # if cells per zone, uncomment cell2 and cell3
+        # cell2:
+        #   topologyRef:
+        #     name: bzone-node-affinity
+        #   cellDatabaseInstance: openstack-cell2
+        #   cellDatabaseAccount: nova-cell2
+        #   cellMessageBusInstance: rabbitmq-cell2
+        #   conductorServiceTemplate:
+        #     replicas: 1
+        #   hasAPIAccess: true
+        #   metadataServiceTemplate:
+        #     enabled: true
+        #     replicas: 3
+        # cell3:
+        #   topologyRef:
+        #     name: czone-node-affinity
+        #   cellDatabaseInstance: openstack-cell3
+        #   cellDatabaseAccount: nova-cell3
+        #   cellMessageBusInstance: rabbitmq-cell3
+        #   conductorServiceTemplate:
+        #     replicas: 1
+        #   hasAPIAccess: true
+        #   metadataServiceTemplate:
+        #     enabled: true
+        #     replicas: 3
+  rabbitmq:
+    templates:
+      rabbitmq:
+        override:
+          service:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: internalapi
+                metallb.universe.tf/loadBalancerIPs: 172.17.0.85
+            spec:
+              type: LoadBalancer
+        replicas: 3
+      rabbitmq-cell1:
+        override:
+          service:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: internalapi
+                metallb.universe.tf/loadBalancerIPs: 172.17.0.86
+            spec:
+              type: LoadBalancer
+        replicas: 3
+        # if cells per zone, uncomment topologyRef
+        # topologyRef:
+        #   name: azone-node-affinity
+        # if cells per zone, uncomment cell2 and cell2
+        # rabbitmq-cell2:
+        #   override:
+        #     service:
+        #       metadata:
+        #         annotations:
+        #           metallb.universe.tf/address-pool: internalapi
+        #           metallb.universe.tf/loadBalancerIPs: 172.17.0.87
+        #       spec:
+        #         type: LoadBalancer
+        #   replicas: 3
+        #   topologyRef:
+        #     name: bzone-node-affinity
+        # rabbitmq-cell3:
+        #   override:
+        #     service:
+        #       metadata:
+        #         annotations:
+        #           metallb.universe.tf/address-pool: internalapi
+        #           metallb.universe.tf/loadBalancerIPs: 172.17.0.88
+        #       spec:
+        #         type: LoadBalancer
+        #   replicas: 3
+        #   topologyRef:
+        #     name: czone-node-affinity
+  galera:
+    templates:
+      openstack:
+        replicas: 3
+        secret: osp-secret
+        storageRequest: 5G
+      openstack-cell1:
+        replicas: 3
+        secret: osp-secret
+        storageRequest: 5G
+        # if cells per zone, uncomment cell1 and cell3
+        # openstack-cell2:
+        #   replicas: 3
+        #   secret: osp-secret
+        #   storageRequest: 5G
+        # openstack-cell3:
+        #   replicas: 3
+        #   secret: osp-secret
+        #   storageRequest: 5G
+
+  # Cinder volume secrets
+  cinder-volume-secrets-az0: |
+    [ontap-az0]
+    netapp_login = _replaced_
+    netapp_password = _replaced_
+    netapp_vserver = _replaced_
+    netapp_pool_name_search_pattern = _replaced_
+
+  cinder-volume-secrets-az1: |
+    [ontap-az1]
+    netapp_login = _replaced_
+    netapp_password = _replaced_
+    netapp_vserver = _replaced_
+    netapp_pool_name_search_pattern = _replaced_
+
+  cinder-volume-secrets-az2: |
+    [ontap-az2]
+    netapp_login = _replaced_
+    netapp_password = _replaced_
+    netapp_vserver = _replaced_
+    netapp_pool_name_search_pattern = _replaced_
+
+  # Manila share secrets
+  osp-secret-manila-az0: |
+    [nfs_az0]
+    netapp_server_hostname = _replaced_
+    netapp_login = _replaced_
+    netapp_password = _replaced_
+    netapp_vserver = _replaced_
+
+  osp-secret-manila-az1: |
+    [nfs_az1]
+    netapp_server_hostname = _replaced_
+    netapp_login = _replaced_
+    netapp_password = _replaced_
+    netapp_vserver = _replaced_
+
+  osp-secret-manila-az2: |
+    [nfs_az2]
+    netapp_server_hostname = _replaced_
+    netapp_login = _replaced_
+    netapp_password = _replaced_
+    netapp_vserver = _replaced_
