@@ -1,0 +1,63 @@
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: worker-0
+  labels:
+    topology.kubernetes.io/zone: zoneA
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: worker-1
+  labels:
+    topology.kubernetes.io/zone: zoneA
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: worker-2
+  labels:
+    topology.kubernetes.io/zone: zoneA
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: worker-3
+  labels:
+    topology.kubernetes.io/zone: zoneB
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: worker-4
+  labels:
+    topology.kubernetes.io/zone: zoneB
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: worker-5
+  labels:
+    topology.kubernetes.io/zone: zoneB
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: worker-6
+  labels:
+    topology.kubernetes.io/zone: zoneC
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: worker-7
+  labels:
+    topology.kubernetes.io/zone: zoneC
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: worker-8
+  labels:
+    topology.kubernetes.io/zone: zoneC

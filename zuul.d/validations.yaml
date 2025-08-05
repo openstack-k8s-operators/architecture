@@ -65,6 +65,25 @@
       cifmw_networking_env_def_file: automation/net-env/dcn.yaml
 - job:
     files:
+    - automation/mocks/dz-storage.yaml
+    - examples/dt/dz-storage/control-plane
+    - examples/dt/dz-storage/control-plane/networking
+    - examples/dt/dz-storage/control-plane/networking/nncp
+    - examples/dt/dz-storage/edpm/computes/r0
+    - examples/dt/dz-storage/edpm/computes/r1
+    - examples/dt/dz-storage/edpm/computes/r2
+    - examples/dt/dz-storage/edpm/deployment
+    - examples/dt/dz-storage/edpm/networkers/r0
+    - examples/dt/dz-storage/edpm/networkers/r1
+    - examples/dt/dz-storage/edpm/networkers/r2
+    - examples/dt/dz-storage/topology
+    - lib
+    name: rhoso-architecture-validate-dz-storage
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: dz-storage
+- job:
+    files:
     - examples/va/hci
     - examples/va/hci/control-plane
     - examples/va/hci/control-plane/networking
