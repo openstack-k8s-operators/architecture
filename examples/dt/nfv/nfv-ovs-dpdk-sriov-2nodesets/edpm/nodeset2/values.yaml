@@ -180,8 +180,8 @@ data:
       - reboot-os
       - configure-ovs-dpdk
       - configure-network
-      - validate-network
       - install-os
+      - validate-network
       - configure-os
       - run-os
       - install-certs
