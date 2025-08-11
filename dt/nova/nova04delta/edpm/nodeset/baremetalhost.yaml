@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: edpm-compute-0-preprovision-network-data
+  namespace: openstack
+type: Opaque
+stringData: {}
+---
+apiVersion: metal3.io/v1alpha1
+kind: BareMetalHost
+metadata:
+  labels: {}
+  name: edpm-compute-0
+  namespace: openstack
