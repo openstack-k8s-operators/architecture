@@ -19,7 +19,11 @@ transformers:
 
 
 components:
-  - ../../../../../lib/networking
+  - ../../../../../lib/networking/metallb/base
+  - ../../../../../lib/networking/metallb/ip-addresses
+  - ../../../../../lib/networking/metallb/l2-single-nic
+  - ../../../../../lib/networking/netconfig
+  - ../../../../../lib/networking/nad
 
 resources:
   - nncp/values.yaml
