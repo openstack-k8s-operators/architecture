@@ -37,20 +37,24 @@ data:
         #       podman login -u <registry_username> -p <registry_password> registry.redhat.io
         timesync_ntp_servers:
           - hostname: pool.ntp.org
-        # GPU passthrough settings
-        edpm_kernel_args: "default_hugepagesz=1GB hugepagesz=1G hugepages=16 intel_iommu=on iommu=pt isolcpus=4-23,28-47"
+        # GPU passthrough settings for a PCI Vendor and Device ID pair.
+        # Here, 10de represents NVIDIA Corporation, and 20f1 corresponds to the GA100 [A100 PCIe 40GB] GPU, according to Device Hunt
+        # https://devicehunt.com/view/type/pci/vendor/10DE/device/20F1
+        # The isolcpus=4-23,28-47 is the CPU cores that are isolated from the GPU.
+        edpm_kernel_args: "default_hugepagesz=1GB hugepagesz=1G hugepages=16 intel_iommu=on iommu=pt isolcpus=4-23,28-47 vfio-pci.ids=10de:20f1"
         edpm_tuned_profile: "cpu-partitioning-powersave"
         edpm_tuned_isolated_cores: "4-23,28-47"
         # edpm_network_config
         # These vars are edpm_network_config role vars
         edpm_network_config_hide_sensitive_logs: false
+        # Nics to MAC addresses mappings for the dataplane nodes
         edpm_network_config_os_net_config_mappings:
           edpm-compute-0:
-            nic2: 6c:fe:54:3f:8a:02  # CHANGEME
-            nic3: 6c:fe:54:3f:8a:03  # CHANGEME
+            nic2: CHANGEME
+            nic3: CHANGEME
           edpm-compute-1:
-            nic2: 6b:fe:54:3f:8a:02  # CHANGEME
-            nic3: 6b:fe:54:3f:8a:03  # CHANGEME
+            nic2: CHANGEME
+            nic3: CHANGEME
         edpm_network_config_template: |
           ---
           {% set mtu_list = [ctlplane_mtu] %}
@@ -128,7 +132,7 @@ data:
       - neutron-ovn
       - nova-custom-gpu-2
       - neutron-metadata
-      - install-nvidia-driver-2
+      - vfio-pci-bind-2
   nova:
     compute:
       conf: |
@@ -145,9 +149,12 @@ data:
         private: CHANGEME4
         public: CHANGEME5
     pci:
+      # You will have one device_spec line for each physical GPU you want to make available for passthrough:
+      # "vendor_id": The vendor ID of the GPU manufacturer (e.g., "10de" for NVIDIA).
+      # "product_id": The product ID of the specific GPU model (e.g., "20f1" for an NVIDIA A100).
+      # "address": The PCI address of the GPU on the host machine. You can find this using `lspci | grep -i nvidia`.
+      # "physical_network": This is used for SR-IOV networking passthrough. For a GPU, you can typically leave this as null.
       conf: |
         # CHANGEME
         [pci]
-        device_spec = {"vendor_id":"10de", "product_id":"CHANGEME", "address": "CHANGEME", "physical_network":null}
-    gpu:
-      nvidia_driver_url: http://path.to.nvidia.drivers.com/nvidia/grid/latest-GRID-Foo/host-driver-foobar.rpm
+        device_spec = {"vendor_id":"10de", "product_id":"20f1", "address": "CHANGEME", "physical_network":null}
