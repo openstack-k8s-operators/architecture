@@ -27,7 +27,7 @@ The following parameters are crucial for host-level configuration:
 
 ### Control Plane (`examples/dt/nova/nova03gamma/service-values.yaml`)
 
-*   `[pci]/alias`: Creates an alias for a specific GPU type. This allows users to request a GPU by a friendly name (e.g., `nvidia_a2`) when creating a VM.
+*   `[pci]alias`: Creates an alias for a specific GPU type. This allows users to request a GPU by a friendly name (e.g., `nvidia_a2`) when creating a VM.
     ```yaml
     nova:
       apiServiceTemplate:
@@ -35,11 +35,11 @@ The following parameters are crucial for host-level configuration:
           [pci]
           alias = { "vendor_id":"10de", "product_id":"20f1", "device_type":"type-PCI", "name":"nvidia_a2" }
     ```
-*   `[filter_scheduler]/enabled_filters`: Ensures that `PciPassthroughFilter` is enabled in the Nova scheduler.
+*   `[filter_scheduler]enabled_filters`: Ensures that `PciPassthroughFilter` is enabled in the Nova scheduler.
 
 ### Compute Node (`examples/dt/nova/nova03gamma/edpm/nodeset/values.yaml`)
 
-*   `[pci]/device_spec`: Whitelists the physical GPUs that are available for passthrough. You must create a `device_spec` entry for each physical GPU you want to make available. For example:
+*   `[pci]device_spec`: Whitelists the physical GPUs that are available for passthrough. You must create a `device_spec` entry for each physical GPU you want to make available. For example:
     ```yaml
     nova:
       pci:
@@ -48,6 +48,13 @@ The following parameters are crucial for host-level configuration:
           device_spec = {"vendor_id":"10de", "product_id":"20f1", "address": "0000:04:00.0", "physical_network":null}
           device_spec = {"vendor_id":"10de", "product_id":"20f1", "address": "0000:82:00.0", "physical_network":null}
     ```
+
+In addition to PCI device configuration, the `nova.compute.conf` section includes parameters for resource management on the compute node:
+
+*   `[DEFAULT]reserved_host_memory_mb`: Specifies the amount of memory (in megabytes) to reserve for the host operating system and other non-OpenStack services. This memory will not be available for allocation to virtual machines.
+*   `[compute]cpu_shared_set`: A list of physical CPUs that are available for host processes and for virtual machines that do not have dedicated CPUs (i.e., unpinned VMs). These should be the CPUs that are **not** isolated by the `isolcpus` kernel argument.
+*   `[compute]cpu_dedicated_set`: A list of physical CPUs that are exclusively reserved for virtual machines with dedicated CPU pinning policies. To ensure performance isolation, this list should correspond directly to the CPUs isolated using the `isolcpus` kernel argument in `edpm_kernel_args`.
+*   `[DEFAULT]reserved_huge_pages`: Defines the number and size of huge pages to reserve for the host, making them unavailable for guest VMs. This configuration works in conjunction with the `hugepages` and `hugepagesz` kernel arguments, which define the total pool of huge pages on the host.
 
 **Note**: In a full device passthrough scenario, the `[devices]/enabled_vgpu_types` option in Nova's configuration is not used. This option is specific to mediated device (mdev) configurations.
 
