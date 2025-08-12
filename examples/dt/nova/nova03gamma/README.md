@@ -1,0 +1,55 @@
+# Nova GPU Passthrough (VFIO)
+
+This directory contains the necessary configurations to deploy OpenStack with Nova configured for full GPU device passthrough (VFIO). This setup allows entire physical GPUs on compute nodes to be passed directly to virtual machines, providing near-native performance.
+
+## Overview
+
+This configuration performs the following actions:
+
+1.  **Host Kernel Configuration**: It configures the compute node's kernel to enable IOMMU and bind specific GPUs to the `vfio-pci` driver, preventing the host from using them.
+2.  **Nova Scheduler Configuration**: It configures the Nova scheduler to be aware of the PCI devices available for passthrough.
+3.  **Nova Compute Configuration**: It whitelists the passthrough-capable GPUs in Nova on the compute nodes.
+
+Unlike SR-IOV or mdev (mediated device) setups, this configuration does not require installing the NVIDIA driver on the host. The driver is only installed inside the guest VM that consumes the GPU.
+
+## Host Configuration (`examples/dt/nova/nova03gamma/edpm/nodeset/values.yaml`)
+
+The following parameters are crucial for host-level configuration:
+
+*   `edpm_kernel_args`: Appends necessary kernel arguments for VFIO passthrough.
+    *   `intel_iommu=on iommu=pt`: Enables the IOMMU for device passthrough.
+    *   `vfio-pci.ids=10de:20f1`: Instructs the `vfio-pci` driver to claim the specified GPU(s) by their vendor and product IDs at boot time. The example IDs `10de:20f1` are for an NVIDIA A100 GPU.
+
+*   **VFIO-PCI Binding Service**: The `vfio-pci-bind` service in `dt/nova/nova03gamma/edpm/nodeset/nova_gpu.yaml` blacklists the `nouveau` and `nvidia` kernel modules to ensure they do not interfere with the `vfio-pci` driver.
+
+## Nova Configuration
+
+### Control Plane (`examples/dt/nova/nova03gamma/service-values.yaml`)
+
+*   `[pci]/alias`: Creates an alias for a specific GPU type. This allows users to request a GPU by a friendly name (e.g., `nvidia_a2`) when creating a VM.
+    ```yaml
+    nova:
+      apiServiceTemplate:
+        customServiceConfig: |
+          [pci]
+          alias = { "vendor_id":"10de", "product_id":"20f1", "device_type":"type-PCI", "name":"nvidia_a2" }
+    ```
+*   `[filter_scheduler]/enabled_filters`: Ensures that `PciPassthroughFilter` is enabled in the Nova scheduler.
+
+### Compute Node (`examples/dt/nova/nova03gamma/edpm/nodeset/values.yaml`)
+
+*   `[pci]/device_spec`: Whitelists the physical GPUs that are available for passthrough. You must create a `device_spec` entry for each physical GPU you want to make available. For example:
+    ```yaml
+    nova:
+      pci:
+        conf: |
+          [pci]
+          device_spec = {"vendor_id":"10de", "product_id":"20f1", "address": "0000:04:00.0", "physical_network":null}
+          device_spec = {"vendor_id":"10de", "product_id":"20f1", "address": "0000:82:00.0", "physical_network":null}
+    ```
+
+**Note**: In a full device passthrough scenario, the `[devices]/enabled_vgpu_types` option in Nova's configuration is not used. This option is specific to mediated device (mdev) configurations.
+
+## Guest VM
+
+To use the passthrough GPU, the guest operating system inside the VM must have the appropriate native NVIDIA driver installed. You will need a standard NVIDIA driver. Do not use vGPU-enabled guest drivers. The GPU will appear as a physical PCI device within the guest.
