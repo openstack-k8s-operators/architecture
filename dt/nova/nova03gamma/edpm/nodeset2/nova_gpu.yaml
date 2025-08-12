@@ -13,13 +13,6 @@ metadata:
 data:
   03-gpu-nova.conf: _replaced_
 ---
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: nvidia-gpu-config-2
-data:
-  nvidia_driver_url: _replaced_
----
 apiVersion: dataplane.openstack.org/v1beta1
 kind: OpenStackDataPlaneService
 metadata:
@@ -50,41 +43,24 @@ spec:
 apiVersion: dataplane.openstack.org/v1beta1
 kind: OpenStackDataPlaneService
 metadata:
-  name: install-nvidia-driver-2
+  name: vfio-pci-bind-2
   namespace: openstack
 spec:
-  dataSources:
-  - configMapRef:
-      name: nvidia-gpu-config-2
   playbookContents: |
-    - name: Install Nvidia Driver
+    - name: Bind vfio-pci to devices
       hosts: all
       tasks:
-        - name: Blacklist nouveau
+        - name: Blacklist nouveau and nvidia
           become: true
           ansible.builtin.copy:
-            dest: "/etc/modprobe.d/blacklist-nouveau.conf"
+            dest: "/etc/modprobe.d/blacklist-nvidia.conf"
             mode: "0644"
             content: |-
               blacklist nouveau
+              blacklist nvidia
               options nouveau modeset=0
             force: false
-          register: _blacklist_nouveau
-        - name: Get the Nvidia Driver URL
-          delegate_to: localhost
-          ansible.builtin.set_fact:
-            nvidia_rpm_url: "{{ lookup('file', '/var/lib/openstack/configs/install-nvidia-driver-2/nvidia_driver_url') | from_yaml }}"
-        - name: Gather the package facts
-          ansible.builtin.package_facts:
-            manager: auto
-        - name: Install nvidia driver RPM either from path or URL
-          become: true
-          ansible.builtin.dnf:
-            name: "{{ nvidia_rpm_url }}"
-            state: present
-            disable_gpg_check: true
-          when: nvidia_rpm_url not in ansible_facts.packages
-          register: _nvidia_driver_install
+          register: _blacklist_nvidia
         - name: Check if grub2-mkconfig has --update-bls-cmdline option
           ansible.builtin.shell:
             cmd: grub2-mkconfig --help | grep '\-\-update-bls-cmdline'
@@ -101,4 +77,4 @@ spec:
               {{ '--update-bls-cmdline'
               if check_update_bls_cmdline.rc == 0
               else '' }}
-          when: _blacklist_nouveau.changed or _nvidia_driver_install.changed
+          when: _blacklist_nvidia.changed
