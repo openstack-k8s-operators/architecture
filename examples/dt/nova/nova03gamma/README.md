@@ -19,6 +19,7 @@ The following parameters are crucial for host-level configuration:
 *   `edpm_kernel_args`: Appends necessary kernel arguments for VFIO passthrough.
     *   `intel_iommu=on iommu=pt`: Enables the IOMMU for device passthrough.
     *   `vfio-pci.ids=10de:20f1`: Instructs the `vfio-pci` driver to claim the specified GPU(s) by their vendor and product IDs at boot time. The example IDs `10de:20f1` are for an NVIDIA A100 GPU.
+    *   `rd.driver.pre=vfio-pci`: Avoids race conditions during boot by loading vfio-pci kernel module early.
 
 *   **VFIO-PCI Binding Service**: The `vfio-pci-bind` service in `dt/nova/nova03gamma/edpm/nodeset/nova_gpu.yaml` blacklists the `nouveau` and `nvidia` kernel modules to ensure they do not interfere with the `vfio-pci` driver.
 
