@@ -20,6 +20,10 @@ transformers:
 components:
   - ../../../../lib/dataplane/nodeset
 
+resources:
+  - ceph_secret.yaml
+  - nova_ceph.yaml
+
 patches:
   - target:
       kind: OpenStackDataPlaneNodeSet
@@ -28,3 +32,7 @@ patches:
       - op: replace
         path: /metadata/name
         value: openstack-second-edpm
+  - target:
+      kind: OpenStackDataPlaneNodeSet
+      name: .*
+    path: extra_mounts.yaml
