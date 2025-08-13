@@ -41,6 +41,7 @@ The following parameters are crucial for host-level configuration:
           alias = { "vendor_id":"10de", "product_id":"20f1", "device_type":"type-PCI", "name":"nvidia_a2" }
     ```
 *   `[filter_scheduler]enabled_filters`: Ensures that `PciPassthroughFilter` is enabled in the Nova scheduler.
+*   The `device_type` in the alias is dependent on the actual hardware. In the case of a GPU that is capable of SR-IOV, you should set it to `type-PF`, and `type-PCI` otherwise. In a full device passthrough scenario, you should use the latter.
 
 ### Compute Node (`examples/dt/nova/nova03gamma/edpm/nodeset/values.yaml`)
 
