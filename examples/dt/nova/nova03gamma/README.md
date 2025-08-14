@@ -41,7 +41,7 @@ The following parameters are crucial for host-level configuration:
           alias = { "vendor_id":"10de", "product_id":"20f1", "device_type":"type-PCI", "name":"nvidia_a2" }
     ```
 *   `[filter_scheduler]enabled_filters`: Ensures that `PciPassthroughFilter` is enabled in the Nova scheduler.
-*   The `device_type` in the alias is dependent on the actual hardware:
+*   `device_type` in the alias is dependent on the actual hardware:
     *   `type-PF`: The device supports SR-IOV and is the parent or root device.
     *   `type-VF`: The device is a child device of a device that supports SR-IOV.
     *   `type-PCI`: The device does not support SR-IOV. This is the value you should use, or simply omit setting `device_type`, in a full device passthrough scenario.
@@ -71,4 +71,4 @@ In addition to PCI device configuration, the `nova.compute.conf` section include
 
 To use the passthrough GPU, the guest operating system inside the VM must have the appropriate native NVIDIA driver installed. You will need a standard NVIDIA driver. Do not use vGPU-enabled guest drivers. The GPU will appear as a physical PCI device within the guest.
 
-// NOTE(bogdando) OSPRH-18880: keep in mind that for PCI in Nova mode, a flavor must use pci_passthrough:alias property. While for PCI in Placement mode, it must be resources:VGPU=X annotation. See https://docs.openstack.org/nova/latest/admin/pci-passthrough.html. TBD - figure out what to set for the managed mode parameter in device_spec?
+// NOTE(bogdando) OSPRH-18880: keep in mind that for PCI in Nova mode, a flavor must use pci_passthrough:alias property. While for PCI in Placement mode, it must be resources:VGPU=X annotation. See https://docs.openstack.org/nova/latest/admin/pci-passthrough.html.
