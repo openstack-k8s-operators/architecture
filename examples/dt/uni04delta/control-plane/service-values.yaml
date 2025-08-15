@@ -37,7 +37,7 @@ data:
     replicas: 1
 
   designate:
-    enabled: false
+    enabled: true
     nsRecords:
       - hostname: ns1.example.org.
         priority: 1
