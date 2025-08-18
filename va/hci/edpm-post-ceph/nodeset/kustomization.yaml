@@ -288,3 +288,25 @@ replacements:
           - spec.heat.enabled
         options:
           create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.watcher.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.watcher.enabled
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.watcher.decisionengineServiceTemplate.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.watcher.template.decisionengineServiceTemplate.customServiceConfig
+        options:
+          create: true

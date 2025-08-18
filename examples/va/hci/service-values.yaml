@@ -94,6 +94,22 @@ data:
     enabled: true
     metricStorage:
       enabled: true
+      monitoringStack: null
+      customMonitoringStack:
+        alertmanagerConfig:
+          disabled: true
+        prometheusConfig:
+          enableRemoteWriteReceiver: true
+          persistentVolumeClaim:
+            resources:
+              requests:
+                storage: 20G
+          replicas: 1
+          scrapeInterval: 30s
+        resourceSelector:
+          matchLabels:
+            service: metricStorage
+        retention: 24h
     autoscaling:
       enabled: true
     ceilometer:
@@ -104,3 +120,11 @@ data:
       expiration = 28800
   heat:
     enabled: true
+  watcher:
+    enabled: true
+    decisionengineServiceTemplate:
+      customServiceConfig: |
+        [watcher_cluster_data_model_collectors.compute]
+        period = 60
+        [watcher_cluster_data_model_collectors.storage]
+        period = 60
