@@ -45,4 +45,4 @@ The following VAs are available.
 
 The following DTs are available.
 
-- [Nova with GPU Passthrough (VFIO)](examples/dt/nova/nova03gamma/) [untested]
+- [Nova with GPU Passthrough (VFIO)](examples/dt/nova/nova04delta/) [untested]

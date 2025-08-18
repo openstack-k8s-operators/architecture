@@ -12,7 +12,7 @@ This configuration performs the following actions:
 
 Unlike SR-IOV or mdev (mediated device) setups, this configuration does not require installing the NVIDIA driver on the host. The driver is only installed inside the guest VM that consumes the GPU.
 
-## Host Configuration (`examples/dt/nova/nova03gamma/edpm/nodeset/values.yaml`)
+## Host Configuration (`examples/dt/nova/nova04delta/edpm/nodeset/values.yaml`)
 
 The following parameters are crucial for host-level configuration:
 
@@ -26,11 +26,11 @@ The following parameters are crucial for host-level configuration:
     *   `edpm_tuned_profile` is set to `cpu-partitioning-powersave` to enable CPU isolation features.
     *   `edpm_tuned_isolated_cores` specifies the cores to be isolated. This should match the list of CPUs provided in the `isolcpus` kernel argument.
 
-*   **VFIO-PCI Binding Service**: The `vfio-pci-bind` service in `dt/nova/nova03gamma/edpm/nodeset/nova_gpu.yaml` blacklists the `nouveau` and `nvidia` kernel modules to ensure they do not interfere with the `vfio-pci` driver. The service also regenerates the initramfs and grub configuration to apply these changes. A reboot is required for these changes to take effect.
+*   **VFIO-PCI Binding Service**: The `vfio-pci-bind` service in `dt/nova/nova04delta/edpm/nodeset/nova_gpu.yaml` blacklists the `nouveau` and `nvidia` kernel modules to ensure they do not interfere with the `vfio-pci` driver. The service also regenerates the initramfs and grub configuration to apply these changes. A reboot is required for these changes to take effect.
 
 ## Nova Configuration
 
-### Control Plane (`examples/dt/nova/nova03gamma/service-values.yaml`)
+### Control Plane (`examples/dt/nova/nova04delta/service-values.yaml`)
 
 *   `[pci]alias`: Creates an alias for a specific GPU type. This allows users to request a GPU by a friendly name (e.g., `nvidia_a2`) when creating a VM.
     ```yaml
@@ -46,7 +46,7 @@ The following parameters are crucial for host-level configuration:
     *   `type-VF`: The device is a child device of a device that supports SR-IOV.
     *   `type-PCI`: The device does not support SR-IOV. This is the value you should use, or simply omit setting `device_type`, in a full device passthrough scenario.
 
-### Compute Node (`examples/dt/nova/nova03gamma/edpm/nodeset/values.yaml`)
+### Compute Node (`examples/dt/nova/nova04delta/edpm/nodeset/values.yaml`)
 
 *   `[pci]device_spec`: Whitelists the physical GPUs that are available for passthrough. You must create a `device_spec` entry for each physical GPU you want to make available. For example:
     ```yaml
