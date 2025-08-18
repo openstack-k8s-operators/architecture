@@ -3,10 +3,7 @@
 This document describes the CR's and deployment workflow to create an
 environment with EDPM Compute Nodes capable of supplying Nvidia GPUs via
 passthrough (VFIO). This setup allows entire physical GPUs on compute nodes to
-be passed directly to virtual machines, providing near-native performance. The
-deployment also takes advantage of defining and mapping Custom Traits to
-different resource providers by passing definition via provider.yaml through a
-ConfigMap.
+be passed directly to virtual machines, providing near-native performance.
 
 ## Purpose
 
@@ -49,4 +46,4 @@ All stages must be executed in the order listed below. Everything is required un
 1. [Install the OpenStack K8S operators and their dependencies](../../common/)
 2. [Configuring networking and deploy the OpenStack control plane](control-plane.md)
 3. [Configure and deploy the initial dataplane](edpm-pre.md)
-4. [Update Dataplane with a reboot and optional provider traits](edpm-post.md)
+4. [Update Dataplane with a reboot](edpm-post.md)

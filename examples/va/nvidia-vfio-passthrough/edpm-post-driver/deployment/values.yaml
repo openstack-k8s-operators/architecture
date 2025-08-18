@@ -12,6 +12,5 @@ data:
     name: edpm-deployment-post-driver
   servicesOverride:
     - reboot-os
-    - compute-provider
   ansibleExtraVars:
     edpm_reboot_strategy: force
