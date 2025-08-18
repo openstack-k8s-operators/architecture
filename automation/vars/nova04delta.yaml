@@ -1,8 +1,8 @@
 ---
 vas:
-  nova03gamma:
+  nova04delta:
     stages:
-      - path: examples/dt/nova/nova03gamma/nncp
+      - path: examples/dt/nova/nova04delta/nncp
         wait_conditions:
           - >-
             oc -n openstack wait nncp
@@ -14,7 +14,7 @@ vas:
             src_file: values.yaml
         build_output: nncp.yaml
 
-      - path: examples/dt/nova/nova03gamma
+      - path: examples/dt/nova/nova04delta
         wait_conditions:
           - >-
             oc -n openstack wait osctlplane controlplane --for condition=Ready
@@ -26,7 +26,7 @@ vas:
             src_file: service-values.yaml
         build_output: control-plane.yaml
 
-      - path: examples/dt/nova/nova03gamma/edpm/nodeset
+      - path: examples/dt/nova/nova04delta/edpm/nodeset
         wait_conditions:
           - >-
             oc -n openstack wait
@@ -37,7 +37,7 @@ vas:
             src_file: values.yaml
         build_output: nodeset.yaml
 
-      - path: examples/dt/nova/nova03gamma/edpm/nodeset2
+      - path: examples/dt/nova/nova04delta/edpm/nodeset2
         wait_conditions:
           - >-
             oc -n openstack wait
@@ -48,7 +48,7 @@ vas:
             src_file: values.yaml
         build_output: nodeset2.yaml
 
-      - path: examples/dt/nova/nova03gamma/edpm/deployment
+      - path: examples/dt/nova/nova04delta/edpm/deployment
         wait_conditions:
           - >-
             oc -n openstack wait
@@ -59,7 +59,7 @@ vas:
             src_file: values.yaml
         build_output: deployment.yaml
 
-      - path: examples/dt/nova/nova03gamma/edpm-post-driver/deployment
+      - path: examples/dt/nova/nova04delta/edpm-post-driver/deployment
         wait_conditions:
           - >-
             oc -n openstack wait
@@ -70,7 +70,7 @@ vas:
             src_file: values.yaml
         build_output: post-driver-deployment.yaml
 
-      - path: examples/dt/nova/nova03gamma/edpm-deploy-provider/nodeset
+      - path: examples/dt/nova/nova04delta/edpm-deploy-provider/nodeset
         wait_conditions:
           - >-
             oc -n openstack wait
@@ -81,7 +81,7 @@ vas:
             src_file: values.yaml
         build_output: provider-nodeset.yaml
 
-      - path: examples/dt/nova/nova03gamma/edpm-deploy-provider/deployment
+      - path: examples/dt/nova/nova04delta/edpm-deploy-provider/deployment
         wait_conditions:
           - >-
             oc -n openstack wait
