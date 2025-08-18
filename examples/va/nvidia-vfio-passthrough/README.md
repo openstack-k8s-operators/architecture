@@ -14,6 +14,20 @@ with nested virtualization and requires real baremetal hosts.
 
 ## Environment
 
+### Nova
+
+Nova control plane is configured for requesting PCI devices from Placement
+by setting `resources:VGPU=X` in flavor extra specs.
+That is a contrary to the legacy mode where PCI devices used to be requested through
+`pci_passthrough:alias` flavor extra specs.
+
+### Guest VM
+
+To use the passthrough GPU, the guest operating system inside the VM must have
+the appropriate native NVIDIA driver installed. You will need a standard NVIDIA
+driver. Do not use vGPU-enabled guest drivers. The GPU will appear as a physical
+PCI device within the guest.
+
 ### Nodes
 
 | Role                        | Machine Type | Count |
@@ -39,6 +53,10 @@ with nested virtualization and requires real baremetal hosts.
 | storage     | VLAN tagged | 172.18.0.0/24     |
 | storagemgmt | VLAN tagged | 172.20.0.0/24     |
 | tenant      | VLAN tagged | 172.19.0.0/24     |
+
+NOTE: A network attach definition is not provided for storagemgmt because only
+RHEL EDPM nodes are going to use it, while control plane pods on OpenShift do
+not need it.
 
 ## Stages
 All stages must be executed in the order listed below. Everything is required unless otherwise indicated.

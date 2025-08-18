@@ -1,6 +1,6 @@
 # Nova GPU Passthrough (VFIO)
 
-This directory contains the necessary configurations to deploy OpenStack with Nova configured for full GPU device passthrough (VFIO). This setup allows entire physical GPUs on compute nodes to be passed directly to virtual machines, providing near-native performance.
+This directory contains the necessary configurations to deploy OpenStack with Nova configured for full GPU device passthrough (VFIO). This setup allows entire physical GPUs on compute nodes to be passed directly to virtual machines, providing near-native performance. Nova control plane is configured for requesting PCI devices from Placement.
 
 ## Overview
 
@@ -29,6 +29,11 @@ The following parameters are crucial for host-level configuration:
 *   **VFIO-PCI Binding Service**: The `vfio-pci-bind` service in `dt/nova/nova04delta/edpm/nodeset/nova_gpu.yaml` blacklists the `nouveau` and `nvidia` kernel modules to ensure they do not interfere with the `vfio-pci` driver. The service also regenerates the initramfs and grub configuration to apply these changes. A reboot is required for these changes to take effect.
 
 ## Nova Configuration
+
+Nova control plane is configured for requesting PCI devices from Placement
+through `resources:VGPU=X` flavor extra specs.
+That is a contrary to the legacy mode where PCI devices used to be requested through
+`pci_passthrough:alias` flavor extra specs.
 
 ### Control Plane (`examples/dt/nova/nova04delta/service-values.yaml`)
 
@@ -70,5 +75,3 @@ In addition to PCI device configuration, the `nova.compute.conf` section include
 ## Guest VM
 
 To use the passthrough GPU, the guest operating system inside the VM must have the appropriate native NVIDIA driver installed. You will need a standard NVIDIA driver. Do not use vGPU-enabled guest drivers. The GPU will appear as a physical PCI device within the guest.
-
-// NOTE(bogdando) OSPRH-18880: keep in mind that for PCI in Nova mode, a flavor must use pci_passthrough:alias property. While for PCI in Placement mode, it must be resources:VGPU=X annotation. See https://docs.openstack.org/nova/latest/admin/pci-passthrough.html.
