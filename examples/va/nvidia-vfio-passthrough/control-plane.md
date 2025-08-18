@@ -10,9 +10,9 @@ Switch to the "openstack" namespace
 ```
 oc project openstack
 ```
-Change to the nvidia-mdev-passthrough directory
+Change to the nvidia-vfio-passthrough directory
 ```
-cd architecture/examples/va/nvidia-mdev-passthrough
+cd architecture/examples/va/nvidia-vfio-passthrough
 ```
 Edit the [control-plane/nncp/values.yaml](control-plane/nncp/values.yaml) and
 [control-plane/service-values.yaml](control-plane/service-values.yaml) files to suit

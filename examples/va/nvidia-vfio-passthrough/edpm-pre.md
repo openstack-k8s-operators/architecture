@@ -10,9 +10,9 @@ Switch to the "openstack" namespace
 ```
 oc project openstack
 ```
-Change to the nvidia-mdev-passthrough directory
+Change to the nvidia-vfio-passthrough directory
 ```
-cd architecture/examples/va/nvidia-mdev-passthrough
+cd architecture/examples/va/nvidia-vfio-passthrough
 ```
 Edit the [edpm/nodeset/values.yaml](edpm/nodeset/values.yaml) and [edpm/deployment/values.yaml](edpm/deployment/values.yaml) files to suit your environment.
 ```
