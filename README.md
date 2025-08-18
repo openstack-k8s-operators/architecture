@@ -39,7 +39,7 @@ The following VAs are available.
 - [Network Functions Virtualization with SRIOV](examples/va/nfv/sriov/)
 - [Network Functions Virtualization with OvS DPDK](examples/va/nfv/ovs-dpdk/)
 - [Network Functions Virtualization with OvS DPDK & SRIOV](examples/va/nfv/ovs-dpdk-sriov/) [untested]
-- [Nvidia GPU Passthrough (VFIO)](examples/va/nvidia-mdev-passthrough/) [untested]
+- [Nvidia GPU Passthrough (VFIO)](examples/va/nvidia-vfio-passthrough/) [untested]
 
 ## Deployment Topologies
 

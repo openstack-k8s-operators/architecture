@@ -9,7 +9,7 @@ The following commands should be executed from your controller.
 
 Change to the post-driver directory.
 ```
-cd architecture/examples/va/nvidia-mdev-passthrough/edpm-post-driver
+cd architecture/examples/va/nvidia-vfio-passthrough/edpm-post-driver
 ```
 
 ### Optional: Create a provider.yaml
