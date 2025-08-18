@@ -26,7 +26,7 @@ The following parameters are crucial for host-level configuration:
     *   `edpm_tuned_profile` is set to `cpu-partitioning-powersave` to enable CPU isolation features.
     *   `edpm_tuned_isolated_cores` specifies the cores to be isolated. This should match the list of CPUs provided in the `isolcpus` kernel argument.
 
-*   **VFIO-PCI Binding Service**: The `vfio-pci-bind` service in `dt/nova/nova03gamma/edpm/nodeset/nova_gpu.yaml` blacklists the `nouveau` and `nvidia` kernel modules to ensure they do not interfere with the `vfio-pci` driver.
+*   **VFIO-PCI Binding Service**: The `vfio-pci-bind` service in `dt/nova/nova03gamma/edpm/nodeset/nova_gpu.yaml` blacklists the `nouveau` and `nvidia` kernel modules to ensure they do not interfere with the `vfio-pci` driver. The service also regenerates the initramfs and grub configuration to apply these changes. A reboot is required for these changes to take effect.
 
 ## Nova Configuration
 
