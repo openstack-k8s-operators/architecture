@@ -69,25 +69,3 @@ vas:
           - name: edpm-deployment-post-driver
             src_file: values.yaml
         build_output: post-driver-deployment.yaml
-
-      - path: examples/dt/nova/nova04delta/edpm-deploy-provider/nodeset
-        wait_conditions:
-          - >-
-            oc -n openstack wait
-            osdpns openstack-edpm --for condition=SetupReady
-            --timeout=60m
-        values:
-          - name: edpm-provider-values
-            src_file: values.yaml
-        build_output: provider-nodeset.yaml
-
-      - path: examples/dt/nova/nova04delta/edpm-deploy-provider/deployment
-        wait_conditions:
-          - >-
-            oc -n openstack wait
-            osdpd edpm-deployment-provider --for condition=Ready
-            --timeout=20m
-        values:
-          - name: edpm-deploy-provider-values
-            src_file: values.yaml
-        build_output: provider-deployment.yaml
