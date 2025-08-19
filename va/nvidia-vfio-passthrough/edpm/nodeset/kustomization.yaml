@@ -38,7 +38,7 @@ replacements:
         options:
           create: true
 
-  # Nova compute PCI passthrough customization
+  # Nova compute CPU pinning customization
   - source:
       kind: ConfigMap
       name: edpm-nodeset-values
@@ -51,6 +51,7 @@ replacements:
           - data.25-cpu-pinning-nova\.conf
         options:
           create: true
+  # Nova compute PCI passthrough customization
   - source:
       kind: ConfigMap
       name: edpm-nodeset-values
