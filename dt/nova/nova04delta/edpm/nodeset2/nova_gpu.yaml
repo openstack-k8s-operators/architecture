@@ -1,6 +1,13 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  name: cpu-pinning-nova-2
+data:
+  25-cpu-pinning-nova.conf: _replaced_
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
   name: gpu-nova-2
 data:
   03-gpu-nova.conf: _replaced_
@@ -13,6 +20,8 @@ spec:
   label: dataplane-deployment-nova-custom-gpu
   edpmServiceType: nova
   dataSources:
+    - configMapRef:
+        name: cpu-pinning-nova-2
     - configMapRef:
         name: gpu-nova-2
     - secretRef:
