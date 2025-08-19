@@ -32,7 +32,7 @@ That is a contrary to the legacy mode where PCI devices used to be requested thr
 
 ### Control Plane (`examples/dt/nova/nova04delta/service-values.yaml`)
 
-*   `[pci]alias`: Creates an alias for a specific GPU type. This allows users to request a GPU by a friendly name (e.g., `nvidia_a2`) when creating a VM.
+*   `[pci]alias`: Creates an alias for a specific GPU type. This allows users to request a GPU by a friendly name (e.g., `nvidia_a2`) when creating a VM. This configuration should match the configuration found on the compute nodes.
     ```yaml
     nova:
       apiServiceTemplate:
@@ -40,7 +40,7 @@ That is a contrary to the legacy mode where PCI devices used to be requested thr
           [pci]
           alias = { "vendor_id":"10de", "product_id":"20f1", "device_type":"type-PCI", "name":"nvidia_a2" }
     ```
-*   `[filter_scheduler]enabled_filters`: Ensures that `PciPassthroughFilter` is enabled in the Nova scheduler.
+*   `[filter_scheduler]pci_in_placement`: Enables PCI in Placement. It should only be enabled after all the computes in the system become configured to report PCI inventory in Placement via enabling `[pci]report_in_placement` in EDPM nodesets configuration. However, this order must be ensured during major upgrades only, where the dataplane deployment to upate EDPM computes configurataion must come before reconfiguring control plane resources.
 *   `device_type` in the alias is dependent on the actual hardware:
     *   `type-PF`: The device supports SR-IOV and is the parent or root device.
     *   `type-VF`: The device is a child device of a device that supports SR-IOV.
@@ -48,14 +48,16 @@ That is a contrary to the legacy mode where PCI devices used to be requested thr
 
 ### Compute Node (`examples/dt/nova/nova04delta/edpm/nodeset/values.yaml`)
 
+*   `[pci]report_in_placement`: Required for PCI in placement to work.
 *   `[pci]device_spec`: Whitelists the physical GPUs that are available for passthrough. You must create a `device_spec` entry for each physical GPU you want to make available. For example:
     ```yaml
     nova:
       pci:
         conf: |
           [pci]
-          device_spec = {"vendor_id":"10de", "product_id":"20f1", "address": "0000:04:00.0", "physical_network":null}
-          device_spec = {"vendor_id":"10de", "product_id":"20f1", "address": "0000:82:00.0", "physical_network":null}
+          device_spec = { "vendor_id":"10de", "product_id":"20f1", "address": "0000:04:00.0", "physical_network":null }
+          device_spec = { "vendor_id":"10de", "product_id":"20f1", "address": "0000:82:00.0", "physical_network":null }
+          alias = { "vendor_id":"10de", "product_id":"20f1", "device_type":"type-PCI", "name":"nvidia_a2" }
     ```
 
 In addition to PCI device configuration, the `nova.compute.conf` section includes parameters for resource management on the compute node:
