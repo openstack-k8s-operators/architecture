@@ -53,4 +53,4 @@ data:
     schedulerServiceTemplate:
       customServiceConfig: |
         [filter_scheduler]
-        enabled_filters = AvailabilityZoneFilter,ComputeFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,ServerGroupAntiAffinityFilter,ServerGroupAffinityFilter,PciPassthroughFilter,NUMATopologyFilter,AggregateInstanceExtraSpecsFilter
+        pci_in_placement = True
