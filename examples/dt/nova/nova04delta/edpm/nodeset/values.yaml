@@ -148,8 +148,11 @@ data:
       # "product_id": The product ID of the specific GPU model (e.g., "20f1" for an NVIDIA A100).
       # "address": The PCI address of the GPU on the host machine. You can find this using `lspci | grep -i nvidia`.
       # "physical_network": This is used for SR-IOV networking passthrough. For a GPU, you can typically leave this as null.
+      # "alias": must match the alias configuration in the API service-values.yaml
       conf: |
         # CHANGEME
         [pci]
         device_spec = {"vendor_id":"10de", "product_id":"20f1", "address": "CHANGEME", "physical_network":null}
+        alias = { "vendor_id":"10de", "product_id":"20f1", "device_type":"type-PCI", "name":"nvidia_a2" }
+        report_in_placement = True
 
