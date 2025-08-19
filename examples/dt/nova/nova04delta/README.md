@@ -29,6 +29,7 @@ The following parameters are crucial for host-level configuration:
 
 ## Nova Configuration
 
+# FIXME: this looks only used in PCI groups in placement? The same pci_passthrough:alias should be used in both cases it seems?
 Nova control plane is configured for requesting PCI devices from Placement
 through `resources:VGPU=X` flavor extra specs.
 That is a contrary to the legacy mode where PCI devices used to be requested through
