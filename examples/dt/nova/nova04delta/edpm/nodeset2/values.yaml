@@ -41,6 +41,8 @@ data:
         # Here, 10de represents NVIDIA Corporation, and 20f1 corresponds to the GA100 [A100 PCIe 40GB] GPU, according to Device Hunt
         # https://devicehunt.com/view/type/pci/vendor/10DE/device/20F1
         edpm_kernel_args: "default_hugepagesz=1GB hugepagesz=1G hugepages=16 intel_iommu=on iommu=pt vfio-pci.ids=10de:20f1 rd.driver.pre=vfio-pci"
+        edpm_tuned_profile: "cpu-partitioning-powersave"
+        edpm_tuned_isolated_cores: "4-23,28-47"
         # edpm_network_config
         # These vars are edpm_network_config role vars
         edpm_network_config_hide_sensitive_logs: false
@@ -138,6 +140,9 @@ data:
         reserved_host_memory_mb = 4096
         reserved_huge_pages = node:0,size:4,count:524160
         reserved_huge_pages = node:1,size:4,count:524160
+        [compute]
+        cpu_shared_set = 0-3,24-27
+        cpu_dedicated_set = 8-23,32-47
     migration:
       ssh_keys:
         private: CHANGEME4

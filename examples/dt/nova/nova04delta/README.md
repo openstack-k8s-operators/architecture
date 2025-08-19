@@ -21,6 +21,10 @@ The following parameters are crucial for host-level configuration:
     *   `vfio-pci.ids=10de:20f1`: Instructs the `vfio-pci` driver to claim the specified GPU(s) by their vendor and product IDs at boot time. The example IDs `10de:20f1` are for an NVIDIA A100 GPU.
     *   `rd.driver.pre=vfio-pci`: Avoids race conditions during boot by loading vfio-pci kernel module early.
 
+*   `edpm_tuned_profile` and `edpm_tuned_isolated_cores`: These parameters configure the `tuned` service.
+    *   `edpm_tuned_profile` is set to `cpu-partitioning-powersave` to enable CPU isolation features.
+    *   `edpm_tuned_isolated_cores` specifies the cores to be isolated. For CPU isolation we strongly recommend using the Tuned approach rather than `isolcpus` kernel argument.
+
 *   **VFIO-PCI Binding Service**: The `vfio-pci-bind` service in `dt/nova/nova04delta/edpm/nodeset/nova_gpu.yaml` blacklists the `nouveau` and `nvidia` kernel modules to ensure they do not interfere with the `vfio-pci` driver. The service also regenerates the initramfs and grub configuration to apply these changes. A reboot is required for these changes to take effect.
 
 ## Nova Configuration
@@ -63,6 +67,8 @@ That is a contrary to the legacy mode where PCI devices used to be requested thr
 In addition to PCI device configuration, the `nova.compute.conf` section includes parameters for resource management on the compute node:
 
 *   `[DEFAULT]reserved_host_memory_mb`: Specifies the amount of memory (in megabytes) to reserve for the host operating system and other non-OpenStack services. This memory will not be available for allocation to virtual machines.
+*   `[compute]cpu_shared_set`: A list of physical CPUs that are available for host processes and for virtual machines that do not have dedicated CPUs (i.e., unpinned VMs). These should be the CPUs that are **not** isolated by `edpm_tuned_isolated_cores`.
+*   `[compute]cpu_dedicated_set`: A list of physical CPUs that are exclusively reserved for virtual machines with dedicated CPU pinning policies. To ensure performance isolation, this list should correspond directly to the CPUs isolated using `edpm_tuned_isolated_cores` parameter.
 *   `[DEFAULT]reserved_huge_pages`: Defines the number and size of huge pages to reserve for the host, making them unavailable for guest VMs. This configuration works in conjunction with the `hugepages` and `hugepagesz` kernel arguments, which define the total pool of huge pages on the host.
 
 **Note**: In a full device passthrough scenario, the `[devices]enabled_vgpu_types` option in Nova's configuration is not used. This option is specific to mediated device (mdev) configurations.
