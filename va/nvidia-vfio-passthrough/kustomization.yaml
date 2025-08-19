@@ -36,7 +36,7 @@ replacements:
           - spec.neutron.template.customServiceConfig
         options:
           create: true
-  # OVN control plane SRIOV customization
+  # OVN control plane customization
   - source:
       kind: ConfigMap
       name: service-values
