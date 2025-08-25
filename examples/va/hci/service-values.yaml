@@ -104,3 +104,11 @@ data:
       expiration = 28800
   heat:
     enabled: true
+  watcher:
+    enabled: true
+    decisionengineServiceTemplate:
+      customServiceConfig: |
+        [watcher_cluster_data_model_collectors.compute]
+        period = 60
+        [watcher_cluster_data_model_collectors.storage]
+        period = 60
