@@ -1,0 +1,10 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nova-extra-config
+data:
+  25-nova-extra.conf: |
+    [DEFAULT]
+    # Triple the default of the following
+    reimage_timeout_per_gb = 60
