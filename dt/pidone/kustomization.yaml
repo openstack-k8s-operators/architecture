@@ -38,6 +38,14 @@ patches:
           subnets:
             - _replaced_
           mtu: 1500
+  # Enable heat
+  - target:
+      kind: OpenStackControlPlane
+      name: controlplane
+    patch: |-
+      - op: replace
+        path: /spec/heat/enabled
+        value: true
 
 replacements:
   - source:
