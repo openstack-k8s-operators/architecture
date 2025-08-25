@@ -69,19 +69,31 @@ data:
             - ip_netmask: {{ ctlplane_ip }}/{{ ctlplane_cidr }}
             routes: {{ ctlplane_host_routes }}
             members:
+          - type: interface
+            name: nic1
+            mtu: {{ ctlplane_mtu }}
+            use_dhcp: false
+            addresses:
+            - ip_netmask: {{ ctlplane_ip }}/{{ ctlplane_cidr }}
+            routes: {{ ctlplane_host_routes }}
+          - type: linux_bond
+            name: bond_api
+            mtu: {{ min_viable_mtu }}
+            bonding_options: {{ edpm_bond_interface_ovs_options }}
+            use_dhcp: false
+            dns_servers: {{ ctlplane_dns_nameservers }}
+            members:
             - type: interface
               name: nic2
               mtu: {{ min_viable_mtu }}
-              # force the MAC address of the bridge to this interface
               primary: true
+
           {% for network in nodeset_networks %}
             - type: vlan
-              mtu: {{ lookup('vars', networks_lower[network] ~ '_mtu') }}
               vlan_id: {{ lookup('vars', networks_lower[network] ~ '_vlan_id') }}
+              device: bond_api
               addresses:
-              - ip_netmask:
-                  {{ lookup('vars', networks_lower[network] ~ '_ip') }}/{{ lookup('vars', networks_lower[network] ~ '_cidr') }}
-              routes: {{ lookup('vars', networks_lower[network] ~ '_host_routes') }}
+              - ip_netmask: {{ lookup('vars', networks_lower[network] ~ '_ip') }}/{{ lookup('vars', networks_lower[network] ~ '_cidr') }}
           {% endfor %}
           - type: sriov_pf
             name: nic3
