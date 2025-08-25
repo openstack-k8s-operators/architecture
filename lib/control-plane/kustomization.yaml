@@ -9,3 +9,4 @@ components:
   - storage
   - ovn-bridge
   - job-settings
+  - tls
