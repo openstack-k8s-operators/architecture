@@ -12,7 +12,7 @@ but it also has the following:
   - zone C RHEL: r2-compute-0, r2-compute-1, r2-networker-0, leaf-4, leaf-5
 - [Toplogy CRDs](https://github.com/openstack-k8s-operators/infra-operator/pull/325) are
   used to either spread pods accross zones or keep them within a zone.
-- Self Node Remdiation and Node Health Checks
+- Self Node Remediation and Node Health Checks
 - It is assumed that a Storage Array is physically located in each of the zones.
   This examples uses a NetApp as an iSCSI backend for Cinder and an NFS backend for Manila.
 - Glance uses Cinder as its backend and is configured with multiple stores

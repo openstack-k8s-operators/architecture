@@ -63,6 +63,12 @@ vas:
             resource_name: openshift-no-reapply-sysctl
             namespace: openshift-cluster-node-tuning-operator
             state: present
+
+          - name: Deploy SNR/NHC
+            type: playbook
+            source: "../../playbooks/snr-nhc.yml"
+            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
+
         name: nncp-configuration
         path: examples/dt/dz-storage/control-plane/networking/nncp
         wait_conditions:
