@@ -222,8 +222,16 @@ vas:
             src_file: values.yaml
         build_output: edpm-deployment.yaml
         post_stage_run:
-          - name: Wait until computes are ready
+          - name: "1 - Wait until computes are ready"
             type: playbook
             source: "../../playbooks/bgp-l3-computes-ready.yml"
             extra_vars:
               num_computes: 6
+          - name: "2 - Setup Cinder volume types and Nova aggregates for dz-storage"
+            type: playbook
+            source: "../../hooks/playbooks/dz_storage_post_deploy_az.yaml"
+            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
+          - name: "3 - Create and import cirros image to all Glance stores"
+            type: playbook
+            source: "../../hooks/playbooks/dz_storage_pre_test_images.yaml"
+            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"

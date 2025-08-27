@@ -9,6 +9,8 @@ components:
 
 resources:
   - values.yaml
+  - nova-extra-config-az2.yaml
+  - nova-custom-az2.yaml
 
 patches:
   - target:

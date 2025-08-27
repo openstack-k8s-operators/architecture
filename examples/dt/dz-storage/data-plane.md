@@ -41,26 +41,50 @@ vi values.yaml
 
 ## Storage Related Compute Node Overrides
 
-Edit the following file to contain any desired override to the Nova configuration:
+Due to the distributed zones architecture, each availability zone requires its own Nova configuration to use the local Glance endpoint. Instead of using a single global `nova-extra-config`, we use **AZ-specific EDPM custom services**.
 
-- [edpm/computes/nova-extra-config.yaml](edpm/computes/nova-extra-config.yaml)
+### AZ-specific ConfigMaps
 
-The file is prepopulated with the following:
+Each AZ has its own Nova configuration file:
+
+- [edpm/computes/r0/nova-extra-config-az0.yaml](edpm/computes/r0/nova-extra-config-az0.yaml) - points to `glance-az0-internal.openstack.svc:9292`
+- [edpm/computes/r1/nova-extra-config-az1.yaml](edpm/computes/r1/nova-extra-config-az1.yaml) - points to `glance-az1-internal.openstack.svc:9292`
+- [edpm/computes/r2/nova-extra-config-az2.yaml](edpm/computes/r2/nova-extra-config-az2.yaml) - points to `glance-az2-internal.openstack.svc:9292`
+
+Each file contains:
 ```ini
 [DEFAULT]
 # Triple the default of the following
 reimage_timeout_per_gb = 60
-```
-The configmap can be genereated with the following command.
-```
-kustomize build edpm/computes/
+[glance]
+endpoint_override = https://glance-azX-internal.openstack.svc:9292
+valid_interfaces = internal
+[cinder]
+cross_az_attach = False
+catalog_info = volumev3:cinderv3:internalURL
 ```
 
-As per [the docs](https://docs.redhat.com/en/documentation/red_hat_openstack_services_on_openshift/18.0/html-single/customizing_the_red_hat_openstack_services_on_openshift_deployment/index#proc_configuring-a-node-set-for-a-feature-or-workload_custom_dataplane),
+### EDPM Custom Services
 
-> The Compute service (nova) provides a default ConfigMap CR named nova-extra-config, where you can add generic configuration that applies to all the node sets that use the default nova service. If you use this default nova-extra-config ConfigMap to add generic configuration to be applied to all the node sets, then you do not need to create a custom service.
+Each AZ uses its own EDPM custom service that references the appropriate ConfigMap:
 
-The EDPM `nova` service created in the next step will apply the above configuration to all Compute nodes.
+- [edpm/computes/r0/nova-custom-az0.yaml](edpm/computes/r0/nova-custom-az0.yaml)
+- [edpm/computes/r1/nova-custom-az1.yaml](edpm/computes/r1/nova-custom-az1.yaml)
+- [edpm/computes/r2/nova-custom-az2.yaml](edpm/computes/r2/nova-custom-az2.yaml)
+
+### Deployment Process
+
+The ConfigMaps and custom services are automatically included when generating the nodeset CRs from each rack's directory. Each r0, r1, r2 directory contains its own AZ-specific configurations and generates the complete CRs including ConfigMaps and custom services.
+
+### Nodeset Configuration
+
+Each compute nodeset references its AZ-specific custom service:
+
+- r0 nodesets use `nova-custom-az0` service
+- r1 nodesets use `nova-custom-az1` service  
+- r2 nodesets use `nova-custom-az2` service
+
+This ensures that Nova compute services in each AZ connect to their local Glance endpoints for optimal performance and proper distributed zones functionality.
 
 ## Create Networker and Compute Nodeset CRs
 

@@ -5,6 +5,16 @@ kind: Kustomization
 components:
   - ../../../../dt/bgp/
 
+patches:
+  # Override the base layer's glance apiOverrides with empty object
+  - target:
+      kind: OpenStackControlPlane
+      name: controlplane
+    patch: |-
+      - op: replace
+        path: /spec/glance/apiOverrides
+        value: {}
+
 resources:
   - networking/nncp/values.yaml
   - service-values.yaml
@@ -152,6 +162,19 @@ replacements:
           kind: OpenStackControlPlane
         fieldPaths:
           - spec.glance.template.keystoneEndpoint
+        options:
+          create: true
+
+  # Set glance apiTimeout for timeout configuration
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.glance.apiTimeout
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.glance.template.apiTimeout
         options:
           create: true
 
