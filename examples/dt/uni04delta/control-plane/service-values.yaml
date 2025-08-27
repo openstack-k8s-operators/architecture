@@ -111,6 +111,8 @@ data:
       router_distributed = true
       router_scheduler_driver = neutron.scheduler.l3_agent_scheduler.ChanceScheduler
       debug = true
+      dns_domain = example.org.
+      external_dns_driver = designate
       [agent]
       report_interval = 300
       [database]
@@ -138,9 +140,22 @@ data:
       [ml2]
       type_drivers = geneve,vlan,flat,local
       tenant_network_types = vlan,flat
+      extension_drivers=qos,port_security,dns_domain_keywords
       [ml2_type_vlan]
       network_vlan_ranges = datacentre:1000:2000
-
+      [designate]
+      url = https://designate-internal.openstack.svc:9001/v2
+      auth_type = password
+      auth_url = {{ .KeystoneInternalURL }}
+      username = {{ .ServiceUser }}
+      password = {{ .ServicePassword }}
+      project_name = service
+      project_domain_name = Default
+      user_domain_name = Default
+      allow_reverse_dns_lookup = True
+      ipv4_ptr_zone_prefix_size = 24
+      ipv6_ptr_zone_prefix_size = 116
+      ptr_zone_email = admin@example.org
   extraMounts:
     - name: v1
       region: r1
