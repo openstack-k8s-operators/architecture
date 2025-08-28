@@ -25,6 +25,7 @@ data:
       - libvirt
       - nova-custom-ceph
       - telemetry
+      - watcher
   ceph:
     conf: CHANGEME_CEPH_CONF
     keyring: CHANGEME_CEPH_KEYRING
