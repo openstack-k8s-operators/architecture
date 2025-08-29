@@ -37,6 +37,7 @@
       - rhoso-architecture-validate-uni06zeta-adoption
       - rhoso-architecture-validate-uni07eta
       - rhoso-architecture-validate-uni07eta-adoption
+      - rhoso-architecture-validate-uni09iota
     github-experimental-trigger:
       jobs:
       - architecture-downstream-va-hci-trigger-job
