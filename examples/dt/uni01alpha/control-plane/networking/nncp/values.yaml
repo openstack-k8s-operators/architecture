@@ -161,6 +161,13 @@ data:
 
   octavia:
     dnsDomain: octavia.openstack.lab
+    subnets:
+      - allocationRanges:
+          - end: 172.23.0.250
+            start: 172.23.0.100
+        cidr: 172.23.0.0/24
+        name: subnet1
+        vlan: 23
     mtu: 1500
     vlan: 23
     base_iface: enp7s0
