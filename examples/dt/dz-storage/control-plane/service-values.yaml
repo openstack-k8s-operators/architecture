@@ -107,12 +107,15 @@ data:
       replicas: 0
     # Ensure keystoneEndpoint is set
     keystoneEndpoint: default
+    # Set API timeout to 600 seconds (this controls both HAProxy and Apache timeouts)
+    apiTimeout: 600
     # There are 4 glanceAPIs keys below (default, az{0,1,2})
     glanceAPIs:
       az0:
         customServiceConfig: |
           [DEFAULT]
           enabled_backends = az0:cinder
+          enabled_import_methods = [web-download,copy-image,glance-direct]
           debug = true
           [glance_store]
           default_backend = az0
@@ -146,6 +149,7 @@ data:
         customServiceConfig: |
           [DEFAULT]
           enabled_backends = az0:cinder,az1:cinder
+          enabled_import_methods = [web-download,copy-image,glance-direct]
           [glance_store]
           default_backend = az1
           [az1]
@@ -188,6 +192,7 @@ data:
         customServiceConfig: |
           [DEFAULT]
           enabled_backends = az0:cinder,az2:cinder
+          enabled_import_methods = [web-download,copy-image,glance-direct]
           [glance_store]
           default_backend = az2
           [az2]
@@ -230,6 +235,7 @@ data:
         customServiceConfig: |
           [DEFAULT]
           enabled_backends = az0:cinder,az1:cinder,az2:cinder
+          enabled_import_methods = [web-download,copy-image,glance-direct]
           [glance_store]
           default_backend = az0
           [az0]

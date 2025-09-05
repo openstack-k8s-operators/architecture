@@ -203,7 +203,7 @@ data:
       - neutron-metadata
       - ovn-bgp-agent
       - libvirt
-      - nova
+      - nova-custom-az2
   nova:
     migration:
       ssh_keys:
