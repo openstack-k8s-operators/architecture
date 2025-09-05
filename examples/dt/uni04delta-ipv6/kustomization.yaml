@@ -9,3 +9,4 @@ resources:
   - control-plane/networking/nncp/values.yaml
   - control-plane/service-values.yaml
   - values.yaml
+  - glance-s3-backend-secrets.yaml
