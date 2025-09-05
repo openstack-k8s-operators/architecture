@@ -7,4 +7,8 @@ metadata:
   annotations:
     config.kubernetes.io/local-config: "true"
 
-data: {}
+data:
+  nodeset:
+    ansible:
+      ansibleVars:
+        edpm_ovn_encap_tos: "inherit"
