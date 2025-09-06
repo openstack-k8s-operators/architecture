@@ -3,7 +3,7 @@ vas:
   dz-storage:
     stages:
       - pre_stage_run:
-          - name: Apply taint on worker-9
+          - name: "1 - Apply taint on worker-9"
             type: cr
             definition:
               spec:
@@ -17,7 +17,7 @@ vas:
             kind: Node
             resource_name: worker-9
             state: patched
-          - name: Disable rp_filters on OCP nodes
+          - name: "2 - Disable rp_filters on OCP nodes"
             type: cr
             definition:
               spec:
@@ -64,7 +64,12 @@ vas:
             namespace: openshift-cluster-node-tuning-operator
             state: present
 
-          - name: Deploy SNR/NHC
+          - name: "3 - Make Pre BGP network configurations"
+            type: playbook
+            source: "../../hooks/playbooks/pre-bgp-netconf.yml"
+            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
+
+          - name: "4 - Deploy SNR/NHC"
             type: playbook
             source: "../../playbooks/snr-nhc.yml"
             inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
