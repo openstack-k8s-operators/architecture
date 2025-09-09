@@ -29,13 +29,15 @@ The following parameters are crucial for host-level configuration:
 
 ## Nova Configuration
 
-# FIXME: this looks only used in PCI groups in placement? The same pci_passthrough:alias should be used in both cases it seems?
-Nova control plane is configured for requesting PCI devices from Placement
-through `resources:VGPU=X` flavor extra specs.
-That is a contrary to the legacy mode where PCI devices used to be requested through
-`pci_passthrough:alias` flavor extra specs.
+A count of `X` PCI devices may be requested through `"pci_passthrough:alias"="nvidia_a2:X"` flavor extra specs:
+```
+$ openstack --os-compute-api=2.86 flavor set --property "pci_passthrough:alias"="nvidia_a2:1" device_passthrough
+```
 
 ### Control Plane (`examples/dt/nova/nova04delta/control-plane/service-values.yaml`)
+
+See [README.md](control-plane/README.md) for deployment instructions.
+There are most essential configuration values to define:
 
 *   `[pci]alias`: Creates an alias for a specific GPU type. This allows users to request a GPU by a friendly name (e.g., `nvidia_a2`) when creating a VM. This configuration should match the configuration found on the compute nodes.
     ```yaml
@@ -52,6 +54,9 @@ That is a contrary to the legacy mode where PCI devices used to be requested thr
     *   `type-PCI`: The device does not support SR-IOV. This is the value you should use, or simply omit setting `device_type`, in a full device passthrough scenario.
 
 ### Compute Node (`examples/dt/nova/nova04delta/edpm/nodeset/values.yaml`)
+
+See [dataplane section](data-plane.md) for deployment instructions.
+There are most essential configuration values to define:
 
 *   `[pci]report_in_placement`: Required for PCI in placement to work.
 *   `[pci]device_spec`: Whitelists the physical GPUs that are available for passthrough. You must create a `device_spec` entry for each physical GPU you want to make available. For example:
