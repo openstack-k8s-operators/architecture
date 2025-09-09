@@ -10,9 +10,9 @@ Switch to the "openstack" namespace
 ```
 oc project openstack
 ```
-Change to the nfv/sriov directory
+Change to the nova/nova04delta directory
 ```
-cd architecture/examples/va/nfv/sriov
+cd architecture/examples/dt/nova/nova04delta
 ```
 Edit the [nncp/values.yaml](nncp/values.yaml) and
 [service-values.yaml](service-values.yaml) files to suit 

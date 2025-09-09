@@ -35,7 +35,7 @@ through `resources:VGPU=X` flavor extra specs.
 That is a contrary to the legacy mode where PCI devices used to be requested through
 `pci_passthrough:alias` flavor extra specs.
 
-### Control Plane (`examples/dt/nova/nova04delta/service-values.yaml`)
+### Control Plane (`examples/dt/nova/nova04delta/control-plane/service-values.yaml`)
 
 *   `[pci]alias`: Creates an alias for a specific GPU type. This allows users to request a GPU by a friendly name (e.g., `nvidia_a2`) when creating a VM. This configuration should match the configuration found on the compute nodes.
     ```yaml

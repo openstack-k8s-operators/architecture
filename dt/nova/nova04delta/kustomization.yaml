@@ -18,9 +18,6 @@ transformers:
         create: true
 
 components:
-  - ../../../lib/networking/metallb
-  - ../../../lib/networking/netconfig
-  - ../../../lib/networking/nad
   - ../../../lib/control-plane
 
 replacements:

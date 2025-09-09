@@ -2,31 +2,48 @@
 vas:
   nova04delta:
     stages:
-      - path: examples/dt/nova/nova04delta/nncp
+      - name: nncp-configuration
+        path: examples/dt/nova/nova04delta/control-plane/networking/nncp
         wait_conditions:
           - >-
             oc -n openstack wait nncp
             -l osp/nncm-config-type=standard
             --for jsonpath='{.status.conditions[0].reason}'=SuccessfullyConfigured
-            --timeout=60s
+            --timeout=5m
         values:
           - name: network-values
             src_file: values.yaml
         build_output: nncp.yaml
 
-      - path: examples/dt/nova/nova04delta
+      - name: network-configuration
+        path: examples/dt/nova/nova04delta/control-plane/networking
         wait_conditions:
           - >-
-            oc -n openstack wait osctlplane controlplane --for condition=Ready
-            --timeout=600s
+            oc -n metallb-system wait pod
+            -l app=metallb -l component=speaker
+            --for condition=Ready
+            --timeout=5m
         values:
           - name: network-values
             src_file: nncp/values.yaml
-          - name: service-values
+        build_output: network.yaml
+
+      - name: control-plane
+        path: examples/dt/nova/nova04delta/control-plane
+        wait_conditions:
+          - >-
+            oc -n openstack wait osctlplane controlplane
+            --for condition=Ready
+            --timeout=60m
+        values:
+          - name: network-values
+            src_file: networking/nncp/values.yaml
+          - name: service-values.yaml
             src_file: service-values.yaml
         build_output: control-plane.yaml
 
-      - path: examples/dt/nova/nova04delta/edpm/nodeset
+      - name: nodeset 1
+        path: examples/dt/nova/nova04delta/edpm/nodeset
         wait_conditions:
           - >-
             oc -n openstack wait
@@ -37,7 +54,8 @@ vas:
             src_file: values.yaml
         build_output: nodeset.yaml
 
-      - path: examples/dt/nova/nova04delta/edpm/nodeset2
+      - name: nodeset 2
+        path: examples/dt/nova/nova04delta/edpm/nodeset2
         wait_conditions:
           - >-
             oc -n openstack wait
@@ -48,7 +66,8 @@ vas:
             src_file: values.yaml
         build_output: nodeset2.yaml
 
-      - path: examples/dt/nova/nova04delta/edpm/deployment
+      - name: deployment
+        path: examples/dt/nova/nova04delta/edpm/deployment
         wait_conditions:
           - >-
             oc -n openstack wait
@@ -59,7 +78,8 @@ vas:
             src_file: values.yaml
         build_output: deployment.yaml
 
-      - path: examples/dt/nova/nova04delta/edpm-post-driver/deployment
+      - name: post deployment
+        path: examples/dt/nova/nova04delta/edpm-post-driver/deployment
         wait_conditions:
           - >-
             oc -n openstack wait
