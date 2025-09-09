@@ -18,7 +18,7 @@ transformers:
         create: true
 
 components:
-  - ../../../../../lib/nncp
+  - ../../../../../../lib/nncp
 
 resources:
   - values.yaml
