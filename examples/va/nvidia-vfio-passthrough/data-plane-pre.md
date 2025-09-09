@@ -2,7 +2,7 @@
 
 ## Assumptions
 
-- The [control plane](control-plane.md) has been created and successfully deployed
+- The [control plane](control-plane/README.md) has been created and successfully deployed
 
 ## Initialize
 

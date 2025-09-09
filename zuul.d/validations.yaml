@@ -231,6 +231,29 @@
       cifmw_architecture_scenario: nvidia-mdev
 - job:
     files:
+    - examples/va/nvidia-vfio-passthrough/control-plane
+    - examples/va/nvidia-vfio-passthrough/control-plane/networking
+    - examples/va/nvidia-vfio-passthrough/control-plane/networking/nncp
+    - examples/va/nvidia-vfio-passthrough/edpm/deployment
+    - examples/va/nvidia-vfio-passthrough/edpm/nodeset
+    - examples/va/nvidia-vfio-passthrough/edpm-post-driver/deployment
+    - lib
+    - va/nvidia-vfio-passthrough
+    name: rhoso-architecture-validate-nvidia-vfio-passthrough
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: nvidia-vfio-passthrough
+- job:
+    files:
+    - examples/va/nvidia-vfio-passthrough/control-plane/networking
+    - examples/va/nvidia-vfio-passthrough/control-plane/networking/nncp
+    - lib
+    name: rhoso-architecture-validate-nvidia-vfio-passthrough-adoption
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: nvidia-vfio-passthrough-adoption
+- job:
+    files:
     - dt/osasinfra
     - examples/dt/osasinfra
     - examples/dt/osasinfra/control-plane
