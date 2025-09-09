@@ -14,6 +14,8 @@
       - rhoso-architecture-validate-nfv-ovs-dpdk-sriov-adoption
       - rhoso-architecture-validate-nfv-ovs-dpdk-sriov-hci
       - rhoso-architecture-validate-nova-three-cells
+      - rhoso-architecture-validate-nova04delta
+      - rhoso-architecture-validate-nova04delta-adoption
       - rhoso-architecture-validate-nova01alpha
       - rhoso-architecture-validate-nvidia-mdev
       - rhoso-architecture-validate-osasinfra
