@@ -2,7 +2,7 @@
 
 ## Assumptions
 
-- Initial [dataplane](edpm-pre.md) deployment has finalized and is successful
+- Initial [dataplane](data-plane-pre.md) deployment has finalized and is successful
 
 ## Reboot EDPM Nodes
 The EDPM Nodes will need a final reboot in order to apply changes done by the

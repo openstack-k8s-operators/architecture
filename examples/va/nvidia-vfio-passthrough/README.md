@@ -63,6 +63,6 @@ not need it.
 All stages must be executed in the order listed below. Everything is required unless otherwise indicated.
 
 1. [Install the OpenStack K8S operators and their dependencies](../../common/)
-2. [Configuring networking and deploy the OpenStack control plane](control-plane.md)
-3. [Configure and deploy the initial dataplane](edpm-pre.md)
-4. [Update Dataplane with a reboot](edpm-post.md)
+2. [Configuring networking and deploy the OpenStack control plane](control-plane/README.md)
+3. [Configure and deploy the initial dataplane](data-plane-pre.md)
+4. [Update Dataplane with a reboot](data-plane-post.md)
