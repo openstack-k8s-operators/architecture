@@ -200,7 +200,8 @@
     - examples/dt/nova/nova02beta/edpm/deployment
     - examples/dt/nova/nova02beta/edpm/nodeset
     - examples/dt/nova/nova02beta/edpm/nodeset2
-    - examples/dt/nova/nova02beta/nncp
+    - examples/dt/nova/nova02beta/networking
+    - examples/dt/nova/nova02beta/networking/nncp
     - lib
     name: rhoso-architecture-validate-nova02beta
     parent: rhoso-architecture-base-job

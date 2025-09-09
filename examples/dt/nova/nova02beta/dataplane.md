@@ -55,7 +55,7 @@ oc apply -f dataplane-deployment.yaml
 ```
 Wait for dataplane deployment to finish
 ```
-oc wait osdpns openstack-edpm --for condition=Ready --timeout=40m
+oc -n openstack wait osdpd edpm-deployment --for condition=Ready --timeout=90m
 ```
 
 ## Generate yamls necessary to finialize Nvidia GPU installation
@@ -82,7 +82,6 @@ Start the deployment
 ```
 oc apply -f dataplane-post-driver-deployment.yaml
 ```
-
 Wait for dataplane deployment to finish
 ```
 oc wait osdpd edpm-deployment-post-driver --for condition=Ready --timeout=20m
@@ -93,10 +92,10 @@ Change to the nova/nova02beta/edpm-deploy-provider directory
 ```
 cd architecture/examples/dt/nova/nova02beta/edpm-deploy-provider/
 ```
-Edit the [nodeset/values.yaml](edpm-deploy-provider/nodeset/values.yaml) files to suit 
+Edit the [dataplaneservice/values.yaml](edpm-deploy-provider/dataplaneservice/values.yaml) files to suit 
 your environment.
 ```
-vi nodeset/values.yaml
+vi dataplaneservice/values.yaml
 ```
 Edit the [deployment/values.yaml](edpm-deploy-provider/deployment/values.yaml) files to suit 
 your environment.
@@ -119,7 +118,7 @@ oc apply -f dataplane-provider-service.yaml
 ```
 Wait for dataplane service to finish
 ```
-oc wait osdpns openstack-edpm --for condition=SetupReadyy --timeout=60m
+oc -n default wait ns openstack --for jsonpath='{.status.phase}'=Active --timeout=5m
 ```
 Start the deployment
 ```

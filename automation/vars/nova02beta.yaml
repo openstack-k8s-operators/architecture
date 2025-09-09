@@ -2,7 +2,7 @@
 vas:
   nova02beta:
     stages:
-      - path: examples/dt/nova/nova02beta/nncp
+      - path: examples/dt/nova/nova02beta/networking/nncp
         wait_conditions:
           - >-
             oc -n openstack wait nncp
@@ -14,6 +14,18 @@ vas:
             src_file: values.yaml
         build_output: nncp.yaml
 
+      - path: examples/dt/nova/nova02beta/networking
+        wait_conditions:
+          - >-
+            oc -n metallb-system wait pod
+            -l app=metallb -l component=speaker
+            --for condition=Ready
+            --timeout=5m
+        values:
+          - name: network-values
+            src_file: nncp/values.yaml
+        build_output: network.yaml
+
       - path: examples/dt/nova/nova02beta
         wait_conditions:
           - >-
@@ -21,7 +33,7 @@ vas:
             --timeout=600s
         values:
           - name: network-values
-            src_file: nncp/values.yaml
+            src_file: networking/nncp/values.yaml
           - name: service-values
             src_file: service-values.yaml
         build_output: control-plane.yaml
