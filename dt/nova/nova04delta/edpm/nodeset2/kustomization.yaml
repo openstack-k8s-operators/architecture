@@ -88,15 +88,3 @@ replacements:
           - spec.baremetalSetTemplate
         options:
           create: true
-  - source:
-      kind: ConfigMap
-      name: edpm-nodeset-values
-      fieldPath: data.nova.gpu.nvidia_driver_url
-    targets:
-      - select:
-          kind: ConfigMap
-          name: nvidia-gpu-config-2
-        fieldPaths:
-          - data.nvidia_driver_url
-        options:
-          create: true
