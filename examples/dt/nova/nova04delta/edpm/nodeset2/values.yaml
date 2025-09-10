@@ -10,6 +10,10 @@ metadata:
 data:
   root_password: cmVkaGF0Cg==
   preProvisioned: false
+  baremetalHostsNetworkData:
+    edpm-compute-1:
+      networkData: |
+        CHANGEME
   baremetalSetTemplate:
     ctlplaneInterface: eno2  # CHANGEME
     cloudUserName: cloud-admin
@@ -26,6 +30,7 @@ data:
     private: CHANGEME2
     # The public key that will have access to the dataplane computes via SSH
     public: CHANGEME3
+  # TODO: wire-in all these with kustomize replaceemtns, like examples/dt/bmo01/dataplane/nodesets/kustomization.yaml
   nodeset:
     ansible:
       ansibleUser: cloud-admin
@@ -48,14 +53,11 @@ data:
         edpm_network_config_hide_sensitive_logs: false
         # Nics to MAC addresses mappings for the dataplane nodes
         edpm_network_config_os_net_config_mappings:
-          edpm-compute-0:
-            nic2: CHANGEME
-            nic3: CHANGEME
           edpm-compute-1:
-            nic2: CHANGEME
-            nic3: CHANGEME
+            nic1: CHANGEME
         edpm_network_config_template: |
           ---
+          # CHANGEME
           {% set mtu_list = [ctlplane_mtu] %}
           {% for network in nodeset_networks %}
           {{ mtu_list.append(lookup('vars', networks_lower[network] ~ '_mtu')) }}
@@ -100,6 +102,7 @@ data:
         edpm_sshd_configure_firewall: true
         edpm_sshd_allowed_ranges:
           - 192.168.122.0/24
+    # FIXME: should I move this under nodes.edpm-compute-1?
     networks:
       - defaultRoute: true
         name: ctlplane
@@ -111,10 +114,15 @@ data:
       - name: tenant
         subnetName: subnet1
     nodes:
-      edpm-compute-0:
-        hostName: edpm-compute-0
       edpm-compute-1:
         hostName: edpm-compute-1
+        bmhLabelSelector:
+          nodeName: edpm-compute-1
+        networkData:
+          name: edpm-compute-1-network-data
+          namespace: openstack
+        ansible:
+          ansibleHost: 192.168.122.101 # CHANGEME
     services:
       - bootstrap
       - download-cache
