@@ -16,6 +16,12 @@ Unlike SR-IOV or mdev (mediated device) setups, this configuration does not requ
 
 The following parameters are crucial for host-level configuration:
 
+*   **BareMetalHost configuration**: `baremetalhosts` section contains information required by metal3 to provision baremetal nodes.
+    *   `bmc.address`: The IP address of the Baseboard Management Controller (BMC).
+    *   `bootMACAddress`: The MAC address of the network interface that the node will use to PXE boot.
+    *   `rootDeviceHints`: Hints for metal3 to identify the root device for the OS installation.
+    *   `preprovisioningNetworkData`: Network configuration to be applied to the node for provisioning.
+
 *   `edpm_kernel_args`: Appends necessary kernel arguments for VFIO passthrough.
     *   `intel_iommu=on iommu=pt`: Enables the IOMMU for device passthrough.
     *   `vfio-pci.ids=10de:20f1`: Instructs the `vfio-pci` driver to claim the specified GPU(s) by their vendor and product IDs at boot time. The example IDs `10de:20f1` are for an NVIDIA A100 GPU.
