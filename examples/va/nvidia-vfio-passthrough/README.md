@@ -37,7 +37,8 @@ The following parameters are crucial for host-level configuration:
     *   `bmc.address`: The IP address of the Baseboard Management Controller (BMC).
     *   `bootMACAddress`: The MAC address of the network interface that the node will use to PXE boot.
     *   `rootDeviceHints`: Hints for metal3 to identify the root device for the OS installation.
-    *   `preprovisioningNetworkData`: Network configuration to be applied to the node for provisioning.
+    *   `preprovisioningNetworkData`: Static nmstate network config to be applied to a `BaremetalHost` via ironic-python-agent ramdisk during provisioning. The config is embedded in the ISO attached as virtual media via the BMC, so no DHCP is required.
+    *   `baremetalHostsNetworkData`: Final nmstate network configuration for EDPM nodes.
 
 *   `edpm_kernel_args`: Appends necessary kernel arguments for VFIO passthrough.
     *   `intel_iommu=on iommu=pt`: Enables the IOMMU for device passthrough.

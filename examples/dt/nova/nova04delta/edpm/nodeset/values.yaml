@@ -20,21 +20,9 @@ data:
       bootMACAddress: CHANGEME
       rootDeviceHints:
         deviceName: /dev/vda
-      preprovisioningNetworkData: |
-        networkData:
-          links:
-            - id: provisioning
-              type: phy
-              name: CHANGEME
-          networks:
-            - id: provisioning
-              type: ipv4
-              link: provisioning
-              ip_address: 172.22.0.100 # CHANGEME
-              netmask: 255.255.255.0
-              routes:
-                - destination: 0.0.0.0/0
-                  next_hop: 172.22.0.1 # CHANGEME
+      preprovisioningNetworkData:
+        nmstate: |
+          CHANGEME
   baremetalHostsNetworkData:
     edpm-compute-0:
       networkData: |

@@ -24,6 +24,7 @@ resources:
   - baremetalset-password-secret.yaml
   - nova_gpu.yaml
   - baremetalhost.yaml
+  - network-data-secrets.yaml
 
 patches:
   - target:
@@ -238,6 +239,31 @@ replacements:
       - select:
           kind: Secret
           name: edpm-compute-1-preprovision-network-data
+        fieldPaths:
+          - stringData
+        options:
+          create: true
+  # networkData
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values
+      fieldPath: data.baremetalHostsNetworkData.edpm-compute-0
+    targets:
+      - select:
+          kind: Secret
+          name: edpm-compute-0-network-data
+        fieldPaths:
+          - stringData
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values
+      fieldPath: data.baremetalHostsNetworkData.edpm-compute-1
+    targets:
+      - select:
+          kind: Secret
+          name: edpm-compute-1-network-data
         fieldPaths:
           - stringData
         options:
