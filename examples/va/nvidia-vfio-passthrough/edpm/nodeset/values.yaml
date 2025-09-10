@@ -10,6 +10,54 @@ metadata:
 data:
   root_password: cmVkaGF0Cg==
   preProvisioned: false
+  metal3_inspection: disabled
+  baremetalhosts:
+    edpm-compute-0:
+      labels:
+        nodeName: edpm-compute-0
+      bmc:
+        address: CHANGEME
+      bootMACAddress: CHANGEME
+      rootDeviceHints:
+        deviceName: /dev/vda
+      preprovisioningNetworkData: |
+        networkData:
+          links:
+            - id: provisioning
+              type: phy
+              name: CHANGEME
+          networks:
+            - id: provisioning
+              type: ipv4
+              link: provisioning
+              ip_address: 172.22.0.100 # CHANGEME
+              netmask: 255.255.255.0
+              routes:
+                - destination: 0.0.0.0/0
+                  next_hop: 172.22.0.1 # CHANGEME
+    edpm-compute-1:
+      labels:
+        nodeName: edpm-compute-1
+      bmc:
+        address: CHANGEME
+      bootMACAddress: CHANGEME
+      rootDeviceHints:
+        deviceName: /dev/vda
+      preprovisioningNetworkData: |
+        networkData:
+          links:
+            - id: provisioning
+              type: phy
+              name: CHANGEME
+          networks:
+            - id: provisioning
+              type: ipv4
+              link: provisioning
+              ip_address: 172.22.0.101 # CHANGEME
+              netmask: 255.255.255.0
+              routes:
+                - destination: 0.0.0.0/0
+                  next_hop: 172.22.0.1 # CHANGEME
   baremetalSetTemplate:
     ctlplaneInterface: eno2  # CHANGEME
     cloudUserName: cloud-admin

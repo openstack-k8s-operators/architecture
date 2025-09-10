@@ -14,7 +14,12 @@ Change to the nvidia-vfio-passthrough directory
 ```
 cd architecture/examples/va/nvidia-vfio-passthrough
 ```
-Edit the [edpm/nodeset/values.yaml](edpm/nodeset/values.yaml) and [edpm/deployment/values.yaml](edpm/deployment/values.yaml) files to suit your environment.
+Edit the `edpm/nodeset/values.yaml` and `edpm/deployment/values.yaml` files to suit your environment.
+
+In `edpm/nodeset/values.yaml`, pay special attention to the `baremetalhosts` section. You will need to provide details for each of your baremetal compute nodes, including:
+- `bmc.address`: The IP address of the Baseboard Management Controller (BMC).
+- `bootMACAddress`: The MAC address of the network interface that the node will use to PXE boot.
+- Other parameters as described in the main [README.md](README.md).
 ```
 vi edpm/nodeset/values.yaml
 vi edpm/deployment/values.yaml
