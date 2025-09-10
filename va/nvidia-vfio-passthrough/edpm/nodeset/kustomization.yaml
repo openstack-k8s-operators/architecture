@@ -23,6 +23,26 @@ components:
 resources:
   - baremetalset-password-secret.yaml
   - nova_gpu.yaml
+  - baremetalhost.yaml
+
+patches:
+  - target:
+      kind: BareMetalHost
+    path: baremetalhost_template.yaml
+  - target:
+      kind: BareMetalHost
+      name: edpm-compute-0
+    patch: |
+     - op: replace
+       path: /spec/preprovisioningNetworkDataName
+       value: edpm-compute-0-preprovision-network-data
+  - target:
+      kind: BareMetalHost
+      name: edpm-compute-1
+    patch: |
+     - op: replace
+       path: /spec/preprovisioningNetworkDataName
+       value: edpm-compute-1-preprovision-network-data
 
 replacements:
   - source:
@@ -86,5 +106,139 @@ replacements:
           name: openstack-edpm
         fieldPaths:
           - spec.baremetalSetTemplate
+        options:
+          create: true
+  # BareMetalHost
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values
+      fieldPath: data.metal3_inspection
+    targets:
+      - select:
+          kind: BareMetalHost
+        fieldPaths:
+          - metadata.annotations.inspect\.metal3\.io
+        options:
+          create: true
+  # edpm-compute-0
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values
+      fieldPath: data.baremetalhosts.edpm-compute-0.labels
+    targets:
+      - select:
+          kind: BareMetalHost
+          name: edpm-compute-0
+        fieldPaths:
+          - metadata.labels
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values
+      fieldPath: data.baremetalhosts.edpm-compute-0.bmc.address
+    targets:
+      - select:
+          kind: BareMetalHost
+          name: edpm-compute-0
+        fieldPaths:
+          - spec.bmc.address
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values
+      fieldPath: data.baremetalhosts.edpm-compute-0.bootMACAddress
+    targets:
+      - select:
+          kind: BareMetalHost
+          name: edpm-compute-0
+        fieldPaths:
+          - spec.bootMACAddress
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values
+      fieldPath: data.baremetalhosts.edpm-compute-0.rootDeviceHints
+    targets:
+      - select:
+          kind: BareMetalHost
+          name: edpm-compute-0
+        fieldPaths:
+          - spec.rootDeviceHints
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values
+      fieldPath: data.baremetalhosts.edpm-compute-0.preprovisioningNetworkData
+    targets:
+      - select:
+          kind: Secret
+          name: edpm-compute-0-preprovision-network-data
+        fieldPaths:
+          - stringData
+        options:
+          create: true
+  # edpm-compute-1
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values
+      fieldPath: data.baremetalhosts.edpm-compute-1.labels
+    targets:
+      - select:
+          kind: BareMetalHost
+          name: edpm-compute-1
+        fieldPaths:
+          - metadata.labels
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values
+      fieldPath: data.baremetalhosts.edpm-compute-1.bmc.address
+    targets:
+      - select:
+          kind: BareMetalHost
+          name: edpm-compute-1
+        fieldPaths:
+          - spec.bmc.address
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values
+      fieldPath: data.baremetalhosts.edpm-compute-1.bootMACAddress
+    targets:
+      - select:
+          kind: BareMetalHost
+          name: edpm-compute-1
+        fieldPaths:
+          - spec.bootMACAddress
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values
+      fieldPath: data.baremetalhosts.edpm-compute-1.rootDeviceHints
+    targets:
+      - select:
+          kind: BareMetalHost
+          name: edpm-compute-1
+        fieldPaths:
+          - spec.rootDeviceHints
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values
+      fieldPath: data.baremetalhosts.edpm-compute-1.preprovisioningNetworkData
+    targets:
+      - select:
+          kind: Secret
+          name: edpm-compute-1-preprovision-network-data
+        fieldPaths:
+          - stringData
         options:
           create: true
