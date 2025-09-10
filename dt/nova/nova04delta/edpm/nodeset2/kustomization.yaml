@@ -22,9 +22,24 @@ components:
 
 resources:
   - baremetalset-password-secret.yaml
+  - network-data-secrets.yaml
   - nova_gpu.yaml
 
+# TODO: wire-in all missing nodeset data values, like examples/dt/bmo01/dataplane/nodesets/kustomization.yaml
 replacements:
+  # networkData
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values
+      fieldPath: data.baremetalHostsNetworkData.edpm-compute-1
+    targets:
+      - select:
+          kind: Secret
+          name: edpm-compute-1-network-data
+        fieldPaths:
+          - stringData
+        options:
+          create: true
   - source:
       kind: ConfigMap
       name: edpm-nodeset-values
