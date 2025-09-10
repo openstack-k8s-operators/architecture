@@ -14,41 +14,69 @@ Change to the nvidia-vfio-passthrough directory
 ```
 cd architecture/examples/va/nvidia-vfio-passthrough
 ```
-Edit the `edpm/nodeset/values.yaml` and `edpm/deployment/values.yaml` files to suit your environment.
+### Configure BMO - Provisioning to watch all namespaces
 
-In `edpm/nodeset/values.yaml`, pay special attention to the `baremetalhosts` section. You will need to provide details for each of your baremetal compute nodes, including:
+```
+oc patch provisioning provisioning-configuration --type merge -p '{"spec":{"watchAllNamespaces": true }}'
+```
+
+### Configure BMO - Provisioning to use external network for virtual-media
+
+```
+oc patch provisioning provisioning-configuration --type merge -p '{"spec":{"virtualMediaViaExternalNetwork": true }}'
+```
+
+### Create the BareMetalHost CRs
+
+Edit the `edpm/nodeset/values.yaml` file to suit your environment. Pay special attention to the `baremetalhosts` section, where you will need to provide details for each of your baremetal compute nodes, including:
 - `bmc.address`: The IP address of the Baseboard Management Controller (BMC).
 - `bootMACAddress`: The MAC address of the network interface that the node will use to PXE boot.
 - Other parameters as described in the main [README.md](README.md).
+
+Also, ensure the `bmhLabelSelector` in `baremetalSetTemplate` matches the labels you have defined for your `baremetalhosts`. For example, if you use `app: openstack`, your `baremetalhosts` should have a corresponding label.
+
+Before applying the nodeset configuration, you must also create the `bmc-secret` secret that contains the BMC credentials. You can create it with the following command:
 ```
-vi edpm/nodeset/values.yaml
-vi edpm/deployment/values.yaml
+oc create secret generic bmc-secret --from-literal=username=CHANGEME --from-literal=password=CHANGEME
 ```
-Generate the dataplane nodeset CR.
+
+Generate the dataplane nodeset CR, which includes the BareMetalHost definitions.
 ```
 kustomize build edpm/nodeset > dataplane-nodeset.yaml
+```
+Apply the CRs to create the BareMetalHosts and the nodeset.
+```
+oc apply -f dataplane-nodeset.yaml
+```
+
+Wait for the BareMetalHosts to become available. You can monitor the status with:
+```
+oc get bmh -w
+```
+The state should change to `available`.
+
+### Configure and deploy the dataplane
+
+Edit `edpm/deployment/values.yaml` if needed.
+```
+vi edpm/deployment/values.yaml
 ```
 Generate the dataplane deployment CR.
 ```
 kustomize build edpm/deployment > dataplane-deployment.yaml
 ```
 
-## Create CRs and do initial deployment
-Create the nodeset CR
-```
-oc apply -f dataplane-nodeset.yaml
-```
-Wait for dataplane nodeset setup to finish
+Wait for dataplane nodeset setup to finish.
 ```
 oc wait osdpns openstack-edpm --for condition=SetupReady --timeout=600s
 ```
 
-Start the deployment
+Start the deployment.
 ```
 oc apply -f dataplane-deployment.yaml
 ```
 
-Wait for dataplane deployment to finish
+Wait for dataplane deployment to finish.
 ```
 oc wait osdpns openstack-edpm --for condition=Ready --timeout=60m
 ```
