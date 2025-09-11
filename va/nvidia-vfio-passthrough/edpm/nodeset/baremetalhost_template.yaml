@@ -12,7 +12,7 @@ spec:
   automatedCleaningMode: metadata
   bmc:
     address: _replaced_
-    credentialsName: bmc-secret
+    credentialsName: _replaced_
   bootMACAddress: _replaced_
   bootMode: UEFI
   rootDeviceHints: {}

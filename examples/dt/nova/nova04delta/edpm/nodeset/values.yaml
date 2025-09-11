@@ -21,6 +21,7 @@ data:
         nodeName: edpm-compute-0
       bmc:
         address: CHANGEME
+        credentialsName: bmc-secret
       bootMACAddress: CHANGEME
       rootDeviceHints:
         deviceName: /dev/vda

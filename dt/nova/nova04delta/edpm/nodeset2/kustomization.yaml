@@ -143,13 +143,13 @@ replacements:
   - source:
       kind: ConfigMap
       name: edpm-nodeset-values
-      fieldPath: data.baremetalhosts.edpm-compute-1.bmc.address
+      fieldPath: data.baremetalhosts.edpm-compute-1.bmc
     targets:
       - select:
           kind: BareMetalHost
           name: edpm-compute-1
         fieldPaths:
-          - spec.bmc.address
+          - spec.bmc
         options:
           create: true
   - source:
