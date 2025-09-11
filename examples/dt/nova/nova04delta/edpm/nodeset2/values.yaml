@@ -8,9 +8,13 @@ metadata:
   annotations:
     config.kubernetes.io/local-config: "true"
 data:
+  # Mapped in dt/nova/nova04delta/edpm/nodeset2/kustomization.yaml to baremetalset-password-secret.data.NodeRootPassword
   root_password: cmVkaGF0Cg==
+  # Mapped in dt/nova/nova04delta/edpm/nodeset2/kustomization.yaml to OpenStackDataPlaneNodeSet.spec.preProvisioned
   preProvisioned: false
+  # Mapped in dt/nova/nova04delta/edpm/nodeset2/kustomization.yaml to BareMetalHost.metadata.annotations.inspect.metal3.io
   metal3_inspection: disabled
+  # Mapped in dt/nova/nova04delta/edpm/nodeset2/kustomization.yaml to BareMetalHost resource properties
   baremetalhosts:
     edpm-compute-1:
       labels:
@@ -23,10 +27,12 @@ data:
       preprovisioningNetworkData:
         nmstate: |
           CHANGEME
+  # Mapped in dt/nova/nova04delta/edpm/nodeset2/kustomization.yaml to edpm-compute-1-network-data Secret
   baremetalHostsNetworkData:
     edpm-compute-1:
       networkData: |
         CHANGEME
+  # Mapped in dt/nova/nova04delta/edpm/nodeset2/kustomization.yaml to OpenStackDataPlaneNodeSet.spec.baremetalSetTemplate
   baremetalSetTemplate:
     ctlplaneInterface: eno2  # CHANGEME
     cloudUserName: cloud-admin
@@ -36,6 +42,7 @@ data:
     passwordSecret:
       name: baremetalset-password-secret
       namespace: openstack
+  # Mapped in lib/dataplane/nodeset/kustomization.yaml to the dataplane-ansible-ssh-private-key-secret
   ssh_keys:
     # Authorized keys that will have access to the dataplane computes via SSH
     authorized: CHANGEME
@@ -43,7 +50,7 @@ data:
     private: CHANGEME2
     # The public key that will have access to the dataplane computes via SSH
     public: CHANGEME3
-  # TODO: wire-in all these with kustomize replaceemtns, like examples/dt/bmo01/dataplane/nodesets/kustomization.yaml
+  # Mapped in lib/dataplane/nodeset/kustomization.yaml to OpenStackDataPlaneNodeSet spec properties
   nodeset:
     ansible:
       ansibleUser: cloud-admin
@@ -115,7 +122,6 @@ data:
         edpm_sshd_configure_firewall: true
         edpm_sshd_allowed_ranges:
           - 192.168.122.0/24
-    # FIXME: should I move this under nodes.edpm-compute-1?
     networks:
       - defaultRoute: true
         name: ctlplane
@@ -153,6 +159,7 @@ data:
       - nova-custom-gpu-2
       - neutron-metadata
       - vfio-pci-bind-2
+  # Mapped in dt/nova/nova04delta/edpm/nodeset2/kustomization.yaml to cpu-pinning-nova-2 ConfigMap
   nova:
     compute:
       conf: |
@@ -164,10 +171,12 @@ data:
         [compute]
         cpu_shared_set = 0-3,24-27
         cpu_dedicated_set = 8-23,32-47
+    # Mapped in lib/dataplane/nodeset/kustomization.yaml to the nova-migration-ssh-key secret
     migration:
       ssh_keys:
         private: CHANGEME4
         public: CHANGEME5
+    # Mapped in dt/nova/nova04delta/edpm/nodeset2/kustomization.yaml to gpu-nova-2 ConfigMap
     pci:
       # You will have one device_spec line for each physical GPU you want to make available for passthrough:
       # "vendor_id": The vendor ID of the GPU manufacturer (e.g., "10de" for NVIDIA).

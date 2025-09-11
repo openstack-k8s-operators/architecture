@@ -8,9 +8,13 @@ metadata:
   annotations:
     config.kubernetes.io/local-config: "true"
 data:
+  # Mapped in va/nvidia-vfio-passthrough/edpm/nodeset/kustomization.yaml to baremetalset-password-secret.data.NodeRootPassword
   root_password: cmVkaGF0Cg==
+  # Mapped in va/nvidia-vfio-passthrough/edpm/nodeset/kustomization.yaml to OpenStackDataPlaneNodeSet.spec.preProvisioned
   preProvisioned: false
+  # Mapped in va/nvidia-vfio-passthrough/edpm/nodeset/kustomization.yaml to BareMetalHost.metadata.annotations.inspect.metal3.io
   metal3_inspection: disabled
+  # Mapped in va/nvidia-vfio-passthrough/edpm/nodeset/kustomization.yaml to BareMetalHost resource properties
   baremetalhosts:
     edpm-compute-0:
       labels:
@@ -34,6 +38,7 @@ data:
       preprovisioningNetworkData:
         nmstate: |
           CHANGEME
+  # Mapped in va/nvidia-vfio-passthrough/edpm/nodeset/kustomization.yaml to edpm-compute-0-network-data and edpm-compute-1-network-data Secrets
   baremetalHostsNetworkData:
     edpm-compute-0:
       networkData: |
@@ -41,6 +46,7 @@ data:
     edpm-compute-1:
       networkData: |
         CHANGEME
+  # Mapped in va/nvidia-vfio-passthrough/edpm/nodeset/kustomization.yaml to OpenStackDataPlaneNodeSet.spec.baremetalSetTemplate
   baremetalSetTemplate:
     ctlplaneInterface: eno2  # CHANGEME
     cloudUserName: cloud-admin
@@ -50,6 +56,7 @@ data:
     passwordSecret:
       name: baremetalset-password-secret
       namespace: openstack
+  # Mapped in lib/dataplane/nodeset/kustomization.yaml to the dataplane-ansible-ssh-private-key-secret
   ssh_keys:
     # Authorized keys that will have access to the dataplane computes via SSH
     authorized: CHANGEME
@@ -57,6 +64,7 @@ data:
     private: CHANGEME2
     # The public key that will have access to the dataplane computes via SSH
     public: CHANGEME3
+  # Mapped in lib/dataplane/nodeset/kustomization.yaml to OpenStackDataPlaneNodeSet spec properties
   nodeset:
     ansible:
       ansibleUser: cloud-admin
@@ -170,6 +178,7 @@ data:
       - neutron-metadata
       - vfio-pci-bind
   nova:
+    # Mapped in va/nvidia-vfio-passthrough/edpm/nodeset/kustomization.yaml to cpu-pinning-nova ConfigMap
     compute:
       conf: |
         # CHANGEME
@@ -180,10 +189,12 @@ data:
         [compute]
         cpu_shared_set = 0-3,24-27
         cpu_dedicated_set = 8-23,32-47
+    # Mapped in lib/dataplane/nodeset/kustomization.yaml to the nova-migration-ssh-key secret
     migration:
       ssh_keys:
         private: CHANGEME4
         public: CHANGEME5
+    # Mapped in va/nvidia-vfio-passthrough/edpm/nodeset/kustomization.yaml to gpu-nova ConfigMap
     pci:
       # You will have one device_spec line for each physical GPU you want to make available for passthrough:
       # "vendor_id": The vendor ID of the GPU manufacturer (e.g., "10de" for NVIDIA).
