@@ -33,6 +33,12 @@ Edit the `edpm/nodeset/values.yaml` file to suit your environment. Pay special a
 - `bootMACAddress`: The MAC address of the network interface that the node will use to PXE boot.
 - Other parameters as described in the main [README.md](README.md).
 
+Additionally, you need to provide SSH keys for Nova live migration. The following keys in `edpm/nodeset/values.yaml` must be populated with base64 encoded values:
+- `nova.migration.ssh_keys.private`
+- `nova.migration.ssh_keys.public`
+
+You can encode your keys using the `base64` command, for example: `cat ~/.ssh/id_rsa | base64 -w0`.
+
 Also, ensure the `bmhLabelSelector` in `baremetalSetTemplate` matches the labels you have defined for your `baremetalhosts`. For example, if you use `app: openstack`, your `baremetalhosts` should have a corresponding label.
 
 Before applying the nodeset configuration, you must also create the `bmc-secret` secret that contains the BMC credentials. You can create it with the following command:
@@ -79,4 +85,33 @@ oc apply -f dataplane-deployment.yaml
 Wait for dataplane deployment to finish.
 ```
 oc wait osdpns openstack-edpm --for condition=Ready --timeout=60m
+```
+
+## Generate yamls necessary to finialize Nvidia GPU installation
+After the Nvidia drivers have been blacklisted on the EDPM nodes, the computes need
+to be rebooted. Below explains the necessary steps to apply a reboot on the necessary nodesets.
+
+Change to the nvidia-vfio-passthrough/edpm-post-driver directory
+```
+cd architecture/examples/va/nvidia-vfio-passthrough/edpm-post-driver/
+```
+Edit the [deployment/values.yaml](edpm-post-driver/deployment/values.yaml) files to suit
+your environment.
+```
+vi deployment/values.yaml
+```
+Generate the dataplane deployment CR.
+```
+kustomize build deployment > dataplane-post-driver-deployment.yaml
+```
+
+## Create CRs to finalize GPU installation
+Start the deployment
+```
+oc apply -f dataplane-post-driver-deployment.yaml
+```
+
+Wait for dataplane deployment to finish
+```
+oc wait osdpd edpm-deployment-post-driver --for condition=Ready --timeout=20m
 ```
