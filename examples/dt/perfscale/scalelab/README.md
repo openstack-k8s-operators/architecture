@@ -8,7 +8,7 @@ This is a collection of CR templates that represent a validated Red Hat OpenStac
 - 3-replica Galera database
 - RabbitMQ
 - OVN networking
-- Network isolation over a three NIC
+- Network isolation over three NIC
 - configurable number of compute nodes based on cloud size
 - Swift enabled and used as Glance backend
 

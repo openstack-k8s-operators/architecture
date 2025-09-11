@@ -14,7 +14,7 @@ Change to the perfscale/scalelab/lvms directory
 ```
 cd architecture/examples/dt/perfscale/scalelab/lvms
 ```
-Edit the [lvms/lvm-cluster/values.yaml](edpm/nodeset/values.yaml) file to suit your environment.
+Edit the [lvms/lvm-cluster/values.yaml](lvms/lvm-cluster/values.yaml) file to suit your environment.
 ```
 vi lvm-cluster/values.yaml
 ```
