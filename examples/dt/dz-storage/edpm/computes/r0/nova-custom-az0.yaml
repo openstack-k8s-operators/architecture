@@ -8,6 +8,13 @@ spec:
   caCerts: combined-ca-bundle
   edpmServiceType: nova
   playbook: osp.edpm.nova
+  dataSources:
+    - configMapRef:
+        name: nova-extra-config-az0
+    - secretRef:
+        name: nova-migration-ssh-key
+    - secretRef:
+        name: nova-cell1-compute-config
   tlsCerts:
     default:
       contents:
@@ -17,10 +24,3 @@ spec:
       issuer: osp-rootca-issuer-internal
       networks:
         - ctlplane
-      dataSources:
-        - configMapRef:
-            name: nova-extra-config-az0
-        - secretRef:
-            name: nova-migration-ssh-key
-        - secretRef:
-            name: nova-cell1-compute-config
