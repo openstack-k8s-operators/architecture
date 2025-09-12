@@ -52,7 +52,7 @@
 
 # 11. Install Ceph
 
-    Use ci-framework/playbooks/ceph.yml and
+    Use ci-framework/hooks/playbooks/ceph.yml and
     ci-framework-data/artifacts/zuul_inventory.yml
 
 ```
