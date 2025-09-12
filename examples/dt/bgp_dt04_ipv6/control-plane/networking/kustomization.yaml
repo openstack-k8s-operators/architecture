@@ -3,11 +3,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 components:
-  - ../../../../dt/bgp/
-
-resources:
-  - networking/nncp/values.yaml
-  - service-values.yaml
+  - ../../../../../dt/bgp/networking
 
 transformers:
   # Set namespace to OpenStack on all namespaced objects without a namespace
@@ -23,6 +19,76 @@ transformers:
       - path: metadata/name
         kind: Namespace
         create: true
+
+resources:
+  - nncp/values.yaml
+  - metallb_bgppeers.yaml
+  - ocp_networks_netattach.yaml
+
+patches:
+  # Add BGPPeer to BGPAdvertisement
+  - target:
+      kind: BGPAdvertisement
+    patch: |-
+      - op: add
+        path: /spec/peers/-
+        value: bgp-peer-node-3-0
+      - op: add
+        path: /spec/peers/-
+        value: bgp-peer-node-3-1
+      - op: add
+        path: /spec/peers/-
+        value: bgp-peer-node-4-0
+      - op: add
+        path: /spec/peers/-
+        value: bgp-peer-node-4-1
+      - op: add
+        path: /spec/peers/-
+        value: bgp-peer-node-5-0
+      - op: add
+        path: /spec/peers/-
+        value: bgp-peer-node-5-1
+      - op: add
+        path: /spec/peers/-
+        value: bgp-peer-node-6-0
+  - target:
+      kind: NetworkAttachmentDefinition
+      labelSelector: "osp/net-attach-def-type=bgp"
+    path: ocp_network_template.yaml
+  # All L2Advertisements are removed
+  - target:
+      kind: L2Advertisement
+    patch: |-
+      kind: L2Advertisement
+      metadata:
+        name: .*
+      $patch: delete
+
+  # Add BGP IPv4 networks to NetConfig
+  - target:
+      kind: NetConfig
+      name: netconfig
+    patch: |-
+      - op: add
+        path: /spec/networks/-
+        value:
+          dnsDomain: bgpnet0ipv4.example.com
+          name: bgpnet0ipv4
+          subnets:
+            - _replaced_
+          mtu: 1500
+  - target:
+      kind: NetConfig
+      name: netconfig
+    patch: |-
+      - op: add
+        path: /spec/networks/-
+        value:
+          dnsDomain: bgpnet1ipv4.example.com
+          name: bgpnet1ipv4
+          subnets:
+            - _replaced_
+          mtu: 1500
 
 replacements:
   # BGP peer IP addresses
@@ -111,27 +177,23 @@ replacements:
           name: bgpnet-worker-3
         fieldPaths:
           - spec.config
-  # disable OCP workers as gateway nodes
+
+  # BGP IPv4 NetConfig customizations
   - source:
       kind: ConfigMap
-      name: service-values
-      fieldPath: data.ovn.ovnController.external-ids
+      name: network-values
+      fieldPath: data.bgp.subnets.bgpnet0ipv4
     targets:
       - select:
-          kind: OpenStackControlPlane
+          kind: NetConfig
         fieldPaths:
-          - spec.ovn.template.ovnController.external-ids
-        options:
-          create: true
-  # configure neutron customServiceConfig
+          - spec.networks.[name=bgpnet0ipv4].subnets
   - source:
       kind: ConfigMap
-      name: service-values
-      fieldPath: data.neutron.customServiceConfig
+      name: network-values
+      fieldPath: data.bgp.subnets.bgpnet1ipv4
     targets:
       - select:
-          kind: OpenStackControlPlane
+          kind: NetConfig
         fieldPaths:
-          - spec.neutron.template.customServiceConfig
-        options:
-          create: true
+          - spec.networks.[name=bgpnet1ipv4].subnets

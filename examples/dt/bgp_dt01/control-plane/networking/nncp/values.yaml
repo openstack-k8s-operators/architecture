@@ -229,73 +229,6 @@ data:
         }
       }
 
-    ctlplaner1:
-      dnsDomain: ctlplaner1.example.com
-      endpoint_annotations:
-        metallb.universe.tf/address-pool: ctlplaner1
-        metallb.universe.tf/allow-shared-ip: ctlplaner1
-        metallb.universe.tf/loadBalancerIPs: 192.168.123.80
-      iface: eth1
-      lb_addresses:
-        - 192.168.123.80-192.168.123.90
-      mtu: 1500
-      net-attach-def: |
-        {
-          "cniVersion": "0.3.1",
-          "name": "ctlplaner1",
-          "type": "macvlan",
-          "master": "eth1",
-          "ipam": {
-            "type": "whereabouts",
-            "range": "192.168.123.0/24",
-            "range_start": "192.168.123.30",
-            "range_end": "192.168.123.70"
-          }
-        }
-      prefix-length: 24
-      subnets:
-        - allocationRanges:
-            - end: 192.168.123.120
-              start: 192.168.123.100
-            - end: 192.168.123.170
-              start: 192.168.123.150
-          cidr: 192.168.123.0/24
-          gateway: 192.168.123.1
-          name: subnet1
-    ctlplaner2:
-      dnsDomain: ctlplaner2.example.com
-      endpoint_annotations:
-        metallb.universe.tf/address-pool: ctlplaner2
-        metallb.universe.tf/allow-shared-ip: ctlplaner2
-        metallb.universe.tf/loadBalancerIPs: 192.168.124.80
-      iface: eth1
-      lb_addresses:
-        - 192.168.124.80-192.168.124.90
-      mtu: 1500
-      net-attach-def: |
-        {
-          "cniVersion": "0.3.1",
-          "name": "ctlplaner2",
-          "type": "macvlan",
-          "master": "eth1",
-          "ipam": {
-            "type": "whereabouts",
-            "range": "192.168.124.0/24",
-            "range_start": "192.168.124.30",
-            "range_end": "192.168.124.70"
-          }
-        }
-      prefix-length: 24
-      subnets:
-        - allocationRanges:
-            - end: 192.168.124.120
-              start: 192.168.124.100
-            - end: 192.168.124.170
-              start: 192.168.124.150
-          cidr: 192.168.124.0/24
-          gateway: 192.168.124.1
-          name: subnet1
-
   internalapi:
     dnsDomain: internalapi.example.com
     subnets:
@@ -333,6 +266,7 @@ data:
           "range_end": "172.17.0.70"
         }
       }
+
   storage:
     dnsDomain: storage.example.com
     subnets:
@@ -366,6 +300,7 @@ data:
           "range_end": "172.18.0.70"
         }
       }
+
   tenant:
     dnsDomain: tenant.example.com
     subnets:
@@ -423,6 +358,7 @@ data:
           ]
         }
       }
+
   external:
     dnsDomain: external.example.com
     subnets:

@@ -1,0 +1,67 @@
+---
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: _ignored_
+spec:
+  desiredState:
+    dns-resolver:
+      config:
+        search: []
+        server: []
+    routes:
+      config: []
+    route-rules:
+      config: []
+    interfaces:
+      - description: internalapi bridge
+        name: internalapi
+        state: up
+        type: linux-bridge
+        mtu: 1500
+        ipv6:
+          enabled: true
+          autoconf: false
+          dhcp: false
+      - description: storage bridge
+        name: storage
+        state: up
+        type: linux-bridge
+        mtu: 1500
+        ipv6:
+          enabled: true
+          autoconf: false
+          dhcp: false
+      - description: tenant bridge
+        name: tenant
+        state: up
+        type: linux-bridge
+        mtu: 1500
+        ipv6:
+          enabled: true
+          autoconf: false
+          dhcp: false
+      - description: ctlplane interface
+        name: _replaced_
+        state: up
+        type: ethernet
+        mtu: 1500
+        ipv4:
+          enabled: false
+        ipv6:
+          address:
+            - ip: _replaced_
+              prefix-length: _replaced_
+          enabled: true
+      - description: ctlplane bridge
+        name: ospbr
+        state: up
+        type: linux-bridge
+        mtu: 1500
+        ipv6:
+          enabled: true
+          autoconf: false
+          dhcp: false
+  nodeSelector:
+    kubernetes.io/hostname: _replaced_
+    node-role.kubernetes.io/worker: ""

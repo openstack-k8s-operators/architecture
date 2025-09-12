@@ -12,9 +12,9 @@ Switch to the "openstack" namespace
 ```
 oc project openstack
 ```
-Change to the bgp_dt01/ directory
+Change to the bgp_dt04_ipv6/ directory
 ```
-cd architecture/examples/dt/bgp_dt01/
+cd architecture/examples/dt/bgp_dt04_ipv6/
 ```
 Edit the networker values.yaml files corresponding to each rack (r0, r1 and r2)
 to suit your environment:
