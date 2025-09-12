@@ -115,8 +115,8 @@ spec:
     - bootstrap
     - download-cache
     - configure-network
-    - validate-network
     - install-os
+    - validate-network
     - configure-os
     - ssh-known-hosts
     - run-os
