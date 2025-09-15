@@ -55,10 +55,6 @@ data:
         [controller_worker]
         loadbalancer_topology=ACTIVE_STANDBY
 
-  ovn:
-    ovnController:
-      external-ids:
-        enable-chassis-as-gateway: false
   neutron:
     customServiceConfig: |
       [DEFAULT]
