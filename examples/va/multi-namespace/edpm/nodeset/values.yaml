@@ -122,9 +122,9 @@ data:
     services:
       - bootstrap
       - configure-network
-      - validate-network
       - install-os
       - configure-os
+      - validate-network
       - ssh-known-hosts
       - run-os
       - reboot-os
