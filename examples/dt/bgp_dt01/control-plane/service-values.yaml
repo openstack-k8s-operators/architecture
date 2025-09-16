@@ -55,13 +55,6 @@ data:
         [controller_worker]
         loadbalancer_topology=ACTIVE_STANDBY
 
-  ovn:
-    ovnController:
-      nicMappings:
-        datacentre: ocpbr
-        # octavia: octbr TODO(eolivare): enable octavia
-      external-ids:
-        enable-chassis-as-gateway: false
   neutron:
     customServiceConfig: |
       [DEFAULT]

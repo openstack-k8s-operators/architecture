@@ -24,19 +24,16 @@ transformers:
         kind: Namespace
         create: true
 
+patches:
+  # with BGP, ovnController has to be disabled from OCP nodes
+  - target:
+      kind: OpenStackControlPlane
+      name: controlplane
+    patch: |-
+      - op: remove
+        path: /spec/ovn/template/ovnController
+
 replacements:
-  # disable OCP workers as gateway nodes
-  - source:
-      kind: ConfigMap
-      name: service-values
-      fieldPath: data.ovn.ovnController.external-ids
-    targets:
-      - select:
-          kind: OpenStackControlPlane
-        fieldPaths:
-          - spec.ovn.template.ovnController.external-ids
-        options:
-          create: true
   # configure neutron customServiceConfig
   - source:
       kind: ConfigMap
