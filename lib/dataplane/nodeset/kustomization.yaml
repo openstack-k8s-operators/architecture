@@ -20,6 +20,17 @@ replacements:
   - source:
       kind: ConfigMap
       name: edpm-nodeset-values
+      fieldPath: data.tlsEnabled
+    targets:
+      - select:
+          kind: OpenStackDataPlaneNodeSet
+        fieldPaths:
+          - spec.tlsEnabled
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values
       fieldPath: data.nodeset.ansible
     targets:
       - select:

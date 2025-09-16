@@ -52,6 +52,7 @@ data:
     # The public key that will have access to the dataplane computes via SSH
     public: CHANGEME3
   # Mapped in lib/dataplane/nodeset/kustomization.yaml to OpenStackDataPlaneNodeSet spec properties
+  tlsEnabled: true
   nodeset:
     ansible:
       ansibleUser: cloud-admin
@@ -160,6 +161,7 @@ data:
       - nova-custom-gpu
       - neutron-metadata
       - vfio-pci-bind
+      - telemetry
   nova:
     # Mapped in dt/nova/nova04delta/edpm/nodeset/kustomization.yaml to cpu-pinning-nova ConfigMap
     compute:
