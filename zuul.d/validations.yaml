@@ -187,7 +187,6 @@
     - examples/dt/nova/nova04delta/control-plane/networking/nncp
     - examples/dt/nova/nova04delta/edpm/deployment
     - examples/dt/nova/nova04delta/edpm/nodeset
-    - examples/dt/nova/nova04delta/edpm/nodeset2
     - examples/dt/nova/nova04delta/edpm-post-driver/deployment
     - lib
     name: rhoso-architecture-validate-nova04delta

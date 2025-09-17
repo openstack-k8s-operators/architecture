@@ -42,7 +42,7 @@ vas:
             src_file: service-values.yaml
         build_output: control-plane.yaml
 
-      - name: nodeset 1
+      - name: edpm-nodeset
         pre_stage_run:
           - name: Patch Provisioning CR
             type: cr
@@ -70,21 +70,6 @@ vas:
             src_file: values.yaml
         build_output: nodeset.yaml
 
-      - name: nodeset 2
-        path: examples/dt/nova/nova04delta/edpm/nodeset2
-        wait_conditions:
-          - >-
-            oc -n openstack wait baremetalhosts.metal3.io edpm-compute-1
-            --for=jsonpath='{.status.provisioning.state}'=available
-            --timeout=10m
-          - >-
-            oc -n openstack wait
-            osdpns openstack-edpm-2 --for condition=SetupReady
-            --timeout=60m
-        values:
-          - name: edpm-nodeset-values
-            src_file: values.yaml
-        build_output: nodeset2.yaml
 
       - name: deployment
         path: examples/dt/nova/nova04delta/edpm/deployment
