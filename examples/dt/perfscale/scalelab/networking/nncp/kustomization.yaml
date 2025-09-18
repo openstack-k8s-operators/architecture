@@ -1,0 +1,132 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+transformers:
+  # Set namespace to OpenStack on all namespaced objects without a namespace
+  - |-
+    apiVersion: builtin
+    kind: NamespaceTransformer
+    metadata:
+      name: _ignored_
+      namespace: openstack
+    setRoleBindingSubjects: none
+    unsetOnly: true
+    fieldSpecs:
+      - path: metadata/name
+        kind: Namespace
+        create: true
+
+components:
+  - ../../../../../../lib/nncp-single-nic
+
+resources:
+  - values.yaml
+
+patches:
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+    patch: |-
+      - op: remove
+        path: /spec/desiredState/dns-resolver
+      - op: remove
+        path: /spec/desiredState/routes
+      - op: remove
+        path: /spec/desiredState/route-rules
+      - op: add
+        path: /spec/desiredState/interfaces/-
+        value:
+          description: external vlan interface
+          ipv4:
+            address:
+            - ip: _replaced_
+              prefix-length: "_replaced_"
+            dhcp: false
+            enabled: true
+          ipv6:
+            enabled: false
+          mtu: 1500
+          name: external
+          state: up
+          type: vlan
+          vlan:
+            base-iface: _replaced_
+            id: "_replaced_"
+
+replacements:
+  # External VLAN base interface
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.external.base_iface
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=external].vlan.base-iface
+
+  # External VLAN ID
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.external.vlan
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=external].vlan.id
+
+  # External MTU
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.external.mtu
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=external].mtu
+
+  # External IP assignment
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_0.external_ip
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          labelSelector: "osp/nncp-node=node-0"
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=external].ipv4.address.0.ip
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_1.external_ip
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          labelSelector: "osp/nncp-node=node-1"
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=external].ipv4.address.0.ip
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_2.external_ip
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          labelSelector: "osp/nncp-node=node-2"
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=external].ipv4.address.0.ip
+  # External prefix-length for all nodes
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.external.prefix-length
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=external].ipv4.address.0.prefix-length
