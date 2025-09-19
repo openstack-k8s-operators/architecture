@@ -132,3 +132,16 @@ replacements:
           - spec.neutron.template.customServiceConfig
         options:
           create: true
+
+  # configure octavia nodeSelector
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.nodeSelector
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.nodeSelector
+        options:
+          create: true

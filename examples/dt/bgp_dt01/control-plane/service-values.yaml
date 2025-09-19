@@ -54,6 +54,8 @@ data:
       customServiceConfig: |
         [controller_worker]
         loadbalancer_topology=ACTIVE_STANDBY
+    nodeSelector:
+      node-role.kubernetes.io/worker: ""
 
   neutron:
     customServiceConfig: |
