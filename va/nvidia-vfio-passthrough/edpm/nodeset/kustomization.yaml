@@ -17,11 +17,18 @@ transformers:
       kind: Namespace
       create: true
 
+secretGenerator:
+  - name: baremetalset-password-secret
+    behavior: create
+    literals:
+      - NodeRootPassword=redhat
+    options:
+      disableNameSuffixHash: true
+
 components:
   - ../../../../lib/dataplane/nodeset
 
 resources:
-  - baremetalset-password-secret.yaml
   - nova_gpu.yaml
   - baremetalhost.yaml
   - network-data-secrets.yaml

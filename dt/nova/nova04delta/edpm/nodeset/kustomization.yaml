@@ -17,11 +17,18 @@ transformers:
       kind: Namespace
       create: true
 
+secretGenerator:
+  - name: baremetalset-password-secret
+    behavior: create
+    literals:
+      - NodeRootPassword=redhat
+    options:
+      disableNameSuffixHash: true
+
 components:
   - ../../../../../lib/dataplane/nodeset
 
 resources:
-  - baremetalset-password-secret.yaml
   - network-data-secrets.yaml
   - nova_gpu.yaml
   - baremetalhost.yaml
@@ -50,18 +57,6 @@ replacements:
           name: edpm-compute-0-network-data
         fieldPaths:
           - stringData
-        options:
-          create: true
-  - source:
-      kind: ConfigMap
-      name: edpm-nodeset-values
-      fieldPath: data.root_password
-    targets:
-      - select:
-          kind: Secret
-          name: baremetalset-password-secret
-        fieldPaths:
-          - data.NodeRootPassword
         options:
           create: true
 
