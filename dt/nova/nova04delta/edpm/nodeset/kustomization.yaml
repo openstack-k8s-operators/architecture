@@ -38,7 +38,6 @@ patches:
        path: /spec/preprovisioningNetworkDataName
        value: edpm-compute-0-preprovision-network-data
 
-# TODO: wire-in all missing nodeset data values, like examples/dt/bmo01/dataplane/nodesets/kustomization.yaml
 replacements:
   # networkData
   - source:
