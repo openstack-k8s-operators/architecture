@@ -1,5 +1,7 @@
 # Apply follow up deployment
 
+// FIXME(bogdando): use edpm_reboot_strategy=force to avoid this extra step?
+
 ## Assumptions
 
 - Initial [dataplane](data-plane-pre.md) deployment has finalized and is successful

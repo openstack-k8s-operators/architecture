@@ -32,6 +32,8 @@ vi nodeset/values.yaml
 vi deployment/values.yaml
 ```
 
+// TODO(bogdando): automate in the base DT kustomizations assuming virtual-media as default choice for BMO
+
 ### Configure BMO - Provisioning to watch all namespaces
 
 ```
@@ -94,6 +96,8 @@ Wait for dataplane deployment to finish
 ```
 oc wait osdpd edpm-deployment --for condition=Ready --timeout=40m
 ```
+
+// FIXME(bogdando): use edpm_reboot_strategy=force to avoid this extra step?
 
 ## Generate yamls necessary to finialize Nvidia GPU installation
 After the Nvidia drivers have been blacklisted on the EDPM nodes, the computes need

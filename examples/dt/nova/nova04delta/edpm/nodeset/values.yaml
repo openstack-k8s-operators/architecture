@@ -58,15 +58,20 @@ data:
       ansibleUser: cloud-admin
       ansiblePort: 22
       ansibleVars:
-        # CHANGEME -- see https://access.redhat.com/solutions/253273
-        # edpm_bootstrap_command: |
-        #       subscription-manager register --username <subscription_manager_username> --password <subscription_manager_password>
-        #       podman login -u <registry_username> -p <registry_password> registry.redhat.io
+        # see https://access.redhat.com/solutions/253273
+        edpm_bootstrap_command: |
+          echo CHANGEME
+        rhc_release: 9.4
+        rhc_repositories:
+          - {name: "*", state: disabled}
+          - {name: "CHANGEME"}
+        edpm_bootstrap_release_version_package: []
         timesync_ntp_servers:
           - hostname: pool.ntp.org
         # GPU passthrough settings for a PCI Vendor and Device ID pair.
         # Here, 10de represents NVIDIA Corporation, and 20f1 corresponds to the GA100 [A100 PCIe 40GB] GPU, according to Device Hunt
         # https://devicehunt.com/view/type/pci/vendor/10DE/device/20F1
+        # TODO(bogdando): add noveau.blacklist=1 nvidia.blacklist=1 nvidia-drm.blacklist=1 nvidia-modeset.blacklist=1 nvidia-uvm.blacklist=1 rd.driver.blacklist=nouveau,nvidia,nvidia-drm,nvidia-modeset,nvidia-uvm ?
         edpm_kernel_args: "default_hugepagesz=1GB hugepagesz=1G hugepages=16 intel_iommu=on iommu=pt vfio-pci.ids=10de:20f1 rd.driver.pre=vfio-pci"
         edpm_tuned_profile: "cpu-partitioning-powersave"
         edpm_tuned_isolated_cores: "4-23,28-47"
@@ -118,6 +123,8 @@ data:
         # edpm_nodes_validation
         edpm_nodes_validation_validate_controllers_icmp: false
         edpm_nodes_validation_validate_gateway_icmp: false
+        edpm_network_config_nmstate: true
+        edpm_network_config_update: false
         dns_search_domains: []
         gather_facts: false
         # edpm firewall, change the allowed CIDR if needed
