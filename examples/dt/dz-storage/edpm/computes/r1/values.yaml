@@ -189,8 +189,8 @@ data:
             name: BgpMainNetV6
             subnetName: subnet1
     services:
-      - download-cache
       - bootstrap
+      - download-cache
       - configure-network
       - install-os
       - configure-os
