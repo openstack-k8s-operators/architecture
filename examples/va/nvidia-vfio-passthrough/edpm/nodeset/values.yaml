@@ -51,7 +51,7 @@ data:
   baremetalSetTemplate:
     ctlplaneInterface: eno2  # CHANGEME
     cloudUserName: cloud-admin
-    provisioningInterface: enp1s0  # CHANGEME
+    # NOTE: provisioningInterface should not be provided when using virtual-media
     bmhLabelSelector:
       app: openstack  # CHANGEME
     passwordSecret:
