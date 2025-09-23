@@ -12,19 +12,20 @@ data:
   preserveJobs: false
 
   memcached:
+    # consider 1 replica per worker (this example uses less for testing)
     templates:
       memcached:
-        replicas: 3
+        replicas: 1
       memcached-azone:
-        replicas: 3
+        replicas: 1
         topologyRef:
           name: azone-node-affinity
       memcached-bzone:
-        replicas: 3
+        replicas: 1
         topologyRef:
           name: bzone-node-affinity
       memcached-czone:
-        replicas: 3
+        replicas: 1
         topologyRef:
           name: czone-node-affinity
   cinder:
@@ -39,7 +40,7 @@ data:
       name: azone-node-affinity
     customServiceConfig: |
       [DEFAULT]
-      # TODO:
+      # Not implemented in this example
 
   cinderVolumes:
     ontap-iscsi-az0:
@@ -141,7 +142,8 @@ data:
                   metallb.universe.tf/loadBalancerIPs: 172.17.0.81
               spec:
                 type: LoadBalancer
-        replicas: 2
+        # 2 replicas per AZ recommended, using less to save memory
+        replicas: 1
         topologyRef:
           name: azone-node-affinity
         type: edge
@@ -184,7 +186,8 @@ data:
                   metallb.universe.tf/loadBalancerIPs: 172.17.0.82
               spec:
                 type: LoadBalancer
-        replicas: 2
+        # 2 replicas per AZ recommended, using less to save memory
+        replicas: 1
         topologyRef:
           name: bzone-node-affinity
         type: edge
@@ -227,7 +230,8 @@ data:
                   metallb.universe.tf/loadBalancerIPs: 172.17.0.83
               spec:
                 type: LoadBalancer
-        replicas: 2
+        # 2 replicas per AZ recommended, using less to save memory
+        replicas: 1
         topologyRef:
           name: czone-node-affinity
         type: edge
@@ -296,7 +300,7 @@ data:
                 type: LoadBalancer
         replicas: 3
       manilaScheduler:
-        replicas: 3
+        replicas: 1
       manilaShares:
         az0:
           customServiceConfigSecrets:
