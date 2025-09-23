@@ -152,8 +152,8 @@ data:
             subnetName: subnet1
             fixedIP: f00d:f00d:f00d:f00d:f00d:f00d:f00d:0023
     services:
-      - download-cache
       - bootstrap
+      - download-cache
       - configure-network
       - install-os
       - configure-os
