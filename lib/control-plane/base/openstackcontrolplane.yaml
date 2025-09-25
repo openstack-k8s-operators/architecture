@@ -187,6 +187,7 @@ spec:
       route: {}
     template:
       secret: osp-secret
+      apiTimeout: 600
       apiServiceTemplate:
         replicas: 3
       metadataServiceTemplate:
