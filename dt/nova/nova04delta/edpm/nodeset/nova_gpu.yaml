@@ -61,12 +61,25 @@ spec:
               options nouveau modeset=0
             force: false
           register: _blacklist_nvidia
+
+        - name: Ensure vfio and vfio-pci modules are loaded at boot
+          become: true
+          ansible.builtin.copy:
+            dest: /etc/modules-load.d/vfio.conf
+            mode: "0644"
+            content: |
+              vfio
+              vfio-pci
+            force: false
+          register: _load_vfio
+
         - name: Check if grub2-mkconfig has --update-bls-cmdline option
           ansible.builtin.shell:
             cmd: grub2-mkconfig --help | grep '\-\-update-bls-cmdline'
           ignore_errors: true
           register: check_update_bls_cmdline
           changed_when: false
+
         - name: Regenerate initramfs
           become: true
           ansible.builtin.command: "{{ item }}"
@@ -77,4 +90,4 @@ spec:
               {{ '--update-bls-cmdline'
               if check_update_bls_cmdline.rc == 0
               else '' }}
-          when: _blacklist_nvidia.changed
+          when: (_blacklist_nvidia.changed or _load_vfio.changed)
