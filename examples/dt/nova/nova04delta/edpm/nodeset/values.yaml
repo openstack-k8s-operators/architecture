@@ -149,8 +149,6 @@ data:
         networkData:
           name: edpm-compute-0-network-data
           namespace: openstack
-        ansible:
-          ansibleHost: 192.168.122.100 # CHANGEME
     services:  # mapped to spec.services
       - bootstrap
       - download-cache

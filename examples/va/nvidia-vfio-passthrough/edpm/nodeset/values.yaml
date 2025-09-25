@@ -66,15 +66,20 @@ data:
     # The public key that will have access to the dataplane computes via SSH
     public: CHANGEME3
   # Mapped in lib/dataplane/nodeset/kustomization.yaml to OpenStackDataPlaneNodeSet spec properties
+  tlsEnabled: true
   nodeset:
     ansible:
       ansibleUser: cloud-admin
       ansiblePort: 22
       ansibleVars:
-        # CHANGEME -- see https://access.redhat.com/solutions/253273
-        # edpm_bootstrap_command: |
-        #       subscription-manager register --username <subscription_manager_username> --password <subscription_manager_password>
-        #       podman login -u <registry_username> -p <registry_password> registry.redhat.io
+        # see https://access.redhat.com/solutions/253273
+        edpm_bootstrap_command: |
+          echo CHANGEME
+        rhc_release: 9.4
+        rhc_repositories:
+          - {name: "*", state: disabled}
+          - {name: "CHANGEME"}
+        edpm_bootstrap_release_version_package: []
         timesync_ntp_servers:
           - hostname: pool.ntp.org
         # GPU passthrough settings for a PCI Vendor and Device ID pair.
@@ -90,13 +95,14 @@ data:
         # Nics to MAC addresses mappings for the dataplane nodes
         edpm_network_config_os_net_config_mappings:
           edpm-compute-0:
+            nic1: CHANGEME
             nic2: CHANGEME
-            nic3: CHANGEME
           edpm-compute-1:
+            nic1: CHANGEME
             nic2: CHANGEME
-            nic3: CHANGEME
         edpm_network_config_template: |
           ---
+          # CHANGEME
           {% set mtu_list = [ctlplane_mtu] %}
           {% for network in nodeset_networks %}
           {{ mtu_list.append(lookup('vars', networks_lower[network] ~ '_mtu')) }}
@@ -135,13 +141,15 @@ data:
         # edpm_nodes_validation
         edpm_nodes_validation_validate_controllers_icmp: false
         edpm_nodes_validation_validate_gateway_icmp: false
+        edpm_network_config_nmstate: true
+        edpm_network_config_update: false
         dns_search_domains: []
         gather_facts: false
         # edpm firewall, change the allowed CIDR if needed
         edpm_sshd_configure_firewall: true
         edpm_sshd_allowed_ranges:
           - 192.168.122.0/24
-    networks:
+    networks:  # mapped to spec.nodeTemplate.networks
       - defaultRoute: true
         name: ctlplane
         subnetName: subnet1
@@ -151,9 +159,11 @@ data:
         subnetName: subnet1
       - name: tenant
         subnetName: subnet1
-    nodes:
+    nodes:  # mapped to spec.nodes
       edpm-compute-0:
         hostName: edpm-compute-0
+        bmhLabelSelector:
+          nodeName: edpm-compute-0
         networkData:
           name: edpm-compute-0-network-data
           namespace: openstack
@@ -179,6 +189,7 @@ data:
       - nova-custom-gpu
       - neutron-metadata
       - vfio-pci-bind
+      - telemetry
   nova:
     # Mapped in va/nvidia-vfio-passthrough/edpm/nodeset/kustomization.yaml to cpu-pinning-nova ConfigMap
     compute:
