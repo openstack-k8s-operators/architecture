@@ -47,26 +47,6 @@ patches:
           type: ethernet
   - target:
       kind: NodeNetworkConfigurationPolicy
-      name: "master-.*"
-    patch: |-
-      - op: add
-        path: /spec/desiredState/interfaces/-
-        value:
-          description: BGP interface 2
-          ipv4:
-            address:
-            - ip: _replaced_
-              prefix-length: _replaced_
-            enabled: true
-            dhcp: false
-          ipv6:
-            enabled: false
-          mtu: 1500
-          name: _replaced_
-          state: up
-          type: ethernet
-  - target:
-      kind: NodeNetworkConfigurationPolicy
       name: "node-[3-9]"
     patch: |-
       - op: add
@@ -147,16 +127,6 @@ patches:
           name: _replaced_
           mtu: 65536
           state: up
-  # Fix roles on masters
-  - target:
-      kind: NodeNetworkConfigurationPolicy
-      name: "master-.*"
-    patch: |-
-      - op: add
-        path: /spec/nodeSelector/node-role.kubernetes.io~1master
-        value: ""
-      - op: remove
-        path: /spec/nodeSelector/node-role.kubernetes.io~1worker
 
 replacements:
   # Node names (workers)
@@ -281,129 +251,6 @@ replacements:
           - spec.nodeSelector.[kubernetes.io/hostname]
 
 
-  # BGP master-0/node-0 IPs
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_0.bgp_ip.0
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: master-0
-        fieldPaths:
-          - spec.desiredState.interfaces.4.ipv4.address.0.ip
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_0.bgp_ip.1
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: master-0
-        fieldPaths:
-          - spec.desiredState.interfaces.5.ipv4.address.0.ip
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_0.loopback_ip
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: master-0
-        fieldPaths:
-          - spec.desiredState.interfaces.6.ipv4.address.0.ip
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_0.loopback_ipv6
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: master-0
-        fieldPaths:
-          - spec.desiredState.interfaces.6.ipv6.address.0.ip
-  # BGP master-1/node-1 IPs
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_1.bgp_ip.0
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: master-1
-        fieldPaths:
-          - spec.desiredState.interfaces.4.ipv4.address.0.ip
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_1.bgp_ip.1
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: master-1
-        fieldPaths:
-          - spec.desiredState.interfaces.5.ipv4.address.0.ip
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_1.loopback_ip
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: master-1
-        fieldPaths:
-          - spec.desiredState.interfaces.6.ipv4.address.0.ip
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_1.loopback_ipv6
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: master-1
-        fieldPaths:
-          - spec.desiredState.interfaces.6.ipv6.address.0.ip
-  # BGP master-2/node-2 IPs
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_2.bgp_ip.0
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: master-2
-        fieldPaths:
-          - spec.desiredState.interfaces.4.ipv4.address.0.ip
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_2.bgp_ip.1
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: master-2
-        fieldPaths:
-          - spec.desiredState.interfaces.5.ipv4.address.0.ip
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_2.loopback_ip
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: master-2
-        fieldPaths:
-          - spec.desiredState.interfaces.6.ipv4.address.0.ip
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_2.loopback_ipv6
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: master-2
-        fieldPaths:
-          - spec.desiredState.interfaces.6.ipv6.address.0.ip
   # BGP worker-0/node-3 IPs
   - source:
       kind: ConfigMap
@@ -823,21 +670,6 @@ replacements:
     targets:  # target all nodes except worker-9 (regexs do not seem to work on select.name value)
       - select:
           kind: NodeNetworkConfigurationPolicy
-          name: master-0
-        fieldPaths:
-          - spec.desiredState.interfaces.5.name
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: master-1
-        fieldPaths:
-          - spec.desiredState.interfaces.5.name
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: master-2
-        fieldPaths:
-          - spec.desiredState.interfaces.5.name
-      - select:
-          kind: NodeNetworkConfigurationPolicy
           name: worker-0
         fieldPaths:
           - spec.desiredState.interfaces.5.name
@@ -887,21 +719,6 @@ replacements:
       name: network-values
       fieldPath: data.loopback.iface
     targets:  # regexs do not seem to work on select.name value
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: master-0
-        fieldPaths:
-          - spec.desiredState.interfaces.6.name
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: master-1
-        fieldPaths:
-          - spec.desiredState.interfaces.6.name
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: master-2
-        fieldPaths:
-          - spec.desiredState.interfaces.6.name
       - select:
           kind: NodeNetworkConfigurationPolicy
           name: worker-0
@@ -957,24 +774,6 @@ replacements:
       name: network-values
       fieldPath: data.bgp.prefix-length
     targets:  # regexs do not seem to work on select.name value
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: master-0
-        fieldPaths:
-          - spec.desiredState.interfaces.4.ipv4.address.0.prefix-length
-          - spec.desiredState.interfaces.5.ipv4.address.0.prefix-length
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: master-1
-        fieldPaths:
-          - spec.desiredState.interfaces.4.ipv4.address.0.prefix-length
-          - spec.desiredState.interfaces.5.ipv4.address.0.prefix-length
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: master-2
-        fieldPaths:
-          - spec.desiredState.interfaces.4.ipv4.address.0.prefix-length
-          - spec.desiredState.interfaces.5.ipv4.address.0.prefix-length
       - select:
           kind: NodeNetworkConfigurationPolicy
           name: worker-0
@@ -1042,21 +841,6 @@ replacements:
     targets:  # regexs do not seem to work on select.name value
       - select:
           kind: NodeNetworkConfigurationPolicy
-          name: master-0
-        fieldPaths:
-          - spec.desiredState.interfaces.6.ipv4.address.0.prefix-length
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: master-1
-        fieldPaths:
-          - spec.desiredState.interfaces.6.ipv4.address.0.prefix-length
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: master-2
-        fieldPaths:
-          - spec.desiredState.interfaces.6.ipv4.address.0.prefix-length
-      - select:
-          kind: NodeNetworkConfigurationPolicy
           name: worker-0
         fieldPaths:
           - spec.desiredState.interfaces.6.ipv4.address.0.prefix-length
@@ -1110,21 +894,6 @@ replacements:
       name: network-values
       fieldPath: data.loopback.prefix-length-ipv6
     targets:  # regexs do not seem to work on select.name value
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: master-0
-        fieldPaths:
-          - spec.desiredState.interfaces.6.ipv6.address.0.prefix-length
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: master-1
-        fieldPaths:
-          - spec.desiredState.interfaces.6.ipv6.address.0.prefix-length
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: master-2
-        fieldPaths:
-          - spec.desiredState.interfaces.6.ipv6.address.0.prefix-length
       - select:
           kind: NodeNetworkConfigurationPolicy
           name: worker-0
@@ -1190,39 +959,6 @@ replacements:
 
 
   # ROUTES
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_0.routes
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: master-0
-        fieldPaths:
-          - spec.desiredState.routes
-
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_1.routes
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: master-1
-        fieldPaths:
-          - spec.desiredState.routes
-
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_2.routes
-    targets:
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: master-2
-        fieldPaths:
-          - spec.desiredState.routes
-
   - source:
       kind: ConfigMap
       name: network-values
