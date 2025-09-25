@@ -123,7 +123,7 @@ data:
         # edpm_nodes_validation
         edpm_nodes_validation_validate_controllers_icmp: false
         edpm_nodes_validation_validate_gateway_icmp: false
-        edpm_network_config_nmstate: true
+        edpm_network_config_nmstate: false
         edpm_network_config_update: false
         dns_search_domains: []
         gather_facts: false
