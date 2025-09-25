@@ -25,8 +25,9 @@ spec:
   cinder:
     uniquePodNames: true
     apiOverride:
-      route: {"haproxy.router.openshift.io/timeout": "60s"}
+      route: {}
     template:
+      apiTimeout: 600
       cinderAPI:
         replicas: 3
       customServiceConfig: |
@@ -98,11 +99,12 @@ spec:
     uniquePodNames: true
     apiOverrides:
       default:
-        route: {"haproxy.router.openshift.io/timeout": "60s"}
+        route: {}
     template:
       databaseInstance: openstack
       glanceAPIs:
         default:
+          apiTimeout: 600
           replicas: 0
           networkAttachments:
             - storage
@@ -185,6 +187,7 @@ spec:
       route: {}
     template:
       secret: osp-secret
+      apiTimeout: 600
       apiServiceTemplate:
         replicas: 3
       metadataServiceTemplate:
