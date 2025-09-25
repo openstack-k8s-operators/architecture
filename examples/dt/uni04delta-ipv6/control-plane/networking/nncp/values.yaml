@@ -108,6 +108,34 @@ data:
           "range_end": "2620:cf:cf:bbbb::70"
         }
       }
+
+  octavia:
+    dnsDomain: octavia.openstack.lab
+    mtu: 1500
+    prefix-length: 64
+    base_iface: enp7s0
+    iface: octaviavlan
+    vlan: 25
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "octavia",
+        "type": "bridge",
+        "bridge": "octbr",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "2620:cf:ce:aaaa::/64",
+          "range_start": "2620:cf:ce:aaaa::30",
+          "range_end": "2620:cf:ce:aaaa::70",
+          "routes": [
+            {
+              "dst": "fd6c:6261:6173:0001::/64",
+              "gw": "2620:cf:ce:aaaa::0096"
+            }
+          ]
+        }
+      }
+
   storage:
     dnsDomain: storage.example.com
     subnets:
