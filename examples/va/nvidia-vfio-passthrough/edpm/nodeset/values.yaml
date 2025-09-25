@@ -28,23 +28,9 @@ data:
       preprovisioningNetworkData:
         nmstate: |
           CHANGEME
-    edpm-compute-1:
-      labels:
-        nodeName: edpm-compute-1
-      bmc:
-        address: CHANGEME
-      bootMACAddress: CHANGEME
-      rootDeviceHints:
-        deviceName: /dev/vda
-      preprovisioningNetworkData:
-        nmstate: |
-          CHANGEME
   # Mapped in va/nvidia-vfio-passthrough/edpm/nodeset/kustomization.yaml to edpm-compute-0-network-data and edpm-compute-1-network-data Secrets
   baremetalHostsNetworkData:
     edpm-compute-0:
-      networkData: |
-        CHANGEME
-    edpm-compute-1:
       networkData: |
         CHANGEME
   # Mapped in va/nvidia-vfio-passthrough/edpm/nodeset/kustomization.yaml to OpenStackDataPlaneNodeSet.spec.baremetalSetTemplate
@@ -95,9 +81,6 @@ data:
         # Nics to MAC addresses mappings for the dataplane nodes
         edpm_network_config_os_net_config_mappings:
           edpm-compute-0:
-            nic1: CHANGEME
-            nic2: CHANGEME
-          edpm-compute-1:
             nic1: CHANGEME
             nic2: CHANGEME
         edpm_network_config_template: |
@@ -166,11 +149,6 @@ data:
           nodeName: edpm-compute-0
         networkData:
           name: edpm-compute-0-network-data
-          namespace: openstack
-      edpm-compute-1:
-        hostName: edpm-compute-1
-        networkData:
-          name: edpm-compute-1-network-data
           namespace: openstack
     services:
       - bootstrap

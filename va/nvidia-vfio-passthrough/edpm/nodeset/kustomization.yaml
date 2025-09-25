@@ -44,13 +44,6 @@ patches:
      - op: replace
        path: /spec/preprovisioningNetworkDataName
        value: edpm-compute-0-preprovision-network-data
-  - target:
-      kind: BareMetalHost
-      name: edpm-compute-1
-    patch: |
-     - op: replace
-       path: /spec/preprovisioningNetworkDataName
-       value: edpm-compute-1-preprovision-network-data
 
 replacements:
   - source:
@@ -189,67 +182,6 @@ replacements:
           - stringData
         options:
           create: true
-  # edpm-compute-1
-  - source:
-      kind: ConfigMap
-      name: edpm-nodeset-values
-      fieldPath: data.baremetalhosts.edpm-compute-1.labels
-    targets:
-      - select:
-          kind: BareMetalHost
-          name: edpm-compute-1
-        fieldPaths:
-          - metadata.labels
-        options:
-          create: true
-  - source:
-      kind: ConfigMap
-      name: edpm-nodeset-values
-      fieldPath: data.baremetalhosts.edpm-compute-1.bmc.address
-    targets:
-      - select:
-          kind: BareMetalHost
-          name: edpm-compute-1
-        fieldPaths:
-          - spec.bmc.address
-        options:
-          create: true
-  - source:
-      kind: ConfigMap
-      name: edpm-nodeset-values
-      fieldPath: data.baremetalhosts.edpm-compute-1.bootMACAddress
-    targets:
-      - select:
-          kind: BareMetalHost
-          name: edpm-compute-1
-        fieldPaths:
-          - spec.bootMACAddress
-        options:
-          create: true
-  - source:
-      kind: ConfigMap
-      name: edpm-nodeset-values
-      fieldPath: data.baremetalhosts.edpm-compute-1.rootDeviceHints
-    targets:
-      - select:
-          kind: BareMetalHost
-          name: edpm-compute-1
-        fieldPaths:
-          - spec.rootDeviceHints
-        options:
-          create: true
-  - source:
-      kind: ConfigMap
-      name: edpm-nodeset-values
-      fieldPath: data.baremetalhosts.edpm-compute-1.preprovisioningNetworkData
-    targets:
-      - select:
-          kind: Secret
-          name: edpm-compute-1-preprovision-network-data
-        fieldPaths:
-          - stringData
-        options:
-          create: true
   # networkData
   - source:
       kind: ConfigMap
@@ -259,18 +191,6 @@ replacements:
       - select:
           kind: Secret
           name: edpm-compute-0-network-data
-        fieldPaths:
-          - stringData
-        options:
-          create: true
-  - source:
-      kind: ConfigMap
-      name: edpm-nodeset-values
-      fieldPath: data.baremetalHostsNetworkData.edpm-compute-1
-    targets:
-      - select:
-          kind: Secret
-          name: edpm-compute-1-network-data
         fieldPaths:
           - stringData
         options:

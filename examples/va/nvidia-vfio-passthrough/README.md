@@ -56,7 +56,7 @@ The following parameters are crucial for host-level configuration:
 | Role                        | Machine Type | Count |
 | --------------------------- | ------------ | ----- |
 | Compact OpenShift           | vm           | 3     |
-| OpenStack Baremetal Compute | Baremetal    | 2     |
+| OpenStack Baremetal Compute | Baremetal    | 1     |
 
 ### Networks
 
