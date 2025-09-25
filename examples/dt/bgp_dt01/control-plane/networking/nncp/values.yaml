@@ -8,8 +8,8 @@ metadata:
     config.kubernetes.io/local-config: "true"
 data:
   # nodes
-  node_0:
-    name: master-0
+  node_3:
+    name: worker-0
     internalapi_ip: 172.17.0.5
     tenant_ip: 172.19.0.5
     ctlplane_ip: 192.168.122.10
@@ -23,9 +23,22 @@ data:
     loopback_ip: 99.99.0.3
     loopback_ipv6: f00d:f00d:f00d:f00d:f00d:f00d:f00d:13
     routes:
-      config: []
-  node_1:
-    name: master-1
+      config:
+        - destination: 99.99.0.0/16
+          next-hop-address: 100.64.0.9
+          next-hop-interface: enp7s0
+        - destination: 99.99.0.0/16
+          next-hop-address: 100.65.0.9
+          next-hop-interface: enp8s0
+        # routes to octavia mgmt network
+        - destination: 172.24.0.0/16
+          next-hop-address: 100.64.0.9
+          next-hop-interface: enp7s0
+        - destination: 172.24.0.0/16
+          next-hop-address: 100.65.0.9
+          next-hop-interface: enp8s0
+  node_4:
+    name: worker-1
     internalapi_ip: 172.17.0.6
     tenant_ip: 172.19.0.6
     ctlplane_ip: 192.168.122.11
@@ -39,9 +52,22 @@ data:
     loopback_ip: 99.99.1.3
     loopback_ipv6: f00d:f00d:f00d:f00d:f00d:f00d:f00d:23
     routes:
-      config: []
-  node_2:
-    name: master-2
+      config:
+        - destination: 99.99.0.0/16
+          next-hop-address: 100.64.1.9
+          next-hop-interface: enp7s0
+        - destination: 99.99.0.0/16
+          next-hop-address: 100.65.1.9
+          next-hop-interface: enp8s0
+        # routes to octavia mgmt network
+        - destination: 172.24.0.0/16
+          next-hop-address: 100.64.1.9
+          next-hop-interface: enp7s0
+        - destination: 172.24.0.0/16
+          next-hop-address: 100.65.1.9
+          next-hop-interface: enp8s0
+  node_5:
+    name: worker-2
     internalapi_ip: 172.17.0.7
     tenant_ip: 172.19.0.7
     ctlplane_ip: 192.168.122.12
@@ -55,100 +81,26 @@ data:
     loopback_ip: 99.99.2.3
     loopback_ipv6: f00d:f00d:f00d:f00d:f00d:f00d:f00d:33
     routes:
-      config: []
-  node_3:
-    name: worker-0
+      config:
+        - destination: 99.99.0.0/16
+          next-hop-address: 100.64.2.9
+          next-hop-interface: enp7s0
+        - destination: 99.99.0.0/16
+          next-hop-address: 100.65.2.9
+          next-hop-interface: enp8s0
+        # routes to octavia mgmt network
+        - destination: 172.24.0.0/16
+          next-hop-address: 100.64.2.9
+          next-hop-interface: enp7s0
+        - destination: 172.24.0.0/16
+          next-hop-address: 100.65.2.9
+          next-hop-interface: enp8s0
+  node_6:
+    name: worker-3
     internalapi_ip: 172.17.0.8
     tenant_ip: 172.19.0.8
     ctlplane_ip: 192.168.122.13
     storage_ip: 172.18.0.8
-    bgp_ip:
-      - 100.64.0.14
-      - 100.65.0.14
-    bgp_peers:
-      - 100.64.0.13
-      - 100.65.0.13
-    loopback_ip: 99.99.0.4
-    loopback_ipv6: f00d:f00d:f00d:f00d:f00d:f00d:f00d:14
-    routes:
-      config:
-        - destination: 99.99.0.0/16
-          next-hop-address: 100.64.0.13
-          next-hop-interface: enp7s0
-        - destination: 99.99.0.0/16
-          next-hop-address: 100.65.0.13
-          next-hop-interface: enp8s0
-        # routes to octavia mgmt network
-        - destination: 172.24.0.0/16
-          next-hop-address: 100.64.0.13
-          next-hop-interface: enp7s0
-        - destination: 172.24.0.0/16
-          next-hop-address: 100.65.0.13
-          next-hop-interface: enp8s0
-  node_4:
-    name: worker-1
-    internalapi_ip: 172.17.0.9
-    tenant_ip: 172.19.0.9
-    ctlplane_ip: 192.168.122.14
-    storage_ip: 172.18.0.9
-    bgp_ip:
-      - 100.64.1.14
-      - 100.65.1.14
-    bgp_peers:
-      - 100.64.1.13
-      - 100.65.1.13
-    loopback_ip: 99.99.1.4
-    loopback_ipv6: f00d:f00d:f00d:f00d:f00d:f00d:f00d:24
-    routes:
-      config:
-        - destination: 99.99.0.0/16
-          next-hop-address: 100.64.1.13
-          next-hop-interface: enp7s0
-        - destination: 99.99.0.0/16
-          next-hop-address: 100.65.1.13
-          next-hop-interface: enp8s0
-        # routes to octavia mgmt network
-        - destination: 172.24.0.0/16
-          next-hop-address: 100.64.1.13
-          next-hop-interface: enp7s0
-        - destination: 172.24.0.0/16
-          next-hop-address: 100.65.1.13
-          next-hop-interface: enp8s0
-  node_5:
-    name: worker-2
-    internalapi_ip: 172.17.0.10
-    tenant_ip: 172.19.0.10
-    ctlplane_ip: 192.168.122.15
-    storage_ip: 172.18.0.10
-    bgp_ip:
-      - 100.64.2.14
-      - 100.65.2.14
-    bgp_peers:
-      - 100.64.2.13
-      - 100.65.2.13
-    loopback_ip: 99.99.2.4
-    loopback_ipv6: f00d:f00d:f00d:f00d:f00d:f00d:f00d:34
-    routes:
-      config:
-        - destination: 99.99.0.0/16
-          next-hop-address: 100.64.2.13
-          next-hop-interface: enp7s0
-        - destination: 99.99.0.0/16
-          next-hop-address: 100.65.2.13
-          next-hop-interface: enp8s0
-        # routes to octavia mgmt network
-        - destination: 172.24.0.0/16
-          next-hop-address: 100.64.2.13
-          next-hop-interface: enp7s0
-        - destination: 172.24.0.0/16
-          next-hop-address: 100.65.2.13
-          next-hop-interface: enp8s0
-  node_6:
-    name: worker-3
-    internalapi_ip: 172.17.0.11
-    tenant_ip: 172.19.0.11
-    ctlplane_ip: 192.168.122.16
-    storage_ip: 172.18.0.11
     bgp_ip:
       - 100.64.10.2
     bgp_peers:
@@ -496,7 +448,7 @@ data:
             - end: f00d:f00d:f00d:f00d:f00d:f00d:f00d:004e
               start: f00d:f00d:f00d:f00d:f00d:f00d:f00d:0042
     bgpdefs:
-      node0:
+      node3:
         bgpnet0:
           bgp_peer: 100.64.0.9
           bgp_ip: 100.64.0.10
@@ -504,8 +456,21 @@ data:
           bgp_peer: 100.65.0.9
           bgp_ip: 100.65.0.10
         routes:
-          config: []
-      node1:
+          config:
+            - destination: 99.99.0.0/16
+              next-hop-address: 100.64.0.9
+              next-hop-interface: enp7s0
+            - destination: 99.99.0.0/16
+              next-hop-address: 100.65.0.9
+              next-hop-interface: enp8s0
+            # routes to octavia mgmt network
+            - destination: 172.24.0.0/16
+              next-hop-address: 100.64.0.9
+              next-hop-interface: enp7s0
+            - destination: 172.24.0.0/16
+              next-hop-address: 100.65.0.9
+              next-hop-interface: enp8s0
+      node4:
         bgpnet0:
           bgp_peer: 100.64.1.9
           bgp_ip: 100.64.1.10
@@ -513,8 +478,21 @@ data:
           bgp_peer: 100.65.1.9
           bgp_ip: 100.65.1.10
         routes:
-          config: []
-      node2:
+          config:
+            - destination: 99.99.0.0/16
+              next-hop-address: 100.64.1.9
+              next-hop-interface: enp7s0
+            - destination: 99.99.0.0/16
+              next-hop-address: 100.65.1.9
+              next-hop-interface: enp8s0
+            # routes to octavia mgmt network
+            - destination: 172.24.0.0/16
+              next-hop-address: 100.64.1.9
+              next-hop-interface: enp7s0
+            - destination: 172.24.0.0/16
+              next-hop-address: 100.65.1.9
+              next-hop-interface: enp8s0
+      node5:
         bgpnet0:
           bgp_peer: 100.64.2.9
           bgp_ip: 100.64.2.10
@@ -522,73 +500,19 @@ data:
           bgp_peer: 100.65.2.9
           bgp_ip: 100.65.2.10
         routes:
-          config: []
-      node3:
-        bgpnet0:
-          bgp_peer: 100.64.0.13
-          bgp_ip: 100.64.0.14
-        bgpnet1:
-          bgp_peer: 100.65.0.13
-          bgp_ip: 100.65.0.14
-        routes:
           config:
             - destination: 99.99.0.0/16
-              next-hop-address: 100.64.0.13
+              next-hop-address: 100.64.2.9
               next-hop-interface: enp7s0
             - destination: 99.99.0.0/16
-              next-hop-address: 100.65.0.13
+              next-hop-address: 100.65.2.9
               next-hop-interface: enp8s0
             # routes to octavia mgmt network
             - destination: 172.24.0.0/16
-              next-hop-address: 100.64.0.13
+              next-hop-address: 100.64.2.9
               next-hop-interface: enp7s0
             - destination: 172.24.0.0/16
-              next-hop-address: 100.65.0.13
-              next-hop-interface: enp8s0
-      node4:
-        bgpnet0:
-          bgp_peer: 100.64.1.13
-          bgp_ip: 100.64.1.14
-        bgpnet1:
-          bgp_peer: 100.65.1.13
-          bgp_ip: 100.65.1.14
-        routes:
-          config:
-            - destination: 99.99.0.0/16
-              next-hop-address: 100.64.1.13
-              next-hop-interface: enp7s0
-            - destination: 99.99.0.0/16
-              next-hop-address: 100.65.1.13
-              next-hop-interface: enp8s0
-            # routes to octavia mgmt network
-            - destination: 172.24.0.0/16
-              next-hop-address: 100.64.1.13
-              next-hop-interface: enp7s0
-            - destination: 172.24.0.0/16
-              next-hop-address: 100.65.1.13
-              next-hop-interface: enp8s0
-      node5:
-        bgpnet0:
-          bgp_peer: 100.64.2.13
-          bgp_ip: 100.64.2.14
-        bgpnet1:
-          bgp_peer: 100.65.2.13
-          bgp_ip: 100.65.2.14
-        routes:
-          config:
-            - destination: 99.99.0.0/16
-              next-hop-address: 100.64.2.13
-              next-hop-interface: enp7s0
-            - destination: 99.99.0.0/16
-              next-hop-address: 100.65.2.13
-              next-hop-interface: enp8s0
-            # routes to octavia mgmt network
-            - destination: 172.24.0.0/16
-              next-hop-address: 100.64.2.13
-              next-hop-interface: enp7s0
-            - destination: 172.24.0.0/16
-              next-hop-address: 100.65.2.13
-              next-hop-interface: enp8s0
+              next-hop-address: 100.65.2.9
       node6:
         bgpnet0:
           bgp_peer: 100.64.10.1
