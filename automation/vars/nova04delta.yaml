@@ -1,0 +1,96 @@
+---
+vas:
+  nova04delta:
+    stages:
+      - name: nncp-configuration
+        path: examples/dt/nova/nova04delta/control-plane/networking/nncp
+        wait_conditions:
+          - >-
+            oc -n openstack wait nncp
+            -l osp/nncm-config-type=standard
+            --for jsonpath='{.status.conditions[0].reason}'=SuccessfullyConfigured
+            --timeout=5m
+        values:
+          - name: network-values
+            src_file: values.yaml
+        build_output: nncp.yaml
+
+      - name: network-configuration
+        path: examples/dt/nova/nova04delta/control-plane/networking
+        wait_conditions:
+          - >-
+            oc -n metallb-system wait pod
+            -l app=metallb -l component=speaker
+            --for condition=Ready
+            --timeout=5m
+        values:
+          - name: network-values
+            src_file: nncp/values.yaml
+        build_output: network.yaml
+
+      - name: control-plane
+        path: examples/dt/nova/nova04delta/control-plane
+        wait_conditions:
+          - >-
+            oc -n openstack wait osctlplane controlplane
+            --for condition=Ready
+            --timeout=60m
+        values:
+          - name: network-values
+            src_file: networking/nncp/values.yaml
+          - name: service-values.yaml
+            src_file: service-values.yaml
+        build_output: control-plane.yaml
+
+      - name: edpm-nodeset
+        pre_stage_run:
+          - name: Patch Provisioning CR
+            type: cr
+            definition:
+              spec:
+                watchAllNamespaces: true
+                virtualMediaViaExternalNetwork: true
+            namespace: openshift-machine-api
+            api_version: metal3.io/v1alpha1
+            kind: Provisioning
+            resource_name: provisioning-configuration
+            state: patched
+        path: examples/dt/nova/nova04delta/edpm/nodeset
+        wait_conditions:
+          - >-
+            oc -n openstack wait baremetalhosts.metal3.io edpm-compute-0
+            --for=jsonpath='{.status.provisioning.state}'=available
+            --timeout=10m
+          - >-
+            oc -n openstack wait
+            osdpns openstack-edpm --for condition=SetupReady
+            --timeout=60m
+        values:
+          - name: edpm-nodeset-values
+            src_file: values.yaml
+        build_output: nodeset.yaml
+
+
+      - name: deployment
+        path: examples/dt/nova/nova04delta/edpm/deployment
+        wait_conditions:
+          - >-
+            oc -n openstack wait
+            osdpd edpm-deployment --for condition=Ready
+            --timeout=90m
+        values:
+          - name: edpm-deployment-values
+            src_file: values.yaml
+        build_output: deployment.yaml
+
+      - name: post deployment
+        path: examples/dt/nova/nova04delta/edpm-post-driver/deployment
+        wait_conditions:
+          - >-
+            oc -n openstack wait
+            osdpd edpm-deployment-post-driver --for condition=Ready
+            --timeout=20m
+        values:
+          - name: edpm-deployment-post-driver
+            src_file: values.yaml
+        build_output: post-driver-deployment.yaml

@@ -1,0 +1,21 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../../../dt/nova/nova04delta/edpm/nodeset
+
+resources:
+  - control-plane/networking/nncp/values.yaml
+  - control-plane/service-values.yaml
+  - edpm/nodeset/values.yaml
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../../../dt/nova/nova04delta/
+
+resources:
+  - networking/nncp/values.yaml
+  - service-values.yaml
