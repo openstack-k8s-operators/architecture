@@ -15,20 +15,6 @@ Change to the nvidia-vfio-passthrough directory
 cd architecture/examples/va/nvidia-vfio-passthrough
 ```
 
-// TODO(bogdando): automate in the base VA kustomizations assuming virtual-media as default choice for BMO
-
-### Configure BMO - Provisioning to watch all namespaces
-
-```
-oc patch provisioning provisioning-configuration --type merge -p '{"spec":{"watchAllNamespaces": true }}'
-```
-
-### Configure BMO - Provisioning to use external network for virtual-media
-
-```
-oc patch provisioning provisioning-configuration --type merge -p '{"spec":{"virtualMediaViaExternalNetwork": true }}'
-```
-
 ### Create the BareMetalHost CRs
 
 Edit the `edpm/nodeset/values.yaml` file to suit your environment. Pay special attention to the `baremetalhosts` section, where you will need to provide details for each of your baremetal compute nodes, including:

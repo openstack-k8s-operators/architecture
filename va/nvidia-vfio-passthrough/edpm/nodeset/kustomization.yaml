@@ -32,6 +32,7 @@ resources:
   - nova_gpu.yaml
   - baremetalhost.yaml
   - network-data-secrets.yaml
+  - provisioning.yaml
 
 patches:
   - target:

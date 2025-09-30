@@ -32,20 +32,6 @@ vi nodeset/values.yaml
 vi deployment/values.yaml
 ```
 
-// TODO(bogdando): automate in the base DT kustomizations assuming virtual-media as default choice for BMO
-
-### Configure BMO - Provisioning to watch all namespaces
-
-```
-oc patch provisioning provisioning-configuration --type merge -p '{"spec":{"watchAllNamespaces": true }}'
-```
-
-### Configure BMO - Provisioning to use external network for virtual-media
-
-```
-oc patch provisioning provisioning-configuration --type merge -p '{"spec":{"virtualMediaViaExternalNetwork": true }}'
-```
-
 ### Create the BareMetalHost CRs
 
 Also, ensure the `bmhLabelSelector` in `baremetalSetTemplate` matches the labels you have defined for your `baremetalhosts`. For example, if you use `app: openstack`, your `baremetalhosts` should have a corresponding label.

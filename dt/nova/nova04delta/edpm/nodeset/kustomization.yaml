@@ -32,6 +32,7 @@ resources:
   - network-data-secrets.yaml
   - nova_gpu.yaml
   - baremetalhost.yaml
+  - provisioning.yaml
 
 patches:
   - target:
@@ -41,9 +42,9 @@ patches:
       kind: BareMetalHost
       name: edpm-compute-0
     patch: |
-     - op: replace
-       path: /spec/preprovisioningNetworkDataName
-       value: edpm-compute-0-preprovision-network-data
+      - op: replace
+        path: /spec/preprovisioningNetworkDataName
+        value: edpm-compute-0-preprovision-network-data
 
 replacements:
   # networkData
