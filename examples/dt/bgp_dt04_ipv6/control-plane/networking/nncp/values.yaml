@@ -8,8 +8,8 @@ metadata:
     config.kubernetes.io/local-config: "true"
 data:
   # nodes
-  node_0:
-    name: master-0
+  node_3:
+    name: worker-0
     internalapi_ip: "2620:cf:cf:bbbb::10"
     tenant_ip: "2620:cf:cf:dddd::10"
     ctlplane_ip: "2620:cf:cf:aaaa::10"
@@ -30,8 +30,8 @@ data:
         - destination: f00d:f00d:f00d:f00d:99:99:0:0/96
           next-hop-address: "2620:cf::100:65:0:9"
           next-hop-interface: enp9s0
-  node_1:
-    name: master-1
+  node_4:
+    name: worker-1
     internalapi_ip: "2620:cf:cf:bbbb::11"
     tenant_ip: "2620:cf:cf:dddd::11"
     ctlplane_ip: "2620:cf:cf:aaaa::11"
@@ -52,8 +52,8 @@ data:
         - destination: f00d:f00d:f00d:f00d:99:99:0:0/96
           next-hop-address: "2620:cf::100:65:1:9"
           next-hop-interface: enp9s0
-  node_2:
-    name: master-2
+  node_5:
+    name: worker-2
     internalapi_ip: "2620:cf:cf:bbbb::12"
     tenant_ip: "2620:cf:cf:dddd::12"
     ctlplane_ip: "2620:cf:cf:aaaa::12"
@@ -74,78 +74,12 @@ data:
         - destination: f00d:f00d:f00d:f00d:99:99:0:0/96
           next-hop-address: "2620:cf::100:65:2:9"
           next-hop-interface: enp9s0
-  node_3:
-    name: worker-0
-    internalapi_ip: "2620:cf:cf:bbbb::13"
-    tenant_ip: "2620:cf:cf:dddd::13"
-    ctlplane_ip: "2620:cf:cf:aaaa::13"
-    storage_ip: "2620:cf:cf:cccc::13"
-    bgp_ip:
-      - "2620:cf::100:64:0:14"
-      - "2620:cf::100:65:0:14"
-    bgp_peers:
-      - "2620:cf::100:64:0:13"
-      - "2620:cf::100:65:0:13"
-    loopback_ip: 99.99.0.4
-    loopback_ipv6: f00d:f00d:f00d:f00d:99:99:0:4
-    routes:
-      config:
-        - destination: f00d:f00d:f00d:f00d:99:99:0:0/96
-          next-hop-address: "2620:cf::100:64:0:13"
-          next-hop-interface: enp8s0
-        - destination: f00d:f00d:f00d:f00d:99:99:0:0/96
-          next-hop-address: "2620:cf::100:65:0:13"
-          next-hop-interface: enp9s0
-  node_4:
-    name: worker-1
-    internalapi_ip: "2620:cf:cf:bbbb::14"
-    tenant_ip: "2620:cf:cf:dddd::14"
-    ctlplane_ip: "2620:cf:cf:aaaa::14"
-    storage_ip: "2620:cf:cf:cccc::14"
-    bgp_ip:
-      - "2620:cf::100:64:1:14"
-      - "2620:cf::100:65:1:14"
-    bgp_peers:
-      - "2620:cf::100:64:1:13"
-      - "2620:cf::100:65:1:13"
-    loopback_ip: 99.99.1.4
-    loopback_ipv6: f00d:f00d:f00d:f00d:99:99:1:4
-    routes:
-      config:
-        - destination: f00d:f00d:f00d:f00d:99:99:0:0/96
-          next-hop-address: "2620:cf::100:64:1:13"
-          next-hop-interface: enp8s0
-        - destination: f00d:f00d:f00d:f00d:99:99:0:0/96
-          next-hop-address: "2620:cf::100:65:1:13"
-          next-hop-interface: enp9s0
-  node_5:
-    name: worker-2
-    internalapi_ip: "2620:cf:cf:bbbb::15"
-    tenant_ip: "2620:cf:cf:dddd::15"
-    ctlplane_ip: "2620:cf:cf:aaaa::15"
-    storage_ip: "2620:cf:cf:cccc::15"
-    bgp_ip:
-      - "2620:cf::100:64:2:14"
-      - "2620:cf::100:65:2:14"
-    bgp_peers:
-      - "2620:cf::100:64:2:13"
-      - "2620:cf::100:65:2:13"
-    loopback_ip: 99.99.2.4
-    loopback_ipv6: f00d:f00d:f00d:f00d:99:99:2:4
-    routes:
-      config:
-        - destination: f00d:f00d:f00d:f00d:99:99:0:0/96
-          next-hop-address: "2620:cf::100:64:2:13"
-          next-hop-interface: enp8s0
-        - destination: f00d:f00d:f00d:f00d:99:99:0:0/96
-          next-hop-address: "2620:cf::100:65:2:13"
-          next-hop-interface: enp9s0
   node_6:
     name: worker-3
     node_name: worker-3
-    internalapi_ip: "2620:cf:cf:dddd::16"
-    tenant_ip: "2620:cf:cf:eeee::16"
-    ctlplane_ip: "2620:cf:cf:aaaa::16"
+    internalapi_ip: "2620:cf:cf:dddd::13"
+    tenant_ip: "2620:cf:cf:eeee::13"
+    ctlplane_ip: "2620:cf:cf:aaaa::13"
     bgp_ip:
       - 100.64.10.2
       - "2620:cf::100:64:10:2"
@@ -155,7 +89,7 @@ data:
     loopback_ip: 99.99.10.2
     loopback_ipv6: f00d:f00d:f00d:f00d:99:99:10:4
     base_if: enp6s0
-    routes:  # TODO-edu
+    routes:
       config:
         - destination: 192.168.133.0/24
           next-hop-address: 100.64.10.1
@@ -537,13 +471,13 @@ data:
             - end: f00d:f00d:f00d:f00d:99:99:10:1e
               start: f00d:f00d:f00d:f00d:99:99:10:2
     bgpdefs:
-      node0:
+      node3:
         bgpnet0:
           bgp_peer: "2620:cf::100:64:0:9"
-          bgp_ip: "2620:cf::100:64:0:a"
+          bgp_ip: "2620:cf::100:64:0:10"
         bgpnet1:
           bgp_peer: "2620:cf::100:65:0:9"
-          bgp_ip: "2620:cf::100:65:0:a"
+          bgp_ip: "2620:cf::100:65:0:10"
         routes:
           config:
             - destination: "f00d:f00d:f00d:f00d:99:99:0:0/96"
@@ -561,13 +495,13 @@ data:
             - destination: "2620:cf:cf:aaac::0/64"
               next-hop-address: "2620:cf:cf:aaad::1"
               next-hop-interface: enp7s0
-      node1:
+      node4:
         bgpnet0:
           bgp_peer: "2620:cf::100:64:1:9"
-          bgp_ip: "2620:cf::100:64:1:a"
+          bgp_ip: "2620:cf::100:64:1:10"
         bgpnet1:
           bgp_peer: "2620:cf::100:65:1:9"
-          bgp_ip: "2620:cf::100:65:1:a"
+          bgp_ip: "2620:cf::100:65:1:10"
         routes:
           config:
             - destination: "f00d:f00d:f00d:f00d:99:99:0:0/96"
@@ -585,13 +519,13 @@ data:
             - destination: "2620:cf:cf:aaac::0/64"
               next-hop-address: "2620:cf:cf:aaad::1"
               next-hop-interface: enp7s0
-      node2:
+      node5:
         bgpnet0:
           bgp_peer: "2620:cf::100:64:2:9"
-          bgp_ip: "2620:cf::100:64:2:a"
+          bgp_ip: "2620:cf::100:64:2:10"
         bgpnet1:
           bgp_peer: "2620:cf::100:65:2:9"
-          bgp_ip: "2620:cf::100:65:2:a"
+          bgp_ip: "2620:cf::100:65:2:10"
         routes:
           config:
             - destination: "f00d:f00d:f00d:f00d:99:99:0:0/96"
@@ -599,78 +533,6 @@ data:
               next-hop-interface: enp8s0
             - destination: "f00d:f00d:f00d:f00d:99:99:0:0/96"
               next-hop-address: "2620:cf::100:65:2:9"
-              next-hop-interface: enp9s0
-            - destination: "2620:cf:cf:aaaa::0/64"
-              next-hop-address: "2620:cf:cf:aaad::1"
-              next-hop-interface: enp7s0
-            - destination: "2620:cf:cf:aaab::0/64"
-              next-hop-address: "2620:cf:cf:aaad::1"
-              next-hop-interface: enp7s0
-            - destination: "2620:cf:cf:aaac::0/64"
-              next-hop-address: "2620:cf:cf:aaad::1"
-              next-hop-interface: enp7s0
-      node3:
-        bgpnet0:
-          bgp_peer: "2620:cf::100:64:0:d"
-          bgp_ip: "2620:cf::100:64:0:e"
-        bgpnet1:
-          bgp_peer: "2620:cf::100:65:0:d"
-          bgp_ip: "2620:cf::100:65:0:e"
-        routes:
-          config:
-            - destination: "f00d:f00d:f00d:f00d:99:99:0:0/96"
-              next-hop-address: "2620:cf::100:64:0:d"
-              next-hop-interface: enp8s0
-            - destination: "f00d:f00d:f00d:f00d:99:99:0:0/96"
-              next-hop-address: "2620:cf::100:65:0:d"
-              next-hop-interface: enp9s0
-            - destination: "2620:cf:cf:aaaa::0/64"
-              next-hop-address: "2620:cf:cf:aaad::1"
-              next-hop-interface: enp7s0
-            - destination: "2620:cf:cf:aaab::0/64"
-              next-hop-address: "2620:cf:cf:aaad::1"
-              next-hop-interface: enp7s0
-            - destination: "2620:cf:cf:aaac::0/64"
-              next-hop-address: "2620:cf:cf:aaad::1"
-              next-hop-interface: enp7s0
-      node4:
-        bgpnet0:
-          bgp_peer: "2620:cf::100:64:1:d"
-          bgp_ip: "2620:cf::100:64:1:e"
-        bgpnet1:
-          bgp_peer: "2620:cf::100:65:1:d"
-          bgp_ip: "2620:cf::100:65:1:e"
-        routes:
-          config:
-            - destination: "f00d:f00d:f00d:f00d:99:99:0:0/96"
-              next-hop-address: "2620:cf::100:64:1:d"
-              next-hop-interface: enp8s0
-            - destination: "f00d:f00d:f00d:f00d:99:99:0:0/96"
-              next-hop-address: "2620:cf::100:65:1:d"
-              next-hop-interface: enp9s0
-            - destination: "2620:cf:cf:aaaa::0/64"
-              next-hop-address: "2620:cf:cf:aaad::1"
-              next-hop-interface: enp7s0
-            - destination: "2620:cf:cf:aaab::0/64"
-              next-hop-address: "2620:cf:cf:aaad::1"
-              next-hop-interface: enp7s0
-            - destination: "2620:cf:cf:aaac::0/64"
-              next-hop-address: "2620:cf:cf:aaad::1"
-              next-hop-interface: enp7s0
-      node5:
-        bgpnet0:
-          bgp_peer: "2620:cf::100:64:2:d"
-          bgp_ip: "2620:cf::100:64:2:e"
-        bgpnet1:
-          bgp_peer: "2620:cf::100:65:2:d"
-          bgp_ip: "2620:cf::100:65:2:e"
-        routes:
-          config:
-            - destination: "f00d:f00d:f00d:f00d:99:99:0:0/96"
-              next-hop-address: "2620:cf::100:64:2:d"
-              next-hop-interface: enp8s0
-            - destination: "f00d:f00d:f00d:f00d:99:99:0:0/96"
-              next-hop-address: "2620:cf::100:65:2:d"
               next-hop-interface: enp9s0
             - destination: "2620:cf:cf:aaaa::0/64"
               next-hop-address: "2620:cf:cf:aaad::1"
