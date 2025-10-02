@@ -27,9 +27,11 @@ data:
         - destination: f00d:f00d:f00d:f00d:99:99:0:0/96
           next-hop-address: "2620:cf::100:64:0:9"
           next-hop-interface: enp8s0
+          weight: 200
         - destination: f00d:f00d:f00d:f00d:99:99:0:0/96
           next-hop-address: "2620:cf::100:65:0:9"
           next-hop-interface: enp9s0
+          weight: 200
   node_4:
     name: worker-1
     internalapi_ip: "2620:cf:cf:bbbb::11"
@@ -49,9 +51,11 @@ data:
         - destination: f00d:f00d:f00d:f00d:99:99:0:0/96
           next-hop-address: "2620:cf::100:64:1:9"
           next-hop-interface: enp8s0
+          weight: 200
         - destination: f00d:f00d:f00d:f00d:99:99:0:0/96
           next-hop-address: "2620:cf::100:65:1:9"
           next-hop-interface: enp9s0
+          weight: 200
   node_5:
     name: worker-2
     internalapi_ip: "2620:cf:cf:bbbb::12"
@@ -71,9 +75,11 @@ data:
         - destination: f00d:f00d:f00d:f00d:99:99:0:0/96
           next-hop-address: "2620:cf::100:64:2:9"
           next-hop-interface: enp8s0
+          weight: 200
         - destination: f00d:f00d:f00d:f00d:99:99:0:0/96
           next-hop-address: "2620:cf::100:65:2:9"
           next-hop-interface: enp9s0
+          weight: 200
   node_6:
     name: worker-3
     node_name: worker-3
@@ -483,9 +489,11 @@ data:
             - destination: "f00d:f00d:f00d:f00d:99:99:0:0/96"
               next-hop-address: "2620:cf::100:64:0:9"
               next-hop-interface: enp8s0
+              weight: 200
             - destination: "f00d:f00d:f00d:f00d:99:99:0:0/96"
               next-hop-address: "2620:cf::100:65:0:9"
               next-hop-interface: enp9s0
+              weight: 200
             - destination: "2620:cf:cf:aaaa::0/64"
               next-hop-address: "2620:cf:cf:aaad::1"
               next-hop-interface: enp7s0
@@ -507,9 +515,11 @@ data:
             - destination: "f00d:f00d:f00d:f00d:99:99:0:0/96"
               next-hop-address: "2620:cf::100:64:1:9"
               next-hop-interface: enp8s0
+              weight: 200
             - destination: "f00d:f00d:f00d:f00d:99:99:0:0/96"
               next-hop-address: "2620:cf::100:65:1:9"
               next-hop-interface: enp9s0
+              weight: 200
             - destination: "2620:cf:cf:aaaa::0/64"
               next-hop-address: "2620:cf:cf:aaad::1"
               next-hop-interface: enp7s0
@@ -531,9 +541,11 @@ data:
             - destination: "f00d:f00d:f00d:f00d:99:99:0:0/96"
               next-hop-address: "2620:cf::100:64:2:9"
               next-hop-interface: enp8s0
+              weight: 200
             - destination: "f00d:f00d:f00d:f00d:99:99:0:0/96"
               next-hop-address: "2620:cf::100:65:2:9"
               next-hop-interface: enp9s0
+              weight: 200
             - destination: "2620:cf:cf:aaaa::0/64"
               next-hop-address: "2620:cf:cf:aaad::1"
               next-hop-interface: enp7s0

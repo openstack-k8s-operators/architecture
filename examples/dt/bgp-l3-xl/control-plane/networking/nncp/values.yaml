@@ -27,9 +27,11 @@ data:
         - destination: 99.99.0.0/16
           next-hop-address: 100.64.0.13
           next-hop-interface: enp8s0
+          weight: 200
         - destination: 99.99.0.0/16
           next-hop-address: 100.65.0.13
           next-hop-interface: enp9s0
+          weight: 200
   node_4:
     name: worker-1
     internalapi_ip: 172.17.0.6
@@ -49,9 +51,11 @@ data:
         - destination: 99.99.0.0/16
           next-hop-address: 100.64.0.17
           next-hop-interface: enp8s0
+          weight: 200
         - destination: 99.99.0.0/16
           next-hop-address: 100.65.0.17
           next-hop-interface: enp9s0
+          weight: 200
   node_5:
     name: worker-2
     internalapi_ip: 172.17.0.7
@@ -71,9 +75,11 @@ data:
         - destination: 99.99.0.0/16
           next-hop-address: 100.64.0.25
           next-hop-interface: enp8s0
+          weight: 200
         - destination: 99.99.0.0/16
           next-hop-address: 100.65.0.21
           next-hop-interface: enp9s0
+          weight: 200
   node_6:
     name: worker-3
     internalapi_ip: 172.17.0.8
@@ -93,9 +99,11 @@ data:
         - destination: 99.99.0.0/16
           next-hop-address: 100.64.1.13
           next-hop-interface: enp8s0
+          weight: 200
         - destination: 99.99.0.0/16
           next-hop-address: 100.65.1.13
           next-hop-interface: enp9s0
+          weight: 200
 
   node_7:
     name: worker-4
@@ -116,9 +124,11 @@ data:
         - destination: 99.99.0.0/16
           next-hop-address: 100.64.1.17
           next-hop-interface: enp8s0
+          weight: 200
         - destination: 99.99.0.0/16
           next-hop-address: 100.65.1.17
           next-hop-interface: enp9s0
+          weight: 200
   node_8:
     name: worker-5
     internalapi_ip: 172.17.0.10
@@ -138,9 +148,11 @@ data:
         - destination: 99.99.0.0/16
           next-hop-address: 100.64.1.21
           next-hop-interface: enp8s0
+          weight: 200
         - destination: 99.99.0.0/16
           next-hop-address: 100.65.1.21
           next-hop-interface: enp9s0
+          weight: 200
   node_9:
     name: worker-6
     internalapi_ip: 172.17.0.11
@@ -160,9 +172,11 @@ data:
         - destination: 99.99.0.0/16
           next-hop-address: 100.64.2.13
           next-hop-interface: enp8s0
+          weight: 200
         - destination: 99.99.0.0/16
           next-hop-address: 100.65.2.13
           next-hop-interface: enp9s0
+          weight: 200
   node_10:
     name: worker-7
     internalapi_ip: 172.17.0.12
@@ -182,9 +196,11 @@ data:
         - destination: 99.99.0.0/16
           next-hop-address: 100.64.2.17
           next-hop-interface: enp8s0
+          weight: 200
         - destination: 99.99.0.0/16
           next-hop-address: 100.65.2.17
           next-hop-interface: enp9s0
+          weight: 200
   node_11:
     name: worker-8
     internalapi_ip: 172.17.0.13
@@ -204,9 +220,11 @@ data:
         - destination: 99.99.0.0/16
           next-hop-address: 100.64.2.21
           next-hop-interface: enp8s0
+          weight: 200
         - destination: 99.99.0.0/16
           next-hop-address: 100.65.2.21
           next-hop-interface: enp9s0
+          weight: 200
   # test worker
   node_12:
     name: worker-9
@@ -556,9 +574,11 @@ data:
             - destination: 99.99.0.0/16
               next-hop-address: 100.64.0.13
               next-hop-interface: enp8s0
+              weight: 200
             - destination: 99.99.0.0/16
               next-hop-address: 100.65.0.13
               next-hop-interface: enp9s0
+              weight: 200
       node4:
         bgpnet0:
           bgp_peer: 100.64.0.17
@@ -573,9 +593,11 @@ data:
             - destination: 99.99.0.0/16
               next-hop-address: 100.64.0.17
               next-hop-interface: enp8s0
+              weight: 200
             - destination: 99.99.0.0/16
               next-hop-address: 100.65.0.17
               next-hop-interface: enp9s0
+              weight: 200
       node5:
         bgpnet0:
           bgp_peer: 100.64.0.21
@@ -590,9 +612,11 @@ data:
             - destination: 99.99.0.0/16
               next-hop-address: 100.64.0.21
               next-hop-interface: enp8s0
+              weight: 200
             - destination: 99.99.0.0/16
               next-hop-address: 100.65.0.21
               next-hop-interface: enp9s0
+              weight: 200
       node6:
         bgpnet0:
           bgp_peer: 100.64.1.13
@@ -607,9 +631,11 @@ data:
             - destination: 99.99.0.0/16
               next-hop-address: 100.64.1.13
               next-hop-interface: enp8s0
+              weight: 200
             - destination: 99.99.0.0/16
               next-hop-address: 100.65.1.13
               next-hop-interface: enp9s0
+              weight: 200
       node7:
         bgpnet0:
           bgp_peer: 100.64.1.17
@@ -624,9 +650,11 @@ data:
             - destination: 99.99.0.0/16
               next-hop-address: 100.64.1.17
               next-hop-interface: enp8s0
+              weight: 200
             - destination: 99.99.0.0/16
               next-hop-address: 100.65.1.17
               next-hop-interface: enp9s0
+              weight: 200
       node8:
         bgpnet0:
           bgp_peer: 100.64.1.21
@@ -641,9 +669,11 @@ data:
             - destination: 99.99.0.0/16
               next-hop-address: 100.64.1.21
               next-hop-interface: enp8s0
+              weight: 200
             - destination: 99.99.0.0/16
               next-hop-address: 100.65.1.21
               next-hop-interface: enp9s0
+              weight: 200
       node9:
         bgpnet0:
           bgp_peer: 100.64.2.13
@@ -658,9 +688,11 @@ data:
             - destination: 99.99.0.0/16
               next-hop-address: 100.64.2.13
               next-hop-interface: enp8s0
+              weight: 200
             - destination: 99.99.0.0/16
               next-hop-address: 100.65.2.13
               next-hop-interface: enp9s0
+              weight: 200
       node10:
         bgpnet0:
           bgp_peer: 100.64.2.17
@@ -675,9 +707,11 @@ data:
             - destination: 99.99.0.0/16
               next-hop-address: 100.64.2.17
               next-hop-interface: enp8s0
+              weight: 200
             - destination: 99.99.0.0/16
               next-hop-address: 100.65.2.17
               next-hop-interface: enp9s0
+              weight: 200
       node11:
         bgpnet0:
           bgp_peer: 100.64.2.21
@@ -692,9 +726,11 @@ data:
             - destination: 99.99.0.0/16
               next-hop-address: 100.64.2.21
               next-hop-interface: enp8s0
+              weight: 200
             - destination: 99.99.0.0/16
               next-hop-address: 100.65.2.21
               next-hop-interface: enp9s0
+              weight: 200
       node12:
         bgpnet0:
           bgp_peer: 100.64.10.1
