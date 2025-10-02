@@ -18,7 +18,7 @@ transformers:
         create: true
 
 components:
-  - ../../../../../../lib/nncp
+  - ../../../../../../va/nvidia-vfio-passthrough/networking/nncp
 
 resources:
   - values.yaml

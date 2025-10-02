@@ -18,7 +18,7 @@ transformers:
         create: true
 
 components:
-  - ../../../../../../../lib/nncp
+  - ../../../../../../../dt/nova/nova04delta/networking/nncp
 
 resources:
   - values.yaml
