@@ -22,7 +22,8 @@ data:
         nodeName: edpm-compute-0
       bmc:
         address: CHANGEME
-        credentialsName: bmc-secret
+        # NOTE: in CI systems, we use credentials_file from cifmw_baremetal_hosts.
+        # credentialsName: bmc-secret
         disableCertificateVerification: true
       bootMACAddress: CHANGEME
       rootDeviceHints:
