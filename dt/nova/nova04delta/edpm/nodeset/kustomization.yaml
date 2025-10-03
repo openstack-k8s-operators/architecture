@@ -150,6 +150,18 @@ replacements:
   - source:
       kind: ConfigMap
       name: edpm-nodeset-values
+      fieldPath: data.baremetalhosts.edpm-compute-0.online
+    targets:
+      - select:
+          kind: BareMetalHost
+          name: edpm-compute-0
+        fieldPaths:
+          - spec.online
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values
       fieldPath: data.baremetalhosts.edpm-compute-0.bootMACAddress
     targets:
       - select:
