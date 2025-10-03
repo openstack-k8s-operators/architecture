@@ -35,6 +35,7 @@ resources:
   - provisioning.yaml
 
 patches:
+  # BareMetalHost pre-provisioning networkData for Ironic Python Agent appliance launched on the provisioned host
   - target:
       kind: BareMetalHost
     path: baremetalhost_template.yaml
@@ -47,20 +48,6 @@ patches:
         value: edpm-compute-0-preprovision-network-data
 
 replacements:
-  # networkData
-  - source:
-      kind: ConfigMap
-      name: edpm-nodeset-values
-      fieldPath: data.baremetalHostsNetworkData.edpm-compute-0
-    targets:
-      - select:
-          kind: Secret
-          name: edpm-compute-0-network-data
-        fieldPaths:
-          - stringData
-        options:
-          create: true
-
   # Nova compute CPU pinning customization
   - source:
       kind: ConfigMap
@@ -191,6 +178,32 @@ replacements:
       - select:
           kind: Secret
           name: edpm-compute-0-preprovision-network-data
+        fieldPaths:
+          - stringData
+        options:
+          create: true
+  # BMO root password for provisioned host
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values
+      fieldPath: data.root_password
+    targets:
+      - select:
+          kind: Secret
+          name: baremetalset-password-secret
+        fieldPaths:
+          - data.NodeRootPassword
+        options:
+          create: true
+  # BMO networkData for provisioned host
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values
+      fieldPath: data.baremetalHostsNetworkData.edpm-compute-0
+    targets:
+      - select:
+          kind: Secret
+          name: edpm-compute-0-network-data
         fieldPaths:
           - stringData
         options:

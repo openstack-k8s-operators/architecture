@@ -19,3 +19,38 @@ transformers:
 
 components:
   - ../../../../../lib/dataplane/deployment
+
+replacements:
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-post-driver-values
+      fieldPath: data.servicesOverride
+    targets:
+      - select:
+          kind: OpenStackDataPlaneDeployment
+        fieldPaths:
+          - spec.servicesOverride
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-post-driver-values
+      fieldPath: data.ansibleExtraVars
+    targets:
+      - select:
+          kind: OpenStackDataPlaneDeployment
+        fieldPaths:
+          - spec.ansibleExtraVars
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-post-driver-values
+      fieldPath: data.deployment.name
+    targets:
+      - select:
+          kind: OpenStackDataPlaneDeployment
+        fieldPaths:
+          - metadata.name
+        options:
+          create: true
