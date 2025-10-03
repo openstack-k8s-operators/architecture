@@ -21,6 +21,9 @@ components:
   - ../../../lib/networking/netconfig
   - ../../../lib/networking/nad
 
+resources:
+  - ocp-networks-storagemgmt-netattach.yaml
+
 patches:
   #
   # The storagemgmt network template needed for CephHCI
@@ -72,3 +75,14 @@ replacements:
           kind: NetConfig
         fieldPaths:
           - spec.networks.[name=storagemgmt].subnets
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storagemgmt.net-attach-def
+    targets:
+      - select:
+          kind: NetworkAttachmentDefinition
+          name: storagemgmt
+        fieldPaths:
+          - spec.config

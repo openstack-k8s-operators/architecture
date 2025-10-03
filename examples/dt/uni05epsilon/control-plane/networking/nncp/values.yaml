@@ -13,18 +13,21 @@ data:
     tenant_ip: 172.19.0.5
     ctlplane_ip: 192.168.122.10
     storage_ip: 172.18.0.5
+    storagemgmt_ip: 172.20.0.5
   node_1:
     name: master-1
     internalapi_ip: 172.17.0.6
     tenant_ip: 172.19.0.6
     ctlplane_ip: 192.168.122.11
     storage_ip: 172.18.0.6
+    storagemgmt_ip: 172.20.0.6
   node_2:
     name: master-2
     internalapi_ip: 172.17.0.7
     tenant_ip: 172.19.0.7
     ctlplane_ip: 192.168.122.12
     storage_ip: 172.18.0.7
+    storagemgmt_ip: 172.20.0.7
 
   ctlplane:
     dnsDomain: ctlplane.openstack.lab
@@ -134,6 +137,25 @@ data:
         name: subnet1
         vlan: 23
     mtu: 1500
+    prefix-length: 24
+    iface: storagemgmt
+    vlan: 23
+    base_iface: enp6s0
+    lb_addresses:
+      - 172.20.0.80-172.20.0.90
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "storagemgmt",
+        "type": "macvlan",
+        "master": "storagemgmt",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "172.20.0.0/24",
+          "range_start": "172.20.0.30",
+          "range_end": "172.20.0.70"
+        }
+      }
 
   tenant:
     dnsDomain: tenant.openstack.lab

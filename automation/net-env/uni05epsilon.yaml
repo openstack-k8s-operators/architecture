@@ -235,6 +235,17 @@ instances:
         prefix_length_v4: 24
         skip_nm: false
         vlan_id: 122
+      storagemgmt:
+        interface_name: enp6s0.123
+        ip_v4: 172.20.0.10
+        mac_addr: "52:54:00:28:4f:f1"
+        mtu: 1500
+        netmask_v4: 255.255.255.0
+        network_name: storagemgmt
+        parent_interface: enp6s0
+        prefix_length_v4: 24
+        skip_nm: false
+        vlan_id: 123
   ocp-1:
     hostname: osasinfra-master-1
     name: ocp-1
@@ -292,6 +303,17 @@ instances:
         prefix_length_v4: 24
         skip_nm: false
         vlan_id: 122
+      storagemgmt:
+        interface_name: enp6s0.123
+        ip_v4: 172.20.0.11
+        mac_addr: "52:54:00:14:39:b6"
+        mtu: 1500
+        netmask_v4: 255.255.255.0
+        network_name: storagemgmt
+        parent_interface: enp6s0
+        prefix_length_v4: 24
+        skip_nm: false
+        vlan_id: 123
   ocp-2:
     hostname: osasinfra-master-2
     name: ocp-2
@@ -349,6 +371,17 @@ instances:
         prefix_length_v4: 24
         skip_nm: false
         vlan_id: 122
+      storagemgmt:
+        interface_name: enp6s0.123
+        ip_v4: 172.20.0.12
+        mac_addr: "52:54:00:de:3d:96"
+        mtu: 1500
+        netmask_v4: 255.255.255.0
+        network_name: storagemgmt
+        parent_interface: enp6s0
+        prefix_length_v4: 24
+        skip_nm: false
+        vlan_id: 123
   networker-0:
     hostname: networker-0
     name: networker-0
@@ -447,6 +480,15 @@ instances:
         parent_interface: eth1
         skip_nm: false
         vlan_id: 22
+      storagemgmt:
+        interface_name: eth1.123
+        ip_v4: 172.20.0.100
+        mac_addr: "52:54:00:17:05:44"
+        mtu: 1500
+        network_name: storagemgmt
+        parent_interface: eth1
+        skip_nm: false
+        vlan_id: 123
   compute-1:
     hostname: compute-1
     name: compute-1
@@ -485,6 +527,15 @@ instances:
         parent_interface: eth1
         skip_nm: false
         vlan_id: 22
+      storagemgmt:
+        interface_name: eth1.123
+        ip_v4: 172.20.0.101
+        mac_addr: "52:54:00:17:05:45"
+        mtu: 1500
+        network_name: storagemgmt
+        parent_interface: eth1
+        skip_nm: false
+        vlan_id: 123
   compute-2:
     hostname: compute-2
     name: compute-2
@@ -523,6 +574,15 @@ instances:
         parent_interface: eth1
         skip_nm: false
         vlan_id: 22
+      storagemgmt:
+        interface_name: eth1.123
+        ip_v4: 172.20.0.102
+        mac_addr: "52:54:00:17:05:46"
+        mtu: 1500
+        network_name: storagemgmt
+        parent_interface: eth1
+        skip_nm: false
+        vlan_id: 123
 networks:
   ctlplane:
     dns_v4:
@@ -674,6 +734,22 @@ networks:
     network_v4: 172.20.0.0/24
     search_domain: storagemgmt.example.com
     tools:
+      metallb:
+        ipv4_ranges:
+          - end: 172.20.0.90
+            end_host: 90
+            length: 11
+            start: 172.20.0.80
+            start_host: 80
+        ipv6_ranges: []
+      multus:
+        ipv4_ranges:
+          - end: 172.20.0.70
+            end_host: 70
+            length: 41
+            start: 172.20.0.30
+            start_host: 30
+        ipv6_ranges: []
       netconfig:
         ipv4_ranges:
           - end: 172.20.0.250

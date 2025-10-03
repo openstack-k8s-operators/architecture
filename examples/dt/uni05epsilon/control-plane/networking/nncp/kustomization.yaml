@@ -21,3 +21,109 @@ components:
 
 resources:
   - values.yaml
+
+patches:
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: "master-.*"
+    patch: |-
+      - op: add
+        path: /spec/desiredState/interfaces/-
+        value:
+          description: storagemgmt vlan host interface
+          name: storagemgmt
+          state: up
+          type: vlan
+          mtu: _mtu_replaced_
+          ipv4:
+            address:
+            - ip: _ip_replaced_
+              prefix-length: _prefix_replaced_
+            dhcp: false
+            enabled: true
+          ipv6:
+            enabled: false
+          vlan:
+            base-iface: _base_iface_replaced_
+            id: _vlan_id_replaced_
+
+replacements:
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_0.storagemgmt_ip
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-0
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=storagemgmt].ipv4.address.0.ip
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_1.storagemgmt_ip
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-1
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=storagemgmt].ipv4.address.0.ip
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_2.storagemgmt_ip
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-2
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=storagemgmt].ipv4.address.0.ip
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storagemgmt.base_iface
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=storagemgmt].vlan.base-iface
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storagemgmt.vlan
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=storagemgmt].vlan.id
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storagemgmt.mtu
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=storagemgmt].mtu
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storagemgmt.prefix-length
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=storagemgmt].ipv4.address.0.prefix-length
+        options:
+          create: true
