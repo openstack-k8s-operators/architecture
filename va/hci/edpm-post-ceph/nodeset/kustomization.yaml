@@ -236,12 +236,12 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
-      fieldPath: data.telemetry.metricStorage.enabled
+      fieldPath: data.telemetry.metricStorage
     targets:
       - select:
           kind: OpenStackControlPlane
         fieldPaths:
-          - spec.telemetry.template.metricStorage.enabled
+          - spec.telemetry.template.metricStorage
         options:
           create: true
   - source:
@@ -286,5 +286,27 @@ replacements:
           kind: OpenStackControlPlane
         fieldPaths:
           - spec.heat.enabled
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.watcher.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.watcher.enabled
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.watcher.decisionengineServiceTemplate.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.watcher.template.decisionengineServiceTemplate.customServiceConfig
         options:
           create: true
