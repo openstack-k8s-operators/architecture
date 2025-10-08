@@ -39,32 +39,6 @@ data:
               name: {{ neutron_physical_bridge_name }}
               mtu: {{ min_viable_mtu }}
               use_dhcp: false
-              dns_servers: {{ ctlplane_dns_nameservers }}
-              domain: {{ dns_search_domains }}
-              addresses:
-                - ip_netmask: {{ ctlplane_ip }}/{{ ctlplane_cidr }}
-              routes: {{ ctlplane_host_routes }}
-              members:
-                - type: interface
-                  name: nic2
-                  mtu: {{ min_viable_mtu }}
-                  primary: true
-                  # this ovs_extra configuration fixes OSPRH-17551, but it will
-                  # be not needed when FDP-1472 is resolved
-                  ovs_extra:
-                    - "set interface eth1 external-ids:ovn-egress-iface=true"
-          {% for network in nodeset_networks %}
-                - type: vlan
-                  mtu: {{ lookup('vars', networks_lower[network] ~ '_mtu') }}
-                  vlan_id: {{ lookup('vars', networks_lower[network] ~ '_vlan_id') }}
-                  addresses:
-                    - ip_netmask: >-
-                        {{
-                          lookup('vars', networks_lower[network] ~ '_ip')
-                        }}/{{
-                          lookup('vars', networks_lower[network] ~ '_cidr')
-                        }}
-                  routes: {{ lookup('vars', networks_lower[network] ~ '_host_routes') }}
           {% endfor %}
         neutron_physical_bridge_name: br-ex
         neutron_public_interface_name: eth0
@@ -137,3 +111,4 @@ data:
       - libvirt
       - nova
       - telemetry
+
