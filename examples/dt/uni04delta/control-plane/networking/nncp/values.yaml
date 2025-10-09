@@ -232,6 +232,31 @@ data:
         }
       }
 
+  octavia:
+    dnsDomain: octavia.example.com
+    mtu: 1500
+    vlan: 25
+    base_iface: enp6s0
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "octavia",
+        "type": "bridge",
+        "bridge": "octbr",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "172.23.0.0/24",
+          "range_start": "172.23.0.30",
+          "range_end": "172.23.0.70",
+          "routes": [
+            {
+              "dst": "172.24.0.0/16",
+              "gw": "172.23.0.150"
+            }
+          ]
+        }
+      }
+
   external:
     dnsDomain: external.example.com
     subnets:
