@@ -25,7 +25,7 @@ resources:
   - ocp_worker_nodes_nncp.yaml
 
 patches:
-  # Add BGP and octavia interfaces
+  # Add BGP, octavia and designate interfaces
   - target:
       kind: NodeNetworkConfigurationPolicy
     patch: |-
@@ -96,6 +96,17 @@ patches:
           description: Octavia bridge
           mtu: 1500
           name: octavia
+          type: linux-bridge
+          state: up
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+    patch: |-
+      - op: add
+        path: /spec/desiredState/interfaces/-
+        value:
+          description: Designate bridge
+          mtu: 1500
+          name: designate
           type: linux-bridge
           state: up
 
