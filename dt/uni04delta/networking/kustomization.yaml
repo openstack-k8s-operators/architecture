@@ -55,6 +55,12 @@ patches:
           subnets:
             - _replaced_
           mtu: 1500
+      - op: add
+        path: /spec/networks/-
+        value:
+          dnsDomain: _replaced_
+          name: octavia
+          mtu: 1500
 
 replacements:
   - source:
@@ -166,5 +172,36 @@ replacements:
       - select:
           kind: NetworkAttachmentDefinition
           name: designateext
+        fieldPaths:
+          - spec.config
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.octavia.dnsDomain
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=octavia].dnsDomain
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.octavia.mtu
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=octavia].mtu
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.octavia.net-attach-def
+    targets:
+      - select:
+          kind: NetworkAttachmentDefinition
+          name: octavia
         fieldPaths:
           - spec.config
