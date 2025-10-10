@@ -18,6 +18,16 @@
       cifmw_architecture_scenario: bgp-l3-xl
 - job:
     files:
+    - automation/mocks/bgp-l3-xl-adoption.yaml
+    - examples/dt/bgp-l3-xl/control-plane/networking
+    - examples/dt/bgp-l3-xl/control-plane/networking/nncp
+    - lib
+    name: rhoso-architecture-validate-bgp-l3-xl-adoption
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: bgp-l3-xl-adoption
+- job:
+    files:
     - automation/mocks/bgp_dt01.yaml
     - examples/dt/bgp_dt01/control-plane
     - examples/dt/bgp_dt01/control-plane/networking

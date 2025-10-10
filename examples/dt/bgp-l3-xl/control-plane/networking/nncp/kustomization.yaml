@@ -950,6 +950,11 @@ replacements:
         fieldPaths:
           - spec.desiredState.interfaces.5.ipv4.address.0.prefix-length
           - spec.desiredState.interfaces.6.ipv4.address.0.prefix-length
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.bgp.prefix-length-worker-9
+    targets:
       - select:  # in case of worker-9, there is one less interfaces
           kind: NodeNetworkConfigurationPolicy
           name: worker-9
