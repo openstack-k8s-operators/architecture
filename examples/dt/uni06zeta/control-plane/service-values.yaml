@@ -104,7 +104,6 @@ data:
       l3_ha = False
       max_l3_agents_per_router = 3
       debug = true
-      log_dir = /var/log/neutron
       control_exchange = neutron
       [agent]
       report_interval = 300
