@@ -4,7 +4,11 @@ kind: Kustomization
 
 components:
   - ../../../../dt/perfscale/scalelab/
+  # To enable Ceph, uncomment the following line:
+  # - ../../../../dt/perfscale/scalelab/ceph/
 
 resources:
   - networking/nncp/values.yaml
   - service-values.yaml
+  # To enable Ceph, uncomment the following line:
+  # - service-values-ceph.yaml

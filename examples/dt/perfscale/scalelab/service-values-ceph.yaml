@@ -1,0 +1,60 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: service-values-ceph
+  annotations:
+    config.kubernetes.io/local-config: "true"
+data:
+  # Ceph conf and keyring
+  ceph:
+    conf: CHANGEME_CEPH_CONF
+    keyring: CHANGEME_CEPH_KEYRING
+
+  # Glance on RBD
+  glance:
+    customServiceConfig: |
+      [DEFAULT]
+      enabled_backends = default_backend:rbd
+      [glance_store]
+      default_backend = default_backend
+      [default_backend]
+      rbd_store_ceph_conf = /etc/ceph/ceph.conf
+      store_description = "RBD backend"
+      rbd_store_pool = images
+      rbd_store_user = openstack
+
+  # Cinder RBD backend
+  cinderVolumes:
+    ceph:
+      customServiceConfig: |
+        [DEFAULT]
+        enabled_backends = ceph
+        [ceph]
+        volume_backend_name = ceph
+        volume_driver = cinder.volume.drivers.rbd.RBDDriver
+        rbd_ceph_conf = /etc/ceph/ceph.conf
+        rbd_user = openstack
+        rbd_pool = volumes
+        rbd_flatten_volume_from_snapshot = False
+        rbd_secret_uuid = CHANGEME
+      networkAttachments:
+        - storage
+
+  # Ceph mounts for control plane
+  extraMounts:
+    - name: v1
+      region: r1
+      extraVol:
+        - propagation:
+            - GlanceAPI
+            - CinderVolume
+          extraVolType: Ceph
+          volumes:
+            - name: ceph
+              secret:
+                secretName: ceph-conf-files
+          mounts:
+            - name: ceph
+              mountPath: "/etc/ceph"
+              readOnly: true
