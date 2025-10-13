@@ -209,6 +209,21 @@
       cifmw_architecture_scenario: nova02beta
 - job:
     files:
+    - examples/dt/nova/nova05epsilon
+    - examples/dt/nova/nova05epsilon/edpm-deploy-provider/dataplaneservice
+    - examples/dt/nova/nova05epsilon/edpm-deploy-provider/deployment
+    - examples/dt/nova/nova05epsilon/edpm-post-driver/deployment
+    - examples/dt/nova/nova05epsilon/edpm/deployment
+    - examples/dt/nova/nova05epsilon/edpm/nodeset
+    - examples/dt/nova/nova05epsilon/networking
+    - examples/dt/nova/nova05epsilon/networking/nncp
+    - lib
+    name: rhoso-architecture-validate-nova05epsilon
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: nova05epsilon
+- job:
+    files:
     - examples/va/nvidia-mdev/control-plane
     - examples/va/nvidia-mdev/control-plane/nncp
     - examples/va/nvidia-mdev/edpm-post-driver/deployment
