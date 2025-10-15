@@ -30,6 +30,7 @@ data:
       - neutron-metadata
       - libvirt
       - nova-custom
+      - telemetry
 
   nova-extra-config: |
     # Additional overrides that can be set in environment-specific cases

@@ -385,3 +385,105 @@ replacements:
           - spec.swift.enabled
         options:
           create: true
+
+  #
+  # Notifications
+  #
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.notificationsBusInstance
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.notificationsBusInstance
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.rabbitmq.templates.rabbitmq-notifications
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.rabbitmq.templates.rabbitmq-notifications
+        options:
+          create: true
+  #
+  # Telemetry
+  #
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.telemetry.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.telemetry.enabled
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.telemetry.metricStorage
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.telemetry.template.metricStorage
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.telemetry.autoscaling.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.telemetry.template.autoscaling.enabled
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.telemetry.ceilometer.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.telemetry.template.ceilometer.enabled
+        options:
+          create: true
+
+  #
+  # Watcher
+  #
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.watcher.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.watcher.enabled
+        options:
+          create: true
+  #
+  # Heat (required by Telemetry Autoscaling)
+  #
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.heat.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.heat.enabled
+        options:
+          create: true
