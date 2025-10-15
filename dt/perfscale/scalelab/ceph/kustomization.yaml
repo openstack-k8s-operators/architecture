@@ -1,0 +1,78 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+resources:
+  - ceph-secret.yaml
+
+replacements:
+  # Ceph secret replacements
+  - source:
+      kind: ConfigMap
+      name: service-values-ceph
+      fieldPath: data.ceph.conf
+    targets:
+      - select:
+          kind: Secret
+          name: ceph-conf-files
+        fieldPaths:
+          - data.ceph\.conf
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values-ceph
+      fieldPath: data.ceph.keyring
+    targets:
+      - select:
+          kind: Secret
+          name: ceph-conf-files
+        fieldPaths:
+          - data.ceph\.client\.openstack\.keyring
+        options:
+          create: true
+  # Ceph-specific control plane replacements
+  - source:
+      kind: ConfigMap
+      name: service-values-ceph
+      fieldPath: data.cinderVolumes.ceph.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.cinder.template.cinderVolumes.ceph.customServiceConfig
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values-ceph
+      fieldPath: data.cinderVolumes.ceph.networkAttachments
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.cinder.template.cinderVolumes.ceph.networkAttachments
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values-ceph
+      fieldPath: data.glance.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.glance.template.customServiceConfig
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values-ceph
+      fieldPath: data.extraMounts
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.extraMounts
+        options:
+          create: true

@@ -22,6 +22,16 @@ vi networking/nncp/values.yaml
 vi service-values.yaml
 ```
 
+### Optional: Enable Ceph backend
+
+To enable Ceph backend for Cinder, Glance, and Nova, see the [Ceph Configuration Guide](ceph.md).
+If enabling Ceph, uncomment the Ceph lines in [kustomization.yaml](kustomization.yaml) and edit
+[service-values-ceph.yaml](service-values-ceph.yaml).
+```
+vi kustomization.yaml  # Uncomment Ceph component and resource
+vi service-values-ceph.yaml
+```
+
 ## Apply node network configuration
 
 Generate the node network configuration
@@ -64,3 +74,5 @@ Wait for control plane to be available
 ```
 oc wait osctlplane controlplane --for condition=Ready --timeout=600s
 ```
+
+**Note:** If Ceph is enabled, the generated CRs will include Ceph configuration for Cinder, Glance, and extraMounts.

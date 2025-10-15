@@ -21,6 +21,17 @@ your environment.
 vi nodeset/values.yaml
 vi deployment/values.yaml
 ```
+
+### Optional: Enable Ceph backend
+
+To enable Ceph backend for Nova ephemeral storage on compute nodes, see the [Ceph Configuration Guide](ceph.md).
+If enabling Ceph, uncomment the Ceph lines in [nodeset/kustomization.yaml](nodeset/kustomization.yaml) and edit
+[nodeset/values-ceph.yaml](nodeset/values-ceph.yaml).
+```
+vi nodeset/kustomization.yaml  # Uncomment Ceph component and resource
+vi nodeset/values-ceph.yaml
+```
+
 Generate the dataplane nodeset CR.
 ```
 kustomize build nodeset > dataplane-nodeset.yaml
@@ -49,3 +60,5 @@ Wait for dataplane deployment to finish
 ```
 oc wait osdpns openstack-edpm --for condition=Ready --timeout=40m
 ```
+
+**Note:** If Ceph is enabled, the dataplane will include Ceph client configuration and Nova will use RBD for ephemeral storage.

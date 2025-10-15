@@ -8,7 +8,11 @@ This is a collection of CR templates that represent a validated Red Hat OpenStac
 - OVN networking
 - Network isolation over three NIC
 - this example only uses two compute nodes in one node set, though it is assumed the number will be scaled
-- Swift enabled and used as Glance backend
+- Swift enabled and used as Glance backend (default)
+- Ceph backend support (optional)
+  - Cinder Volume using RBD backend
+  - Glance using RBD backend  
+  - Nova using RBD for ephemeral storage
 
 ## Considerations
 
@@ -22,6 +26,8 @@ This is a collection of CR templates that represent a validated Red Hat OpenStac
 
 5. In stage 4 [kustomize](https://kustomize.io/) is used to generate the dataplane CRs dynamically. The `edpm/values.yaml` file must be updated to fit your environment. kustomize version 5 or newer required.
 
+6. Ceph backend is optional. To enable Ceph, see [ceph.md](ceph.md) for configuration requirements. Ceph must be deployed and configured before applying the CRs.
+
 ## Stages
 
 All stages must be executed in the order listed below. Everything is required unless otherwise indicated.
@@ -30,3 +36,7 @@ All stages must be executed in the order listed below. Everything is required un
 1. [Install the OpenStack K8S operators and their dependencies](../../../common/)
 2. [Configuring networking and deploy the OpenStack control plane](control-plane.md)
 3. [Configure and deploy the dataplane](dataplane.md)
+
+## Optional: Ceph Backend
+
+To deploy with Ceph backend for Cinder, Glance, and Nova, see [Ceph Configuration Guide](ceph.md).
