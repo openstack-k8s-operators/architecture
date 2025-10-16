@@ -4,5 +4,11 @@ kind: Provisioning
 metadata:
   name: provisioning-configuration
 spec:
+  provisioningDHCPRange: null
+  provisioningIP: null
+  provisioningInterface: null
+  provisioningMacAddresses: null
+  provisioningNetwork: Disabled
+  provisioningNetworkCIDR: null
   watchAllNamespaces: true
   virtualMediaViaExternalNetwork: true
