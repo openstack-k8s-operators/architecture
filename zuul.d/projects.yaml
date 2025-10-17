@@ -16,7 +16,11 @@
       - rhoso-architecture-validate-nova-three-cells
       - rhoso-architecture-validate-nova01alpha
       - rhoso-architecture-validate-nova02beta
+      - rhoso-architecture-validate-nova04delta
+      - rhoso-architecture-validate-nova04delta-adoption
       - rhoso-architecture-validate-nvidia-mdev
+      - rhoso-architecture-validate-nvidia-vfio-passthrough
+      - rhoso-architecture-validate-nvidia-vfio-passthrough-adoption
       - rhoso-architecture-validate-osasinfra
       - rhoso-architecture-validate-osasinfra-ipv6
       - rhoso-architecture-validate-ovs-dpdk
