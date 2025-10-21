@@ -529,3 +529,12 @@
     vars:
       cifmw_architecture_scenario: uni09iota
       cifmw_networking_env_def_file: automation/net-env/uni09iota.yaml
+- job:
+    files:
+    - examples/dt/uni09iota/control-plane/networking
+    - examples/dt/uni09iota/control-plane/networking/nncp
+    - lib
+    name: rhoso-architecture-validate-uni09iota-adoption
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: uni09iota-adoption

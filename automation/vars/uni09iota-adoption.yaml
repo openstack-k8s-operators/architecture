@@ -1,0 +1,39 @@
+---
+vas:
+  uni09iota-adoption:
+    stages:
+      - pre_stage_run:
+          - name: Apply fc_card label on master-0
+            type: cr
+            definition:
+              metadata:
+                labels:
+                  fc_card: 'available'
+            kind: Node
+            resource_name: master-0
+            state: patched
+        name: nncp-configuration
+        path: examples/dt/uni09iota/control-plane/networking/nncp
+        wait_conditions:
+          - >-
+            oc -n openstack wait nncp
+            -l osp/nncm-config-type=standard
+            --for jsonpath='{.status.conditions[0].reason}'=SuccessfullyConfigured
+            --timeout=5m
+        values:
+          - name: network-values
+            src_file: values.yaml
+        build_output: nncp.yaml
+
+      - name: network-configuration
+        path: examples/dt/uni09iota/control-plane/networking
+        wait_conditions:
+          - >-
+            oc -n metallb-system wait pod
+            -l app=metallb -l component=speaker
+            --for condition=Ready
+            --timeout=5m
+        values:
+          - name: network-values
+            src_file: nncp/values.yaml
+        build_output: network.yaml
