@@ -15,8 +15,8 @@ data:
     ctlplane_ip: "2620:cf:cf:aaaa::10"
     storage_ip: "2620:cf:cf:cccc::10"
     bgp_ip:
-      - "2620:cf::100:64:0:10"
-      - "2620:cf::100:65:0:10"
+      - "2620:cf::100:64:0:a"
+      - "2620:cf::100:65:0:a"
     bgp_peers:
       - "2620:cf::100:64:0:9"
       - "2620:cf::100:65:0:9"
@@ -39,8 +39,8 @@ data:
     ctlplane_ip: "2620:cf:cf:aaaa::11"
     storage_ip: "2620:cf:cf:cccc::11"
     bgp_ip:
-      - "2620:cf::100:64:1:10"
-      - "2620:cf::100:65:1:10"
+      - "2620:cf::100:64:1:a"
+      - "2620:cf::100:65:1:a"
     bgp_peers:
       - "2620:cf::100:64:1:9"
       - "2620:cf::100:65:1:9"
@@ -63,8 +63,8 @@ data:
     ctlplane_ip: "2620:cf:cf:aaaa::12"
     storage_ip: "2620:cf:cf:cccc::12"
     bgp_ip:
-      - "2620:cf::100:64:2:10"
-      - "2620:cf::100:65:2:10"
+      - "2620:cf::100:64:2:a"
+      - "2620:cf::100:65:2:a"
     bgp_peers:
       - "2620:cf::100:64:2:9"
       - "2620:cf::100:65:2:9"
@@ -480,10 +480,10 @@ data:
       node3:
         bgpnet0:
           bgp_peer: "2620:cf::100:64:0:9"
-          bgp_ip: "2620:cf::100:64:0:10"
+          bgp_ip: "2620:cf::100:64:0:a"
         bgpnet1:
           bgp_peer: "2620:cf::100:65:0:9"
-          bgp_ip: "2620:cf::100:65:0:10"
+          bgp_ip: "2620:cf::100:65:0:a"
         routes:
           config:
             - destination: "f00d:f00d:f00d:f00d:99:99:0:0/96"
@@ -506,10 +506,10 @@ data:
       node4:
         bgpnet0:
           bgp_peer: "2620:cf::100:64:1:9"
-          bgp_ip: "2620:cf::100:64:1:10"
+          bgp_ip: "2620:cf::100:64:1:a"
         bgpnet1:
           bgp_peer: "2620:cf::100:65:1:9"
-          bgp_ip: "2620:cf::100:65:1:10"
+          bgp_ip: "2620:cf::100:65:1:a"
         routes:
           config:
             - destination: "f00d:f00d:f00d:f00d:99:99:0:0/96"
@@ -532,10 +532,10 @@ data:
       node5:
         bgpnet0:
           bgp_peer: "2620:cf::100:64:2:9"
-          bgp_ip: "2620:cf::100:64:2:10"
+          bgp_ip: "2620:cf::100:64:2:a"
         bgpnet1:
           bgp_peer: "2620:cf::100:65:2:9"
-          bgp_ip: "2620:cf::100:65:2:10"
+          bgp_ip: "2620:cf::100:65:2:a"
         routes:
           config:
             - destination: "f00d:f00d:f00d:f00d:99:99:0:0/96"
