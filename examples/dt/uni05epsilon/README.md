@@ -55,6 +55,7 @@ Focused on verifying Cinder and Glance with multiple backends.
 | Neutron          | Geneve (OVN)            | Must have          |
 | Octavia (TODO)   | act-stby                | Must have          |
 | Swift            | (default)               | Must have          |
+| Watcher          | (default)               | Must have          |
 
 
 #### Support services
@@ -67,6 +68,8 @@ to work properly and can be deployed with any/default configuration.
 | ---------------- |--------------------------- |
 | Nova             | needed by scenario testing |
 | Keystone         | needed by all services     |
+| Telemetry        | needed by watcher          |
+| Heat             | needed by telemetry        |
 
 
 ### Additional configuration

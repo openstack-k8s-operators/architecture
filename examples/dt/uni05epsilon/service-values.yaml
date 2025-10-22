@@ -9,6 +9,7 @@ metadata:
 
 data:
   preserveJobs: false
+  notificationsBusInstance: rabbitmq-notifications
 
   cinderBackup:
     customServiceConfig: |
@@ -142,6 +143,47 @@ data:
     templates:
       rabbitmq-cell2:
         replicas: 3
+      rabbitmq-notifications:
+        override:
+          service:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: internalapi
+                metallb.universe.tf/loadBalancerIPs: 172.17.0.87
+            spec:
+              type: LoadBalancer
+        replicas: 3
 
   swift:
+    enabled: true
+
+  telemetry:
+    enabled: true
+    metricStorage:
+      enabled: true
+      monitoringStack: null
+      customMonitoringStack:
+        alertmanagerConfig:
+          disabled: true
+        prometheusConfig:
+          enableRemoteWriteReceiver: true
+          persistentVolumeClaim:
+            resources:
+              requests:
+                storage: 20G
+          replicas: 1
+          scrapeInterval: 30s
+        resourceSelector:
+          matchLabels:
+            service: metricStorage
+        retention: 24h
+    autoscaling:
+      enabled: true
+    ceilometer:
+      enabled: true
+
+  watcher:
+    enabled: true
+
+  heat:
     enabled: true
