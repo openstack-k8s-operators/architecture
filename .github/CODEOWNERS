@@ -1,0 +1,8 @@
+# Uni-jobs
+automation/vars/hci @openstack-k8s-operators/ciops
+automation/vars/hci-adoption @openstack-k8s-operators/ciops
+automation/vars/uni* @openstack-k8s-operators/ciops
+dt/uni* @openstack-k8s-operators/ciops
+va/hci @openstack-k8s-operators/ciops
+examples/dt/uni* @openstack-k8s-operators/ciops
+examples/va/hci @openstack-k8s-operators/ciops
