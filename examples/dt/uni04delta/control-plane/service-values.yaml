@@ -111,7 +111,7 @@ data:
       router_distributed = true
       router_scheduler_driver = neutron.scheduler.l3_agent_scheduler.ChanceScheduler
       debug = true
-      dns_domain = example.org.
+      dns_domain = openstackgate.local.
       external_dns_driver = designate
       [agent]
       report_interval = 300
