@@ -128,6 +128,9 @@ data:
         replicas: 3
         type: split
 
+  heat:
+    enabled: true
+
   nova:
     template:
       cellTemplates:
@@ -183,7 +186,4 @@ data:
       enabled: true
 
   watcher:
-    enabled: true
-
-  heat:
     enabled: true
