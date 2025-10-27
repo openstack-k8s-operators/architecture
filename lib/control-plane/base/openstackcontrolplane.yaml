@@ -222,21 +222,25 @@ spec:
   ovn:
     template:
       ovnController:
+        metricsEnabled: false
         networkAttachment: tenant
         nicMappings:
           datacentre: _replaced_
       ovnDBCluster:
         ovndbcluster-nb:
+          metricsEnabled: false
           dbType: NB
           networkAttachment: internalapi
           storageRequest: 10G
           replicas: 3
         ovndbcluster-sb:
+          metricsEnabled: false
           dbType: SB
           networkAttachment: internalapi
           storageRequest: 10G
           replicas: 3
       ovnNorthd:
+        metricsEnabled: false
         logLevel: info
         nThreads: 1
         replicas: 1
