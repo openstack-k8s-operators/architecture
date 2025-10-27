@@ -40,5 +40,6 @@
       - rhoso-architecture-validate-uni07eta
       - rhoso-architecture-validate-uni07eta-adoption
       - rhoso-architecture-validate-uni09iota
+      - rhoso-architecture-validate-uni09iota-adoption
     github-gate:
       jobs: *id001
