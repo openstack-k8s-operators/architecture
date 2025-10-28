@@ -41,6 +41,28 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
+      fieldPath: data.notificationsBusInstance
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.notificationsBusInstance
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.rabbitmq.templates.rabbitmq-notifications
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.rabbitmq.templates.rabbitmq-notifications
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
       fieldPath: data.cinderBackup.customServiceConfig
     targets:
       - select:
@@ -297,16 +319,5 @@ replacements:
           kind: OpenStackControlPlane
         fieldPaths:
           - spec.watcher.enabled
-        options:
-          create: true
-  - source:
-      kind: ConfigMap
-      name: service-values
-      fieldPath: data.watcher.decisionengineServiceTemplate.customServiceConfig
-    targets:
-      - select:
-          kind: OpenStackControlPlane
-        fieldPaths:
-          - spec.watcher.template.decisionengineServiceTemplate.customServiceConfig
         options:
           create: true
