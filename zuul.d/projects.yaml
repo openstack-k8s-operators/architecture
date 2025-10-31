@@ -16,6 +16,7 @@
       - rhoso-architecture-validate-nova-three-cells
       - rhoso-architecture-validate-nova01alpha
       - rhoso-architecture-validate-nova02beta
+      - rhoso-architecture-validate-nova05epsilon
       - rhoso-architecture-validate-nvidia-mdev
       - rhoso-architecture-validate-osasinfra
       - rhoso-architecture-validate-osasinfra-ipv6

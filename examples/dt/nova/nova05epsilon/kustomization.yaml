@@ -1,0 +1,13 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../../dt/nova/nova05epsilon/
+  # - https://github.com/openstack-k8s-operators/architecture/dt/nova/nova05epsilon?ref=main
+  ## It's possible to replace ../../../../dt/nova/nova05epsilon with a git checkout URL as per:
+  ## https://github.com/kubernetes-sigs/kustomize/blob/master/examples/remoteBuild.md
+
+resources:
+  - networking/nncp/values.yaml
+  - service-values.yaml
