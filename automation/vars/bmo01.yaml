@@ -2,7 +2,8 @@
 vas:
   bmo01:
     stages:
-      - path: examples/dt/bmo01/control-plane/nncp
+      - name: nncp-configuration
+        path: examples/dt/bmo01/control-plane/nncp
         wait_conditions:
           - >-
             oc -n openstack wait nncp
@@ -24,6 +25,7 @@ vas:
             kind: Node
             resource_name: master-0
             state: patched
+        name: control-plane
         path: examples/dt/bmo01/control-plane
         wait_conditions:
           - >-
@@ -50,6 +52,7 @@ vas:
             kind: Provisioning
             resource_name: provisioning-configuration
             state: patched
+        name: baremetalhosts-configuration
         path: examples/dt/bmo01/dataplane/baremetalhosts
         wait_conditions:
           - >-
@@ -62,7 +65,8 @@ vas:
             src_file: values.yaml
         build_output: baremetalhosts.yaml
 
-      - path: examples/dt/bmo01/dataplane/secrets
+      - name: dataplane-secrets
+        path: examples/dt/bmo01/dataplane/secrets
         wait_conditions:
           - >-
             oc -n openstack wait secrets dataplane-ansible-ssh-private-key-secret
@@ -75,7 +79,8 @@ vas:
             src_file: values.yaml
         build_output: dataplane-secrets.yaml
 
-      - path: examples/dt/bmo01/dataplane/nodesets
+      - name: dataplane-nodesets
+        path: examples/dt/bmo01/dataplane/nodesets
         wait_conditions:
           - >-
             oc -n openstack wait openstackdataplanenodesets
@@ -92,7 +97,8 @@ vas:
             src_file: values.yaml
         build_output: dataplane-nodesets.yaml
 
-      - path: examples/dt/bmo01/dataplane
+      - name: edpm-deployment
+        path: examples/dt/bmo01/dataplane
         wait_conditions:
           - >-
             oc -n openstack wait openstackdataplanenodesets

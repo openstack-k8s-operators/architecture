@@ -2,7 +2,8 @@
 vas:
   nfv-ovs-dpdk-sriov-adoption:
     stages:
-      - path: examples/va/nfv/ovs-dpdk-sriov/nncp
+      - name: nncp-configuration
+        path: examples/va/nfv/ovs-dpdk-sriov/nncp
         wait_conditions:
           - >-
             oc -n openstack wait nncp

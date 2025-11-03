@@ -2,7 +2,8 @@
 vas:
   osasinfra:
     stages:
-      - path: examples/dt/osasinfra/control-plane/nncp
+      - name: nncp-configuration
+        path: examples/dt/osasinfra/control-plane/nncp
         wait_conditions:
           - >-
             oc -n openstack wait nncp
@@ -14,7 +15,8 @@ vas:
             src_file: values.yaml
         build_output: nncp.yaml
 
-      - path: examples/dt/osasinfra/control-plane
+      - name: control-plane
+        path: examples/dt/osasinfra/control-plane
         wait_conditions:
           - >-
             oc -n openstack wait openstackcontrolplane
@@ -26,7 +28,8 @@ vas:
             src_file: nncp/values.yaml
         build_output: ../control-plane.yaml
 
-      - path: examples/dt/osasinfra/edpm-pre-ceph/nodeset
+      - name: edpm-pre-ceph-nodeset
+        path: examples/dt/osasinfra/edpm-pre-ceph/nodeset
         wait_conditions:
           - >-
             oc -n openstack wait
@@ -37,7 +40,8 @@ vas:
             src_file: values.yaml
         build_output: nodeset-pre-ceph.yaml
 
-      - path: examples/dt/osasinfra/edpm-pre-ceph/deployment
+      - name: edpm-pre-ceph-deployment
+        path: examples/dt/osasinfra/edpm-pre-ceph/deployment
         wait_conditions:
           - >-
             oc -n openstack wait
@@ -53,7 +57,8 @@ vas:
             source: "../../hooks/playbooks/ceph.yml"
             inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
 
-      - path: examples/dt/osasinfra
+      - name: edpm-post-ceph-nodeset
+        path: examples/dt/osasinfra
         wait_conditions:
           - >-
             oc -n openstack wait
@@ -66,7 +71,8 @@ vas:
             src_file: values.yaml
         build_output: nodeset-post-ceph.yaml
 
-      - path: examples/dt/osasinfra/deployment
+      - name: edpm-post-ceph-deployment
+        path: examples/dt/osasinfra/deployment
         wait_conditions:
           - >-
             oc -n openstack wait

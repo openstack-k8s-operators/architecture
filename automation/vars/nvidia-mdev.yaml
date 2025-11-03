@@ -2,7 +2,8 @@
 vas:
   nvidia-mdev:
     stages:
-      - path: examples/va/nvidia-mdev/control-plane/nncp
+      - name: nncp-configuration
+        path: examples/va/nvidia-mdev/control-plane/nncp
         wait_conditions:
           - >-
             oc -n openstack wait nncp
@@ -14,7 +15,8 @@ vas:
             src_file: values.yaml
         build_output: nncp.yaml
 
-      - path: examples/va/nvidia-mdev/control-plane
+      - name: control-plane
+        path: examples/va/nvidia-mdev/control-plane
         wait_conditions:
           - >-
             oc -n openstack wait osctlplane controlplane --for condition=Ready
@@ -26,7 +28,8 @@ vas:
             src_file: service-values.yaml
         build_output: control-plane.yaml
 
-      - path: examples/va/nvidia-mdev/edpm/nodeset
+      - name: edpm-nodeset
+        path: examples/va/nvidia-mdev/edpm/nodeset
         wait_conditions:
           - >-
             oc -n openstack wait
@@ -37,7 +40,8 @@ vas:
             src_file: values.yaml
         build_output: nodeset.yaml
 
-      - path: examples/va/nvidia-mdev/edpm/deployment
+      - name: edpm-deployment
+        path: examples/va/nvidia-mdev/edpm/deployment
         wait_conditions:
           - >-
             oc -n openstack wait
@@ -48,7 +52,8 @@ vas:
             src_file: values.yaml
         build_output: deployment.yaml
 
-      - path: examples/va/nvidia-mdev/edpm-post-driver/nodeset
+      - name: edpm-provider-nodeset
+        path: examples/va/nvidia-mdev/edpm-post-driver/nodeset
         wait_conditions:
           - >-
             oc -n openstack wait
@@ -59,7 +64,8 @@ vas:
             src_file: values.yaml
         build_output: compute-provider-service.yaml
 
-      - path: examples/va/nvidia-mdev/edpm-post-driver/deployment
+      - name: edpm-post-driver-deployment
+        path: examples/va/nvidia-mdev/edpm-post-driver/deployment
         wait_conditions:
           - >-
             oc -n openstack wait
