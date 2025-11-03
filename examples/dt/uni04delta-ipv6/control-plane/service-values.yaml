@@ -151,7 +151,7 @@ data:
 
         [processing]
         update_pxe_enabled = false
-
+      replicas: 0
   nova:
     cellTemplates:
       cell0:
