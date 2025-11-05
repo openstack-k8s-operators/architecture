@@ -1,0 +1,42 @@
+---
+cifmw_install_ca_url: http://example.com/example.pem
+cifmw_repo_setup_rhos_release_rpm: http://example.com/rhos-release.rpm
+cifmw_repo_setup_rhos_release_args: example-args
+cifmw_ci_gen_kustomize_values_remove_keys_expressions:
+  - ^node(_[0-9]+)?$
+cifmw_baremetal_hosts:
+  edpm-compute-0:
+    connection: idrac-virtualmedia://foo.example.com/redfish/v1/Systems/System.Embedded.1
+    boot_mode: UEFI
+    status: running
+    nics:
+      - mac: "aa:bb:cc:dd:ee:ff"
+        network: provision
+    root_device_hint: /dev/disk/by-path/pci-0000:65:00.0-scsi-0:1:234:5
+    root_device_hint_field: deviceName
+    credentials_file: "/home/zuul/idrac_access.yaml"
+    nmstate:
+      interfaces:
+        - name: nic1
+          type: ethernet
+          state: up
+          ipv4:
+            enabled: true
+            dhcp: true
+        - name: nic2
+          type: ethernet
+          state: up
+          ipv4:
+            enabled: true
+            address:
+              - ip: 10.0.0.10
+                prefix-length: 24
+      dns-resolver:
+        config:
+          server:
+            - 10.0.0.1
+      routes:
+        config:
+          - destination: 0.0.0.0/0
+            next-hop-address: 10.0.0.1
+            next-hop-interface: nic1

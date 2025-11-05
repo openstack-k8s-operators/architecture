@@ -209,6 +209,30 @@
       cifmw_architecture_scenario: nova02beta
 - job:
     files:
+    - automation/mocks/nova04delta.yaml
+    - automation/net-env/nova04delta.yaml
+    - examples/dt/nova/nova04delta/control-plane
+    - examples/dt/nova/nova04delta/control-plane/networking
+    - examples/dt/nova/nova04delta/control-plane/networking/nncp
+    - examples/dt/nova/nova04delta/edpm/deployment
+    - examples/dt/nova/nova04delta/edpm/nodeset
+    - lib
+    name: rhoso-architecture-validate-nova04delta
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: nova04delta
+      cifmw_networking_env_def_file: automation/net-env/nova04delta.yaml
+- job:
+    files:
+    - examples/dt/nova/nova04delta/control-plane/networking
+    - examples/dt/nova/nova04delta/control-plane/networking/nncp
+    - lib
+    name: rhoso-architecture-validate-nova04delta-adoption
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: nova04delta-adoption
+- job:
+    files:
     - examples/va/nvidia-mdev/control-plane
     - examples/va/nvidia-mdev/control-plane/nncp
     - examples/va/nvidia-mdev/edpm-post-driver/deployment
@@ -221,6 +245,30 @@
     parent: rhoso-architecture-base-job
     vars:
       cifmw_architecture_scenario: nvidia-mdev
+- job:
+    files:
+    - automation/net-env/nvidia-vfio-passthrough.yaml
+    - examples/va/nvidia-vfio-passthrough/control-plane
+    - examples/va/nvidia-vfio-passthrough/control-plane/networking
+    - examples/va/nvidia-vfio-passthrough/control-plane/networking/nncp
+    - examples/va/nvidia-vfio-passthrough/edpm/deployment
+    - examples/va/nvidia-vfio-passthrough/edpm/nodeset
+    - lib
+    - va/nvidia-vfio-passthrough
+    name: rhoso-architecture-validate-nvidia-vfio-passthrough
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: nvidia-vfio-passthrough
+      cifmw_networking_env_def_file: automation/net-env/nvidia-vfio-passthrough.yaml
+- job:
+    files:
+    - examples/va/nvidia-vfio-passthrough/control-plane/networking
+    - examples/va/nvidia-vfio-passthrough/control-plane/networking/nncp
+    - lib
+    name: rhoso-architecture-validate-nvidia-vfio-passthrough-adoption
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: nvidia-vfio-passthrough-adoption
 - job:
     files:
     - dt/osasinfra

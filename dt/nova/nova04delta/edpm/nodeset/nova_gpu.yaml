@@ -1,0 +1,92 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cpu-pinning-nova
+data:
+  25-cpu-pinning-nova.conf: _replaced_
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gpu-nova
+data:
+  03-gpu-nova.conf: _replaced_
+---
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneService
+metadata:
+  name: nova-custom-gpu
+spec:
+  edpmServiceType: nova
+  dataSources:
+    - configMapRef:
+        name: cpu-pinning-nova
+    - configMapRef:
+        name: gpu-nova
+    - secretRef:
+        name: nova-cell1-compute-config
+    - secretRef:
+        name: nova-migration-ssh-key
+  playbook: osp.edpm.nova
+  tlsCerts:
+    default:
+      contents:
+        - dnsnames
+        - ips
+      networks:
+        - ctlplane
+      issuer: osp-rootca-issuer-internal
+  caCerts: combined-ca-bundle
+---
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneService
+metadata:
+  name: vfio-pci-bind
+  namespace: openstack
+spec:
+  playbookContents: |
+    - name: Bind vfio-pci to devices
+      hosts: all
+      tasks:
+        - name: Blacklist nouveau and nvidia
+          become: true
+          ansible.builtin.copy:
+            dest: "/etc/modprobe.d/blacklist-nvidia.conf"
+            mode: "0644"
+            content: |-
+              blacklist nouveau
+              blacklist nvidia
+              options nouveau modeset=0
+            force: false
+          register: _blacklist_nvidia
+
+        - name: Ensure vfio and vfio-pci modules are loaded at boot
+          become: true
+          ansible.builtin.copy:
+            dest: /etc/modules-load.d/vfio.conf
+            mode: "0644"
+            content: |
+              vfio
+              vfio-pci
+            force: false
+          register: _load_vfio
+
+        - name: Check if grub2-mkconfig has --update-bls-cmdline option
+          ansible.builtin.shell:
+            cmd: grub2-mkconfig --help | grep '\-\-update-bls-cmdline'
+          ignore_errors: true
+          register: check_update_bls_cmdline
+          changed_when: false
+
+        - name: Regenerate initramfs
+          become: true
+          ansible.builtin.command: "{{ item }}"
+          loop:
+            - 'dracut --force'
+            - >-
+              grub2-mkconfig -o /boot/grub2/grub.cfg
+              {{ '--update-bls-cmdline'
+              if check_update_bls_cmdline.rc == 0
+              else '' }}
+          when: (_blacklist_nvidia.changed or _load_vfio.changed)

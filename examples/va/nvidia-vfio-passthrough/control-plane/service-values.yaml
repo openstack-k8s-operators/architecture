@@ -1,0 +1,61 @@
+# local-config: referenced, but not emitted by kustomize
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: service-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+data:
+  preserveJobs: false
+  neutron:
+    customServiceConfig: |
+      [ml2]
+      mechanism_drivers = ovn
+  ovn:
+    ovnController:
+      nicMappings:
+        datacentre: ospbr
+  glance:
+    customServiceConfig: |
+      [DEFAULT]
+      enabled_backends = default_backend:swift
+      [glance_store]
+      default_backend = default_backend
+      [default_backend]
+      swift_store_create_container_on_put = True
+      swift_store_auth_version = 3
+      swift_store_auth_address = {{ .KeystoneInternalURL }}
+      swift_store_endpoint_type = internalURL
+      swift_store_user = service:glance
+      swift_store_key = {{ .ServicePassword }}
+    default:
+      replicas: 1
+  swift:
+    enabled: true
+  telemetry:
+    enabled: true
+    template:
+      ceilometer:
+        enabled: true
+  nova:
+    apiServiceTemplate:
+      customServiceConfig: |
+        [pci]
+        alias = { "vendor_id":"10de", "product_id":"20f1", "device_type":"type-PF", "name":"nvidia_a2" }
+        [filter_scheduler]
+        pci_in_placement = True
+    cell0:
+      conductorServiceTemplate:
+        customServiceConfig: |
+          [filter_scheduler]
+          pci_in_placement = True
+    cell1:
+      conductorServiceTemplate:
+        customServiceConfig: |
+          [filter_scheduler]
+          pci_in_placement = True
+    schedulerServiceTemplate:
+      customServiceConfig: |
+        [filter_scheduler]
+        pci_in_placement = True
