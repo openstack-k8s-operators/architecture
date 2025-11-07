@@ -1,0 +1,71 @@
+---
+vas:
+  nvidia-vfio-passthrough:
+    stages:
+      - name: nncp-configuration
+        path: examples/va/nvidia-vfio-passthrough/control-plane/networking/nncp
+        wait_conditions:
+          - >-
+            oc -n openstack wait nncp
+            -l osp/nncm-config-type=standard
+            --for jsonpath='{.status.conditions[0].reason}'=SuccessfullyConfigured
+            --timeout=5m
+        values:
+          - name: network-values
+            src_file: values.yaml
+        build_output: nncp.yaml
+
+      - name: network-configuration
+        path: examples/va/nvidia-vfio-passthrough/control-plane/networking
+        wait_conditions:
+          - >-
+            oc -n metallb-system wait pod
+            -l app=metallb -l component=speaker
+            --for condition=Ready
+            --timeout=5m
+        values:
+          - name: network-values
+            src_file: nncp/values.yaml
+        build_output: network.yaml
+
+      - name: control-plane
+        path: examples/va/nvidia-vfio-passthrough/control-plane
+        wait_conditions:
+          - >-
+            oc -n openstack wait osctlplane controlplane
+            --for condition=Ready
+            --timeout=60m
+        values:
+          - name: network-values
+            src_file: networking/nncp/values.yaml
+          - name: service-values.yaml
+            src_file: service-values.yaml
+        build_output: control-plane.yaml
+
+      - name: edpm-nodeset
+        path: examples/va/nvidia-vfio-passthrough/edpm/nodeset
+        wait_conditions:
+          - >-
+            oc -n openstack wait baremetalhosts.metal3.io edpm-compute-0
+            --for=jsonpath='{.status.provisioning.state}'=available
+            --timeout=10m
+          - >-
+            oc -n openstack wait
+            osdpns openstack-edpm --for condition=SetupReady
+            --timeout=60m
+        values:
+          - name: edpm-nodeset-values
+            src_file: values.yaml
+        build_output: nodeset.yaml
+
+      - name: edpm-deployment
+        path: examples/va/nvidia-vfio-passthrough/edpm/deployment
+        wait_conditions:
+          - >-
+            oc -n openstack wait
+            osdpd edpm-deployment --for condition=Ready
+            --timeout=90m
+        values:
+          - name: edpm-deployment-values
+            src_file: values.yaml
+        build_output: deployment.yaml
