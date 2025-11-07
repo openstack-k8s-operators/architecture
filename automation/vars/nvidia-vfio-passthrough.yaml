@@ -38,7 +38,7 @@ vas:
         values:
           - name: network-values
             src_file: networking/nncp/values.yaml
-          - name: service-values.yaml
+          - name: service-values
             src_file: service-values.yaml
         build_output: control-plane.yaml
 
