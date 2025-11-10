@@ -94,6 +94,7 @@ data:
     enabled: true
     amphoraImageContainerImage: quay.io/gthiemonge/octavia-amphora-image
     apacheContainerImage: registry.redhat.io/ubi9/httpd-24:latest
+    redisServiceName: octavia-redis
     availabilityZones:
       - zone-1
     octaviaAPI:
@@ -175,3 +176,9 @@ data:
       [ml2]
       type_drivers = geneve,vxlan,vlan,flat,local
       tenant_network_types = geneve,flat
+
+  redis:
+    enabled: true
+    templates:
+      octavia-redis:
+        replicas: 1
