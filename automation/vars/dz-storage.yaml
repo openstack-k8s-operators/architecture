@@ -94,7 +94,8 @@ vas:
             src_file: nncp/values.yaml
         build_output: networking.yaml
 
-      - path: examples/dt/dz-storage/topology
+      - name: topology-configuration
+        path: examples/dt/dz-storage/topology
         wait_conditions:
           - >-
             oc -n openstack wait

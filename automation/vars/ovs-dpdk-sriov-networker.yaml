@@ -2,7 +2,8 @@
 vas:
   ovs-dpdk-sriov-networker:
     stages:
-      - path: examples/dt/nfv/nfv-ovs-dpdk-sriov-networker/nncp
+      - name: nncp-configuration
+        path: examples/dt/nfv/nfv-ovs-dpdk-sriov-networker/nncp
         wait_conditions:
           - >-
             oc -n openstack wait nncp
@@ -14,7 +15,8 @@ vas:
             src_file: values.yaml
         build_output: nncp.yaml
 
-      - path: examples/dt/nfv/nfv-ovs-dpdk-sriov-networker
+      - name: control-plane
+        path: examples/dt/nfv/nfv-ovs-dpdk-sriov-networker
         wait_conditions:
           - >-
             oc -n openstack wait osctlplane controlplane --for condition=Ready
@@ -26,7 +28,8 @@ vas:
             src_file: service-values.yaml
         build_output: control-plane.yaml
 
-      - path: examples/dt/nfv/nfv-ovs-dpdk-sriov-networker/edpm/networkers
+      - name: edpm-networker-nodeset
+        path: examples/dt/nfv/nfv-ovs-dpdk-sriov-networker/edpm/networkers
         wait_conditions:
           - >-
             oc -n openstack wait openstackdataplanenodeset
@@ -38,7 +41,8 @@ vas:
             src_file: values.yaml
         build_output: edpm-networker-nodeset.yaml
 
-      - path: examples/dt/nfv/nfv-ovs-dpdk-sriov-networker/edpm/computes
+      - name: edpm-compute-nodeset
+        path: examples/dt/nfv/nfv-ovs-dpdk-sriov-networker/edpm/computes
         wait_conditions:
           - >-
             oc -n openstack wait openstackdataplanenodeset
@@ -50,7 +54,8 @@ vas:
             src_file: values.yaml
         build_output: edpm-compute-nodeset.yaml
 
-      - path: examples/dt/nfv/nfv-ovs-dpdk-sriov-networker/edpm/deployment
+      - name: edpm-deployment
+        path: examples/dt/nfv/nfv-ovs-dpdk-sriov-networker/edpm/deployment
         wait_conditions:
           - >-
             oc -n openstack wait openstackdataplanedeployment
