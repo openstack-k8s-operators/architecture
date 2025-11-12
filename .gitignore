@@ -4,3 +4,4 @@ examples/dt/uni*/data-plane.yaml
 examples/dt/uni*/networker/edpm-networker.yaml
 .idea/
 .aider*
+.tool-versions*
