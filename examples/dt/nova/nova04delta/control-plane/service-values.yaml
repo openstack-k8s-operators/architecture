@@ -41,6 +41,22 @@ data:
       logging:
         enabled: false
         # cloNamespace: ""
+      metricStorage:
+        dashboardsEnabled: true
+        enabled: true
+        dataplaneNetwork: ctlplane
+        networkAttachments:  # required, based on the telemetry operator documentation
+          - ctlplane
+        monitoringStack:
+          alertingEnabled: true
+          scrapeInterval: 30s
+          storage:
+            persistent:
+              pvcStorageClass: local-storage
+              pvcStorageRequest: 20G
+              pvcStorageSelector: {}
+            retention: 24h
+            strategy: persistent
   nova:
     apiServiceTemplate:
       customServiceConfig: |
