@@ -1,0 +1,25 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: baremetalhost-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+data:
+  metal3_inspection: ""
+  edpm-compute-0:
+    online: true
+    labels:
+      app: openstack
+      nodeset: edpm
+      nodeName: edpm-compute-0
+    bmc:
+      address: CHANGEME
+      credentialsName: bmc-secret
+      disableCertificateVerification: true
+    bootMACAddress: CHANGEME
+    rootDeviceHints:
+      deviceName: /dev/vda
+    preprovisioningNetworkData:
+      nmstate: |
+        CHANGEME
