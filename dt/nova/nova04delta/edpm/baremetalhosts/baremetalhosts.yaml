@@ -1,12 +1,20 @@
 ---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: edpm-compute-0-preprovision-network-data
+  namespace: openstack
+type: Opaque
+stringData: {}
+---
 apiVersion: metal3.io/v1alpha1
 kind: BareMetalHost
 metadata:
   labels: {}
-  name: _ignored_
-  namespace: _replaced_
+  name: edpm-compute-0
+  namespace: openstack
   annotations:
-    inspect.metal3.io: _replaced_
+    inspect.metal3.io: ""
 spec:
   architecture: x86_64
   automatedCleaningMode: metadata
@@ -17,4 +25,3 @@ spec:
   bootMode: UEFI
   rootDeviceHints: {}
   online: true
-  preprovisioningNetworkDataName: _replaced_

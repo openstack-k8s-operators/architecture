@@ -213,7 +213,9 @@
     - automation/net-env/nova04delta.yaml
     - examples/dt/nova/nova04delta/control-plane
     - examples/dt/nova/nova04delta/control-plane/networking
+    - examples/dt/nova/nova04delta/control-plane/networking/dns
     - examples/dt/nova/nova04delta/control-plane/networking/nncp
+    - examples/dt/nova/nova04delta/edpm/baremetalhosts
     - examples/dt/nova/nova04delta/edpm/deployment
     - examples/dt/nova/nova04delta/edpm/nodeset
     - lib
