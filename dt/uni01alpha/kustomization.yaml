@@ -402,6 +402,18 @@ replacements:
 
   - source:
       kind: ConfigMap
+      name: service-values
+      fieldPath: data.neutron.ml2MechanismDrivers
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.neutron.template.ml2MechanismDrivers
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
       name: network-values
       fieldPath: data.ctlplane.endpoint_annotations
     targets:

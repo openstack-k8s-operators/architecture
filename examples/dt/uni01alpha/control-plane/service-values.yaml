@@ -176,6 +176,9 @@ data:
       [ml2]
       type_drivers = geneve,vxlan,vlan,flat,local
       tenant_network_types = geneve,flat
+    ml2MechanismDrivers:
+      - ovn
+      - baremetal
 
   redis:
     enabled: true
