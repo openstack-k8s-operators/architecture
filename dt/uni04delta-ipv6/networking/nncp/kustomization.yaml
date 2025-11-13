@@ -118,6 +118,58 @@ patches:
       name: master-2
     patch: *routes
 
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: master-0
+    patch: &octvlan |-
+      - op: add
+        path: /spec/desiredState/interfaces/-
+        value:
+          description: Octavia vlan host interface
+          name: octavia
+          state: up
+          type: vlan
+          vlan:
+            base-iface: _replaced_
+            id: _replaced_
+
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: master-1
+    patch: *octvlan
+
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: master-2
+    patch: *octvlan
+
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: master-0
+    patch: &octbridge |-
+      - op: add
+        path: /spec/desiredState/interfaces/-
+        value:
+          description: Octavia bridge
+          mtu: 1500
+          name: octbr
+          type: linux-bridge
+          bridge:
+            options:
+              stp:
+                enabled: false
+            port:
+              - name: octavia
+
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: master-1
+    patch: *octbridge
+
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: master-2
+    patch: *octbridge
 
 replacements:
 
@@ -261,3 +313,45 @@ replacements:
           name: master-2
         fieldPaths:
           - spec.desiredState.routes.config.1.destination
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.octavia.base_iface
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-0
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=octavia].vlan.base-iface
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-1
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=octavia].vlan.base-iface
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-2
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=octavia].vlan.base-iface
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.octavia.vlan
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-0
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=octavia].vlan.id
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-1
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=octavia].vlan.id
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-2
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=octavia].vlan.id
