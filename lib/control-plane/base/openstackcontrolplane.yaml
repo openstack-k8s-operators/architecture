@@ -230,12 +230,12 @@ spec:
           dbType: NB
           networkAttachment: internalapi
           storageRequest: 10G
-          replicas: 3
+          replicas: 1
         ovndbcluster-sb:
           dbType: SB
           networkAttachment: internalapi
           storageRequest: 10G
-          replicas: 3
+          replicas: 1
       ovnNorthd:
         logLevel: info
         nThreads: 1
