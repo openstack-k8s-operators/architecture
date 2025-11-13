@@ -109,6 +109,9 @@ data:
       tenant_network_types = vlan,flat
       [ml2_type_vlan]
       network_vlan_ranges = datacentre:1000:2000
+    ml2MechanismDrivers:
+      - ovn
+      - baremetal
 
   extraMounts:
     - name: v1
