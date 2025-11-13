@@ -8,9 +8,13 @@ metadata:
     config.kubernetes.io/local-config: "true"
 
 data:
+  # --- Fields required by lib/control-plane ---
   preserveJobs: false
   notificationsBusInstance: rabbitmq-notifications
+  tls:
+    caBundleSecretName: ""
 
+  # --- Below are VA/DT-specific data ---
   cinderBackup:
     customServiceConfig: |
       [DEFAULT]
