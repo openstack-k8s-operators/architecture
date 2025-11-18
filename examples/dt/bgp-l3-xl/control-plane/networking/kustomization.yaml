@@ -69,24 +69,6 @@ patches:
       - op: add
         path: /spec/peers/-
         value: bgp-peer-node-9-0
-      - op: add
-        path: /spec/peers/-
-        value: bgp-peer-node-9-1
-      - op: add
-        path: /spec/peers/-
-        value: bgp-peer-node-10-0
-      - op: add
-        path: /spec/peers/-
-        value: bgp-peer-node-10-1
-      - op: add
-        path: /spec/peers/-
-        value: bgp-peer-node-11-0
-      - op: add
-        path: /spec/peers/-
-        value: bgp-peer-node-11-1
-      - op: add
-        path: /spec/peers/-
-        value: bgp-peer-node-12-0
   - target:
       kind: NetworkAttachmentDefinition
       labelSelector: "osp/net-attach-def-type=bgp"
@@ -240,78 +222,15 @@ replacements:
           name: bgp-peer-node-9-0
         fieldPaths:
           - spec.peerAddress
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_9.bgp_peers.1
-    targets:
-      - select:
-          kind: BGPPeer
-          name: bgp-peer-node-9-1
-        fieldPaths:
-          - spec.peerAddress
-  # node10
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_10.bgp_peers.0
-    targets:
-      - select:
-          kind: BGPPeer
-          name: bgp-peer-node-10-0
-        fieldPaths:
-          - spec.peerAddress
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_10.bgp_peers.1
-    targets:
-      - select:
-          kind: BGPPeer
-          name: bgp-peer-node-10-1
-        fieldPaths:
-          - spec.peerAddress
-  # node11
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_11.bgp_peers.0
-    targets:
-      - select:
-          kind: BGPPeer
-          name: bgp-peer-node-11-0
-        fieldPaths:
-          - spec.peerAddress
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_11.bgp_peers.1
-    targets:
-      - select:
-          kind: BGPPeer
-          name: bgp-peer-node-11-1
-        fieldPaths:
-          - spec.peerAddress
-  # node12
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.node_12.bgp_peers.0
-    targets:
-      - select:
-          kind: BGPPeer
-          name: bgp-peer-node-12-0
-        fieldPaths:
-          - spec.peerAddress
 
   # BGP NetworkAttachmentDefinition customization
   - source:
       kind: ConfigMap
       name: network-values
-      fieldPath: data.bgp.net-attach-def.node12
+      fieldPath: data.bgp.net-attach-def.node9
     targets:
       - select:
           kind: NetworkAttachmentDefinition
-          name: bgpnet-worker-9
+          name: bgpnet-worker-6
         fieldPaths:
           - spec.config
