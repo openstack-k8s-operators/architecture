@@ -685,63 +685,6 @@ cifmw_networking_env_definition:
       name: ocp-worker-2
       networks:
         ctlplane:
-          interface_name: enp8s0
-          ip_v4: 192.168.122.15
-          mac_addr: 52:54:00:a3:32:7a
-          mtu: 1500
-          netmask_v4: 255.255.255.0
-          network_name: ctlplane
-          prefix_length_v4: 24
-          skip_nm: false
-        internalapi:
-          interface_name: enp8s0.20
-          ip_v4: 172.17.0.15
-          mac_addr: 52:54:00:2a:55:0f
-          mtu: 1500
-          netmask_v4: 255.255.255.0
-          network_name: internalapi
-          parent_interface: enp8s0
-          prefix_length_v4: 24
-          skip_nm: false
-          vlan_id: 20
-        octavia:
-          interface_name: enp8s0.23
-          ip_v4: 172.23.0.15
-          mac_addr: 52:54:00:13:4e:27
-          mtu: 1500
-          netmask_v4: 255.255.255.0
-          network_name: octavia
-          parent_interface: enp8s0
-          prefix_length_v4: 24
-          skip_nm: false
-          vlan_id: 23
-        storage:
-          interface_name: enp8s0.21
-          ip_v4: 172.18.0.15
-          mac_addr: 52:54:00:12:6e:dc
-          mtu: 1500
-          netmask_v4: 255.255.255.0
-          network_name: storage
-          parent_interface: enp8s0
-          prefix_length_v4: 24
-          skip_nm: false
-          vlan_id: 21
-        tenant:
-          interface_name: enp8s0.22
-          ip_v4: 172.19.0.15
-          mac_addr: 52:54:00:18:2f:ac
-          mtu: 1500
-          netmask_v4: 255.255.255.0
-          network_name: tenant
-          parent_interface: enp8s0
-          prefix_length_v4: 24
-          skip_nm: false
-          vlan_id: 22
-    ocp-worker-3:
-      hostname: worker-3
-      name: ocp-worker-3
-      networks:
-        ctlplane:
           interface_name: enp7s0
           ip_v4: 192.168.122.16
           mac_addr: 52:54:00:67:1b:c5
@@ -794,9 +737,9 @@ cifmw_networking_env_definition:
           prefix_length_v4: 24
           skip_nm: false
           vlan_id: 22
-    ocp-worker-4:
-      hostname: worker-4
-      name: ocp-worker-4
+    ocp-worker-3:
+      hostname: worker-3
+      name: ocp-worker-3
       networks:
         ctlplane:
           interface_name: enp7s0
@@ -851,66 +794,9 @@ cifmw_networking_env_definition:
           prefix_length_v4: 24
           skip_nm: false
           vlan_id: 22
-    ocp-worker-5:
-      hostname: worker-5
-      name: ocp-worker-5
-      networks:
-        ctlplane:
-          interface_name: enp7s0
-          ip_v4: 192.168.122.18
-          mac_addr: 52:54:00:67:1b:c5
-          mtu: 1500
-          netmask_v4: 255.255.255.0
-          network_name: ctlplane
-          prefix_length_v4: 24
-          skip_nm: false
-        internalapi:
-          interface_name: enp7s0.20
-          ip_v4: 172.17.0.18
-          mac_addr: 52:54:00:65:17:db
-          mtu: 1500
-          netmask_v4: 255.255.255.0
-          network_name: internalapi
-          parent_interface: enp7s0
-          prefix_length_v4: 24
-          skip_nm: false
-          vlan_id: 20
-        octavia:
-          interface_name: enp7s0.23
-          ip_v4: 172.23.0.18
-          mac_addr: 52:54:00:2f:28:7e
-          mtu: 1500
-          netmask_v4: 255.255.255.0
-          network_name: octavia
-          parent_interface: enp7s0
-          prefix_length_v4: 24
-          skip_nm: false
-          vlan_id: 23
-        storage:
-          interface_name: enp7s0.21
-          ip_v4: 172.18.0.18
-          mac_addr: 52:54:00:46:68:6b
-          mtu: 1500
-          netmask_v4: 255.255.255.0
-          network_name: storage
-          parent_interface: enp7s0
-          prefix_length_v4: 24
-          skip_nm: false
-          vlan_id: 21
-        tenant:
-          interface_name: enp7s0.22
-          ip_v4: 172.19.0.18
-          mac_addr: 52:54:00:31:3b:02
-          mtu: 1500
-          netmask_v4: 255.255.255.0
-          network_name: tenant
-          parent_interface: enp7s0
-          prefix_length_v4: 24
-          skip_nm: false
-          vlan_id: 22
-    ocp-worker-6:
-      hostname: worker-6
-      name: ocp-worker-6
+    ocp-worker-4:
+      hostname: worker-4
+      name: ocp-worker-4
       networks:
         ctlplane:
           interface_name: enp7s0
@@ -965,9 +851,9 @@ cifmw_networking_env_definition:
           prefix_length_v4: 24
           skip_nm: false
           vlan_id: 22
-    ocp-worker-7:
-      hostname: worker-7
-      name: ocp-worker-7
+    ocp-worker-5:
+      hostname: worker-5
+      name: ocp-worker-5
       networks:
         ctlplane:
           interface_name: enp7s0
@@ -1022,66 +908,9 @@ cifmw_networking_env_definition:
           prefix_length_v4: 24
           skip_nm: false
           vlan_id: 22
-    ocp-worker-8:
-      hostname: worker-8
-      name: ocp-worker-8
-      networks:
-        ctlplane:
-          interface_name: enp7s0
-          ip_v4: 192.168.122.21
-          mac_addr: 52:54:00:67:1b:c5
-          mtu: 1500
-          netmask_v4: 255.255.255.0
-          network_name: ctlplane
-          prefix_length_v4: 24
-          skip_nm: false
-        internalapi:
-          interface_name: enp7s0.20
-          ip_v4: 172.17.0.21
-          mac_addr: 52:54:00:65:17:db
-          mtu: 1500
-          netmask_v4: 255.255.255.0
-          network_name: internalapi
-          parent_interface: enp7s0
-          prefix_length_v4: 24
-          skip_nm: false
-          vlan_id: 20
-        octavia:
-          interface_name: enp7s0.23
-          ip_v4: 172.23.0.21
-          mac_addr: 52:54:00:2f:28:7e
-          mtu: 1500
-          netmask_v4: 255.255.255.0
-          network_name: octavia
-          parent_interface: enp7s0
-          prefix_length_v4: 24
-          skip_nm: false
-          vlan_id: 23
-        storage:
-          interface_name: enp7s0.21
-          ip_v4: 172.18.0.21
-          mac_addr: 52:54:00:46:68:6b
-          mtu: 1500
-          netmask_v4: 255.255.255.0
-          network_name: storage
-          parent_interface: enp7s0
-          prefix_length_v4: 24
-          skip_nm: false
-          vlan_id: 21
-        tenant:
-          interface_name: enp7s0.22
-          ip_v4: 172.19.0.21
-          mac_addr: 52:54:00:31:3b:02
-          mtu: 1500
-          netmask_v4: 255.255.255.0
-          network_name: tenant
-          parent_interface: enp7s0
-          prefix_length_v4: 24
-          skip_nm: false
-          vlan_id: 22
-    ocp-worker-9:
-      hostname: worker-9
-      name: ocp-worker-9
+    ocp-worker-6:
+      hostname: worker-6
+      name: ocp-worker-6
       networks:
         ctlplane:
           interface_name: enp7s0
@@ -1458,9 +1287,6 @@ test_groups:
     - ocp-worker-4
     - ocp-worker-5
     - ocp-worker-6
-    - ocp-worker-7
-    - ocp-worker-8
-    - ocp-worker-9
     - router-0
     - spine-0
     - spine-1
@@ -1493,9 +1319,6 @@ test_groups:
     - ocp-worker-4
     - ocp-worker-5
     - ocp-worker-6
-    - ocp-worker-7
-    - ocp-worker-8
-    - ocp-worker-9
   ocps:
     - ocp-master-0
     - ocp-master-1

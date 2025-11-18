@@ -3,7 +3,7 @@ vas:
   bgp-l3-xl:
     stages:
       - pre_stage_run:
-          - name: Apply taint on worker-9
+          - name: Apply taint on worker-6
             type: cr
             definition:
               spec:
@@ -15,7 +15,7 @@ vas:
                     key: testOperator
                     value: 'true'
             kind: Node
-            resource_name: worker-9
+            resource_name: worker-6
             state: patched
           - name: Disable rp_filters on OCP nodes
             type: cr
@@ -46,12 +46,6 @@ vas:
                         value: worker-4
                       - label: kubernetes.io/hostname
                         value: worker-5
-                      - label: kubernetes.io/hostname
-                        value: worker-6
-                      - label: kubernetes.io/hostname
-                        value: worker-7
-                      - label: kubernetes.io/hostname
-                        value: worker-8
                       - label: node-role.kubernetes.io/master
                     operand:
                       tunedConfig:
