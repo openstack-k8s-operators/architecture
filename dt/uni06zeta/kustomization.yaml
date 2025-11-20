@@ -140,6 +140,42 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
+      fieldPath: data.swift.swiftProxy.replicas
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.swift.template.swiftProxy.replicas
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.swift.swiftRing.ringReplicas
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.swift.template.swiftRing.ringReplicas
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.swift.swiftStorage.replicas
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.swift.template.swiftStorage.replicas
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
       fieldPath: data.octavia.enabled
     targets:
       - select:
