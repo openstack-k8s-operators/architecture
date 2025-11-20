@@ -26,6 +26,8 @@
       - rhoso-architecture-validate-ovs-dpdk
       - rhoso-architecture-validate-ovs-dpdk-sriov
       - rhoso-architecture-validate-ovs-dpdk-sriov-2nodesets
+      - rhoso-architecture-validate-ovs-dpdk-sriov-ipv6
+      - rhoso-architecture-validate-ovs-dpdk-sriov-ipv6-2nodesets
       - rhoso-architecture-validate-ovs-dpdk-sriov-networker
       - rhoso-architecture-validate-pidone
       - rhoso-architecture-validate-sriov
