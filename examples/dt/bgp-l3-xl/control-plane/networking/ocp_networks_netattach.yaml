@@ -2,7 +2,7 @@
 apiVersion: k8s.cni.cncf.io/v1
 kind: NetworkAttachmentDefinition
 metadata:
-  name: bgpnet-worker-9
+  name: bgpnet-worker-6
   labels:
-    osp/net: bgpnet-worker-9
+    osp/net: bgpnet-worker-6
     osp/net-attach-def-type: bgp
