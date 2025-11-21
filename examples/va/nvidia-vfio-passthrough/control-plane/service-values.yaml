@@ -38,6 +38,15 @@ data:
     template:
       ceilometer:
         enabled: true
+      logging:
+        enabled: false
+        # cloNamespace: ""
+      metricStorage:
+        dashboardsEnabled: true
+        enabled: true
+        dataplaneNetwork: ctlplane
+        networkAttachments:  # required, based on the telemetry operator documentation
+          - ctlplane
   nova:
     apiServiceTemplate:
       customServiceConfig: |

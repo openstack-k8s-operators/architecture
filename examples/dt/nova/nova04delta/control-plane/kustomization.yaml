@@ -4,7 +4,9 @@ kind: Kustomization
 
 components:
   - ../../../../../dt/nova/nova04delta/
+  - ../../../../../dt/nova/nova04delta/networking/dns
 
 resources:
   - networking/nncp/values.yaml
   - service-values.yaml
+  - networking/dns/values.yaml
