@@ -61,6 +61,12 @@ data:
 
   swift:
     enabled: true
+    swiftProxy:
+      replicas: 1
+    swiftStorage:
+      replicas: 1
+    swiftRing:
+      ringReplicas: 1
 
   octavia:
     enabled: false
