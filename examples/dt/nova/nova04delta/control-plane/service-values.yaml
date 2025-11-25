@@ -52,7 +52,7 @@ data:
           scrapeInterval: 30s
           storage:
             persistent:
-              # NOTE: pvcStorageClass is defined in control-plane/networking/nncp/values.yaml network-values data.storageClass
+              pvcStorageClass: local-storage
               pvcStorageRequest: 20G
               pvcStorageSelector: {}
             retention: 24h
