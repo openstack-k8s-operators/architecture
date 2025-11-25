@@ -1,0 +1,19 @@
+# local-config: referenced, but not emitted by kustomize
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dns-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+data:
+  servers:
+    - name: rhoso-ctlplane
+      zones:
+        # must match the ctlplane DNS domain defined EDPM hostnames in the nodeset CR
+        - ctlplane.example.com
+      forwardPlugin:
+        policy: Sequential
+        upstreams:
+          # must match the ctlplane DNS server(s) defined in the oscp CR
+          - 192.168.122.80
