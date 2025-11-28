@@ -26,9 +26,6 @@ transformers:
 components:
   - ../../lib/control-plane
 
-resources:
-  - networking/resources/octavia-network-attachment-definition.yaml
-
 replacements:
   - source:
       kind: ConfigMap
@@ -284,11 +281,35 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
+      fieldPath: data.ovn.ovnController.nicMappings
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.ovn.template.ovnController.nicMappings
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
       fieldPath: data.neutron.customServiceConfig
     targets:
       - select:
           kind: OpenStackControlPlane
         fieldPaths:
           - spec.neutron.template.customServiceConfig
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.heat.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.heat.enabled
         options:
           create: true
