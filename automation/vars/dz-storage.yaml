@@ -217,7 +217,7 @@ vas:
             oc -n openstack wait openstackdataplanedeployment
             edpm-deployment
             --for condition=Ready
-            --timeout=120m
+            --timeout=180m
         values:
           - name: edpm-deployment-values
             src_file: values.yaml
