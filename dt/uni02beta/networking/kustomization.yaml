@@ -15,7 +15,21 @@ transformers:
       - path: metadata/name
         kind: Namespace
         create: true
+
 components:
-  - ../../../lib/networking/metallb
-  - ../../../lib/networking/netconfig
   - ../../../lib/networking/nad
+
+resources:
+  - nad.yaml
+
+replacements:
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.octavia.net-attach-def
+    targets:
+      - select:
+          kind: NetworkAttachmentDefinition
+          name: octavia
+        fieldPaths:
+          - spec.config
