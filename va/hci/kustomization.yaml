@@ -24,3 +24,4 @@ components:
   - ../../lib/control-plane/storage
   - ../../lib/control-plane/ovn-nic
   - ../../lib/control-plane/job-settings
+  - ../../lib/control-plane/tls
