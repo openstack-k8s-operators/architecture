@@ -16,24 +16,18 @@ data:
     tenant_ip: 172.19.0.5
     ctlplane_ip: 192.168.122.10
     storage_ip: 172.18.0.5
-    designate_ip: 172.26.0.5
-    designateext_ip: 172.34.0.5
   node_1:
     name: master-1
     internalapi_ip: 172.17.0.6
     tenant_ip: 172.19.0.6
     ctlplane_ip: 192.168.122.11
     storage_ip: 172.18.0.6
-    designate_ip: 172.26.0.6
-    designateext_ip: 172.34.0.6
   node_2:
     name: master-2
     internalapi_ip: 172.17.0.7
     tenant_ip: 172.19.0.7
     ctlplane_ip: 192.168.122.12
     storage_ip: 172.18.0.7
-    designate_ip: 172.26.0.7
-    designateext_ip: 172.34.0.7
 
   ctlplane:
     dnsDomain: ctlplane.example.com
@@ -66,64 +60,6 @@ data:
           "range": "192.168.122.0/24",
           "range_start": "192.168.122.30",
           "range_end": "192.168.122.70"
-        }
-      }
-
-  designate:
-    dnsDomain: designate.example.com
-    mtu: 9000
-    prefix-length: 24
-    iface: designate
-    vlan: 24
-    subnets:
-      - allocationRanges:
-          - end: 172.26.0.250
-            start: 172.26.0.100
-        cidr: 172.26.0.0/24
-        name: subnet1
-    lb_addresses:
-      - 172.26.0.80-172.26.0.120
-    base_iface: enp6s0
-    net-attach-def: |
-      {
-        "cniVersion": "0.3.1",
-        "name": "designate",
-        "type": "macvlan",
-        "master": "designate",
-        "ipam": {
-          "type": "whereabouts",
-          "range": "172.26.0.0/24",
-          "range_start": "172.26.0.30",
-          "range_end": "172.26.0.70"
-        }
-      }
-
-  designateext:
-    dnsDomain: designateext.example.com
-    mtu: 9000
-    prefix-length: 24
-    iface: designateext
-    vlan: 34
-    base_iface: enp6s0
-    subnets:
-      - allocationRanges:
-          - end: 172.34.0.250
-            start: 172.34.0.100
-        cidr: 172.34.0.0/24
-        name: subnet1
-    lb_addresses:
-      - 172.34.0.80-172.34.0.120
-    net-attach-def: |
-      {
-        "cniVersion": "0.3.1",
-        "name": "designateext",
-        "type": "macvlan",
-        "master": "designateext",
-        "ipam": {
-          "type": "whereabouts",
-          "range": "172.34.0.0/24",
-          "range_start": "172.34.0.30",
-          "range_end": "172.34.0.70"
         }
       }
 

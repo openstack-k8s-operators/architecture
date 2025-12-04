@@ -32,12 +32,8 @@ data:
         rbd_flatten_volume_from_snapshot = False
         rbd_secret_uuid = _replaced_
 
-  designate-redis:
     enabled: true
     replicas: 1
-
-  designate:
-    enabled: true
     nsRecords:
       - hostname: ns1.example.org.
         priority: 1
@@ -47,22 +43,16 @@ data:
       services:
         - metadata:
             annotations:
-              metallb.universe.tf/address-pool: designateext
-              metallb.universe.tf/allow-shared-ip: designateext
               metallb.universe.tf/LoadBalancerIPs: 172.34.0.80
           spec:
             type: LoadBalancer
         - metadata:
             annotations:
-              metallb.universe.tf/address-pool: designateext
-              metallb.universe.tf/allow-shared-ip: designateext
               metallb.universe.tf/LoadBalancerIPs: 172.34.0.81
           spec:
             type: LoadBalancer
         - metadata:
             annotations:
-              metallb.universe.tf/address-pool: designateext
-              metallb.universe.tf/allow-shared-ip: designateext
               metallb.universe.tf/LoadBalancerIPs: 172.34.0.82
           spec:
             type: LoadBalancer
@@ -112,7 +102,6 @@ data:
       router_scheduler_driver = neutron.scheduler.l3_agent_scheduler.ChanceScheduler
       debug = true
       dns_domain = example.org.
-      external_dns_driver = designate
       [agent]
       report_interval = 300
       [database]
@@ -143,18 +132,6 @@ data:
       extension_drivers=qos,port_security,dns_domain_keywords
       [ml2_type_vlan]
       network_vlan_ranges = datacentre:1000:2000
-      [designate]
-      url = https://designate-internal.openstack.svc:9001/v2
-      auth_type = password
-      auth_url = {{ .KeystoneInternalURL }}
-      username = {{ .ServiceUser }}
-      password = {{ .ServicePassword }}
-      project_name = service
-      project_domain_name = Default
-      user_domain_name = Default
-      allow_reverse_dns_lookup = True
-      ipv4_ptr_zone_prefix_size = 24
-      ipv6_ptr_zone_prefix_size = 116
       ptr_zone_email = admin@example.org
   extraMounts:
     - name: v1
