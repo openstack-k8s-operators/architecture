@@ -49,6 +49,11 @@ data:
   telemetry:
     enabled: true
     template:
+      metricStorage:
+        enabled: true
+        dataplaneNetwork: ctlplane
+        networkAttachments:
+          - ctlplane
       ceilometer:
         enabled: true
   nova:
