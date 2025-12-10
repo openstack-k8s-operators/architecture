@@ -9,8 +9,12 @@ data:
   storageClass: lvms-local-storage
   topologyRef:
     name: default-spread-pods
+  # --- Fields required by lib/control-plane ---
   preserveJobs: false
+  tls:
+    caBundleSecretName: ""
 
+  # --- Below are VA/DT-specific data ---
   memcached:
     # consider 1 replica per worker (this example uses less for testing)
     templates:
