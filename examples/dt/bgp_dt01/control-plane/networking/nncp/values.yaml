@@ -26,20 +26,20 @@ data:
       config:
         - destination: 99.99.0.0/16
           next-hop-address: 100.64.0.9
-          next-hop-interface: enp7s0
+          next-hop-interface: enp8s0
           weight: 200
         - destination: 99.99.0.0/16
           next-hop-address: 100.65.0.9
-          next-hop-interface: enp8s0
+          next-hop-interface: enp9s0
           weight: 200
         # routes to octavia mgmt network
         - destination: 172.24.0.0/16
           next-hop-address: 100.64.0.9
-          next-hop-interface: enp7s0
+          next-hop-interface: enp8s0
           weight: 200
         - destination: 172.24.0.0/16
           next-hop-address: 100.65.0.9
-          next-hop-interface: enp8s0
+          next-hop-interface: enp9s0
           weight: 200
   node_4:
     name: worker-1
@@ -59,20 +59,20 @@ data:
       config:
         - destination: 99.99.0.0/16
           next-hop-address: 100.64.1.9
-          next-hop-interface: enp7s0
+          next-hop-interface: enp8s0
           weight: 200
         - destination: 99.99.0.0/16
           next-hop-address: 100.65.1.9
-          next-hop-interface: enp8s0
+          next-hop-interface: enp9s0
           weight: 200
         # routes to octavia mgmt network
         - destination: 172.24.0.0/16
           next-hop-address: 100.64.1.9
-          next-hop-interface: enp7s0
+          next-hop-interface: enp8s0
           weight: 200
         - destination: 172.24.0.0/16
           next-hop-address: 100.65.1.9
-          next-hop-interface: enp8s0
+          next-hop-interface: enp9s0
           weight: 200
   node_5:
     name: worker-2
@@ -92,20 +92,20 @@ data:
       config:
         - destination: 99.99.0.0/16
           next-hop-address: 100.64.2.9
-          next-hop-interface: enp7s0
+          next-hop-interface: enp8s0
           weight: 200
         - destination: 99.99.0.0/16
           next-hop-address: 100.65.2.9
-          next-hop-interface: enp8s0
+          next-hop-interface: enp9s0
           weight: 200
         # routes to octavia mgmt network
         - destination: 172.24.0.0/16
           next-hop-address: 100.64.2.9
-          next-hop-interface: enp7s0
+          next-hop-interface: enp8s0
           weight: 200
         - destination: 172.24.0.0/16
           next-hop-address: 100.65.2.9
-          next-hop-interface: enp8s0
+          next-hop-interface: enp9s0
           weight: 200
   node_6:
     name: worker-3
@@ -119,16 +119,16 @@ data:
       - 100.64.10.1
     loopback_ip: 99.99.10.2
     loopback_ipv6: f00d:f00d:f00d:f00d:f00d:f00d:f00d:43
-    base_if: enp6s0
+    base_if: enp7s0
     routes:
       config:
         - destination: 192.168.133.0/24
           next-hop-address: 100.64.10.1
-          next-hop-interface: enp7s0
+          next-hop-interface: enp8s0
         # routes to octavia mgmt network
         - destination: 172.24.0.0/16
           next-hop-address: 100.64.10.1
-          next-hop-interface: enp7s0
+          next-hop-interface: enp8s0
 
   # networks
   ctlplane:
@@ -141,7 +141,7 @@ data:
             start: 192.168.122.150
         cidr: 192.168.122.0/24
         gateway: 192.168.122.1
-        name: subnet1
+        name: subnet0
         routes:
           - destination: 192.168.123.0/24
             nexthop: 192.168.122.1
@@ -154,7 +154,7 @@ data:
             start: 192.168.123.150
         cidr: 192.168.123.0/24
         gateway: 192.168.123.1
-        name: subnet2
+        name: subnet1
         routes:
           - destination: 192.168.122.0/24
             nexthop: 192.168.123.1
@@ -167,14 +167,14 @@ data:
             start: 192.168.124.150
         cidr: 192.168.124.0/24
         gateway: 192.168.124.1
-        name: subnet3
+        name: subnet2
         routes:
           - destination: 192.168.122.0/24
             nexthop: 192.168.124.1
           - destination: 192.168.123.0/24
             nexthop: 192.168.124.1
     prefix-length: 24
-    iface: enp6s0
+    iface: enp7s0
     mtu: 1500
     lb_addresses:
       - 192.168.125.80-192.168.125.90
@@ -213,7 +213,7 @@ data:
     prefix-length: 24
     iface: internalapi
     vlan: 20
-    base_iface: enp6s0
+    base_iface: enp7s0
     lb_addresses:
       - 172.17.0.80-172.17.0.90
     endpoint_annotations:
@@ -251,7 +251,7 @@ data:
     prefix-length: 24
     iface: storage
     vlan: 21
-    base_iface: enp6s0
+    base_iface: enp7s0
     lb_addresses:
       - 172.18.0.80-172.18.0.90
     net-attach-def: |
@@ -285,7 +285,7 @@ data:
     prefix-length: 24
     iface: tenant
     vlan: 22
-    base_iface: enp6s0
+    base_iface: enp7s0
     lb_addresses:
       - 172.19.0.80-172.19.0.90
     net-attach-def: |
@@ -316,7 +316,7 @@ data:
         vlan: 23
     mtu: 1500
     vlan: 23
-    base_iface: enp6s0
+    base_iface: enp7s0
     net-attach-def: |
       {
         "cniVersion": "0.3.1",
@@ -356,8 +356,8 @@ data:
     prefix-length: 30
     prefix-length-worker-3: 24
     ifaces:
-      - enp7s0
       - enp8s0
+      - enp9s0
     asn: 64999
     peer_asn: 64999
     subnets:
@@ -471,20 +471,30 @@ data:
           config:
             - destination: 99.99.0.0/16
               next-hop-address: 100.64.0.9
-              next-hop-interface: enp7s0
+              next-hop-interface: enp8s0
               weight: 200
             - destination: 99.99.0.0/16
               next-hop-address: 100.65.0.9
-              next-hop-interface: enp8s0
+              next-hop-interface: enp9s0
               weight: 200
+            # ctlplane routes
+            - destination: 192.168.122.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
+            - destination: 192.168.123.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
+            - destination: 192.168.124.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
             # routes to octavia mgmt network
             - destination: 172.24.0.0/16
               next-hop-address: 100.64.0.9
-              next-hop-interface: enp7s0
+              next-hop-interface: enp8s0
               weight: 200
             - destination: 172.24.0.0/16
               next-hop-address: 100.65.0.9
-              next-hop-interface: enp8s0
+              next-hop-interface: enp9s0
               weight: 200
       node4:
         bgpnet0:
@@ -497,20 +507,30 @@ data:
           config:
             - destination: 99.99.0.0/16
               next-hop-address: 100.64.1.9
-              next-hop-interface: enp7s0
+              next-hop-interface: enp8s0
               weight: 200
             - destination: 99.99.0.0/16
               next-hop-address: 100.65.1.9
-              next-hop-interface: enp8s0
+              next-hop-interface: enp9s0
               weight: 200
+            # ctlplane routes
+            - destination: 192.168.122.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
+            - destination: 192.168.123.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
+            - destination: 192.168.124.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
             # routes to octavia mgmt network
             - destination: 172.24.0.0/16
               next-hop-address: 100.64.1.9
-              next-hop-interface: enp7s0
+              next-hop-interface: enp8s0
               weight: 200
             - destination: 172.24.0.0/16
               next-hop-address: 100.65.1.9
-              next-hop-interface: enp8s0
+              next-hop-interface: enp9s0
               weight: 200
       node5:
         bgpnet0:
@@ -523,20 +543,30 @@ data:
           config:
             - destination: 99.99.0.0/16
               next-hop-address: 100.64.2.9
-              next-hop-interface: enp7s0
+              next-hop-interface: enp8s0
               weight: 200
             - destination: 99.99.0.0/16
               next-hop-address: 100.65.2.9
-              next-hop-interface: enp8s0
+              next-hop-interface: enp9s0
               weight: 200
+            # ctlplane routes
+            - destination: 192.168.122.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
+            - destination: 192.168.123.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
+            - destination: 192.168.124.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
             # routes to octavia mgmt network
             - destination: 172.24.0.0/16
               next-hop-address: 100.64.2.9
-              next-hop-interface: enp7s0
+              next-hop-interface: enp8s0
               weight: 200
             - destination: 172.24.0.0/16
               next-hop-address: 100.65.2.9
-              next-hop-interface: enp8s0
+              next-hop-interface: enp9s0
               weight: 200
       node6:
         bgpnet0:
@@ -546,18 +576,18 @@ data:
           config:
             - destination: 192.168.133.0/24
               next-hop-address: 100.64.10.1
-              next-hop-interface: enp7s0
+              next-hop-interface: enp8s0
             # routes to octavia mgmt network
             - destination: 172.24.0.0/16
               next-hop-address: 100.64.10.1
-              next-hop-interface: enp7s0
+              next-hop-interface: enp8s0
     net-attach-def:
       node6: |
         {
           "cniVersion": "0.3.1",
           "name": "bgpnet-worker-3",
           "type": "macvlan",
-          "master": "enp7s0",
+          "master": "enp8s0",
           "ipam": {
             "type": "whereabouts",
             "range": "100.64.10.0/24",
@@ -590,12 +620,12 @@ data:
   dns-resolver:
     config:
       server:
-        - 192.168.122.1
+        - 192.168.125.1
       search: []
     options:
       - key: server
         values:
-          - 192.168.122.1
+          - 192.168.125.1
 
   routes:
     config: []
