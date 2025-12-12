@@ -32,6 +32,23 @@ data:
           next-hop-address: 100.65.0.13
           next-hop-interface: enp9s0
           weight: 200
+        # routes needed for adoption
+        - destination: 172.31.0.0/24
+          next-hop-address: 100.64.0.13
+          next-hop-interface: enp8s0
+          weight: 200
+        - destination: 172.31.0.0/24
+          next-hop-address: 100.65.0.13
+          next-hop-interface: enp9s0
+          weight: 200
+        - destination: 192.168.188.0/24
+          next-hop-address: 100.64.0.13
+          next-hop-interface: enp8s0
+          weight: 200
+        - destination: 192.168.188.0/24
+          next-hop-address: 100.65.0.13
+          next-hop-interface: enp9s0
+          weight: 200
   node_4:
     name: worker-1
     internalapi_ip: 172.17.0.6
@@ -56,32 +73,25 @@ data:
           next-hop-address: 100.65.0.17
           next-hop-interface: enp9s0
           weight: 200
-  node_5:
-    name: worker-2
-    internalapi_ip: 172.17.0.7
-    tenant_ip: 172.19.0.7
-    ctlplane_ip: 192.168.122.12
-    storage_ip: 172.18.0.7
-    bgp_ip:
-      - 100.64.0.22
-      - 100.65.0.22
-    bgp_peers:
-      - 100.64.0.21
-      - 100.65.0.21
-    loopback_ip: 99.99.0.5
-    loopback_ipv6: f00d:f00d:f00d:f00d:f00d:f00d:f00d:33
-    routes:
-      config:
-        - destination: 99.99.0.0/16
-          next-hop-address: 100.64.0.25
+        # routes needed for adoption
+        - destination: 172.31.0.0/24
+          next-hop-address: 100.64.0.17
           next-hop-interface: enp8s0
           weight: 200
-        - destination: 99.99.0.0/16
-          next-hop-address: 100.65.0.21
+        - destination: 172.31.0.0/24
+          next-hop-address: 100.65.0.17
           next-hop-interface: enp9s0
           weight: 200
-  node_6:
-    name: worker-3
+        - destination: 192.168.188.0/24
+          next-hop-address: 100.64.0.17
+          next-hop-interface: enp8s0
+          weight: 200
+        - destination: 192.168.188.0/24
+          next-hop-address: 100.65.0.17
+          next-hop-interface: enp9s0
+          weight: 200
+  node_5:
+    name: worker-2
     internalapi_ip: 172.17.0.8
     tenant_ip: 172.19.0.8
     ctlplane_ip: 192.168.122.13
@@ -104,9 +114,25 @@ data:
           next-hop-address: 100.65.1.13
           next-hop-interface: enp9s0
           weight: 200
-
-  node_7:
-    name: worker-4
+        # routes needed for adoption
+        - destination: 172.31.0.0/24
+          next-hop-address: 100.64.1.13
+          next-hop-interface: enp8s0
+          weight: 200
+        - destination: 172.31.0.0/24
+          next-hop-address: 100.65.1.13
+          next-hop-interface: enp9s0
+          weight: 200
+        - destination: 192.168.188.0/24
+          next-hop-address: 100.64.1.13
+          next-hop-interface: enp8s0
+          weight: 200
+        - destination: 192.168.188.0/24
+          next-hop-address: 100.65.1.13
+          next-hop-interface: enp9s0
+          weight: 200
+  node_6:
+    name: worker-3
     internalapi_ip: 172.17.0.9
     tenant_ip: 172.19.0.9
     ctlplane_ip: 192.168.122.14
@@ -129,32 +155,25 @@ data:
           next-hop-address: 100.65.1.17
           next-hop-interface: enp9s0
           weight: 200
-  node_8:
-    name: worker-5
-    internalapi_ip: 172.17.0.10
-    tenant_ip: 172.19.0.10
-    ctlplane_ip: 192.168.122.15
-    storage_ip: 172.18.0.10
-    bgp_ip:
-      - 100.64.1.22
-      - 100.65.1.22
-    bgp_peers:
-      - 100.64.1.21
-      - 100.65.1.21
-    loopback_ip: 99.99.1.5
-    loopback_ipv6: f00d:f00d:f00d:f00d:f00d:f00d:f00d:33
-    routes:
-      config:
-        - destination: 99.99.0.0/16
-          next-hop-address: 100.64.1.21
+        # routes needed for adoption
+        - destination: 172.31.0.0/24
+          next-hop-address: 100.64.1.17
           next-hop-interface: enp8s0
           weight: 200
-        - destination: 99.99.0.0/16
-          next-hop-address: 100.65.1.21
+        - destination: 172.31.0.0/24
+          next-hop-address: 100.65.1.17
           next-hop-interface: enp9s0
           weight: 200
-  node_9:
-    name: worker-6
+        - destination: 192.168.188.0/24
+          next-hop-address: 100.64.1.17
+          next-hop-interface: enp8s0
+          weight: 200
+        - destination: 192.168.188.0/24
+          next-hop-address: 100.65.1.17
+          next-hop-interface: enp9s0
+          weight: 200
+  node_7:
+    name: worker-4
     internalapi_ip: 172.17.0.11
     tenant_ip: 172.19.0.11
     ctlplane_ip: 192.168.122.16
@@ -177,8 +196,25 @@ data:
           next-hop-address: 100.65.2.13
           next-hop-interface: enp9s0
           weight: 200
-  node_10:
-    name: worker-7
+        # routes needed for adoption
+        - destination: 172.31.0.0/24
+          next-hop-address: 100.64.2.13
+          next-hop-interface: enp8s0
+          weight: 200
+        - destination: 172.31.0.0/24
+          next-hop-address: 100.65.2.13
+          next-hop-interface: enp9s0
+          weight: 200
+        - destination: 192.168.188.0/24
+          next-hop-address: 100.64.2.13
+          next-hop-interface: enp8s0
+          weight: 200
+        - destination: 192.168.188.0/24
+          next-hop-address: 100.65.2.13
+          next-hop-interface: enp9s0
+          weight: 200
+  node_8:
+    name: worker-5
     internalapi_ip: 172.17.0.12
     tenant_ip: 172.19.0.12
     ctlplane_ip: 192.168.122.17
@@ -201,33 +237,26 @@ data:
           next-hop-address: 100.65.2.17
           next-hop-interface: enp9s0
           weight: 200
-  node_11:
-    name: worker-8
-    internalapi_ip: 172.17.0.13
-    tenant_ip: 172.19.0.13
-    ctlplane_ip: 192.168.122.18
-    storage_ip: 172.18.0.13
-    bgp_ip:
-      - 100.64.2.22
-      - 100.65.2.22
-    bgp_peers:
-      - 100.64.2.21
-      - 100.65.2.21
-    loopback_ip: 99.99.2.5
-    loopback_ipv6: f00d:f00d:f00d:f00d:f00d:f00d:f00d:33
-    routes:
-      config:
-        - destination: 99.99.0.0/16
-          next-hop-address: 100.64.2.21
+        # routes needed for adoption
+        - destination: 172.31.0.0/24
+          next-hop-address: 100.64.2.17
           next-hop-interface: enp8s0
           weight: 200
-        - destination: 99.99.0.0/16
-          next-hop-address: 100.65.2.21
+        - destination: 172.31.0.0/24
+          next-hop-address: 100.65.2.17
+          next-hop-interface: enp9s0
+          weight: 200
+        - destination: 192.168.188.0/24
+          next-hop-address: 100.64.2.17
+          next-hop-interface: enp8s0
+          weight: 200
+        - destination: 192.168.188.0/24
+          next-hop-address: 100.65.2.17
           next-hop-interface: enp9s0
           weight: 200
   # test worker
-  node_12:
-    name: worker-9
+  node_9:
+    name: worker-6
     internalapi_ip: 172.17.0.14
     tenant_ip: 172.19.0.14
     ctlplane_ip: 192.168.122.19
@@ -302,16 +331,16 @@ data:
         "cniVersion": "0.3.1",
         "name": "ctlplane",
         "type": "bridge",
-        "bridge": "ctlplane",
+        "bridge": "ospbr",
         "isDefaultGateway": true,
         "forceAddress": false,
         "ipMasq": true,
         "hairpinMode": true,
         "ipam": {
           "type": "whereabouts",
-          "range": "192.168.125.0/24",
-          "range_start": "192.168.125.30",
-          "range_end": "192.168.125.70"
+          "range": "192.168.126.0/24",
+          "range_start": "192.168.126.30",
+          "range_end": "192.168.126.70"
         }
       }
 
@@ -343,7 +372,7 @@ data:
         "bridge": "internalapi",
         "isDefaultGateway": true,
         "forceAddress": false,
-        "ipMasq": true,
+        "ipMasq": false,
         "hairpinMode": true,
         "ipam": {
           "type": "whereabouts",
@@ -376,7 +405,7 @@ data:
         "bridge": "storage",
         "isDefaultGateway": true,
         "forceAddress": false,
-        "ipMasq": true,
+        "ipMasq": false,
         "hairpinMode": true,
         "ipam": {
           "type": "whereabouts",
@@ -409,7 +438,7 @@ data:
         "bridge": "tenant",
         "isDefaultGateway": true,
         "forceAddress": false,
-        "ipMasq": true,
+        "ipMasq": false,
         "hairpinMode": true,
         "ipam": {
           "type": "whereabouts",
@@ -579,6 +608,33 @@ data:
               next-hop-address: 100.65.0.13
               next-hop-interface: enp9s0
               weight: 200
+            # ctlplane nncp routes
+            - destination: 192.168.122.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
+            - destination: 192.168.123.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
+            - destination: 192.168.124.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
+            # routes needed for adoption
+            - destination: 172.31.0.0/24
+              next-hop-address: 100.64.0.13
+              next-hop-interface: enp8s0
+              weight: 200
+            - destination: 172.31.0.0/24
+              next-hop-address: 100.65.0.13
+              next-hop-interface: enp9s0
+              weight: 200
+            - destination: 192.168.188.0/24
+              next-hop-address: 100.64.0.13
+              next-hop-interface: enp8s0
+              weight: 200
+            - destination: 192.168.188.0/24
+              next-hop-address: 100.65.0.13
+              next-hop-interface: enp9s0
+              weight: 200
       node4:
         bgpnet0:
           bgp_peer: 100.64.0.17
@@ -598,26 +654,34 @@ data:
               next-hop-address: 100.65.0.17
               next-hop-interface: enp9s0
               weight: 200
-      node5:
-        bgpnet0:
-          bgp_peer: 100.64.0.21
-          bgp_ip: 100.64.0.22
-        bgpnet1:
-          bgp_peer: 100.65.0.21
-          bgp_ip: 100.65.0.22
-        loopback_ip: 99.99.0.5
-        loopback_ipv6: f00d:f00d:f00d:f00d:f00d:f00d:f00d:15
-        routes:
-          config:
-            - destination: 99.99.0.0/16
-              next-hop-address: 100.64.0.21
+            # ctlplane nncp routes
+            - destination: 192.168.122.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
+            - destination: 192.168.123.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
+            - destination: 192.168.124.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
+            # routes needed for adoption
+            - destination: 172.31.0.0/24
+              next-hop-address: 100.64.0.17
               next-hop-interface: enp8s0
               weight: 200
-            - destination: 99.99.0.0/16
-              next-hop-address: 100.65.0.21
+            - destination: 172.31.0.0/24
+              next-hop-address: 100.65.0.17
               next-hop-interface: enp9s0
               weight: 200
-      node6:
+            - destination: 192.168.188.0/24
+              next-hop-address: 100.64.0.17
+              next-hop-interface: enp8s0
+              weight: 200
+            - destination: 192.168.188.0/24
+              next-hop-address: 100.65.0.17
+              next-hop-interface: enp9s0
+              weight: 200
+      node5:
         bgpnet0:
           bgp_peer: 100.64.1.13
           bgp_ip: 100.64.1.14
@@ -636,7 +700,34 @@ data:
               next-hop-address: 100.65.1.13
               next-hop-interface: enp9s0
               weight: 200
-      node7:
+            # ctlplane nncp routes
+            - destination: 192.168.122.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
+            - destination: 192.168.123.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
+            - destination: 192.168.124.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
+            # routes needed for adoption
+            - destination: 172.31.0.0/24
+              next-hop-address: 100.64.1.13
+              next-hop-interface: enp8s0
+              weight: 200
+            - destination: 172.31.0.0/24
+              next-hop-address: 100.65.1.13
+              next-hop-interface: enp9s0
+              weight: 200
+            - destination: 192.168.188.0/24
+              next-hop-address: 100.64.1.13
+              next-hop-interface: enp8s0
+              weight: 200
+            - destination: 192.168.188.0/24
+              next-hop-address: 100.65.1.13
+              next-hop-interface: enp9s0
+              weight: 200
+      node6:
         bgpnet0:
           bgp_peer: 100.64.1.17
           bgp_ip: 100.64.1.18
@@ -655,26 +746,34 @@ data:
               next-hop-address: 100.65.1.17
               next-hop-interface: enp9s0
               weight: 200
-      node8:
-        bgpnet0:
-          bgp_peer: 100.64.1.21
-          bgp_ip: 100.64.1.22
-        bgpnet1:
-          bgp_peer: 100.65.1.21
-          bgp_ip: 100.65.1.22
-        loopback_ip: 99.99.1.5
-        loopback_ipv6: f00d:f00d:f00d:f00d:f00d:f00d:f00d:25
-        routes:
-          config:
-            - destination: 99.99.0.0/16
-              next-hop-address: 100.64.1.21
+            # ctlplane nncp routes
+            - destination: 192.168.122.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
+            - destination: 192.168.123.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
+            - destination: 192.168.124.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
+            # routes needed for adoption
+            - destination: 172.31.0.0/24
+              next-hop-address: 100.64.1.17
               next-hop-interface: enp8s0
               weight: 200
-            - destination: 99.99.0.0/16
-              next-hop-address: 100.65.1.21
+            - destination: 172.31.0.0/24
+              next-hop-address: 100.65.1.17
               next-hop-interface: enp9s0
               weight: 200
-      node9:
+            - destination: 192.168.188.0/24
+              next-hop-address: 100.64.1.17
+              next-hop-interface: enp8s0
+              weight: 200
+            - destination: 192.168.188.0/24
+              next-hop-address: 100.65.1.17
+              next-hop-interface: enp9s0
+              weight: 200
+      node7:
         bgpnet0:
           bgp_peer: 100.64.2.13
           bgp_ip: 100.64.2.14
@@ -693,7 +792,34 @@ data:
               next-hop-address: 100.65.2.13
               next-hop-interface: enp9s0
               weight: 200
-      node10:
+            # ctlplane nncp routes
+            - destination: 192.168.122.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
+            - destination: 192.168.123.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
+            - destination: 192.168.124.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
+            # routes needed for adoption
+            - destination: 172.31.0.0/24
+              next-hop-address: 100.64.2.13
+              next-hop-interface: enp8s0
+              weight: 200
+            - destination: 172.31.0.0/24
+              next-hop-address: 100.65.2.13
+              next-hop-interface: enp9s0
+              weight: 200
+            - destination: 192.168.188.0/24
+              next-hop-address: 100.64.2.13
+              next-hop-interface: enp8s0
+              weight: 200
+            - destination: 192.168.188.0/24
+              next-hop-address: 100.65.2.13
+              next-hop-interface: enp9s0
+              weight: 200
+      node8:
         bgpnet0:
           bgp_peer: 100.64.2.17
           bgp_ip: 100.64.2.18
@@ -712,26 +838,34 @@ data:
               next-hop-address: 100.65.2.17
               next-hop-interface: enp9s0
               weight: 200
-      node11:
-        bgpnet0:
-          bgp_peer: 100.64.2.21
-          bgp_ip: 100.64.2.22
-        bgpnet1:
-          bgp_peer: 100.65.2.21
-          bgp_ip: 100.65.2.22
-        loopback_ip: 99.99.2.5
-        loopback_ipv6: f00d:f00d:f00d:f00d:f00d:f00d:f00d:35
-        routes:
-          config:
-            - destination: 99.99.0.0/16
-              next-hop-address: 100.64.2.21
+            # ctlplane nncp routes
+            - destination: 192.168.122.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
+            - destination: 192.168.123.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
+            - destination: 192.168.124.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
+            # routes needed for adoption
+            - destination: 172.31.0.0/24
+              next-hop-address: 100.64.2.17
               next-hop-interface: enp8s0
               weight: 200
-            - destination: 99.99.0.0/16
-              next-hop-address: 100.65.2.21
+            - destination: 172.31.0.0/24
+              next-hop-address: 100.65.2.17
               next-hop-interface: enp9s0
               weight: 200
-      node12:
+            - destination: 192.168.188.0/24
+              next-hop-address: 100.64.2.17
+              next-hop-interface: enp8s0
+              weight: 200
+            - destination: 192.168.188.0/24
+              next-hop-address: 100.65.2.17
+              next-hop-interface: enp9s0
+              weight: 200
+      node9:
         bgpnet0:
           bgp_peer: 100.64.10.1
           bgp_ip: 100.64.10.2
@@ -743,10 +877,10 @@ data:
               next-hop-address: 100.64.10.1
               next-hop-interface: enp8s0
     net-attach-def:
-      node12: |
+      node9: |
         {
           "cniVersion": "0.3.1",
-          "name": "bgpnet-worker-9",
+          "name": "bgpnet-worker-6",
           "type": "host-device",
           "device": "enp8s0",
           "ipam": {
@@ -778,12 +912,12 @@ data:
   dns-resolver:
     config:
       server:
-        - 192.168.122.1
+        - 192.168.125.1
       search: []
     options:
       - key: server
         values:
-          - 192.168.122.1
+          - 192.168.125.1
 
   routes:
     config: []
