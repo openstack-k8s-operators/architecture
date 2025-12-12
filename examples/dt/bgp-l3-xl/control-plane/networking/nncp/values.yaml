@@ -331,16 +331,16 @@ data:
         "cniVersion": "0.3.1",
         "name": "ctlplane",
         "type": "bridge",
-        "bridge": "ctlplane",
+        "bridge": "ospbr",
         "isDefaultGateway": true,
         "forceAddress": false,
         "ipMasq": true,
         "hairpinMode": true,
         "ipam": {
           "type": "whereabouts",
-          "range": "192.168.125.0/24",
-          "range_start": "192.168.125.30",
-          "range_end": "192.168.125.70"
+          "range": "192.168.126.0/24",
+          "range_start": "192.168.126.30",
+          "range_end": "192.168.126.70"
         }
       }
 
@@ -608,6 +608,16 @@ data:
               next-hop-address: 100.65.0.13
               next-hop-interface: enp9s0
               weight: 200
+            # ctlplane nncp routes
+            - destination: 192.168.122.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
+            - destination: 192.168.123.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
+            - destination: 192.168.124.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
             # routes needed for adoption
             - destination: 172.31.0.0/24
               next-hop-address: 100.64.0.13
@@ -644,6 +654,16 @@ data:
               next-hop-address: 100.65.0.17
               next-hop-interface: enp9s0
               weight: 200
+            # ctlplane nncp routes
+            - destination: 192.168.122.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
+            - destination: 192.168.123.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
+            - destination: 192.168.124.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
             # routes needed for adoption
             - destination: 172.31.0.0/24
               next-hop-address: 100.64.0.17
@@ -680,6 +700,16 @@ data:
               next-hop-address: 100.65.1.13
               next-hop-interface: enp9s0
               weight: 200
+            # ctlplane nncp routes
+            - destination: 192.168.122.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
+            - destination: 192.168.123.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
+            - destination: 192.168.124.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
             # routes needed for adoption
             - destination: 172.31.0.0/24
               next-hop-address: 100.64.1.13
@@ -716,6 +746,16 @@ data:
               next-hop-address: 100.65.1.17
               next-hop-interface: enp9s0
               weight: 200
+            # ctlplane nncp routes
+            - destination: 192.168.122.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
+            - destination: 192.168.123.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
+            - destination: 192.168.124.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
             # routes needed for adoption
             - destination: 172.31.0.0/24
               next-hop-address: 100.64.1.17
@@ -752,6 +792,16 @@ data:
               next-hop-address: 100.65.2.13
               next-hop-interface: enp9s0
               weight: 200
+            # ctlplane nncp routes
+            - destination: 192.168.122.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
+            - destination: 192.168.123.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
+            - destination: 192.168.124.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
             # routes needed for adoption
             - destination: 172.31.0.0/24
               next-hop-address: 100.64.2.13
@@ -788,6 +838,16 @@ data:
               next-hop-address: 100.65.2.17
               next-hop-interface: enp9s0
               weight: 200
+            # ctlplane nncp routes
+            - destination: 192.168.122.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
+            - destination: 192.168.123.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
+            - destination: 192.168.124.0/24
+              next-hop-address: 192.168.125.1
+              next-hop-interface: enp7s0
             # routes needed for adoption
             - destination: 172.31.0.0/24
               next-hop-address: 100.64.2.17
@@ -852,12 +912,12 @@ data:
   dns-resolver:
     config:
       server:
-        - 192.168.122.1
+        - 192.168.125.1
       search: []
     options:
       - key: server
         values:
-          - 192.168.122.1
+          - 192.168.125.1
 
   routes:
     config: []
