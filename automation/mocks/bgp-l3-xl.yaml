@@ -1139,43 +1139,63 @@ cifmw_networking_env_definition:
   networks:
     ctlplane:
       dns_v4:
-        - 192.168.122.1
+        - 192.168.125.1
       dns_v6: []
-      gw_v4: 192.168.122.1
+      gw_v4: 192.168.125.1
       mtu: 1500
       network_name: ctlplane
-      network_v4: 192.168.122.0/24
+      network_v4: 192.168.125.0/24
       search_domain: ctlplane.example.com
       tools:
         metallb:
           ipv4_ranges:
-            - end: 192.168.122.90
+            - end: 192.168.125.90
               end_host: 90
               length: 11
-              start: 192.168.122.80
+              start: 192.168.125.80
               start_host: 80
           ipv6_ranges: []
         multus:
           ipv4_ranges:
-            - end: 192.168.122.70
+            - end: 192.168.125.70
               end_host: 70
               length: 41
-              start: 192.168.122.30
+              start: 192.168.125.30
               start_host: 30
           ipv6_ranges: []
         netconfig:
           ipv4_ranges:
-            - end: 192.168.122.120
+            - end: 192.168.125.120
               end_host: 120
               length: 21
-              start: 192.168.122.100
+              start: 192.168.125.100
               start_host: 100
-            - end: 192.168.122.200
+            - end: 192.168.125.200
               end_host: 200
               length: 51
-              start: 192.168.122.150
+              start: 192.168.125.150
               start_host: 150
           ipv6_ranges: []
+    ctlplane_ocp_nad:
+      gw_v4: 192.168.126.1
+      mtu: 1500
+      network_name: ctlplane_ocp_nad
+      network_v4: 192.168.126.0/24
+      tools:
+        multus:
+          ipv4_ranges:
+            - end: 192.168.126.70
+              end_host: 70
+              length: 41
+              start: 192.168.126.30
+              start_host: 30
+        metallb:
+          ipv4_ranges:
+            - end: 192.168.126.90
+              end_host: 90
+              length: 11
+              start: 192.168.126.80
+              start_host: 80
     ctlplaner0:
       dns_v4:
         - 192.168.122.1
