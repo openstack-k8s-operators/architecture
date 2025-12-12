@@ -1,0 +1,51 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../../../../va/nfv/ovs-dpdk-sriov/edpm/nodeset
+  # - https://github.com/openstack-k8s-operators/architecture/va/nfv/ovs-dpdk-sriov/edpm/nodeset?ref=main
+  ## It's possible to replace ../../../../../../va/nfv/ovs-dpdk-sriov/edpm/nodeset/ with a git checkout URL
+  ## as per: https://github.com/kubernetes-sigs/kustomize/blob/master/examples/remoteBuild.md
+
+resources:
+  - values.yaml
+
+patches:
+  - target:
+      kind: ConfigMap
+      name: sriov-nova
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: sriov-nova-2
+  - target:
+      kind: ConfigMap
+      name: ovs-dpdk-sriov-cpu-pinning-nova
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: ovs-dpdk-sriov-cpu-pinning-nova-2
+  - target:
+      kind: OpenStackDataPlaneService
+      name: nova-custom-ovsdpdksriov
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: nova-custom-ovsdpdksriov-2
+      - op: replace
+        path: /spec/label
+        value: nova-custom-ovsdpdksriov-2
+      - op: replace
+        path: /spec/dataSources/0/configMapRef/name
+        value: ovs-dpdk-sriov-cpu-pinning-nova-2
+      - op: replace
+        path: /spec/dataSources/1/configMapRef/name
+        value: sriov-nova-2
+  - target:
+      kind: OpenStackDataPlaneNodeSet
+      name: openstack-edpm
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: openstack-edpm-2
