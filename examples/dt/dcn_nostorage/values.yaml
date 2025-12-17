@@ -1,0 +1,54 @@
+---
+apiVersion: v1
+data:
+    nodeset_name: computes-edpm
+    ceph_conf:
+        az0.client.openstack.keyring: CHANGEME_CEPH_CONF
+        az0.conf: CHANGEME_CEPH_KEYRING
+        az1.client.openstack.keyring: CHANGEME_CEPH_KEYRING
+        az1.conf: CHANGEME_CEPH_CONF
+        az2.client.openstack.keyring: CHANGEME_CEPH_KEYRING
+        az2.conf: CHANGEME_CEPH_CONF
+    nodeset:
+        services:
+            - bootstrap
+            - configure-network
+            - validate-network
+            - install-os
+            - ceph-hci-pre
+            - configure-os
+            - ssh-known-hosts
+            - run-os
+            - reboot-os
+            - install-certs
+            - ceph-client
+            - ovn
+            - neutron-metadata
+            - libvirt
+            - nova-custom-ceph
+    nova:
+        customDataplaneService:
+            name: nova-custom-ceph
+        ceph:
+            conf: CHANGEME_NOVA_CEPH_CONF
+        name: ceph-nova
+        dataSources:
+            - configMapRef:
+              name: ceph-nova
+            - secretRef:
+              name: nova-cell1-compute-config
+            - secretRef:
+              name: nova-migration-ssh-key
+    neutron-metadata:
+        customDataplaneService:
+            name: neutron-metadata
+        dataSources:
+            - secretRef:
+              name: neutron-ovn-metadata-agent-neutron-config
+            - secretRef:
+              name: nova-cell1-metadata-neutron-config
+kind: ConfigMap
+metadata:
+    annotations:
+        config.kubernetes.io/local-config: 'true'
+    name: edpm-nodeset-values-post-ceph
