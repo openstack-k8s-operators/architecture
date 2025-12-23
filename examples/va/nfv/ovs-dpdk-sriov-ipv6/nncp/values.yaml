@@ -1,0 +1,199 @@
+---
+# local-config: referenced, but not emitted by kustomize
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: network-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+data:
+  # nodes
+  node_0:
+    name: master-0
+    node_name: master-0.ocp.openstack.lab
+    internalapi_ip: "2620:cf:cf:bbbb::10"
+    tenant_ip: "2620:cf:cf:eeee::10"
+    ctlplane_ip: "2620:cf:cf:aaaa::10"
+    storage_ip: "2620:cf:cf:cccc::10"
+  node_1:
+    name: master-1
+    node_name: master-1.ocp.openstack.lab
+    internalapi_ip: "2620:cf:cf:bbbb::11"
+    tenant_ip: "2620:cf:cf:eeee::11"
+    ctlplane_ip: "2620:cf:cf:aaaa::11"
+    storage_ip: "2620:cf:cf:cccc::11"
+  node_2:
+    name: master-2
+    node_name: master-2.ocp.openstack.lab
+    internalapi_ip: "2620:cf:cf:bbbb::12"
+    tenant_ip: "2620:cf:cf:eeee::12"
+    ctlplane_ip: "2620:cf:cf:aaaa::12"
+    storage_ip: "2620:cf:cf:cccc::12"
+
+  # networks
+  ctlplane:
+    dnsDomain: ctlplane.example.com
+    subnets:
+      - allocationRanges:
+          - end: "2620:cf:cf:aaaa::120"
+            start: "2620:cf:cf:aaaa::100"
+          - end: "2620:cf:cf:aaaa::200"
+            start: "2620:cf:cf:aaaa::150"
+        cidr: "2620:cf:cf:aaaa::0/64"
+        gateway: "2620:cf:cf:aaaa::1"
+        name: subnet1
+    prefix-length: 64
+    iface: enp7s0
+    mtu: 9000
+    lb_addresses:
+      - "2620:cf:cf:aaaa::80-2620:cf:cf:aaaa::90"
+    endpoint_annotations:
+      metallb.universe.tf/address-pool: ctlplane
+      metallb.universe.tf/allow-shared-ip: ctlplane
+      metallb.universe.tf/loadBalancerIPs: "2620:cf:cf:aaaa::80"
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "ctlplane",
+        "type": "macvlan",
+        "master": "ospbr",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "2620:cf:cf:aaaa::0/64",
+          "range_start": "2620:cf:cf:aaaa::30",
+          "range_end": "2620:cf:cf:aaaa::70"
+        }
+      }
+  internalapi:
+    dnsDomain: internalapi.example.com
+    subnets:
+      - allocationRanges:
+          - end: "2620:cf:cf:bbbb::250"
+            start: "2620:cf:cf:bbbb::100"
+        cidr: "2620:cf:cf:bbbb::0/64"
+        name: subnet1
+        vlan: 20
+    mtu: 1500
+    prefix-length: 64
+    iface: internalapi
+    vlan: 20
+    base_iface: enp7s0
+    lb_addresses:
+      - "2620:cf:cf:bbbb::80-2620:cf:cf:bbbb::90"
+    endpoint_annotations:
+      metallb.universe.tf/address-pool: internalapi
+      metallb.universe.tf/allow-shared-ip: internalapi
+      metallb.universe.tf/loadBalancerIPs: "2620:cf:cf:bbbb::80"
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "internalapi",
+        "type": "macvlan",
+        "master": "internalapi",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "2620:cf:cf:bbbb::0/64",
+          "range_start": "2620:cf:cf:bbbb::30",
+          "range_end": "2620:cf:cf:bbbb::70"
+        }
+      }
+  storage:
+    dnsDomain: storage.example.com
+    subnets:
+      - allocationRanges:
+          - end: "2620:cf:cf:cccc::250"
+            start: "2620:cf:cf:cccc::100"
+        cidr: "2620:cf:cf:cccc::0/64"
+        name: subnet1
+        vlan: 21
+    mtu: 9000
+    prefix-length: 64
+    iface: storage
+    vlan: 21
+    base_iface: enp7s0
+    lb_addresses:
+      - "2620:cf:cf:cccc::80-2620:cf:cf:cccc::90"
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "storage",
+        "type": "macvlan",
+        "master": "storage",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "2620:cf:cf:cccc::0/64",
+          "range_start": "2620:cf:cf:cccc::30",
+          "range_end": "2620:cf:cf:cccc::70"
+        }
+      }
+  tenant:
+    dnsDomain: tenant.example.com
+    subnets:
+      - allocationRanges:
+          - end: "2620:cf:cf:eeee::250"
+            start: "2620:cf:cf:eeee::100"
+        cidr: "2620:cf:cf:eeee::0/64"
+        name: subnet1
+        vlan: 22
+    mtu: 1500
+    prefix-length: 64
+    iface: tenant
+    vlan: 22
+    base_iface: enp7s0
+    lb_addresses:
+      - "2620:cf:cf:eeee::80-2620:cf:cf:eeee::90"
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "tenant",
+        "type": "macvlan",
+        "master": "tenant",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "2620:cf:cf:eeee::0/64",
+          "range_start": "2620:cf:cf:eeee::30",
+          "range_end": "2620:cf:cf:eeee::70"
+        }
+      }
+  external:
+    dnsDomain: external.example.com
+    subnets:
+      - allocationRanges:
+          - end: "2620:cf:cf:cf::250"
+            start: "2620:cf:cf:cf::100"
+        cidr: "2620:cf:cf:cf::/64"
+        gateway: "2620:cf:cf:cf::1"
+        name: subnet1
+    mtu: 1500
+  datacentre:
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "datacentre",
+        "type": "bridge",
+        "bridge": "ospbr",
+        "ipam": {}
+      }
+
+  dns-resolver:
+    config:
+      server:
+        - "2620:cf:cf:aaaa::1"
+      search: []
+    options:
+      - key: server
+        values:
+          - "2620:cf:cf:aaaa::1"
+  routes:
+    config: []
+  rabbitmq:
+    endpoint_annotations:
+      metallb.universe.tf/address-pool: internalapi
+      metallb.universe.tf/loadBalancerIPs: "2620:cf:cf:bbbb::81"
+  rabbitmq-cell1:
+    endpoint_annotations:
+      metallb.universe.tf/address-pool: internalapi
+      metallb.universe.tf/loadBalancerIPs: "2620:cf:cf:bbbb::82"
+  lbServiceType: LoadBalancer
+  storageClass: local-storage
+  bridgeName: ospbr
