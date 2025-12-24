@@ -1,0 +1,89 @@
+---
+vas:
+  bgp-l3-xl-adoption:
+    stages:
+      - pre_stage_run:
+          - name: Apply taint on worker-9
+            type: cr
+            definition:
+              spec:
+                taints:
+                  - effect: NoSchedule
+                    key: testOperator
+                    value: 'true'
+                  - effect: NoExecute
+                    key: testOperator
+                    value: 'true'
+            kind: Node
+            resource_name: worker-9
+            state: patched
+          - name: Disable rp_filters on OCP nodes
+            type: cr
+            definition:
+              spec:
+                profile:
+                  - data: |
+                      [main]
+                      summary=Optimize systems running OpenShift (provider specific parent profile)
+                      include=-provider-${f:exec:cat:/var/lib/ocp-tuned/provider},openshift
+
+                      [sysctl]
+                      net.ipv4.conf.enp7s0.rp_filter=0
+                      net.ipv4.conf.enp8s0.rp_filter=0
+                    name: openshift-no-reapply-sysctl
+                recommend:
+                  - match:
+                      # applied to all nodes except worker-9, because worker-9 has no enp8s0
+                      - label: kubernetes.io/hostname
+                        value: worker-0
+                      - label: kubernetes.io/hostname
+                        value: worker-1
+                      - label: kubernetes.io/hostname
+                        value: worker-2
+                      - label: kubernetes.io/hostname
+                        value: worker-3
+                      - label: kubernetes.io/hostname
+                        value: worker-4
+                      - label: kubernetes.io/hostname
+                        value: worker-5
+                      - label: kubernetes.io/hostname
+                        value: worker-6
+                      - label: kubernetes.io/hostname
+                        value: worker-7
+                      - label: kubernetes.io/hostname
+                        value: worker-8
+                      - label: node-role.kubernetes.io/master
+                    operand:
+                      tunedConfig:
+                        reapply_sysctl: false
+                    priority: 15
+                    profile: openshift-no-reapply-sysctl
+            api_version: tuned.openshift.io/v1
+            kind: Tuned
+            resource_name: openshift-no-reapply-sysctl
+            namespace: openshift-cluster-node-tuning-operator
+            state: present
+        name: nncp-configuration
+        path: examples/dt/bgp-l3-xl/control-plane/networking/nncp
+        wait_conditions:
+          - >-
+            oc -n openstack wait nncp
+            -l osp/nncm-config-type=standard
+            --for jsonpath='{.status.conditions[0].reason}'=SuccessfullyConfigured
+            --timeout=300s
+        values:
+          - name: network-values
+            src_file: values.yaml
+        build_output: nncp.yaml
+
+      - name: networking
+        path: examples/dt/bgp-l3-xl/control-plane/networking
+        wait_conditions:
+          - >-
+            oc -n metallb-system wait pod
+            -l app=metallb -l component=speaker
+            --for condition=Ready
+        values:
+          - name: network-values
+            src_file: nncp/values.yaml
+        build_output: networking.yaml
