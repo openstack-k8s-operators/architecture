@@ -6,10 +6,12 @@
 Focused on components with NFS-based backends.
 
 ## Node topology
-| Node role         | Machine Type | Count |
-| ----------------- | ------------ | ----- |
-| Compact OpenShift | vm           | 3     |
-| Compute nodes     | vm           | 2     |
+| Node role                                 | Machine Type | Count |
+| ----------------------------------------- | ------------ | ----- |
+| OpenShift masters (dedicated to OpenShift) | vm           | 3     |
+| OpenShift workers (OpenStack control plane)| vm           | 3     |
+| OpenShift worker (Test Operator)           | vm           | 1     |
+| Compute nodes                              | vm           | 2     |
 
 
 ## Services, enabled features and configurations
