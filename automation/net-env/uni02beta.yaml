@@ -558,8 +558,7 @@ instances:
       storage:
         interface_name: enp6s0.121
         ip_v4: 172.18.0.16
-        # Intentionally fake/non-hex MAC (matches existing repo convention); worker-3 is dedicated to test-operator
-        mac_addr: "52:54:00:23:e0:fg"
+        mac_addr: "52:54:00:23:e0:13"
         mtu: 1500
         netmask_v4: 255.255.255.0
         network_name: storage
