@@ -30,6 +30,8 @@ data:
         ovn-encap-type: geneve
         system-id: random
       networkAttachment: tenant
+      nicMappings:
+        octavia: octbr
       resources: {}
       tls: {}
   glance:
@@ -64,3 +66,23 @@ data:
       customServiceConfig: |
         [filter_scheduler]
         enabled_filtes = AvailabilityZoneFilter,ComputeFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,ServerGroupAntiAffinityFilter,ServerGroupAffinityFilter,PciPassthroughFilter,NUMATopologyFilter,AggregateInstanceExtraSpecsFilter
+  octavia:
+    enabled: true
+    amphoraImageContainerImage: quay.io/gthiemonge/octavia-amphora-image
+    apacheContainerImage: registry.redhat.io/ubi9/httpd-24:latest
+    octaviaAPI:
+      customServiceConfig: '# add your customization here'
+      networkAttachments:
+        - internalapi
+    octaviaHousekeeping:
+      customServiceConfig: '# add your customization here'
+      networkAttachments:
+        - octavia
+    octaviaHealthManager:
+      customServiceConfig: '# add your customization here'
+      networkAttachments:
+        - octavia
+    octaviaWorker:
+      customServiceConfig: '# add your customization here'
+      networkAttachments:
+        - octavia
