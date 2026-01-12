@@ -3,7 +3,7 @@ vas:
   dcn:
     stages:
       - name: nncp-configuration
-        path: examples/dt/dcn/control-plane/nncp
+        path: examples/dt/dcn/control-plane/networking/nncp
         wait_conditions:
           - >-
             oc -n openstack wait nncp
@@ -15,6 +15,19 @@ vas:
             src_file: values.yaml
         build_output: nncp.yaml
 
+      - name: networking
+        path: examples/dt/dcn/control-plane/networking
+        wait_conditions:
+          - >-
+            oc -n metallb-system wait pod
+            -l app=metallb -l component=speaker
+            --for condition=Ready
+            --timeout=5m
+        values:
+          - name: network-values
+            src_file: nncp/values.yaml
+        build_output: network.yaml
+
       - name: control-plane
         path: examples/dt/dcn/control-plane
         wait_conditions:
@@ -23,7 +36,7 @@ vas:
             --timeout=30m
         values:
           - name: network-values
-            src_file: nncp/values.yaml
+            src_file: networking/nncp/values.yaml
         build_output: ../control-plane.yaml
         post_stage_run:
           - name: Deploy DCN

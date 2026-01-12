@@ -18,7 +18,7 @@ transformers:
         create: true
 
 components:
-  - ../../../../../dt/dcn/nncp
+  - ../../../../../../dt/dcn/nncp
 
 
 resources:
