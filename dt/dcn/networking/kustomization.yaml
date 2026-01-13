@@ -24,6 +24,8 @@ components:
 
 resources:
   - nad.yaml
+  - storagemgmt-nad.yaml
+  - storagemgmt-metallb.yaml
 
 # Add storagemgmt network template, as it is needed for CephHCI
 patches:
@@ -85,3 +87,51 @@ replacements:
           name: octavia
         fieldPaths:
           - spec.config
+
+  # Storagemgmt NAD support
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storagemgmt.net-attach-def
+    targets:
+      - select:
+          kind: NetworkAttachmentDefinition
+          name: storagemgmt
+        fieldPaths:
+          - spec.config
+
+  # Storagemgmt IPAddressPool
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storagemgmt.lb_addresses
+    targets:
+      - select:
+          kind: IPAddressPool
+          name: storagemgmt
+        fieldPaths:
+          - spec.addresses
+
+  # Storagemgmt L2Advertisement interface
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storagemgmt.iface
+    targets:
+      - select:
+          kind: L2Advertisement
+          name: storagemgmt
+        fieldPaths:
+          - spec.interfaces.0
+
+  # Override ctlplane L2Advertisement to use bridgeName (ospbr) instead of ctlplane.iface (enp7s0)
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.bridgeName
+    targets:
+      - select:
+          kind: L2Advertisement
+          name: ctlplane
+        fieldPaths:
+          - spec.interfaces.0

@@ -1,0 +1,8 @@
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: storagemgmt
+  labels:
+    osp/net: storagemgmt
+    osp/net-attach-def-type: standard
