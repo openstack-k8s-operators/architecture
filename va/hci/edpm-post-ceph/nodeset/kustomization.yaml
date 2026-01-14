@@ -290,6 +290,17 @@ replacements:
           create: true
   - source:
       kind: ConfigMap
+      name: network-values
+      fieldPath: data.storageClass
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.telemetry.template.metricStorage.customMonitoringStack.prometheusConfig.persistentVolumeClaim.storageClassName
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
       name: service-values
       fieldPath: data.keystone.customServiceConfig
     targets:
