@@ -3,6 +3,7 @@
       jobs: &id001
       - noop
       - rhoso-architecture-validate-bgp-l3-xl
+      - rhoso-architecture-validate-bgp-l3-xl-adoption
       - rhoso-architecture-validate-bgp_dt01
       - rhoso-architecture-validate-bgp_dt04_ipv6
       - rhoso-architecture-validate-bmo01
