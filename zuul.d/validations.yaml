@@ -347,6 +347,31 @@
       cifmw_architecture_scenario: ovs-dpdk-sriov-2nodesets
 - job:
     files:
+    - automation/mocks/ovs-dpdk-sriov-ipv6.yaml
+    - examples/va/nfv/ovs-dpdk-sriov-ipv6
+    - examples/va/nfv/ovs-dpdk-sriov-ipv6/nncp
+    - examples/va/nfv/ovs-dpdk-sriov/edpm/deployment
+    - examples/va/nfv/ovs-dpdk-sriov/edpm/nodeset
+    - lib
+    name: rhoso-architecture-validate-ovs-dpdk-sriov-ipv6
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: ovs-dpdk-sriov-ipv6
+- job:
+    files:
+    - automation/mocks/ovs-dpdk-sriov-ipv6-2nodesets.yaml
+    - examples/dt/nfv/nfv-ovs-dpdk-sriov-2nodesets/edpm/deployment
+    - examples/dt/nfv/nfv-ovs-dpdk-sriov-2nodesets/edpm/nodeset
+    - examples/dt/nfv/nfv-ovs-dpdk-sriov-2nodesets/edpm/nodeset2
+    - examples/dt/nfv/nfv-ovs-dpdk-sriov-ipv6-2nodesets
+    - examples/dt/nfv/nfv-ovs-dpdk-sriov-ipv6-2nodesets/nncp
+    - lib
+    name: rhoso-architecture-validate-ovs-dpdk-sriov-ipv6-2nodesets
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: ovs-dpdk-sriov-ipv6-2nodesets
+- job:
+    files:
     - automation/mocks/ovs-dpdk-sriov-networker.yaml
     - examples/dt/nfv/nfv-ovs-dpdk-sriov-networker
     - examples/dt/nfv/nfv-ovs-dpdk-sriov-networker/edpm/computes
