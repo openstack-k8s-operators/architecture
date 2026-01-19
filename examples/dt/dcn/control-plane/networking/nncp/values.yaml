@@ -62,7 +62,7 @@ data:
                   - destination: 192.168.122.0/24
                     nexthop: 192.168.133.1
                   - destination: 192.168.144.0/24
-                    nexthop: 192.168.133.1ØØ
+                    nexthop: 192.168.133.1
             - allocationRanges:
                   - end: 192.168.144.120
                     start: 192.168.144.100
@@ -147,8 +147,8 @@ data:
             {
               "cniVersion": "0.3.1",
               "name": "datacentre",
-              "type": "bridge",
-              "bridge": "ospbr",
+              "type": "host-device",
+              "device": "enp8s0",
               "ipam": {}
             }
     dns-resolver:
@@ -170,8 +170,8 @@ data:
                     start: 10.0.0.100
               cidr: 10.0.0.0/24
               name: subnet1
-              vlan: 22
-        vlan: 22
+              vlan: 44
+        vlan: 44
     internalapi:
         base_iface: enp7s0
         dnsDomain: internalapi.example.com
@@ -309,23 +309,27 @@ data:
               vlan: 40
         vlan: 40
     lbServiceType: LoadBalancer
+    # storagemgmt_ip should only be used for Swift here (not necessary for Ceph)
     node_0:
         ctlplane_ip: 192.168.122.10
         internalapi_ip: 172.17.0.10
         name: master-0
         storage_ip: 172.18.0.10
+        storagemgmt_ip: 172.20.0.10
         tenant_ip: 172.19.0.10
     node_1:
         ctlplane_ip: 192.168.122.11
         internalapi_ip: 172.17.0.11
         name: master-1
         storage_ip: 172.18.0.11
+        storagemgmt_ip: 172.20.0.11
         tenant_ip: 172.19.0.11
     node_2:
         ctlplane_ip: 192.168.122.12
         internalapi_ip: 172.17.0.12
         name: master-2
         storage_ip: 172.18.0.12
+        storagemgmt_ip: 172.20.0.12
         tenant_ip: 172.19.0.12
     rabbitmq:
         endpoint_annotations:
@@ -507,10 +511,25 @@ data:
               vlan: 41
         vlan: 41
     storagemgmt:
-        base_iface: eth1
+        base_iface: enp7s0
         dnsDomain: storagemgmt.example.com
         iface: storagemgmt
+        lb_addresses:
+            - 172.20.0.80-172.20.0.90
         mtu: 1500
+        net-attach-def: |
+            {
+              "cniVersion": "0.3.1",
+              "name": "storagemgmt",
+              "type": "macvlan",
+              "master": "storagemgmt",
+              "ipam": {
+                "type": "whereabouts",
+                "range": "172.20.0.0/24",
+                "range_start": "172.20.0.30",
+                "range_end": "172.20.0.70"
+              }
+            }
         prefix-length: 24
         subnets:
             - allocationRanges:
