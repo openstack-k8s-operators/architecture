@@ -84,7 +84,8 @@
     - automation/net-env/dcn.yaml
     - dt/dcn
     - examples/dt/dcn/control-plane
-    - examples/dt/dcn/control-plane/nncp
+    - examples/dt/dcn/control-plane/networking
+    - examples/dt/dcn/control-plane/networking/nncp
     - lib
     name: rhoso-architecture-validate-dcn
     parent: rhoso-architecture-base-job
