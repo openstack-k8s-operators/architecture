@@ -2,12 +2,12 @@
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
 metadata:
-  name: openstack
+  name: swift
   namespace: openstack-operators
 spec:
   channel: stable-v1.0
   installPlanApproval: Manual
-  name: openstack-operator
+  name: swift-operator
   source: rhoso-testing-operator-catalog
   sourceNamespace: openshift-marketplace
-  startingCSV: openstack-operator.v1.0.6
+  startingCSV: swift-operator.v1.0.6
