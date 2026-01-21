@@ -4,6 +4,9 @@ kind: OpenStackControlPlane
 metadata:
   name: controlplane
 spec:
+  tls:
+    podLevel:
+      enabled: false
   barbican:
     apiOverride:
       route: {}
