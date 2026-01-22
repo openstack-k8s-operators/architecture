@@ -41,6 +41,10 @@ data:
   swift:
     enabled: true
   nova:
+    apiServiceTemplate:
+      customServiceConfig: |
+         [pci]
+         alias = { "vendor_id":"8086", "product_id":"154d", "device_type":"type-PCI", "name":"a1" }
     schedulerServiceTemplate:
       customServiceConfig: |
         [filter_scheduler]

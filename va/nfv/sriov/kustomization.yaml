@@ -92,3 +92,14 @@ replacements:
           - spec.nova.template.schedulerServiceTemplate.customServiceConfig
         options:
           create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.nova.apiServiceTemplate.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.nova.template.apiServiceTemplate.customServiceConfig
+        options:
+          create: true
