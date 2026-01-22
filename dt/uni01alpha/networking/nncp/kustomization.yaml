@@ -37,58 +37,7 @@ patches:
 
   - target:
       kind: NodeNetworkConfigurationPolicy
-      name: master-0
-    patch: |-
-      - op: add
-        path: /spec/desiredState/interfaces/-
-        value:
-          description: Octavia bridge
-          mtu: 1500
-          name: octbr
-          type: linux-bridge
-          bridge:
-            options:
-              stp:
-                enabled: false
-            port:
-              - name: octavia
-
-  - target:
-      kind: NodeNetworkConfigurationPolicy
       name: master-1
-    patch: |-
-      - op: add
-        path: /spec/desiredState/interfaces/-
-        value:
-          description: Octavia vlan host interface
-          name: octavia
-          state: up
-          type: vlan
-          vlan:
-            base-iface: _replaced_
-            id: _replaced_
-
-  - target:
-      kind: NodeNetworkConfigurationPolicy
-      name: master-1
-    patch: |-
-      - op: add
-        path: /spec/desiredState/interfaces/-
-        value:
-          description: Octavia bridge
-          mtu: 1500
-          name: octbr
-          type: linux-bridge
-          bridge:
-            options:
-              stp:
-                enabled: false
-            port:
-              - name: octavia
-
-  - target:
-      kind: NodeNetworkConfigurationPolicy
-      name: master-2
     patch: |-
       - op: add
         path: /spec/desiredState/interfaces/-
@@ -108,16 +57,13 @@ patches:
       - op: add
         path: /spec/desiredState/interfaces/-
         value:
-          description: Octavia bridge
-          mtu: 1500
-          name: octbr
-          type: linux-bridge
-          bridge:
-            options:
-              stp:
-                enabled: false
-            port:
-              - name: octavia
+          description: Octavia vlan host interface
+          name: octavia
+          state: up
+          type: vlan
+          vlan:
+            base-iface: _replaced_
+            id: _replaced_
 
   - target:
       kind: NodeNetworkConfigurationPolicy

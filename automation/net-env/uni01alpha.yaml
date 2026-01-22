@@ -159,6 +159,19 @@ instances:
         skip_nm: false
         trunk_parent: ctlplane
         vlan_id: 22
+      octavia:
+        interface_name: eth1.23
+        ip_v4: 172.23.0.106
+        is_trunk_parent: false
+        mac_addr: '52:54:00:53:17:40'
+        mtu: 1500
+        netmask_v4: 255.255.255.0
+        network_name: octavia
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 23
   networker-1:
     hostname: networker-1
     name: networker-1
@@ -199,6 +212,19 @@ instances:
         skip_nm: false
         trunk_parent: ctlplane
         vlan_id: 22
+      octavia:
+        interface_name: eth1.23
+        ip_v4: 172.23.0.107
+        is_trunk_parent: false
+        mac_addr: '52:54:00:53:13:45'
+        mtu: 1500
+        netmask_v4: 255.255.255.0
+        network_name: octavia
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 23
   networker-2:
     hostname: networker-2
     name: networker-2
@@ -239,6 +265,19 @@ instances:
         skip_nm: false
         trunk_parent: ctlplane
         vlan_id: 22
+      octavia:
+        interface_name: eth1.23
+        ip_v4: 172.23.0.108
+        is_trunk_parent: false
+        mac_addr: '52:54:00:53:11:51'
+        mtu: 1500
+        netmask_v4: 255.255.255.0
+        network_name: octavia
+        parent_interface: eth1
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 23
   ocp-0:
     hostname: master-0
     name: ocp-0

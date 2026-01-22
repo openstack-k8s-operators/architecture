@@ -135,7 +135,6 @@ data:
     ovnController:
       nicMappings:
         datacentre: ocpbr
-        octavia: octbr
         ironic: ironic
       availability-zones:
         - zone-1
