@@ -104,8 +104,6 @@ data:
       policy_file = /etc/neutron/policy.yaml
       [placement]
       region_name = regionOne
-      [ovs]
-      igmp_snooping_enable = true
       [ovn]
       ovn_emit_need_to_frag = false
       [ml2]
