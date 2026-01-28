@@ -5,24 +5,3 @@ metadata:
   name: node-3
   labels:
     osp/nncm-config-type: standard
----
-apiVersion: nmstate.io/v1
-kind: NodeNetworkConfigurationPolicy
-metadata:
-  name: node-4
-  labels:
-    osp/nncm-config-type: standard
----
-apiVersion: nmstate.io/v1
-kind: NodeNetworkConfigurationPolicy
-metadata:
-  name: node-5
-  labels:
-    osp/nncm-config-type: standard
----
-apiVersion: nmstate.io/v1
-kind: NodeNetworkConfigurationPolicy
-metadata:
-  name: node-6
-  labels:
-    osp/nncm-config-type: standard

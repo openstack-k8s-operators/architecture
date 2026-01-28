@@ -2,22 +2,7 @@
 vas:
   uni02beta:
     stages:
-      - pre_stage_run:
-          - name: Apply taint on worker-3 (Test Operator node)
-            type: cr
-            definition:
-              spec:
-                taints:
-                  - effect: NoSchedule
-                    key: testOperator
-                    value: 'true'
-                  - effect: NoExecute
-                    key: testOperator
-                    value: 'true'
-            kind: Node
-            resource_name: worker-3
-            state: patched
-        name: nncp-configuration
+      - name: nncp-configuration
         path: examples/dt/uni02beta/control-plane/networking/nncp
         wait_conditions:
           - >-
