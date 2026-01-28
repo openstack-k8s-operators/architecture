@@ -16,12 +16,6 @@ spec:
         replicas: 3
       barbicanKeystoneListener:
         replicas: 1
-  ceilometer:
-    template:
-      passwordSelector:
-        service: CeilometerPassword
-      secret: osp-secret
-      serviceUser: ceilometer
   cinder:
     uniquePodNames: true
     apiOverride:
