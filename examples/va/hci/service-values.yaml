@@ -120,6 +120,8 @@ data:
       enabled: true
     ceilometer:
       enabled: true
+    cloudkitty:
+      enabled: false
   keystone:
     customServiceConfig: |
       [token]
