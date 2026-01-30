@@ -1,0 +1,315 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+transformers:
+  # Set namespace to OpenStack2 on all namespaced objects without a namespace
+  - |-
+    apiVersion: builtin
+    kind: NamespaceTransformer
+    metadata:
+      name: _ignored_
+      namespace: openstack2
+    setRoleBindingSubjects: none
+    unsetOnly: true
+    fieldSpecs:
+      - path: metadata/name
+        kind: Namespace
+        create: true
+
+components:
+  - ../../../../lib/control-plane/base
+  - ../../../../lib/control-plane/service-endpoints
+  - ../../../../lib/control-plane/dns
+  - ../../../../lib/control-plane/storage
+  - ../../../../lib/control-plane/ovn-nic
+  - ../../../../lib/control-plane/job-settings
+  - ../../../../lib/control-plane/tls
+
+resources:
+  - networking/nncp/values.yaml
+  - service-values.yaml
+  - skmo-values.yaml
+
+patches:
+  - target:
+      kind: OpenStackControlPlane
+      name: controlplane
+    path: skmo-leaf-patch.yaml
+
+replacements:
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.barbican.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.barbican.template.enabled
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.cinderAPI.replicas
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.cinder.template.cinderAPI.replicas
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.glance.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.glance.template.customServiceConfig
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.glance.default.replicas
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.glance.template.glanceAPIs.default.replicas
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.swift.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.swift.enabled
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.nova.apiServiceTemplate.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.nova.template.apiServiceTemplate.customServiceConfig
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.nova.schedulerServiceTemplate.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.nova.template.schedulerServiceTemplate.customServiceConfig
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.nova.metadataServiceTemplate.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.nova.template.metadataServiceTemplate.customServiceConfig
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.nova.cellTemplates.cell0.conductorServiceTemplate.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.nova.template.cellTemplates.cell0.conductorServiceTemplate.customServiceConfig
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.nova.cellTemplates.cell0.noVNCProxyServiceTemplate.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.nova.template.cellTemplates.cell0.noVNCProxyServiceTemplate.customServiceConfig
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.nova.cellTemplates.cell1.conductorServiceTemplate.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.nova.template.cellTemplates.cell1.conductorServiceTemplate.customServiceConfig
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.nova.cellTemplates.cell1.noVNCProxyServiceTemplate.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.nova.template.cellTemplates.cell1.noVNCProxyServiceTemplate.customServiceConfig
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: skmo-values
+      fieldPath: data.leafRegion
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.keystone.template.region
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: skmo-values
+      fieldPath: data.leafAdminUser
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.keystone.template.adminUser
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: skmo-values
+      fieldPath: data.leafAdminProject
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.keystone.template.adminProject
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: skmo-values
+      fieldPath: data.leafAdminPasswordKey
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.keystone.template.passwordSelectors.admin
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: skmo-values
+      fieldPath: data.keystoneInternalURL
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.keystone.template.override.service.internal.endpointURL
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: skmo-values
+      fieldPath: data.keystonePublicURL
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.keystone.template.override.service.public.endpointURL
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: skmo-values
+      fieldPath: data.caBundleSecretName
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.tls.caBundleSecretName
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: skmo-values
+      fieldPath: data.serviceUserBarbican
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.barbican.template.serviceUser
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: skmo-values
+      fieldPath: data.serviceUserCinder
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.cinder.template.serviceUser
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: skmo-values
+      fieldPath: data.serviceUserGlance
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.glance.template.serviceUser
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: skmo-values
+      fieldPath: data.serviceUserNeutron
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.neutron.template.serviceUser
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: skmo-values
+      fieldPath: data.serviceUserNova
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.nova.template.serviceUser
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: skmo-values
+      fieldPath: data.serviceUserPlacement
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.placement.template.serviceUser
+        options:
+          create: true
