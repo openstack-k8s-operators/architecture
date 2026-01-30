@@ -1,0 +1,189 @@
+---
+vas:
+  multi-namespace:
+    stages:
+      - name: namespace-configuration    # stage 0
+        path: examples/va/multi-namespace/namespace
+        wait_conditions:
+          - >-
+            oc -n default wait ns openstack2
+            --for jsonpath='{.status.phase}'=Active
+            --timeout=5m
+        values:
+          - name: namespace-values
+            src_file: values.yaml
+        build_output: namespace.yaml
+
+      - name: nncp-configuration    # stage 1
+        path: examples/va/multi-namespace/control-plane/networking/nncp
+        wait_conditions:
+          # We don't wait for these NNCPs at this stage, because we'll wait for
+          # both namespaces in the next stage so that they can deploy in parallel
+          # to save time
+          - >-
+            oc -n default wait ns openstack2
+            --for jsonpath='{.status.phase}'=Active
+            --timeout=5m
+        values:
+          - name: network-values
+            src_file: values.yaml
+        build_output: nncp.yaml
+
+      - name: nncp-configuration2    # stage 2
+        path: examples/va/multi-namespace/control-plane2/networking/nncp
+        wait_conditions:
+          - >-
+            oc -n openstack wait nncp
+            -l osp/nncm-config-type=standard
+            --for jsonpath='{.status.conditions[0].reason}'=SuccessfullyConfigured
+            --timeout=5m
+        values:
+          - name: network-values2
+            src_file: values.yaml
+        build_output: nncp2.yaml
+
+      - name: network-configuration    # stage 3
+        path: examples/va/multi-namespace/control-plane/networking
+        wait_conditions:
+          - >-
+            oc -n metallb-system wait pod
+            -l app=metallb -l component=speaker
+            --for condition=Ready
+            --timeout=5m
+        values:
+          - name: network-values
+            src_file: nncp/values.yaml
+        build_output: network.yaml
+
+      - name: network-configuration2    # stage 4
+        path: examples/va/multi-namespace/control-plane2/networking
+        wait_conditions:
+          - >-
+            oc -n metallb-system wait pod
+            -l app=metallb -l component=speaker
+            --for condition=Ready
+            --timeout=5m
+        values:
+          - name: network-values2
+            src_file: nncp/values.yaml
+        build_output: network2.yaml
+
+      - name: control-plane    # stage 5
+        path: examples/va/multi-namespace/control-plane
+        wait_conditions:
+          # Central Keystone must be ready before the leaf region
+          - >-
+            oc -n openstack wait keystoneapi --all --for condition=Ready
+            --timeout=60m
+        values:
+          - name: service-values
+            src_file: service-values.yaml
+          - name: network-values
+            src_file: networking/nncp/values.yaml
+        build_output: ../control-plane.yaml
+
+      - pre_stage_run:    # stage 6
+          - name: Prepare SKMO leaf prerequisites in regionZero
+            type: playbook
+            source: "../../playbooks/skmo/prepare-leaf.yaml"
+            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
+        name: control-plane2    # stage 6
+        path: examples/va/multi-namespace-skmo/control-plane2
+        wait_conditions:
+          - >-
+            oc -n openstack wait osctlplane controlplane --for condition=Ready
+            --timeout=60m
+          - >-
+            oc -n openstack2 wait osctlplane controlplane --for condition=Ready
+            --timeout=60m
+        values:
+          - name: service-values
+            src_file: service-values.yaml
+          - name: network-values2
+            src_file: ../../multi-namespace/control-plane2/networking/nncp/values.yaml
+        build_output: ../control-plane2.yaml
+        post_stage_run:
+          - name: Trust leaf region CA in central region
+            type: playbook
+            source: "../../playbooks/skmo/trust-leaf-ca.yaml"
+            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
+
+      - name: control-plane-ca    # stage 7
+        path: examples/va/multi-namespace-skmo/control-plane
+        wait_conditions:
+          - >-
+            oc -n openstack wait osctlplane controlplane --for condition=Ready
+            --timeout=60m
+        values:
+          - name: service-values
+            src_file: service-values.yaml
+          - name: network-values
+            src_file: ../../multi-namespace/control-plane/networking/nncp/values.yaml
+        build_output: ../control-plane-ca.yaml
+
+      - name: edpm-nodeset    # stage 8
+        path: examples/va/multi-namespace/edpm/nodeset
+        wait_conditions:
+          # We don't wait for this namespace's OpenStackDataPlaneNodeSet at
+          # this stage, because we'll wait for both namespaces in the next
+          # stage so that they can deploy in parallel to save time
+          - >-
+            oc -n default wait ns openstack2
+            --for jsonpath='{.status.phase}'=Active
+            --timeout=5m
+        values:
+          - name: edpm-nodeset-values
+            src_file: values.yaml
+        build_output: nodeset.yaml
+
+      - pre_stage_run:    # stage 9
+          - name: Get OpenStackDataPlaneServices for openstack2 namespace
+            type: playbook
+            source: "../../playbooks/multi-namespace/ns2_osdp_services.yaml"
+            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
+        name: edpm-nodeset2
+        path: examples/va/multi-namespace/edpm2/nodeset
+        wait_conditions:
+          - >-
+            oc -n openstack wait
+            osdpns openstack-edpm --for condition=SetupReady
+            --timeout=10m
+          - >-
+            oc -n openstack2 wait
+            osdpns openstack-edpm --for condition=SetupReady
+            --timeout=10m
+        values:
+          - name: edpm-nodeset2-values
+            src_file: values.yaml
+        build_output: nodeset2.yaml
+
+      - name: edpm-deployment    # stage 10
+        path: examples/va/multi-namespace/edpm
+        wait_conditions:
+          # We don't wait for this namespace's OpenStackDataPlaneDeployment at
+          # this stage, because we'll wait for both namespaces in the next
+          # stage so that they can deploy in parallel to save time
+          - >-
+            oc -n default wait ns openstack2
+            --for jsonpath='{.status.phase}'=Active
+            --timeout=5m
+        values:
+          - name: edpm-deployment-values
+            src_file: values.yaml
+        build_output: deployment.yaml
+
+      - name: edpm-deployment2    # stage 11
+        path: examples/va/multi-namespace/edpm2
+        wait_conditions:
+          - >-
+            oc -n openstack wait
+            osdpns openstack-edpm --for condition=Ready
+            --timeout=60m
+          - >-
+            oc -n openstack2 wait
+            osdpns openstack-edpm --for condition=Ready
+            --timeout=60m
+        values:
+          - name: edpm-deployment2-values
+            src_file: values.yaml
+        build_output: deployment2.yaml

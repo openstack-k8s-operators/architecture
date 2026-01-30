@@ -1,0 +1,54 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+components:
+  - ../../multi-namespace/control-plane2
+
+resources:
+  - skmo-values.yaml
+
+patches:
+  - target:
+      kind: ConfigMap
+      name: service-values
+    path: service-values.yaml
+  - target:
+      kind: OpenStackControlPlane
+      name: controlplane
+    path: skmo-leaf-patch.yaml
+
+replacements:
+  - source:
+      kind: ConfigMap
+      name: skmo-values
+      fieldPath: data.leafRegion
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.keystone.template.region
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: skmo-values
+      fieldPath: data.keystoneInternalURL
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.keystone.template.override.service.internal.endpointURL
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: skmo-values
+      fieldPath: data.keystonePublicURL
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.keystone.template.override.service.public.endpointURL
+        options:
+          create: true

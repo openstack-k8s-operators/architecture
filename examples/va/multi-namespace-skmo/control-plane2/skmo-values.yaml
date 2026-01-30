@@ -1,0 +1,29 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: skmo-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+data:
+  # Leaf region name registered in the central Keystone
+  leafRegion: regionTwo
+  # Leaf admin user (must exist in central Keystone)
+  leafAdminUser: admin-two
+  leafAdminProject: admin
+  leafAdminPasswordKey: AdminPassword
+  # Central Keystone endpoints (use public endpoint for both)
+  keystoneInternalURL: https://keystone-public.openstack.svc:5000
+  keystonePublicURL: https://keystone-public.openstack.svc:5000
+  # CA bundle secrets
+  # Leaf region secret (must include central Keystone CA)
+  leafCaBundleSecretName: openstack2-custom-cacerts
+  # Central region secret (must include leaf region CA)
+  centralCaBundleSecretName: openstack-custom-cacerts
+  # Leaf service users (created by operators in leaf region)
+  serviceUserBarbican: regionTwo_barbican
+  serviceUserCinder: regionTwo_cinder
+  serviceUserGlance: regionTwo_glance
+  serviceUserNeutron: regionTwo_neutron
+  serviceUserNova: regionTwo_nova
+  serviceUserPlacement: regionTwo_placement

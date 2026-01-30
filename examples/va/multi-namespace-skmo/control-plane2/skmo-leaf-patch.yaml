@@ -1,0 +1,13 @@
+---
+apiVersion: core.openstack.org/v1beta1
+kind: OpenStackControlPlane
+metadata:
+  name: controlplane
+spec:
+  # Leaf region should not run Horizon
+  horizon:
+    enabled: false
+  # Use central Keystone as an external service
+  keystone:
+    template:
+      externalKeystoneAPI: true
