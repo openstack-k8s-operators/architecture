@@ -82,6 +82,7 @@ data:
       [default_backend]
       s3_store_create_bucket_on_put = True
       s3_store_bucket_url_format = "path"
+      s3_store_large_object_size = 0
     glanceAPIs:
       default:
         replicas: 3
