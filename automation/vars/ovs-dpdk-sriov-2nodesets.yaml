@@ -2,7 +2,8 @@
 vas:
   ovs-dpdk-sriov-2nodesets:
     stages:
-      - path: examples/dt/nfv/nfv-ovs-dpdk-sriov-2nodesets/nncp
+      - name: nncp-configuration
+        path: examples/dt/nfv/nfv-ovs-dpdk-sriov-2nodesets/nncp
         wait_conditions:
           - >-
             oc -n openstack wait nncp
@@ -14,7 +15,8 @@ vas:
             src_file: values.yaml
         build_output: nncp.yaml
 
-      - path: examples/dt/nfv/nfv-ovs-dpdk-sriov-2nodesets
+      - name: control-plane
+        path: examples/dt/nfv/nfv-ovs-dpdk-sriov-2nodesets
         wait_conditions:
           - >-
             oc -n openstack wait osctlplane controlplane --for condition=Ready
@@ -26,7 +28,8 @@ vas:
             src_file: service-values.yaml
         build_output: control-plane.yaml
 
-      - path: examples/dt/nfv/nfv-ovs-dpdk-sriov-2nodesets/edpm/nodeset
+      - name: edpm-nodeset
+        path: examples/dt/nfv/nfv-ovs-dpdk-sriov-2nodesets/edpm/nodeset
         wait_conditions:
           - >-
             oc -n openstack wait
@@ -37,7 +40,8 @@ vas:
             src_file: values.yaml
         build_output: nodeset.yaml
 
-      - path: examples/dt/nfv/nfv-ovs-dpdk-sriov-2nodesets/edpm/nodeset2
+      - name: edpm-nodeset2
+        path: examples/dt/nfv/nfv-ovs-dpdk-sriov-2nodesets/edpm/nodeset2
         wait_conditions:
           - >-
             oc -n openstack wait
@@ -48,7 +52,8 @@ vas:
             src_file: values.yaml
         build_output: nodeset2.yaml
 
-      - path: examples/dt/nfv/nfv-ovs-dpdk-sriov-2nodesets/edpm/deployment
+      - name: edpm-deployment
+        path: examples/dt/nfv/nfv-ovs-dpdk-sriov-2nodesets/edpm/deployment
         wait_conditions:
           - >-
             oc -n openstack

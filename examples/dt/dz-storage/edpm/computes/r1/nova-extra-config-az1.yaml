@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nova-extra-config-az1
+data:
+  25-nova-extra.conf: |
+    [DEFAULT]
+    # Triple the default of the following
+    reimage_timeout_per_gb = 60
+    [glance]
+    endpoint_override = https://glance-az1-internal.openstack.svc:9292
+    valid_interfaces = internal
+    [cinder]
+    cross_az_attach = False
+    catalog_info = volumev3:cinderv3:internalURL

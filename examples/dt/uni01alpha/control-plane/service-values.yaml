@@ -8,7 +8,12 @@ metadata:
     config.kubernetes.io/local-config: "true"
 
 data:
+  # --- Fields required by lib/control-plane ---
   preserveJobs: false
+  tls:
+    caBundleSecretName: ""
+
+  # --- Below are VA/DT-specific data ---
   cinderVolumes:
     lvm-iscsi:
       replicas: 1
@@ -94,6 +99,7 @@ data:
     enabled: true
     amphoraImageContainerImage: quay.io/gthiemonge/octavia-amphora-image
     apacheContainerImage: registry.redhat.io/ubi9/httpd-24:latest
+    redisServiceName: octavia-redis
     availabilityZones:
       - zone-1
     octaviaAPI:
@@ -175,3 +181,12 @@ data:
       [ml2]
       type_drivers = geneve,vxlan,vlan,flat,local
       tenant_network_types = geneve,flat
+    ml2MechanismDrivers:
+      - ovn
+      - baremetal
+
+  redis:
+    enabled: true
+    templates:
+      octavia-redis:
+        replicas: 1

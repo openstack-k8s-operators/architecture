@@ -24,19 +24,102 @@ transformers:
         kind: Namespace
         create: true
 
+patches:
+  # with BGP, ovnController has to be disabled from OCP nodes
+  - target:
+      kind: OpenStackControlPlane
+      name: controlplane
+    patch: |-
+      - op: remove
+        path: /spec/ovn/template/ovnController
+
 replacements:
-  # disable OCP workers as gateway nodes
+  # BGP peer IP addresses
+  # node3
   - source:
       kind: ConfigMap
-      name: service-values
-      fieldPath: data.ovn.ovnController.external-ids
+      name: network-values
+      fieldPath: data.node_3.bgp_peers.0
     targets:
       - select:
-          kind: OpenStackControlPlane
+          kind: BGPPeer
+          name: bgp-peer-node-3-0
         fieldPaths:
-          - spec.ovn.template.ovnController.external-ids
-        options:
-          create: true
+          - spec.peerAddress
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_3.bgp_peers.1
+    targets:
+      - select:
+          kind: BGPPeer
+          name: bgp-peer-node-3-1
+        fieldPaths:
+          - spec.peerAddress
+  # node4
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_4.bgp_peers.0
+    targets:
+      - select:
+          kind: BGPPeer
+          name: bgp-peer-node-4-0
+        fieldPaths:
+          - spec.peerAddress
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_4.bgp_peers.1
+    targets:
+      - select:
+          kind: BGPPeer
+          name: bgp-peer-node-4-1
+        fieldPaths:
+          - spec.peerAddress
+  # node5
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_5.bgp_peers.0
+    targets:
+      - select:
+          kind: BGPPeer
+          name: bgp-peer-node-5-0
+        fieldPaths:
+          - spec.peerAddress
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_5.bgp_peers.1
+    targets:
+      - select:
+          kind: BGPPeer
+          name: bgp-peer-node-5-1
+        fieldPaths:
+          - spec.peerAddress
+  # node6
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_6.bgp_peers.0
+    targets:
+      - select:
+          kind: BGPPeer
+          name: bgp-peer-node-6-0
+        fieldPaths:
+          - spec.peerAddress
+  # BGP NetworkAttachmentDefinition customization
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.bgp.net-attach-def.node6
+    targets:
+      - select:
+          kind: NetworkAttachmentDefinition
+          name: bgpnet-worker-3
+        fieldPaths:
+          - spec.config
   # configure neutron customServiceConfig
   - source:
       kind: ConfigMap
@@ -47,5 +130,18 @@ replacements:
           kind: OpenStackControlPlane
         fieldPaths:
           - spec.neutron.template.customServiceConfig
+        options:
+          create: true
+
+  # configure octavia nodeSelector
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.nodeSelector
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.nodeSelector
         options:
           create: true

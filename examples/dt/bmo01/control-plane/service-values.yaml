@@ -8,7 +8,12 @@ metadata:
     config.kubernetes.io/local-config: "true"
 
 data:
+  # --- Fields required by lib/control-plane ---
   preserveJobs: false
+  tls:
+    caBundleSecretName: ""
+
+  # --- Below are VA/DT-specific data ---
   cinderVolumes:
     lvm-iscsi:
       replicas: 1

@@ -94,7 +94,8 @@ vas:
             src_file: nncp/values.yaml
         build_output: networking.yaml
 
-      - path: examples/dt/dz-storage/topology
+      - name: topology-configuration
+        path: examples/dt/dz-storage/topology
         wait_conditions:
           - >-
             oc -n openstack wait
@@ -105,7 +106,7 @@ vas:
             src_file: node-zone-labels.yaml
         build_output: topology.yaml
 
-      # allow 60m (not 30m) for larger control plane on more nodes
+      # allow 180m (not 30m) for larger control plane on more nodes
       - name: control-plane
         path: examples/dt/dz-storage/control-plane
         wait_conditions:
@@ -113,7 +114,7 @@ vas:
             oc -n openstack wait openstackcontrolplane
             controlplane
             --for condition=Ready
-            --timeout=60m
+            --timeout=180m
         values:
           - name: network-values
             src_file: networking/nncp/values.yaml
@@ -216,14 +217,23 @@ vas:
             oc -n openstack wait openstackdataplanedeployment
             edpm-deployment
             --for condition=Ready
-            --timeout=120m
+            --timeout=180m
         values:
           - name: edpm-deployment-values
             src_file: values.yaml
         build_output: edpm-deployment.yaml
         post_stage_run:
-          - name: Wait until computes are ready
+          - name: "1 - Wait until computes are ready"
             type: playbook
-            source: "../../playbooks/bgp-l3-computes-ready.yml"
+            source: "nova_wait_for_compute_service.yml"
             extra_vars:
-              num_computes: 6
+              _number_of_computes: 6
+              _cell_conductor: nova-cell0-conductor-0
+          - name: "2 - Setup Cinder volume types and Nova aggregates for dz-storage"
+            type: playbook
+            source: "../../hooks/playbooks/dz_storage_post_deploy_az.yaml"
+            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
+          - name: "3 - Create and import cirros image to all Glance stores"
+            type: playbook
+            source: "../../hooks/playbooks/dz_storage_pre_test_images.yaml"
+            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"

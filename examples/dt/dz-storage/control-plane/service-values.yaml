@@ -9,22 +9,27 @@ data:
   storageClass: lvms-local-storage
   topologyRef:
     name: default-spread-pods
+  # --- Fields required by lib/control-plane ---
   preserveJobs: false
+  tls:
+    caBundleSecretName: ""
 
+  # --- Below are VA/DT-specific data ---
   memcached:
+    # consider 1 replica per worker (this example uses less for testing)
     templates:
       memcached:
-        replicas: 3
+        replicas: 1
       memcached-azone:
-        replicas: 3
+        replicas: 1
         topologyRef:
           name: azone-node-affinity
       memcached-bzone:
-        replicas: 3
+        replicas: 1
         topologyRef:
           name: bzone-node-affinity
       memcached-czone:
-        replicas: 3
+        replicas: 1
         topologyRef:
           name: czone-node-affinity
   cinder:
@@ -39,7 +44,7 @@ data:
       name: azone-node-affinity
     customServiceConfig: |
       [DEFAULT]
-      # TODO:
+      # Not implemented in this example
 
   cinderVolumes:
     ontap-iscsi-az0:
@@ -107,12 +112,15 @@ data:
       replicas: 0
     # Ensure keystoneEndpoint is set
     keystoneEndpoint: default
+    # Set API timeout to 600 seconds (this controls both HAProxy and Apache timeouts)
+    apiTimeout: 600
     # There are 4 glanceAPIs keys below (default, az{0,1,2})
     glanceAPIs:
       az0:
         customServiceConfig: |
           [DEFAULT]
           enabled_backends = az0:cinder
+          enabled_import_methods = [web-download,copy-image,glance-direct]
           debug = true
           [glance_store]
           default_backend = az0
@@ -138,7 +146,8 @@ data:
                   metallb.universe.tf/loadBalancerIPs: 172.17.0.81
               spec:
                 type: LoadBalancer
-        replicas: 2
+        # 2 replicas per AZ recommended, using less to save memory
+        replicas: 1
         topologyRef:
           name: azone-node-affinity
         type: edge
@@ -146,6 +155,7 @@ data:
         customServiceConfig: |
           [DEFAULT]
           enabled_backends = az0:cinder,az1:cinder
+          enabled_import_methods = [web-download,copy-image,glance-direct]
           [glance_store]
           default_backend = az1
           [az1]
@@ -180,7 +190,8 @@ data:
                   metallb.universe.tf/loadBalancerIPs: 172.17.0.82
               spec:
                 type: LoadBalancer
-        replicas: 2
+        # 2 replicas per AZ recommended, using less to save memory
+        replicas: 1
         topologyRef:
           name: bzone-node-affinity
         type: edge
@@ -188,6 +199,7 @@ data:
         customServiceConfig: |
           [DEFAULT]
           enabled_backends = az0:cinder,az2:cinder
+          enabled_import_methods = [web-download,copy-image,glance-direct]
           [glance_store]
           default_backend = az2
           [az2]
@@ -222,7 +234,8 @@ data:
                   metallb.universe.tf/loadBalancerIPs: 172.17.0.83
               spec:
                 type: LoadBalancer
-        replicas: 2
+        # 2 replicas per AZ recommended, using less to save memory
+        replicas: 1
         topologyRef:
           name: czone-node-affinity
         type: edge
@@ -230,6 +243,7 @@ data:
         customServiceConfig: |
           [DEFAULT]
           enabled_backends = az0:cinder,az1:cinder,az2:cinder
+          enabled_import_methods = [web-download,copy-image,glance-direct]
           [glance_store]
           default_backend = az0
           [az0]
@@ -290,7 +304,7 @@ data:
                 type: LoadBalancer
         replicas: 3
       manilaScheduler:
-        replicas: 3
+        replicas: 1
       manilaShares:
         az0:
           customServiceConfigSecrets:
@@ -381,11 +395,6 @@ data:
       customServiceConfig: |
         [controller_worker]
         loadbalancer_topology=ACTIVE_STANDBY
-
-  ovn:
-    ovnController:
-      external-ids:
-        enable-chassis-as-gateway: false
 
   neutron:
     customServiceConfig: |

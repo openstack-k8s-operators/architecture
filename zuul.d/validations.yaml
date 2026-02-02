@@ -18,6 +18,16 @@
       cifmw_architecture_scenario: bgp-l3-xl
 - job:
     files:
+    - automation/mocks/bgp-l3-xl-adoption.yaml
+    - examples/dt/bgp-l3-xl/control-plane/networking
+    - examples/dt/bgp-l3-xl/control-plane/networking/nncp
+    - lib
+    name: rhoso-architecture-validate-bgp-l3-xl-adoption
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: bgp-l3-xl-adoption
+- job:
+    files:
     - automation/mocks/bgp_dt01.yaml
     - examples/dt/bgp_dt01/control-plane
     - examples/dt/bgp_dt01/control-plane/networking
@@ -34,6 +44,24 @@
     parent: rhoso-architecture-base-job
     vars:
       cifmw_architecture_scenario: bgp_dt01
+- job:
+    files:
+    - automation/mocks/bgp_dt04_ipv6.yaml
+    - examples/dt/bgp_dt04_ipv6/control-plane
+    - examples/dt/bgp_dt04_ipv6/control-plane/networking
+    - examples/dt/bgp_dt04_ipv6/control-plane/networking/nncp
+    - examples/dt/bgp_dt04_ipv6/edpm/computes/r0
+    - examples/dt/bgp_dt04_ipv6/edpm/computes/r1
+    - examples/dt/bgp_dt04_ipv6/edpm/computes/r2
+    - examples/dt/bgp_dt04_ipv6/edpm/deployment
+    - examples/dt/bgp_dt04_ipv6/edpm/networkers/r0
+    - examples/dt/bgp_dt04_ipv6/edpm/networkers/r1
+    - examples/dt/bgp_dt04_ipv6/edpm/networkers/r2
+    - lib
+    name: rhoso-architecture-validate-bgp_dt04_ipv6
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: bgp_dt04_ipv6
 - job:
     files:
     - automation/mocks/bmo01.yaml
@@ -56,7 +84,8 @@
     - automation/net-env/dcn.yaml
     - dt/dcn
     - examples/dt/dcn/control-plane
-    - examples/dt/dcn/control-plane/nncp
+    - examples/dt/dcn/control-plane/networking
+    - examples/dt/dcn/control-plane/networking/nncp
     - lib
     name: rhoso-architecture-validate-dcn
     parent: rhoso-architecture-base-job
@@ -175,6 +204,48 @@
       cifmw_architecture_scenario: nova01alpha
 - job:
     files:
+    - examples/dt/nova/nova02beta
+    - examples/dt/nova/nova02beta/edpm-deploy-provider/dataplaneservice
+    - examples/dt/nova/nova02beta/edpm-deploy-provider/deployment
+    - examples/dt/nova/nova02beta/edpm-post-driver/deployment
+    - examples/dt/nova/nova02beta/edpm/deployment
+    - examples/dt/nova/nova02beta/edpm/nodeset
+    - examples/dt/nova/nova02beta/edpm/nodeset2
+    - examples/dt/nova/nova02beta/networking
+    - examples/dt/nova/nova02beta/networking/nncp
+    - lib
+    name: rhoso-architecture-validate-nova02beta
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: nova02beta
+- job:
+    files:
+    - automation/mocks/nova04delta.yaml
+    - automation/net-env/nova04delta.yaml
+    - examples/dt/nova/nova04delta/control-plane
+    - examples/dt/nova/nova04delta/control-plane/networking
+    - examples/dt/nova/nova04delta/control-plane/networking/dns
+    - examples/dt/nova/nova04delta/control-plane/networking/nncp
+    - examples/dt/nova/nova04delta/edpm/baremetalhosts
+    - examples/dt/nova/nova04delta/edpm/deployment
+    - examples/dt/nova/nova04delta/edpm/nodeset
+    - lib
+    name: rhoso-architecture-validate-nova04delta
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: nova04delta
+      cifmw_networking_env_def_file: automation/net-env/nova04delta.yaml
+- job:
+    files:
+    - examples/dt/nova/nova04delta/control-plane/networking
+    - examples/dt/nova/nova04delta/control-plane/networking/nncp
+    - lib
+    name: rhoso-architecture-validate-nova04delta-adoption
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: nova04delta-adoption
+- job:
+    files:
     - examples/va/nvidia-mdev/control-plane
     - examples/va/nvidia-mdev/control-plane/nncp
     - examples/va/nvidia-mdev/edpm-post-driver/deployment
@@ -187,6 +258,30 @@
     parent: rhoso-architecture-base-job
     vars:
       cifmw_architecture_scenario: nvidia-mdev
+- job:
+    files:
+    - automation/net-env/nvidia-vfio-passthrough.yaml
+    - examples/va/nvidia-vfio-passthrough/control-plane
+    - examples/va/nvidia-vfio-passthrough/control-plane/networking
+    - examples/va/nvidia-vfio-passthrough/control-plane/networking/nncp
+    - examples/va/nvidia-vfio-passthrough/edpm/deployment
+    - examples/va/nvidia-vfio-passthrough/edpm/nodeset
+    - lib
+    - va/nvidia-vfio-passthrough
+    name: rhoso-architecture-validate-nvidia-vfio-passthrough
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: nvidia-vfio-passthrough
+      cifmw_networking_env_def_file: automation/net-env/nvidia-vfio-passthrough.yaml
+- job:
+    files:
+    - examples/va/nvidia-vfio-passthrough/control-plane/networking
+    - examples/va/nvidia-vfio-passthrough/control-plane/networking/nncp
+    - lib
+    name: rhoso-architecture-validate-nvidia-vfio-passthrough-adoption
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: nvidia-vfio-passthrough-adoption
 - job:
     files:
     - dt/osasinfra
@@ -251,6 +346,31 @@
     parent: rhoso-architecture-base-job
     vars:
       cifmw_architecture_scenario: ovs-dpdk-sriov-2nodesets
+- job:
+    files:
+    - automation/mocks/ovs-dpdk-sriov-ipv6.yaml
+    - examples/va/nfv/ovs-dpdk-sriov-ipv6
+    - examples/va/nfv/ovs-dpdk-sriov-ipv6/nncp
+    - examples/va/nfv/ovs-dpdk-sriov/edpm/deployment
+    - examples/va/nfv/ovs-dpdk-sriov/edpm/nodeset
+    - lib
+    name: rhoso-architecture-validate-ovs-dpdk-sriov-ipv6
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: ovs-dpdk-sriov-ipv6
+- job:
+    files:
+    - automation/mocks/ovs-dpdk-sriov-ipv6-2nodesets.yaml
+    - examples/dt/nfv/nfv-ovs-dpdk-sriov-2nodesets/edpm/deployment
+    - examples/dt/nfv/nfv-ovs-dpdk-sriov-2nodesets/edpm/nodeset
+    - examples/dt/nfv/nfv-ovs-dpdk-sriov-2nodesets/edpm/nodeset2
+    - examples/dt/nfv/nfv-ovs-dpdk-sriov-ipv6-2nodesets
+    - examples/dt/nfv/nfv-ovs-dpdk-sriov-ipv6-2nodesets/nncp
+    - lib
+    name: rhoso-architecture-validate-ovs-dpdk-sriov-ipv6-2nodesets
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: ovs-dpdk-sriov-ipv6-2nodesets
 - job:
     files:
     - automation/mocks/ovs-dpdk-sriov-networker.yaml
@@ -481,3 +601,26 @@
     parent: rhoso-architecture-base-job
     vars:
       cifmw_architecture_scenario: uni07eta-adoption
+- job:
+    files:
+    - automation/net-env/uni09iota.yaml
+    - dt/uni09iota
+    - examples/dt/uni09iota
+    - examples/dt/uni09iota/control-plane
+    - examples/dt/uni09iota/control-plane/networking
+    - examples/dt/uni09iota/control-plane/networking/nncp
+    - lib
+    name: rhoso-architecture-validate-uni09iota
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: uni09iota
+      cifmw_networking_env_def_file: automation/net-env/uni09iota.yaml
+- job:
+    files:
+    - examples/dt/uni09iota/control-plane/networking
+    - examples/dt/uni09iota/control-plane/networking/nncp
+    - lib
+    name: rhoso-architecture-validate-uni09iota-adoption
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: uni09iota-adoption

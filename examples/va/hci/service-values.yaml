@@ -7,7 +7,13 @@ metadata:
   annotations:
     config.kubernetes.io/local-config: "true"
 data:
+  # --- Fields required by lib/control-plane ---
   preserveJobs: false
+  notificationsBusInstance: rabbitmq-notifications
+  tls:
+    caBundleSecretName: ""
+
+  # --- Below are VA/DT-specific data ---
   cinderAPI:
     replicas: 3
   cinderBackup:
@@ -94,6 +100,22 @@ data:
     enabled: true
     metricStorage:
       enabled: true
+      monitoringStack: null
+      customMonitoringStack:
+        alertmanagerConfig:
+          disabled: true
+        prometheusConfig:
+          enableRemoteWriteReceiver: true
+          persistentVolumeClaim:
+            resources:
+              requests:
+                storage: 10G
+          replicas: 1
+          scrapeInterval: 30s
+        resourceSelector:
+          matchLabels:
+            service: metricStorage
+        retention: 24h
     autoscaling:
       enabled: true
     ceilometer:
@@ -103,4 +125,18 @@ data:
       [token]
       expiration = 28800
   heat:
+    enabled: true
+  rabbitmq:
+    templates:
+      rabbitmq-notifications:
+        override:
+          service:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: internalapi
+                metallb.universe.tf/loadBalancerIPs: 172.17.0.87
+            spec:
+              type: LoadBalancer
+        replicas: 3
+  watcher:
     enabled: true

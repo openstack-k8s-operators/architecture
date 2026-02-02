@@ -8,7 +8,12 @@ metadata:
     config.kubernetes.io/local-config: "true"
 
 data:
+  # --- Fields required by lib/control-plane ---
   preserveJobs: false
+  tls:
+    caBundleSecretName: ""
+
+  # --- Below are VA/DT-specific data ---
   cinderVolumes:
     lvm-nvme-tcp:
       replicas: 1
@@ -61,9 +66,18 @@ data:
 
   swift:
     enabled: true
+    swiftProxy:
+      replicas: 1
+    swiftStorage:
+      replicas: 1
+    swiftRing:
+      ringReplicas: 1
+
+  heat:
+    enabled: true
 
   octavia:
-    enabled: false
+    enabled: true
     amphoraImageContainerImage: quay.io/gthiemonge/octavia-amphora-image
     apacheContainerImage: registry.redhat.io/ubi9/httpd-24:latest
     availabilityZones:

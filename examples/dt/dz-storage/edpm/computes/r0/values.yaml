@@ -189,8 +189,8 @@ data:
             subnetName: subnet0
             fixedIP: f00d:f00d:f00d:f00d:f00d:f00d:f00d:0013
     services:
-      - download-cache
       - bootstrap
+      - download-cache
       - configure-network
       - install-os
       - configure-os
@@ -203,7 +203,7 @@ data:
       - neutron-metadata
       - ovn-bgp-agent
       - libvirt
-      - nova
+      - nova-custom-az0
   nova:
     migration:
       ssh_keys:

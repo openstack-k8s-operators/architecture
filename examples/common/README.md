@@ -18,8 +18,8 @@ oc apply -k examples/common/olm/
 The following commands can be used to confirm that each step of this
 procedure is complete.
 ```
-while ! (oc get pod --no-headers=true -l openstack.org/operator-name=openstack-controller -n openstack-operators | grep "controller-operator"); do sleep 10; done
-oc wait pod -n openstack-operators --for condition=Ready -l openstack.org/operator-name=openstack-controller --timeout=300s
+while ! (oc get pod --no-headers=true -l openstack.org/operator-name=openstack-init -n openstack-operators | grep -E "(controller-operator|operator-controller)"); do sleep 10; done
+oc wait pod -n openstack-operators --for condition=Ready -l openstack.org/operator-name=openstack-init --timeout=300s
 while ! (oc get pod --no-headers=true -l name=cert-manager-operator -n cert-manager-operator | grep "cert-manager-operator"); do sleep 10; done
 oc wait pod -n cert-manager-operator --for condition=Ready -l name=cert-manager-operator --timeout=300s
 while ! (oc get pod --no-headers=true -l app=cainjector -n cert-manager | grep "cert-manager-cainjector"); do sleep 10; done

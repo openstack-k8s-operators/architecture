@@ -1,0 +1,245 @@
+---
+# local-config: referenced, but not emitted by kustomize
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: network-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+data:
+  # nodes
+  node_0:
+    name: e31-h03-000-r640
+    internalapi_ip: 172.17.0.50
+    tenant_ip: 172.18.0.50
+    external_ip: 172.19.0.50
+    storage_ip: 172.20.0.50
+    ctlplane_ip: 172.16.0.50
+  node_1:
+    name: e31-h05-000-r640
+    internalapi_ip: 172.17.0.51
+    tenant_ip: 172.18.0.51
+    external_ip: 172.19.0.51
+    storage_ip: 172.20.0.51
+    ctlplane_ip: 172.16.0.51
+  node_2:
+    name: e31-h06-000-r640
+    internalapi_ip: 172.17.0.52
+    tenant_ip: 172.18.0.52
+    external_ip: 172.19.0.52
+    storage_ip: 172.20.0.52
+    ctlplane_ip: 172.16.0.52
+
+  # networks
+  internalapi:
+    dnsDomain: internalapi.example.com
+    subnets:
+      - allocationRanges:
+          - end: 172.17.254.254
+            start: 172.17.5.100
+        cidr: 172.17.0.0/16
+        name: subnet1
+        vlan: 17
+    mtu: 1500
+    prefix-length: 16
+    iface: internalapi
+    vlan: 17
+    base_iface: ens2f0np0
+    lb_addresses:
+      - 172.17.2.10-172.17.2.250
+    endpoint_annotations:
+      metallb.universe.tf/address-pool: internalapi
+      metallb.universe.tf/allow-shared-ip: internalapi
+      metallb.universe.tf/loadBalancerIPs: 172.17.2.120
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "internalapi",
+        "type": "macvlan",
+        "master": "internalapi",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "172.17.0.0/16",
+          "range_start": "172.17.1.10",
+          "range_end": "172.17.1.250"
+        }
+      }
+  external:
+    dnsDomain: externalapi.example.com
+    subnets:
+      - allocationRanges:
+          - end: 172.19.100.254
+            start: 172.19.5.100
+        cidr: 172.19.0.0/16
+        name: subnet1
+        vlan: 19
+    mtu: 1500
+    prefix-length: 16
+    iface: external
+    vlan: 19
+    base_iface: ens2f1np1
+    lb_addresses:
+      - 172.19.2.10-172.19.2.250
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "external",
+        "type": "macvlan",
+        "master": "external",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "172.19.0.0/16",
+          "range_start": "172.19.1.10",
+          "range_end": "172.19.1.250"
+        }
+      }
+  storage:
+    dnsDomain: storage.example.com
+    subnets:
+      - allocationRanges:
+          - end: 172.20.254.254
+            start: 172.20.5.100
+        cidr: 172.20.0.0/16
+        name: subnet1
+        vlan: 20
+    mtu: 1500
+    prefix-length: 16
+    iface: storage
+    vlan: 20
+    base_iface: ens2f1np1
+    lb_addresses:
+      - 172.20.2.10-172.20.2.250
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "storage",
+        "type": "macvlan",
+        "master": "storage",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "172.20.0.0/16",
+          "range_start": "172.20.1.10",
+          "range_end": "172.20.1.250"
+        }
+      }
+  tenant:
+    dnsDomain: tenant.example.com
+    subnets:
+      - allocationRanges:
+          - end: 172.18.254.254
+            start: 172.18.5.100
+        cidr: 172.18.0.0/16
+        name: subnet1
+        vlan: 18
+    mtu: 1500
+    prefix-length: 16
+    iface: tenant
+    vlan: 18
+    base_iface: ens2f0np0
+    lb_addresses:
+      - 172.18.2.10-172.18.2.250
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "tenant",
+        "type": "macvlan",
+        "master": "tenant",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "172.18.0.0/16",
+          "range_start": "172.18.1.10",
+          "range_end": "172.18.1.250"
+        }
+      }
+  datacentre:
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "datacentre",
+        "type": "bridge",
+        "bridge": "ospbr",
+        "ipam": {}
+      }
+  ctlplane:
+    dnsDomain: ctlplane.example.com
+    subnets:
+      - allocationRanges:
+          - end: 172.16.254.254
+            start: 172.16.20.100
+        cidr: 172.16.0.0/16
+        gateway: 172.16.0.1
+        name: subnet1
+    prefix-length: 16
+    iface: ens1f1
+    mtu: 9000
+    lb_addresses:
+      - 172.16.16.10-172.16.16.250
+    endpoint_annotations:
+      metallb.universe.tf/address-pool: ctlplane
+      metallb.universe.tf/allow-shared-ip: ctlplane
+      metallb.universe.tf/loadBalancerIPs: 172.16.16.120
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "ctlplane",
+        "type": "macvlan",
+        "master": "ens1f1",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "172.16.0.0/16",
+          "range_start": "172.16.15.10",
+          "range_end": "172.16.15.250"
+        }
+      }
+  octavia:
+    dnsDomain: octavia.example.com
+    mtu: 1500
+    vlan: 29
+    base_iface: ens2f0np0
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "octavia",
+        "type": "bridge",
+        "bridge": "octbr",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "172.23.0.0/16",
+          "range_start": "172.23.0.30",
+          "range_end": "172.23.0.70",
+          "routes": [
+            {
+              "dst": "172.24.0.0/16",
+              "gw": "172.23.0.150"
+            }
+          ]
+        }
+      }
+  dns-resolver:
+    config:
+      server:
+        - 192.168.122.1
+      search: []
+    options:
+      - key: server
+        values:
+          - 10.1.37.190
+      - key: server
+        values:
+          - 172.16.0.1
+
+  routes:
+    config: []
+
+  rabbitmq:
+    endpoint_annotations:
+      metallb.universe.tf/address-pool: internalapi
+      metallb.universe.tf/loadBalancerIPs: 172.17.2.125
+  rabbitmq-cell1:
+    endpoint_annotations:
+      metallb.universe.tf/address-pool: internalapi
+      metallb.universe.tf/loadBalancerIPs: 172.17.2.126
+
+  lbServiceType: LoadBalancer
+  storageClass: lvms-vg1
+  bridgeName: ens1f1

@@ -1,0 +1,26 @@
+---
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneService
+metadata:
+  name: nova-custom-az2
+spec:
+  addCertMounts: false
+  caCerts: combined-ca-bundle
+  edpmServiceType: nova
+  playbook: osp.edpm.nova
+  dataSources:
+    - configMapRef:
+        name: nova-extra-config-az2
+    - secretRef:
+        name: nova-migration-ssh-key
+    - secretRef:
+        name: nova-cell1-compute-config
+  tlsCerts:
+    default:
+      contents:
+        - dnsnames
+        - ips
+      edpmRoleServiceName: nova
+      issuer: osp-rootca-issuer-internal
+      networks:
+        - ctlplane

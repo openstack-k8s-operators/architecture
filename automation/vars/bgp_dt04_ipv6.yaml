@@ -1,0 +1,199 @@
+---
+vas:
+  bgp_dt04_ipv6:
+    stages:
+      - pre_stage_run:
+          - name: Apply taint on worker-3
+            type: cr
+            definition:
+              spec:
+                taints:
+                  - effect: NoSchedule
+                    key: testOperator
+                    value: 'true'
+                  - effect: NoExecute
+                    key: testOperator
+                    value: 'true'
+            kind: Node
+            resource_name: worker-3.ocp.openstack.lab
+            state: patched
+          - name: Disable rp_filters on OCP nodes
+            type: cr
+            definition:
+              spec:
+                profile:
+                  - data: |
+                      [main]
+                      summary=Optimize systems running OpenShift (provider specific parent profile)
+                      include=-provider-${f:exec:cat:/var/lib/ocp-tuned/provider},openshift
+
+                      [sysctl]
+                      net.ipv4.conf.enp8s0.rp_filter=0
+                      net.ipv4.conf.enp9s0.rp_filter=0
+                    name: openshift-no-reapply-sysctl
+                recommend:
+                  - match:
+                      # applied to all nodes except worker-3, because worker-3 has no enp8s0
+                      - label: kubernetes.io/hostname
+                        value: worker-0.ocp.openstack.lab
+                      - label: kubernetes.io/hostname
+                        value: worker-1.ocp.openstack.lab
+                      - label: kubernetes.io/hostname
+                        value: worker-2.ocp.openstack.lab
+                      - label: node-role.kubernetes.io/master
+                    operand:
+                      tunedConfig:
+                        reapply_sysctl: false
+                    priority: 15
+                    profile: openshift-no-reapply-sysctl
+            api_version: tuned.openshift.io/v1
+            kind: Tuned
+            resource_name: openshift-no-reapply-sysctl
+            namespace: openshift-cluster-node-tuning-operator
+            state: present
+        name: nncp-configuration
+        path: examples/dt/bgp_dt04_ipv6/control-plane/networking/nncp
+        wait_conditions:
+          - >-
+            oc -n openstack wait nncp
+            -l osp/nncm-config-type=standard
+            --for jsonpath='{.status.conditions[0].reason}'=SuccessfullyConfigured
+            --timeout=300s
+        values:
+          - name: network-values
+            src_file: values.yaml
+        build_output: nncp.yaml
+
+      - name: networking
+        path: examples/dt/bgp_dt04_ipv6/control-plane/networking
+        wait_conditions:
+          - >-
+            oc -n metallb-system wait pod
+            -l app=metallb -l component=speaker
+            --for condition=Ready
+        values:
+          - name: network-values
+            src_file: nncp/values.yaml
+        build_output: networking.yaml
+      - name: control-plane
+        path: examples/dt/bgp_dt04_ipv6/control-plane
+        wait_conditions:
+          - >-
+            oc -n openstack wait openstackcontrolplane
+            controlplane
+            --for condition=Ready
+            --timeout=30m
+        values:
+          - name: network-values
+            src_file: networking/nncp/values.yaml
+          - name: service-values
+            src_file: service-values.yaml
+        build_output: control-plane.yaml
+        post_stage_run:
+          - name: Create BGPConfiguration after controplane is deployed
+            type: cr
+            definition:
+              spec: {}
+            api_version: network.openstack.org/v1beta1
+            kind: BGPConfiguration
+            resource_name: bgpconfiguration
+            namespace: openstack
+            state: present
+
+      - name: edpm-computes-r0-nodeset
+        path: examples/dt/bgp_dt04_ipv6/edpm/computes/r0
+        wait_conditions:
+          - >-
+            oc -n openstack wait openstackdataplanenodeset
+            r0-compute-nodes
+            --for condition=SetupReady
+            --timeout=600s
+        values:
+          - name: edpm-r0-compute-nodeset-values
+            src_file: values.yaml
+        build_output: edpm-r0-compute-nodeset.yaml
+
+      - name: edpm-computes-r1-nodeset
+        path: examples/dt/bgp_dt04_ipv6/edpm/computes/r1
+        wait_conditions:
+          - >-
+            oc -n openstack wait openstackdataplanenodeset
+            r1-compute-nodes
+            --for condition=SetupReady
+            --timeout=600s
+        values:
+          - name: edpm-r1-compute-nodeset-values
+            src_file: values.yaml
+        build_output: edpm-r1-compute-nodeset.yaml
+
+      - name: edpm-computes-r2-nodeset
+        path: examples/dt/bgp_dt04_ipv6/edpm/computes/r2
+        wait_conditions:
+          - >-
+            oc -n openstack wait openstackdataplanenodeset
+            r2-compute-nodes
+            --for condition=SetupReady
+            --timeout=600s
+        values:
+          - name: edpm-r2-compute-nodeset-values
+            src_file: values.yaml
+        build_output: edpm-r2-compute-nodeset.yaml
+
+      - name: edpm-networkers-r0-nodeset
+        path: examples/dt/bgp_dt04_ipv6/edpm/networkers/r0
+        wait_conditions:
+          - >-
+            oc -n openstack wait openstackdataplanenodeset
+            r0-networker-nodes
+            --for condition=SetupReady
+            --timeout=600s
+        values:
+          - name: edpm-r0-networker-nodeset-values
+            src_file: values.yaml
+        build_output: edpm-r0-networker-nodeset.yaml
+
+      - name: edpm-networkers-r1-nodeset
+        path: examples/dt/bgp_dt04_ipv6/edpm/networkers/r1
+        wait_conditions:
+          - >-
+            oc -n openstack wait openstackdataplanenodeset
+            r1-networker-nodes
+            --for condition=SetupReady
+            --timeout=600s
+        values:
+          - name: edpm-r1-networker-nodeset-values
+            src_file: values.yaml
+        build_output: edpm-r1-networker-nodeset.yaml
+
+      - name: edpm-networkers-r2-nodeset
+        path: examples/dt/bgp_dt04_ipv6/edpm/networkers/r2
+        wait_conditions:
+          - >-
+            oc -n openstack wait openstackdataplanenodeset
+            r2-networker-nodes
+            --for condition=SetupReady
+            --timeout=600s
+        values:
+          - name: edpm-r2-networker-nodeset-values
+            src_file: values.yaml
+        build_output: edpm-r2-networker-nodeset.yaml
+
+      - name: edpm-deployment
+        path: examples/dt/bgp_dt04_ipv6/edpm/deployment
+        wait_conditions:
+          - >-
+            oc -n openstack wait openstackdataplanedeployment
+            edpm-deployment
+            --for condition=Ready
+            --timeout=120m
+        values:
+          - name: edpm-deployment-values
+            src_file: values.yaml
+        build_output: edpm-deployment.yaml
+        post_stage_run:
+          - name: Wait until computes are ready
+            type: playbook
+            source: "nova_wait_for_compute_service.yml"
+            extra_vars:
+              _number_of_computes: 3
+              _cell_conductor: nova-cell0-conductor-0

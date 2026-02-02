@@ -259,6 +259,42 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
+      fieldPath: data.octavia.redisServiceName
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.redisServiceName
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.redis.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.redis.enabled
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.redis.templates
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.redis.templates
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
       fieldPath: data.heat.enabled
     targets:
       - select:
@@ -361,6 +397,18 @@ replacements:
           kind: OpenStackControlPlane
         fieldPaths:
           - spec.neutron.template.customServiceConfig
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.neutron.ml2MechanismDrivers
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.neutron.template.ml2MechanismDrivers
         options:
           create: true
 

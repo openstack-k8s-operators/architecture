@@ -5,6 +5,23 @@ kind: Kustomization
 components:
   - ../../../../dt/bgp/
 
+patches:
+  # Override the base layer's glance apiOverrides with empty object
+  - target:
+      kind: OpenStackControlPlane
+      name: controlplane
+    patch: |-
+      - op: replace
+        path: /spec/glance/apiOverrides
+        value: {}
+  # with BGP, ovnController has to be disabled from OCP nodes
+  - target:
+      kind: OpenStackControlPlane
+      name: controlplane
+    patch: |-
+      - op: remove
+        path: /spec/ovn/template/ovnController
+
 resources:
   - networking/nncp/values.yaml
   - service-values.yaml
@@ -31,18 +48,6 @@ transformers:
         create: true
 
 replacements:
-  # disable OCP workers as gateway nodes
-  - source:
-      kind: ConfigMap
-      name: service-values
-      fieldPath: data.ovn.ovnController.external-ids
-    targets:
-      - select:
-          kind: OpenStackControlPlane
-        fieldPaths:
-          - spec.ovn.template.ovnController.external-ids
-        options:
-          create: true
   # configure neutron customServiceConfig
   - source:
       kind: ConfigMap
@@ -152,6 +157,19 @@ replacements:
           kind: OpenStackControlPlane
         fieldPaths:
           - spec.glance.template.keystoneEndpoint
+        options:
+          create: true
+
+  # Set glance apiTimeout for timeout configuration
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.glance.apiTimeout
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.glance.template.apiTimeout
         options:
           create: true
 

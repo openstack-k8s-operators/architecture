@@ -2,7 +2,8 @@
 vas:
   ovs-dpdk:
     stages:
-      - path: examples/va/nfv/ovs-dpdk/nncp
+      - name: nncp-configuration
+        path: examples/va/nfv/ovs-dpdk/nncp
         wait_conditions:
           - >-
             oc -n openstack wait nncp
@@ -14,7 +15,8 @@ vas:
             src_file: values.yaml
         build_output: nncp.yaml
 
-      - path: examples/va/nfv/ovs-dpdk
+      - name: control-plane
+        path: examples/va/nfv/ovs-dpdk
         wait_conditions:
           - >-
             oc -n openstack wait osctlplane controlplane --for condition=Ready
@@ -26,7 +28,8 @@ vas:
             src_file: service-values.yaml
         build_output: control-plane.yaml
 
-      - path: examples/va/nfv/ovs-dpdk/edpm/nodeset
+      - name: edpm-nodeset
+        path: examples/va/nfv/ovs-dpdk/edpm/nodeset
         wait_conditions:
           - >-
             oc -n openstack wait
@@ -37,7 +40,8 @@ vas:
             src_file: values.yaml
         build_output: nodeset.yaml
 
-      - path: examples/va/nfv/ovs-dpdk/edpm/deployment
+      - name: edpm-deployment
+        path: examples/va/nfv/ovs-dpdk/edpm/deployment
         wait_conditions:
           - >-
             oc -n openstack wait

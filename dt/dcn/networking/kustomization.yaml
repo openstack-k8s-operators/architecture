@@ -1,0 +1,137 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+transformers:
+  # Set namespace to OpenStack on all namespaced objects without a namespace
+  - |-
+    apiVersion: builtin
+    kind: NamespaceTransformer
+    metadata:
+      name: _ignored_
+      namespace: openstack
+    setRoleBindingSubjects: none
+    unsetOnly: true
+    fieldSpecs:
+      - path: metadata/name
+        kind: Namespace
+        create: true
+
+components:
+  - ../../../lib/networking/metallb
+  - ../../../lib/networking/netconfig
+  - ../../../lib/networking/nad
+
+resources:
+  - nad.yaml
+  - storagemgmt-nad.yaml
+  - storagemgmt-metallb.yaml
+
+# Add storagemgmt network template, as it is needed for CephHCI
+patches:
+  - target:
+      version: v1beta1
+      kind: NetConfig
+      name: netconfig
+    patch: |-
+      - op: add
+        path: /spec/networks/-
+        value:
+          dnsDomain: _replaced_
+          name: storagemgmt
+          subnets:
+            - _replaced_
+          mtu: 1500
+
+# Add storagemgmt network replacements
+replacements:
+  # NetConfig dnsDomain specific to this VA
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storagemgmt.dnsDomain
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=storagemgmt].dnsDomain
+  # NetConfig MTU specific to this VA
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storagemgmt.mtu
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=storagemgmt].mtu
+  # NetConfig subnets specific to this VA
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storagemgmt.subnets
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=storagemgmt].subnets
+
+  # Octavia support
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.octavia.net-attach-def
+    targets:
+      - select:
+          kind: NetworkAttachmentDefinition
+          name: octavia
+        fieldPaths:
+          - spec.config
+
+  # Storagemgmt NAD support
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storagemgmt.net-attach-def
+    targets:
+      - select:
+          kind: NetworkAttachmentDefinition
+          name: storagemgmt
+        fieldPaths:
+          - spec.config
+
+  # Storagemgmt IPAddressPool
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storagemgmt.lb_addresses
+    targets:
+      - select:
+          kind: IPAddressPool
+          name: storagemgmt
+        fieldPaths:
+          - spec.addresses
+
+  # Storagemgmt L2Advertisement interface
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storagemgmt.iface
+    targets:
+      - select:
+          kind: L2Advertisement
+          name: storagemgmt
+        fieldPaths:
+          - spec.interfaces.0
+
+  # Override ctlplane L2Advertisement to use bridgeName (ospbr) instead of ctlplane.iface (enp7s0)
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.bridgeName
+    targets:
+      - select:
+          kind: L2Advertisement
+          name: ctlplane
+        fieldPaths:
+          - spec.interfaces.0

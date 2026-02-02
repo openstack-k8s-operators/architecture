@@ -1,0 +1,68 @@
+---
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: service-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+
+data:
+  # --- Fields required by lib/control-plane ---
+  preserveJobs: false
+  tls:
+    caBundleSecretName: ""
+
+  # --- Below are VA/DT-specific data ---
+  cinderVolumes:
+    pure-fc:
+      nodeSelector:
+        fc_card: 'available'
+      replicas: 1
+      customServiceConfig: |
+        [pure]
+        volume_backend_name=pure
+        volume_driver=cinder.volume.drivers.pure.PureFCDriver
+      customServiceConfigSecrets:
+        - cinder-volume-pure-fc-secrets
+      networkAttachments:
+        - storage
+  cinder-volume-pure-fc-secrets: |
+    [pure]
+    san_ip = _replaced_
+    pure_api_token = _replaced_
+  cinderBackup:
+    nodeSelector:
+      fc_card: 'available'
+    replicas: 1
+    customServiceConfig: |
+      [DEFAULT]
+      backup_driver = cinder.backup.drivers.swift.SwiftBackupDriver
+
+  glance:
+    customServiceConfig: |
+      [DEFAULT]
+      debug=True
+      enabled_backends = default_backend:cinder
+      [glance_store]
+      default_backend = default_backend
+      [default_backend]
+      description = Default cinder backend
+      cinder_store_auth_address = {{ .KeystoneInternalURL }}
+      cinder_store_user_name = {{ .ServiceUser }}
+      cinder_store_password = {{ .ServicePassword }}
+      cinder_store_project_name = service
+      cinder_catalog_info = volumev3::internalURL
+      cinder_use_multipath = true
+      [oslo_concurrency]
+      lock_path = /var/lib/glance/tmp
+    databaseInstance: openstack
+    glanceAPIs:
+      default:
+        nodeSelector:
+          fc_card: 'available'
+        replicas: 1
+        type: split
+
+  swift:
+    enabled: true

@@ -6,5 +6,5 @@ components:
   - ../../../../dt/dcn/
 
 resources:
-  - nncp/values.yaml
+  - networking/nncp/values.yaml
   - service-values.yaml

@@ -41,6 +41,28 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
+      fieldPath: data.notificationsBusInstance
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.notificationsBusInstance
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.rabbitmq.templates.rabbitmq-notifications
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.rabbitmq.templates.rabbitmq-notifications
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
       fieldPath: data.cinderBackup.customServiceConfig
     targets:
       - select:
@@ -236,12 +258,12 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
-      fieldPath: data.telemetry.metricStorage.enabled
+      fieldPath: data.telemetry.metricStorage
     targets:
       - select:
           kind: OpenStackControlPlane
         fieldPaths:
-          - spec.telemetry.template.metricStorage.enabled
+          - spec.telemetry.template.metricStorage
         options:
           create: true
   - source:
@@ -268,6 +290,17 @@ replacements:
           create: true
   - source:
       kind: ConfigMap
+      name: network-values
+      fieldPath: data.storageClass
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.telemetry.template.metricStorage.customMonitoringStack.prometheusConfig.persistentVolumeClaim.storageClassName
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
       name: service-values
       fieldPath: data.keystone.customServiceConfig
     targets:
@@ -286,5 +319,16 @@ replacements:
           kind: OpenStackControlPlane
         fieldPaths:
           - spec.heat.enabled
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.watcher.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.watcher.enabled
         options:
           create: true

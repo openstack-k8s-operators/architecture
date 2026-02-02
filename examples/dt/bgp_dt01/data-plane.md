@@ -14,7 +14,7 @@ oc project openstack
 ```
 Change to the bgp_dt01/ directory
 ```
-cd architecture/examples/dt/bgp/bgp_dt01/
+cd architecture/examples/dt/bgp_dt01/
 ```
 Edit the networker values.yaml files corresponding to each rack (r0, r1 and r2)
 to suit your environment:

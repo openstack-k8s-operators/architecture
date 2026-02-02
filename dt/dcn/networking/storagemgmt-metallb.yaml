@@ -1,0 +1,22 @@
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: storagemgmt
+  namespace: metallb-system
+  labels:
+    osp/lb-addresses-type: standard
+spec:
+  addresses:
+    - _replaced_
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: storagemgmt
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+    - storagemgmt
+  interfaces:
+    - _replaced_

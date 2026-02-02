@@ -1,0 +1,95 @@
+---
+vas:
+  nova04delta:
+    stages:
+      - name: nncp-configuration
+        path: examples/dt/nova/nova04delta/control-plane/networking/nncp
+        wait_conditions:
+          - >-
+            oc -n openstack wait nncp
+            -l osp/nncm-config-type=standard
+            --for jsonpath='{.status.conditions[0].reason}'=SuccessfullyConfigured
+            --timeout=5m
+        values:
+          - name: network-values
+            src_file: values.yaml
+        build_output: nncp.yaml
+
+      - name: network-configuration
+        path: examples/dt/nova/nova04delta/control-plane/networking
+        wait_conditions:
+          - >-
+            oc -n metallb-system wait pod
+            -l app=metallb -l component=speaker
+            --for condition=Ready
+            --timeout=5m
+        values:
+          - name: network-values
+            src_file: nncp/values.yaml
+        build_output: network.yaml
+
+      - name: control-plane
+        path: examples/dt/nova/nova04delta/control-plane
+        wait_conditions:
+          - >-
+            oc -n openstack wait osctlplane controlplane
+            --for condition=OpenStackControlPlaneDNSReadyCondition
+            --timeout=20m
+        values:
+          - name: network-values
+            src_file: networking/nncp/values.yaml
+          - name: service-values
+            src_file: service-values.yaml
+        build_output: control-plane.yaml
+
+      - name: dns-configuration
+        path: examples/dt/nova/nova04delta/control-plane/networking/dns
+        wait_conditions:
+          - >-
+            oc -n openshift-dns wait dns.operator/default --for condition=Available
+            --timeout=20m
+        values:
+          - name: dns-values
+            src_file: values.yaml
+        build_output: dns.yaml
+
+      - name: baremetalhosts-configuration
+        path: examples/dt/nova/nova04delta/edpm/baremetalhosts
+        wait_conditions:
+          - >-
+            oc -n openstack wait baremetalhosts.metal3.io edpm-compute-0
+            --for=jsonpath='{.status.provisioning.state}'=available
+            --timeout=20m
+          - >-
+            oc -n openstack wait osctlplane controlplane
+            --for condition=Ready
+            --timeout=20m
+        values:
+          - name: baremetalhost-values
+            src_file: values.yaml
+        build_output: baremetalhosts.yaml
+
+      - name: edpm-nodeset
+        path: examples/dt/nova/nova04delta/edpm/nodeset
+        wait_conditions:
+          - >-
+            oc -n openstack wait
+            osdpns openstack-edpm --for condition=SetupReady
+            --timeout=20m
+        values:
+          - name: edpm-nodeset-values
+            src_file: values.yaml
+        build_output: nodeset.yaml
+
+
+      - name: edpm-deployment
+        path: examples/dt/nova/nova04delta/edpm/deployment
+        wait_conditions:
+          - >-
+            oc -n openstack wait
+            osdpd edpm-deployment --for condition=Ready
+            --timeout=90m
+        values:
+          - name: edpm-deployment-values
+            src_file: values.yaml
+        build_output: deployment.yaml

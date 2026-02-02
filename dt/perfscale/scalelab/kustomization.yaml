@@ -1,0 +1,309 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+transformers:
+  # Set namespace to OpenStack on all namespaced objects without a namespace
+  - |-
+    apiVersion: builtin
+    kind: NamespaceTransformer
+    metadata:
+      name: _ignored_
+      namespace: openstack
+    setRoleBindingSubjects: none
+    unsetOnly: true
+    fieldSpecs:
+      - path: metadata/name
+        kind: Namespace
+        create: true
+
+components:
+  - ../../../lib/control-plane
+
+replacements:
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.ovn.ovnController
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.ovn.template.ovnController
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.glance.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.glance.template.customServiceConfig
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.glance.default.replicas
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.glance.template.glanceAPIs.default.replicas
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.swift.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.swift.enabled
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.telemetry.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.telemetry.enabled
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.telemetry.template.ceilometer.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.telemetry.template.ceilometer.enabled
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.telemetry.template.metricStorage.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.telemetry.template.metricStorage.enabled
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.telemetry.template.metricStorage.dataplaneNetwork
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.telemetry.template.metricStorage.dataplaneNetwork
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.telemetry.template.metricStorage.networkAttachments
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.telemetry.template.metricStorage.networkAttachments
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.nova.schedulerServiceTemplate.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.nova.template.schedulerServiceTemplate.customServiceConfig
+        options:
+          create: true
+
+  # Add external interface and loadbalancer addresses
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.external.iface
+    targets:
+      - select:
+          group: metallb.io
+          kind: L2Advertisement
+          name: external
+        fieldPaths:
+          - spec.interfaces.0
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.external.lb_addresses
+    targets:
+      - select:
+          kind: IPAddressPool
+          name: external
+        fieldPaths:
+          - spec.addresses
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.external.net-attach-def
+    targets:
+      - select:
+          kind: NetworkAttachmentDefinition
+          name: external
+        fieldPaths:
+          - spec.config
+
+  # Replace ctlplane interfacename instead of bridge name.
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ctlplane.iface
+    targets:
+      - select:
+          kind: L2Advertisement
+          name: ctlplane
+        fieldPaths:
+          - spec.interfaces.0
+
+  # Octavia
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.enabled
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.amphoraImageContainerImage
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.amphoraImageContainerImage
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.apacheContainerImage
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.apacheContainerImage
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.octaviaAPI.networkAttachments
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.octaviaAPI.networkAttachments
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.octaviaHousekeeping.networkAttachments
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.octaviaHousekeeping.networkAttachments
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.octaviaHealthManager.networkAttachments
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.octaviaHealthManager.networkAttachments
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.octaviaWorker.networkAttachments
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.octaviaWorker.networkAttachments
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.octaviaAPI.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.octaviaAPI.customServiceConfig
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.octaviaHealthManager.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.octaviaHealthManager.customServiceConfig
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.octaviaHousekeeping.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.octaviaHousekeeping.customServiceConfig
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.octaviaWorker.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.octaviaWorker.customServiceConfig
+        options:
+          create: true

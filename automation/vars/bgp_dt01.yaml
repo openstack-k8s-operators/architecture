@@ -194,6 +194,7 @@ vas:
         post_stage_run:
           - name: Wait until computes are ready
             type: playbook
-            source: "../../playbooks/bgp-l3-computes-ready.yml"
+            source: "nova_wait_for_compute_service.yml"
             extra_vars:
-              num_computes: 3
+              _number_of_computes: 3
+              _cell_conductor: nova-cell0-conductor-0

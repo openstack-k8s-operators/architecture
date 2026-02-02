@@ -6,8 +6,12 @@ metadata:
   annotations:
     config.kubernetes.io/local-config: "true"
 data:
+  # --- Fields required by lib/control-plane ---
   preserveJobs: false
+  tls:
+    caBundleSecretName: ""
 
+  # --- Below are VA/DT-specific data ---
   cinderBackup:
     customServiceConfig: |
       [DEFAULT]
@@ -109,6 +113,9 @@ data:
       tenant_network_types = vlan,flat
       [ml2_type_vlan]
       network_vlan_ranges = datacentre:1000:2000
+    ml2MechanismDrivers:
+      - ovn
+      - baremetal
 
   extraMounts:
     - name: v1

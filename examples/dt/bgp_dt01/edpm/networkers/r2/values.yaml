@@ -21,7 +21,10 @@ data:
       ansiblePort: 22
       ansibleVars:
         edpm_ovn_encap_ip: "{{ lookup('vars', 'bgpmainnet_ip') }}"
-        edpm_ovn_bgp_agent_expose_tenant_networks: false
+        edpm_ovn_bridge_mappings:
+          - "datacentre:br-ex"
+          - "octavia:br-octavia"
+        edpm_ovn_bgp_agent_expose_tenant_networks: true
         edpm_frr_bgp_ipv4_src_network: bgpmainnet
         edpm_frr_bgp_ipv6_src_network: bgpmainnetv6
         edpm_frr_bgp_neighbor_password: f00barZ
@@ -44,6 +47,10 @@ data:
           network_config:
           - type: ovs_bridge
             name: {{ neutron_physical_bridge_name }}
+            use_dhcp: false
+            use_dhcpv6: true  # needed to enable IPv6 on bridges
+          - type: ovs_bridge
+            name: br-octavia
             use_dhcp: false
             use_dhcpv6: true  # needed to enable IPv6 on bridges
           - type: interface
@@ -75,6 +82,7 @@ data:
             - ip_netmask: {{ lookup('vars', 'bgpmainnetv6_ip') }}/128
             - ip_netmask: {{ lookup('vars', 'internalapi_ip') }}/32
             - ip_netmask: {{ lookup('vars', 'tenant_ip') }}/32
+            - ip_netmask: {{ lookup('vars', 'octavia_ip') }}/32
         edpm_enable_chassis_gw: true
         edpm_sshd_allowed_ranges:
           - 192.168.122.0/24
@@ -91,6 +99,8 @@ data:
       - name: Storage
         subnetName: subnet1
       - name: Tenant
+        subnetName: subnet1
+      - name: Octavia
         subnetName: subnet1
       - name: BgpNet0
         subnetName: subnet0
@@ -139,6 +149,8 @@ data:
             subnetName: subnet1
           - name: Tenant
             subnetName: subnet1
+          - name: Octavia
+            subnetName: subnet1
           - name: Bgpnet0
             subnetName: subnet2
             fixedIP: 100.64.2.6
@@ -152,8 +164,8 @@ data:
             subnetName: subnet1
             fixedIP: f00d:f00d:f00d:f00d:f00d:f00d:f00d:0033
     services:
-      - download-cache
       - bootstrap
+      - download-cache
       - configure-network
       - install-os
       - configure-os

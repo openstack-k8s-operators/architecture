@@ -3,6 +3,7 @@ cifmw_baremetal_hosts:
   compute-0:
     connection: ipmi://10.10.100.100
     boot_mode: UEFI
+    label: openstack
     nics:
       - mac: "89:9a:b7:cb:4a:3f"
         network: provision
@@ -12,6 +13,7 @@ cifmw_baremetal_hosts:
   compute-1:
     connection: ipmi://10.10.100.101
     boot_mode: UEFI
+    label: openstack-2
     nics:
       - mac: "53:b0:4d:06:56:ea"
         network: provision

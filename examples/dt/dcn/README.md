@@ -28,7 +28,7 @@ This is a collection of CR templates that represent a Red Hat OpenStack Services
 
 2. The CRs are applied against an OpenShift cluster in _stages_.  That is, there is an ordering in which each grouping of CRs is fed to the cluster.  It is _not_ a case of simply taking all CRs from all stages and applying them all at once.
 
-3. In stages 1 and 2 [kustomize](https://kustomize.io/) is used to genereate the control plane CRs dynamically. The `control-plane/nncp/values.yaml` file(s) must be updated to fit your environment. kustomize version 5 or newer required.
+3. In stages 1 and 2 [kustomize](https://kustomize.io/) is used to generate the control plane CRs dynamically. The `control-plane/networking/nncp/values.yaml` file(s) must be updated to fit your environment. kustomize version 5 or newer required.
 
 4. In stages 3 and 4 [kustomize](https://kustomize.io/) is used to generate the dataplane CRs dynamically. The `edpm-pre-ceph/values.yaml`, `values.yaml` and `service-values.yaml` files must be updated to fit your environment. kustomize version 5 or newer required.
 

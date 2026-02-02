@@ -6,5 +6,5 @@ components:
   - ../../../../../dt/dcn/control-plane
 
 resources:
-  - ../nncp
+  - ../networking/nncp
   - service-values.yaml

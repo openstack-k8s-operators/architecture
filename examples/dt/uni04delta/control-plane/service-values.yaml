@@ -8,7 +8,12 @@ metadata:
     config.kubernetes.io/local-config: "true"
 
 data:
+  # --- Fields required by lib/control-plane ---
   preserveJobs: false
+  tls:
+    caBundleSecretName: ""
+
+  # --- Below are VA/DT-specific data ---
   cinderBackup:
     customServiceConfig: |
       [DEFAULT]
@@ -70,20 +75,18 @@ data:
   glance:
     customServiceConfig: |
       [DEFAULT]
-      debug = True
-      enabled_backends = default_backend:rbd
-
+      debug=True
+      enabled_backends = default_backend:s3
       [glance_store]
       default_backend = default_backend
-
       [default_backend]
-      rbd_store_ceph_conf = /etc/ceph/ceph.conf
-      store_description = "RBD backend"
-      rbd_store_pool = images
-      rbd_store_user = openstack
+      s3_store_create_bucket_on_put = True
+      s3_store_bucket_url_format = "path"
     glanceAPIs:
       default:
         replicas: 3
+        customServiceConfigSecrets:
+          - s3glance
 
   manila:
     enabled: true
@@ -111,6 +114,8 @@ data:
       router_distributed = true
       router_scheduler_driver = neutron.scheduler.l3_agent_scheduler.ChanceScheduler
       debug = true
+      dns_domain = example.org.
+      external_dns_driver = designate
       [agent]
       report_interval = 300
       [database]
@@ -138,9 +143,22 @@ data:
       [ml2]
       type_drivers = geneve,vlan,flat,local
       tenant_network_types = vlan,flat
+      extension_drivers=qos,port_security,dns_domain_keywords
       [ml2_type_vlan]
       network_vlan_ranges = datacentre:1000:2000
-
+      [designate]
+      url = https://designate-internal.openstack.svc:9001/v2
+      auth_type = password
+      auth_url = {{ .KeystoneInternalURL }}
+      username = {{ .ServiceUser }}
+      password = {{ .ServicePassword }}
+      project_name = service
+      project_domain_name = Default
+      user_domain_name = Default
+      allow_reverse_dns_lookup = True
+      ipv4_ptr_zone_prefix_size = 24
+      ipv6_ptr_zone_prefix_size = 116
+      ptr_zone_email = admin@example.org
   extraMounts:
     - name: v1
       region: r1

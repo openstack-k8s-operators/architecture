@@ -1,0 +1,25 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ceph-nova
+  namespace: openstack
+data:
+  03-ceph-nova.conf: _replaced_
+---
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneService
+metadata:
+  name: nova-custom-ceph
+  namespace: openstack
+spec:
+  dataSources:
+    - configMapRef:
+        name: ceph-nova
+    - secretRef:
+        name: nova-cell1-compute-config
+    - secretRef:
+        name: nova-migration-ssh-key
+  playbook: osp.edpm.nova
+  caCerts: combined-ca-bundle
+  edpmServiceType: nova

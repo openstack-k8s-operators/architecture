@@ -83,7 +83,7 @@ vas:
         post_stage_run:
           - name: Deploy Ceph
             type: playbook
-            source: "../../playbooks/ceph.yml"
+            source: "../../hooks/playbooks/ceph.yml"
             inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
 
       - name: edpm-nodeset-post-ceph
