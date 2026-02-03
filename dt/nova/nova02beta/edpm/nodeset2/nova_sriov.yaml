@@ -113,11 +113,11 @@ spec:
             - "/tmp/nvidia-sriov.pp"
           when: policy_file.changed
 
-        - name: Get the Nvidia Driver URL
+        - name: Load NVIDIA config from controller mount
           delegate_to: localhost
           ansible.builtin.set_fact:
-            nvidia_rpm_url: "{{ lookup('file', '/var/lib/openstack/configs/install-nvidia-sriov/nvidia_driver_url') | from_yaml }}"
-            nvidia_pci_address: "{{ lookup('file', '/var/lib/openstack/configs/install-nvidia-sriov/nvidia_pci_address') | from_yaml }}"
+            nvidia_rpm_url: "{{ lookup('file', '/var/lib/openstack/configs/install-nvidia-sriov/nvidia_driver_url') | from_yaml | trim }}"
+            nvidia_pci_address: "{{ lookup('file', '/var/lib/openstack/configs/install-nvidia-sriov/nvidia_pci_address') | trim }}"
 
         - name: Gather the package facts
           ansible.builtin.package_facts:
