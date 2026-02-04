@@ -106,6 +106,29 @@ data:
       cephfs_nfs_cluster_id=cephfs
       cephfs_protocol_helper_type=NFS
 
+  ovn:
+    ovnController:
+      nicMappings:
+        datacentre: ospbr
+        octavia: octbr
+
+  octavia:
+    enabled: true
+    amphoraImageContainerImage: quay.io/gthiemonge/octavia-amphora-image
+    apacheContainerImage: registry.redhat.io/ubi9/httpd-24:latest
+    octaviaAPI:
+      networkAttachments:
+        - internalapi
+    octaviaHousekeeping:
+      networkAttachments:
+        - octavia
+    octaviaHealthManager:
+      networkAttachments:
+        - octavia
+    octaviaWorker:
+      networkAttachments:
+        - octavia
+
   neutron:
     customServiceConfig: |
       [DEFAULT]
