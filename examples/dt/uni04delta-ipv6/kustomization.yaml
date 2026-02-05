@@ -9,3 +9,17 @@ resources:
   - control-plane/networking/nncp/values.yaml
   - control-plane/service-values.yaml
   - values.yaml
+
+replacements:
+  # Glance
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.glance.glanceAPIs.default.customServiceConfigSecrets
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.glance.template.glanceAPIs.default.customServiceConfigSecrets
+        options:
+          create: true
