@@ -18,7 +18,17 @@ transformers:
         create: true
 
 components:
-  - ../../../lib/control-plane/
+  - ../../../lib/control-plane/base
+  - ../../../lib/control-plane/service-endpoints
+  - ../../../lib/control-plane/dns
+  - ../../../lib/control-plane/storage
+  - ../../../lib/control-plane/ovn-bridge
+  - ../../../lib/control-plane/job-settings
+  # Note: tls component is not included here because this component
+  # is used by the post-ceph nodeset path where data.tls may not be
+  # provided. The base openstackcontrolplane.yaml already has tls: {}
+  # as a default. For stage 6 control-plane builds, tls is included
+  # via dt/dcn/kustomization.yaml -> lib/control-plane -> tls.
 
 replacements:
   # Control plane custom service configs
