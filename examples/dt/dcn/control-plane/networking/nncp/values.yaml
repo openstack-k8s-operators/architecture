@@ -309,27 +309,27 @@ data:
               vlan: 40
         vlan: 40
     lbServiceType: LoadBalancer
-    # storagemgmt_ip should only be used for Swift here (not necessary for Ceph)
+    # storagemgmt_ip should only be used if needed here (not necessary for Ceph)
     node_0:
         ctlplane_ip: 192.168.122.10
         internalapi_ip: 172.17.0.10
         name: master-0
         storage_ip: 172.18.0.10
-        storagemgmt_ip: 172.20.0.10
+        # storagemgmt_ip: 172.20.0.10
         tenant_ip: 172.19.0.10
     node_1:
         ctlplane_ip: 192.168.122.11
         internalapi_ip: 172.17.0.11
         name: master-1
         storage_ip: 172.18.0.11
-        storagemgmt_ip: 172.20.0.11
+        # storagemgmt_ip: 172.20.0.11
         tenant_ip: 172.19.0.11
     node_2:
         ctlplane_ip: 192.168.122.12
         internalapi_ip: 172.17.0.12
         name: master-2
         storage_ip: 172.18.0.12
-        storagemgmt_ip: 172.20.0.12
+        # storagemgmt_ip: 172.20.0.12
         tenant_ip: 172.19.0.12
     rabbitmq:
         endpoint_annotations:
