@@ -9,4 +9,5 @@ components:
   - storage
   - ovn-bridge
   - job-settings
+  - messaging-bus
   - tls

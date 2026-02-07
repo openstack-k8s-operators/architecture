@@ -77,7 +77,7 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
-      fieldPath: data.telemetry.template.ceilometer.enabled
+      fieldPath: data.telemetry.ceilometer.enabled
     targets:
       - select:
           kind: OpenStackControlPlane
@@ -88,7 +88,7 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
-      fieldPath: data.telemetry.template.metricStorage.enabled
+      fieldPath: data.telemetry.metricStorage.enabled
     targets:
       - select:
           kind: OpenStackControlPlane
@@ -97,7 +97,7 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
-      fieldPath: data.telemetry.template.metricStorage.dataplaneNetwork
+      fieldPath: data.telemetry.metricStorage.dataplaneNetwork
     targets:
       - select:
           kind: OpenStackControlPlane
@@ -108,7 +108,7 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
-      fieldPath: data.telemetry.template.metricStorage.networkAttachments
+      fieldPath: data.telemetry.metricStorage.networkAttachments
     targets:
       - select:
           kind: OpenStackControlPlane

@@ -10,6 +10,8 @@ metadata:
 data:
   # --- Fields required by lib/control-plane ---
   preserveJobs: false
+  notificationsBus:
+    cluster: rabbitmq
   tls:
     caBundleSecretName: ""
 
@@ -81,12 +83,14 @@ data:
       cell0:
         cellDatabaseInstance: openstack
         cellDatabaseAccount: nova-cell0
-        cellMessageBusInstance: rabbitmq
+        messagingBus:
+          cluster: rabbitmq
         hasAPIAccess: true
       cell1:
         cellDatabaseInstance: openstack-cell1
         cellDatabaseAccount: nova-cell1
-        cellMessageBusInstance: rabbitmq-cell1
+        messagingBus:
+          cluster: rabbitmq-cell1
         hasAPIAccess: true
         novaComputeTemplates:
           compute-ironic:
@@ -94,6 +98,8 @@ data:
 
   swift:
     enabled: true
+    notificationsBus:
+      cluster: rabbitmq
 
   octavia:
     enabled: true
@@ -117,6 +123,8 @@ data:
 
   heat:
     enabled: true
+    notificationsBus:
+      cluster: rabbitmq
     customServiceConfig: |
       [clients_heat]
       endpoint_type: public
@@ -128,8 +136,13 @@ data:
       enabled: true
     autoscaling:
       enabled: true
+      aodh:
+        notificationsBus:
+          cluster: rabbitmq
     ceilometer:
       enabled: true
+      notificationsBus:
+        cluster: rabbitmq
 
   ovn:
     ovnController:

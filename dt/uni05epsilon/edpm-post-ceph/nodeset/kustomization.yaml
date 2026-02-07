@@ -263,7 +263,7 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
-      fieldPath: data.nova.template.cellTemplates.cell2
+      fieldPath: data.nova.cellTemplates.cell2
     targets:
       - select:
           kind: OpenStackControlPlane
@@ -387,19 +387,8 @@ replacements:
           create: true
 
   #
-  # Notifications
+  # Notifications (rabbitmq-notifications template)
   #
-  - source:
-      kind: ConfigMap
-      name: service-values
-      fieldPath: data.notificationsBusInstance
-    targets:
-      - select:
-          kind: OpenStackControlPlane
-        fieldPaths:
-          - spec.notificationsBusInstance
-        options:
-          create: true
   - source:
       kind: ConfigMap
       name: service-values

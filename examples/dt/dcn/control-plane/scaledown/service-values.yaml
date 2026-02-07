@@ -8,6 +8,8 @@ metadata:
 data:
   # --- Fields required by lib/control-plane ---
   preserveJobs: false
+  notificationsBus:
+    cluster: rabbitmq
   tls:
     caBundleSecretName: ""
 
@@ -185,62 +187,59 @@ data:
         networkAttachments:
           - storage
   neutron:
-    template:
-      customServiceConfig: |
-        [DEFAULT]
-        router_scheduler_driver = neutron.scheduler.l3_agent_scheduler.AZLeastRoutersScheduler
-        network_scheduler_driver =  neutron.scheduler.dhcp_agent_scheduler.AZAwareWeightScheduler
-        default_availability_zones = az0,az1,az2
-        [ml2_type_vlan]
-        network_vlan_ranges = datacentre:1:1000,leaf1:1:1000,leaf2:1:1000
-        [neutron]
-        physnets = datacentre,leaf1,leaf2
+    customServiceConfig: |
+      [DEFAULT]
+      router_scheduler_driver = neutron.scheduler.l3_agent_scheduler.AZLeastRoutersScheduler
+      network_scheduler_driver =  neutron.scheduler.dhcp_agent_scheduler.AZAwareWeightScheduler
+      default_availability_zones = az0,az1,az2
+      [ml2_type_vlan]
+      network_vlan_ranges = datacentre:1:1000,leaf1:1:1000,leaf2:1:1000
+      [neutron]
+      physnets = datacentre,leaf1,leaf2
   octavia:
     enabled: true
-    template:
-      amphoraImageContainerImage: quay.io/gthiemonge/octavia-amphora-image
-      lbMgmtNetwork:
-        createDefaultLbMgmtNetwork: false
-        lbMgmtRouterGateway: 172.23.0.150
-        availabilityZones:
-          - az0
-      octaviaAPI:
-        networkAttachments:
-          - internalapi
-        customServiceConfig: |
-          [controller_worker]
-          loadbalancer_topology=ACTIVE_STANDBY
-      octaviaHousekeeping:
-        networkAttachments:
-          - octavia
-        customServiceConfig: |
-          [controller_worker]
-          loadbalancer_topology=ACTIVE_STANDBY
-      octaviaHealthManager:
-        networkAttachments:
-          - octavia
-        customServiceConfig: |
-          [controller_worker]
-          loadbalancer_topology=ACTIVE_STANDBY
-      octaviaWorker:
-        networkAttachments:
-          - octavia
-        customServiceConfig: |
-          [controller_worker]
-          loadbalancer_topology=ACTIVE_STANDBY
+    amphoraImageContainerImage: quay.io/gthiemonge/octavia-amphora-image
+    lbMgmtNetwork:
+      createDefaultLbMgmtNetwork: false
+      lbMgmtRouterGateway: 172.23.0.150
+      availabilityZones:
+        - az0
+    octaviaAPI:
+      networkAttachments:
+        - internalapi
+      customServiceConfig: |
+        [controller_worker]
+        loadbalancer_topology=ACTIVE_STANDBY
+    octaviaHousekeeping:
+      networkAttachments:
+        - octavia
+      customServiceConfig: |
+        [controller_worker]
+        loadbalancer_topology=ACTIVE_STANDBY
+    octaviaHealthManager:
+      networkAttachments:
+        - octavia
+      customServiceConfig: |
+        [controller_worker]
+        loadbalancer_topology=ACTIVE_STANDBY
+    octaviaWorker:
+      networkAttachments:
+        - octavia
+      customServiceConfig: |
+        [controller_worker]
+        loadbalancer_topology=ACTIVE_STANDBY
 
   ovn:
-    template:
-      ovnController:
-        external-ids:
-          availability-zones: []
-          enable-chassis-as-gateway: true
-          ovn-bridge: br-int
-          ovn-encap-type: geneve
-          system-id: random
-        nicMappings:
-          datacentre: ocpbr
-          octavia: octbr
+    ovnController:
+      external-ids:
+        availability-zones: []
+        enable-chassis-as-gateway: true
+        ovn-bridge: br-int
+        ovn-encap-type: geneve
+        system-id: random
+      nicMappings:
+        datacentre: ocpbr
+        octavia: octbr
   nova:
     customServiceConfig: |
       [DEFAULT]
@@ -256,7 +255,8 @@ data:
       cell1:
         cellDatabaseInstance: openstack-cell1
         cellDatabaseAccount: nova-cell1
-        cellMessageBusInstance: rabbitmq-cell1
+        messagingBus:
+          cluster: rabbitmq-cell1
         conductorServiceTemplate:
           replicas: 1
         hasAPIAccess: true
@@ -275,7 +275,8 @@ data:
       cell3:
         cellDatabaseInstance: openstack-cell3
         cellDatabaseAccount: nova-cell3
-        cellMessageBusInstance: rabbitmq-cell3
+        messagingBus:
+          cluster: rabbitmq-cell3
         conductorServiceTemplate:
           replicas: 1
         hasAPIAccess: true

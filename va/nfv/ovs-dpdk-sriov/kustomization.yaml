@@ -98,7 +98,7 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
-      fieldPath: data.telemetry.template.ceilometer.enabled
+      fieldPath: data.telemetry.ceilometer.enabled
     targets:
       - select:
           kind: OpenStackControlPlane

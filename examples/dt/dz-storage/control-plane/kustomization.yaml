@@ -89,7 +89,7 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
-      fieldPath: data.manila.template.manilaAPI.customServiceConfig
+      fieldPath: data.manila.manilaAPI.customServiceConfig
     targets:
       - select:
           kind: OpenStackControlPlane
@@ -100,7 +100,7 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
-      fieldPath: data.manila.template.manilaShares
+      fieldPath: data.manila.manilaShares
     targets:
       - select:
           kind: OpenStackControlPlane
@@ -112,7 +112,7 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
-      fieldPath: data.manila.template.manilaAPI.replicas
+      fieldPath: data.manila.manilaAPI.replicas
     targets:
       - select:
           kind: OpenStackControlPlane
@@ -124,7 +124,7 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
-      fieldPath: data.manila.template.manilaScheduler.replicas
+      fieldPath: data.manila.manilaScheduler.replicas
     targets:
       - select:
           kind: OpenStackControlPlane

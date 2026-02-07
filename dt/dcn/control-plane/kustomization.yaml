@@ -58,7 +58,7 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
-      fieldPath: data.neutron.template.customServiceConfig
+      fieldPath: data.neutron.customServiceConfig
     targets:
       - select:
           kind: OpenStackControlPlane
@@ -69,7 +69,7 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
-      fieldPath: data.ovn.template.ovnController.external-ids
+      fieldPath: data.ovn.ovnController.external-ids
     targets:
       - select:
           kind: OpenStackControlPlane
@@ -80,7 +80,7 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
-      fieldPath: data.ovn.template.ovnController.nicMappings
+      fieldPath: data.ovn.ovnController.nicMappings
     targets:
       - select:
           kind: OpenStackControlPlane

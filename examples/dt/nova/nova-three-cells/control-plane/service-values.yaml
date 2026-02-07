@@ -10,6 +10,8 @@ metadata:
 data:
   # --- Fields required by lib/control-plane ---
   preserveJobs: false
+  notificationsBus:
+    cluster: rabbitmq
   tls:
     caBundleSecretName: ""
 
@@ -39,24 +41,27 @@ data:
       replicas: 1
 
   nova:
-    template:
-      secret: osp-secret
-      cellTemplates:
-        cell2:
-          cellDatabaseAccount: nova-cell2
-          cellDatabaseInstance: openstack-cell2
-          cellMessageBusInstance: rabbitmq-cell2
-          conductorServiceTemplate:
-            replicas: 1
-          hasAPIAccess: true
+    secret: osp-secret
+    cellTemplates:
+      cell2:
+        cellDatabaseAccount: nova-cell2
+        cellDatabaseInstance: openstack-cell2
+        messagingBus:
+          cluster: rabbitmq-cell2
+        conductorServiceTemplate:
+          replicas: 1
+        hasAPIAccess: true
 
   swift:
     enabled: true
+    notificationsBus:
+      cluster: rabbitmq
   telemetry:
     enabled: true
-    template:
-      ceilometer:
-        enabled: true
+    ceilometer:
+      enabled: true
+      notificationsBus:
+        cluster: rabbitmq
 
   rabbitmq:
     templates:
