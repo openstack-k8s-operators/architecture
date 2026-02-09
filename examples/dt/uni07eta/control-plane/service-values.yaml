@@ -110,6 +110,7 @@ data:
   neutron:
     customServiceConfig: |
       [DEFAULT]
+      service_plugins = qos,ovn-router,trunk,segments,port_forwarding,log,placement
       vlan_transparent = true
       agent_down_time = 600
       router_distributed = true
