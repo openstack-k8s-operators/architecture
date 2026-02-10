@@ -271,36 +271,38 @@ data:
 
   octavia:
     enabled: true
-    amphoraImageContainerImage: quay.io/gthiemonge/octavia-amphora-image
-    lbMgmtNetwork:
-      createDefaultLbMgmtNetwork: false
-      lbMgmtRouterGateway: 172.23.0.150
-      availabilityZones:
-        - az0
-    octaviaAPI:
-      networkAttachments:
-        - internalapi
-    octaviaHousekeeping:
-      networkAttachments:
-        - octavia
-    octaviaHealthManager:
-      networkAttachments:
-        - octavia
-    octaviaWorker:
-      networkAttachments:
-        - octavia
+    template:
+      amphoraImageContainerImage: quay.io/gthiemonge/octavia-amphora-image
+      lbMgmtNetwork:
+        createDefaultLbMgmtNetwork: false
+        lbMgmtRouterGateway: 172.23.0.150
+        availabilityZones:
+          - az0
+      octaviaAPI:
+        networkAttachments:
+          - internalapi
+      octaviaHousekeeping:
+        networkAttachments:
+          - octavia
+      octaviaHealthManager:
+        networkAttachments:
+          - octavia
+      octaviaWorker:
+        networkAttachments:
+          - octavia
 
   ovn:
-    ovnController:
-      external-ids:
-        availability-zones: []
-        enable-chassis-as-gateway: true
-        ovn-bridge: br-int
-        ovn-encap-type: geneve
-        system-id: random
-      nicMappings:
-        datacentre: ocpbr
-        octavia: octbr
+    template:
+      ovnController:
+        external-ids:
+          availability-zones: []
+          enable-chassis-as-gateway: true
+          ovn-bridge: br-int
+          ovn-encap-type: geneve
+          system-id: random
+        nicMappings:
+          datacentre: ocpbr
+          octavia: octbr
   nova:
     customServiceConfig: |
       [DEFAULT]

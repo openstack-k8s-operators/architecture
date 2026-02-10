@@ -198,48 +198,50 @@ data:
       physnets = datacentre,leaf1,leaf2
   octavia:
     enabled: true
-    amphoraImageContainerImage: quay.io/gthiemonge/octavia-amphora-image
-    lbMgmtNetwork:
-      createDefaultLbMgmtNetwork: false
-      lbMgmtRouterGateway: 172.23.0.150
-      availabilityZones:
-        - az0
-    octaviaAPI:
-      networkAttachments:
-        - internalapi
-      customServiceConfig: |
-        [controller_worker]
-        loadbalancer_topology=ACTIVE_STANDBY
-    octaviaHousekeeping:
-      networkAttachments:
-        - octavia
-      customServiceConfig: |
-        [controller_worker]
-        loadbalancer_topology=ACTIVE_STANDBY
-    octaviaHealthManager:
-      networkAttachments:
-        - octavia
-      customServiceConfig: |
-        [controller_worker]
-        loadbalancer_topology=ACTIVE_STANDBY
-    octaviaWorker:
-      networkAttachments:
-        - octavia
-      customServiceConfig: |
-        [controller_worker]
-        loadbalancer_topology=ACTIVE_STANDBY
+    template:
+      amphoraImageContainerImage: quay.io/gthiemonge/octavia-amphora-image
+      lbMgmtNetwork:
+        createDefaultLbMgmtNetwork: false
+        lbMgmtRouterGateway: 172.23.0.150
+        availabilityZones:
+          - az0
+      octaviaAPI:
+        networkAttachments:
+          - internalapi
+        customServiceConfig: |
+          [controller_worker]
+          loadbalancer_topology=ACTIVE_STANDBY
+      octaviaHousekeeping:
+        networkAttachments:
+          - octavia
+        customServiceConfig: |
+          [controller_worker]
+          loadbalancer_topology=ACTIVE_STANDBY
+      octaviaHealthManager:
+        networkAttachments:
+          - octavia
+        customServiceConfig: |
+          [controller_worker]
+          loadbalancer_topology=ACTIVE_STANDBY
+      octaviaWorker:
+        networkAttachments:
+          - octavia
+        customServiceConfig: |
+          [controller_worker]
+          loadbalancer_topology=ACTIVE_STANDBY
 
   ovn:
-    ovnController:
-      external-ids:
-        availability-zones: []
-        enable-chassis-as-gateway: true
-        ovn-bridge: br-int
-        ovn-encap-type: geneve
-        system-id: random
-      nicMappings:
-        datacentre: ocpbr
-        octavia: octbr
+    template:
+      ovnController:
+        external-ids:
+          availability-zones: []
+          enable-chassis-as-gateway: true
+          ovn-bridge: br-int
+          ovn-encap-type: geneve
+          system-id: random
+        nicMappings:
+          datacentre: ocpbr
+          octavia: octbr
   nova:
     customServiceConfig: |
       [DEFAULT]
