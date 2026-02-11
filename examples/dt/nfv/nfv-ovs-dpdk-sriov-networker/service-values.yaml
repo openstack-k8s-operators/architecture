@@ -16,6 +16,8 @@ metadata:
 data:
   # --- Fields required by lib/control-plane ---
   preserveJobs: false
+  notificationsBus:
+    cluster: rabbitmq
   tls:
     caBundleSecretName: ""
 
@@ -58,13 +60,16 @@ data:
       replicas: 1
   swift:
     enabled: true
+    notificationsBus:
+      cluster: rabbitmq
   telemetry:
     enabled: true
-    template:
-      ceilometer:
-        enabled: true
-      metricStorage:
-        enabled: true
+    ceilometer:
+      enabled: true
+      notificationsBus:
+        cluster: rabbitmq
+    metricStorage:
+      enabled: true
   extraMounts:
     - name: v1
       region: r1

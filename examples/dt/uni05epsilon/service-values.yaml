@@ -10,7 +10,8 @@ metadata:
 data:
   # --- Fields required by lib/control-plane ---
   preserveJobs: false
-  notificationsBusInstance: rabbitmq-notifications
+  notificationsBus:
+    cluster: rabbitmq-notifications
   tls:
     caBundleSecretName: ""
 
@@ -134,17 +135,21 @@ data:
 
   heat:
     enabled: true
+    notificationsBus:
+      cluster: rabbitmq-notifications
 
   nova:
-    template:
-      cellTemplates:
-        cell2:
-          cellDatabaseAccount: nova-cell2
-          cellDatabaseInstance: openstack-cell2
-          cellMessageBusInstance: rabbitmq-cell2
-          conductorServiceTemplate:
-            replicas: 1
-          hasAPIAccess: true
+    notificationsBus:
+      cluster: rabbitmq-notifications
+    cellTemplates:
+      cell2:
+        cellDatabaseAccount: nova-cell2
+        cellDatabaseInstance: openstack-cell2
+        messagingBus:
+          cluster: rabbitmq-cell2
+        conductorServiceTemplate:
+          replicas: 1
+        hasAPIAccess: true
 
   rabbitmq:
     templates:
@@ -163,6 +168,8 @@ data:
 
   swift:
     enabled: true
+    notificationsBus:
+      cluster: rabbitmq-notifications
 
   telemetry:
     enabled: true
@@ -186,8 +193,15 @@ data:
         retention: 24h
     autoscaling:
       enabled: true
+      aodh:
+        notificationsBus:
+          cluster: rabbitmq-notifications
     ceilometer:
       enabled: true
+      notificationsBus:
+        cluster: rabbitmq-notifications
 
   watcher:
     enabled: true
+    notificationsBus:
+      cluster: rabbitmq-notifications

@@ -9,7 +9,8 @@ metadata:
 data:
   # --- Fields required by lib/control-plane ---
   preserveJobs: false
-  notificationsBusInstance: rabbitmq-notifications
+  notificationsBus:
+    cluster: rabbitmq-notifications
   tls:
     caBundleSecretName: ""
 
@@ -118,8 +119,13 @@ data:
         retention: 24h
     autoscaling:
       enabled: true
+      aodh:
+        notificationsBus:
+          cluster: rabbitmq-notifications
     ceilometer:
       enabled: true
+      notificationsBus:
+        cluster: rabbitmq-notifications
     cloudkitty:
       enabled: false
   keystone:
@@ -128,6 +134,8 @@ data:
       expiration = 28800
   heat:
     enabled: true
+    notificationsBus:
+      cluster: rabbitmq-notifications
   rabbitmq:
     templates:
       rabbitmq-notifications:
@@ -142,3 +150,5 @@ data:
         replicas: 3
   watcher:
     enabled: true
+    notificationsBus:
+      cluster: rabbitmq-notifications

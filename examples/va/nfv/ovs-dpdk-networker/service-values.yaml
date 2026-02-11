@@ -16,6 +16,8 @@ metadata:
 data:
   # --- Fields required by lib/control-plane ---
   preserveJobs: false
+  notificationsBus:
+    cluster: rabbitmq
   tls:
     caBundleSecretName: ""
 
@@ -49,9 +51,10 @@ data:
     enabled: true
   telemetry:
     enabled: true
-    template:
-      ceilometer:
-        enabled: true
+    ceilometer:
+      enabled: true
+      notificationsBus:
+        cluster: rabbitmq
   nova:
     schedulerServiceTemplate:
       customServiceConfig: |
