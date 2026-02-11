@@ -1,0 +1,63 @@
+---
+vas:
+  nova03gamma:
+    stages:
+      - pre_stage_run:
+          - name: Apply cinder-lvm label on master-0
+            type: cr
+            definition:
+              metadata:
+                labels:
+                  openstack.org/cinder-lvm: ""
+            kind: Node
+            resource_name: master-0
+            state: patched
+        name: nncp-configuration        
+        path: examples/dt/nova/nova03gamma/nncp/
+        wait_conditions:
+          - >-
+            oc -n openstack wait nncp
+            -l osp/nncm-config-type=standard
+            --for jsonpath='{.status.conditions[0].reason}'=SuccessfullyConfigured
+            --timeout=60s
+        values:
+          - name: network-values
+            src_file: values.yaml
+        build_output: nncp.yaml
+
+      - name: control-plane
+        path: examples/dt/nova/nova03gamma/
+        wait_conditions:
+          - >-
+            oc -n openstack wait osctlplane controlplane --for condition=Ready
+            --timeout=600s
+        values:
+          - name: network-values
+            src_file: nncp/values.yaml
+          - name: service-values
+            src_file: service-values.yaml
+        build_output: control-plane.yaml
+
+      - name: edpm-nodeset
+        path: examples/dt/nova/nova03gamma/edpm/nodeset
+        wait_conditions:
+          - >-
+            oc -n openstack wait
+            osdpns openstack-edpm --for condition=SetupReady
+            --timeout=60m
+        values:
+          - name: edpm-nodeset-values
+            src_file: values.yaml
+        build_output: nodeset.yaml
+
+      - name: edpm-deployment
+        path: examples/dt/nova/nova03gamma/edpm/deployment
+        wait_conditions:
+          - >-
+            oc -n openstack wait
+            osdpns openstack-edpm --for condition=Ready
+            --timeout=60m
+        values:
+          - name: edpm-deployment-values
+            src_file: values.yaml
+        build_output: deployment.yaml
