@@ -1,6 +1,6 @@
 ---
 vas:
-  multi-namespace:
+  multi-namespace-skmo:
     stages:
       - name: namespace-configuration    # stage 0
         path: examples/va/multi-namespace/namespace
@@ -75,6 +75,9 @@ vas:
           - >-
             oc -n openstack wait keystoneapi --all --for condition=Ready
             --timeout=60m
+          - >-
+            oc -n openstack wait pod openstackclient --for condition=Ready
+            --timeout=10m
         values:
           - name: service-values
             src_file: service-values.yaml
@@ -107,21 +110,12 @@ vas:
             type: playbook
             source: "../../playbooks/skmo/trust-leaf-ca.yaml"
             inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
+          - name: Ensure central control plane uses custom CA bundle
+            type: playbook
+            source: "../../playbooks/skmo/ensure-central-ca-bundle.yaml"
+            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
 
-      - name: control-plane-ca    # stage 7
-        path: examples/va/multi-namespace-skmo/control-plane
-        wait_conditions:
-          - >-
-            oc -n openstack wait osctlplane controlplane --for condition=Ready
-            --timeout=60m
-        values:
-          - name: service-values
-            src_file: service-values.yaml
-          - name: network-values
-            src_file: ../../multi-namespace/control-plane/networking/nncp/values.yaml
-        build_output: ../control-plane-ca.yaml
-
-      - name: edpm-nodeset    # stage 8
+      - name: edpm-nodeset    # stage 7
         path: examples/va/multi-namespace/edpm/nodeset
         wait_conditions:
           # We don't wait for this namespace's OpenStackDataPlaneNodeSet at
@@ -136,7 +130,7 @@ vas:
             src_file: values.yaml
         build_output: nodeset.yaml
 
-      - pre_stage_run:    # stage 9
+      - pre_stage_run:    # stage 8
           - name: Get OpenStackDataPlaneServices for openstack2 namespace
             type: playbook
             source: "../../playbooks/multi-namespace/ns2_osdp_services.yaml"
@@ -157,7 +151,7 @@ vas:
             src_file: values.yaml
         build_output: nodeset2.yaml
 
-      - name: edpm-deployment    # stage 10
+      - name: edpm-deployment    # stage 9
         path: examples/va/multi-namespace/edpm
         wait_conditions:
           # We don't wait for this namespace's OpenStackDataPlaneDeployment at
@@ -172,7 +166,7 @@ vas:
             src_file: values.yaml
         build_output: deployment.yaml
 
-      - name: edpm-deployment2    # stage 11
+      - name: edpm-deployment2    # stage 10
         path: examples/va/multi-namespace/edpm2
         wait_conditions:
           - >-

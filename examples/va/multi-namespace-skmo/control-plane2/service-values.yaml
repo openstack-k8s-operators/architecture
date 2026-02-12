@@ -7,13 +7,14 @@ metadata:
     config.kubernetes.io/local-config: "true"
 data:
   # --- Fields required by lib/control-plane ---
-  preserveJobs: false
   tls:
-    caBundleSecretName: openstack2-custom-cacerts
+    caBundleSecretName: custom-ca-certs
 
-  # --- Below are VA/DT-specific data ---
-  cinderAPI:
-    replicas: 1
+  # --- SKMO-specific overrides ---
+  horizon:
+    enabled: false
+  keystone:
+    externalKeystoneAPI: true
   glance:
     customServiceConfig: |
       [DEFAULT]
@@ -28,7 +29,3 @@ data:
       swift_store_user = service:glance
       swift_store_key = {{ .ServicePassword }}
       swift_store_region = regionTwo
-    default:
-      replicas: 1
-  swift:
-    enabled: true

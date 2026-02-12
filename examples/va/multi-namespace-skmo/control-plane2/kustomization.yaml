@@ -14,11 +14,39 @@ patches:
       name: service-values
     path: service-values.yaml
   - target:
+      group: core.openstack.org
+      version: v1beta1
       kind: OpenStackControlPlane
       name: controlplane
-    path: skmo-leaf-patch.yaml
+    patch: |-
+      - op: remove
+        path: /spec/keystone/template/override/service/internal/metadata
+      - op: remove
+        path: /spec/keystone/template/override/service/internal/spec
 
 replacements:
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.horizon.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.horizon.enabled
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.keystone.externalKeystoneAPI
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.keystone.template.externalKeystoneAPI
+        options:
+          create: true
   - source:
       kind: ConfigMap
       name: skmo-values
@@ -50,5 +78,28 @@ replacements:
           kind: OpenStackControlPlane
         fieldPaths:
           - spec.keystone.template.override.service.public.endpointURL
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.tls
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.tls
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.glance.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.glance.template.customServiceConfig
         options:
           create: true

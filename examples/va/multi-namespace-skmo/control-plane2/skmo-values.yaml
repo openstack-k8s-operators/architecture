@@ -17,9 +17,9 @@ data:
   keystonePublicURL: https://keystone-public.openstack.svc:5000
   # CA bundle secrets
   # Leaf region secret (must include central Keystone CA)
-  leafCaBundleSecretName: openstack2-custom-cacerts
+  leafCaBundleSecretName: custom-ca-certs
   # Central region secret (must include leaf region CA)
-  centralCaBundleSecretName: openstack-custom-cacerts
+  centralCaBundleSecretName: custom-ca-certs
   # Leaf service users (created by operators in leaf region)
   serviceUserBarbican: regionTwo_barbican
   serviceUserCinder: regionTwo_cinder
