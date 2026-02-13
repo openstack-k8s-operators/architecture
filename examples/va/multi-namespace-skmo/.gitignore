@@ -1,0 +1,11 @@
+namespace.yaml
+nncp.yaml
+nncp2.yaml
+networking.yaml
+networking2.yaml
+control-plane.yaml
+control-plane2.yaml
+nodeset.yaml
+nodeset2.yaml
+deployment.yaml
+deployment2.yaml
