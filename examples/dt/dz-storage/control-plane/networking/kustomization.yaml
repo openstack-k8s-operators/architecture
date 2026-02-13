@@ -101,6 +101,24 @@ patches:
         name: .*
       $patch: delete
 
+  # tenant IPAddressPool removed
+  - target:
+      kind: IPAddressPool
+    patch: |-
+      kind: IPAddressPool
+      metadata:
+        name: tenant
+      $patch: delete
+
+  # tenant NAD removed
+  - target:
+      kind: NetworkAttachmentDefinition
+    patch: |-
+      kind: NetworkAttachmentDefinition
+      metadata:
+        name: tenant
+      $patch: delete
+
 replacements:
   # BGP peer IP addresses
   # node3

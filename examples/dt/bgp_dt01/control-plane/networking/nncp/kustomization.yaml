@@ -169,7 +169,7 @@ replacements:
           kind: NodeNetworkConfigurationPolicy
           name: worker-0
         fieldPaths:
-          - spec.desiredState.interfaces.3.ipv4.address.0.ip
+          - spec.desiredState.interfaces.2.ipv4.address.0.ip
   - source:
       kind: ConfigMap
       name: network-values
@@ -179,7 +179,7 @@ replacements:
           kind: NodeNetworkConfigurationPolicy
           name: worker-1
         fieldPaths:
-          - spec.desiredState.interfaces.3.ipv4.address.0.ip
+          - spec.desiredState.interfaces.2.ipv4.address.0.ip
   - source:
       kind: ConfigMap
       name: network-values
@@ -189,7 +189,7 @@ replacements:
           kind: NodeNetworkConfigurationPolicy
           name: worker-2
         fieldPaths:
-          - spec.desiredState.interfaces.3.ipv4.address.0.ip
+          - spec.desiredState.interfaces.2.ipv4.address.0.ip
   - source:
       kind: ConfigMap
       name: network-values
@@ -199,7 +199,7 @@ replacements:
           kind: NodeNetworkConfigurationPolicy
           name: worker-3
         fieldPaths:
-          - spec.desiredState.interfaces.3.ipv4.address.0.ip
+          - spec.desiredState.interfaces.2.ipv4.address.0.ip
 
   # ctlplane prefix-lengths
   - source:
@@ -210,7 +210,7 @@ replacements:
       - select:
           kind: NodeNetworkConfigurationPolicy
         fieldPaths:
-          - spec.desiredState.interfaces.3.ipv4.address.0.prefix-length
+          - spec.desiredState.interfaces.2.ipv4.address.0.prefix-length
 
   # BGP worker-0/node-3 IPs
   - source:
@@ -222,7 +222,7 @@ replacements:
           kind: NodeNetworkConfigurationPolicy
           name: worker-0
         fieldPaths:
-          - spec.desiredState.interfaces.5.ipv4.address.0.ip
+          - spec.desiredState.interfaces.4.ipv4.address.0.ip
   - source:
       kind: ConfigMap
       name: network-values
@@ -232,7 +232,7 @@ replacements:
           kind: NodeNetworkConfigurationPolicy
           name: worker-0
         fieldPaths:
-          - spec.desiredState.interfaces.6.ipv4.address.0.ip
+          - spec.desiredState.interfaces.5.ipv4.address.0.ip
   - source:
       kind: ConfigMap
       name: network-values
@@ -242,7 +242,7 @@ replacements:
           kind: NodeNetworkConfigurationPolicy
           name: worker-0
         fieldPaths:
-          - spec.desiredState.interfaces.7.ipv4.address.0.ip
+          - spec.desiredState.interfaces.6.ipv4.address.0.ip
   - source:
       kind: ConfigMap
       name: network-values
@@ -252,7 +252,7 @@ replacements:
           kind: NodeNetworkConfigurationPolicy
           name: worker-0
         fieldPaths:
-          - spec.desiredState.interfaces.7.ipv6.address.0.ip
+          - spec.desiredState.interfaces.6.ipv6.address.0.ip
   # BGP worker-1/node-4 IPs
   - source:
       kind: ConfigMap
@@ -263,7 +263,7 @@ replacements:
           kind: NodeNetworkConfigurationPolicy
           name: worker-1
         fieldPaths:
-          - spec.desiredState.interfaces.5.ipv4.address.0.ip
+          - spec.desiredState.interfaces.4.ipv4.address.0.ip
   - source:
       kind: ConfigMap
       name: network-values
@@ -273,7 +273,7 @@ replacements:
           kind: NodeNetworkConfigurationPolicy
           name: worker-1
         fieldPaths:
-          - spec.desiredState.interfaces.6.ipv4.address.0.ip
+          - spec.desiredState.interfaces.5.ipv4.address.0.ip
   - source:
       kind: ConfigMap
       name: network-values
@@ -283,7 +283,7 @@ replacements:
           kind: NodeNetworkConfigurationPolicy
           name: worker-1
         fieldPaths:
-          - spec.desiredState.interfaces.7.ipv4.address.0.ip
+          - spec.desiredState.interfaces.6.ipv4.address.0.ip
   - source:
       kind: ConfigMap
       name: network-values
@@ -293,7 +293,7 @@ replacements:
           kind: NodeNetworkConfigurationPolicy
           name: worker-1
         fieldPaths:
-          - spec.desiredState.interfaces.7.ipv6.address.0.ip
+          - spec.desiredState.interfaces.6.ipv6.address.0.ip
   # BGP worker-2/node-5 IPs
   - source:
       kind: ConfigMap
@@ -304,7 +304,7 @@ replacements:
           kind: NodeNetworkConfigurationPolicy
           name: worker-2
         fieldPaths:
-          - spec.desiredState.interfaces.5.ipv4.address.0.ip
+          - spec.desiredState.interfaces.4.ipv4.address.0.ip
   - source:
       kind: ConfigMap
       name: network-values
@@ -314,7 +314,7 @@ replacements:
           kind: NodeNetworkConfigurationPolicy
           name: worker-2
         fieldPaths:
-          - spec.desiredState.interfaces.6.ipv4.address.0.ip
+          - spec.desiredState.interfaces.5.ipv4.address.0.ip
   - source:
       kind: ConfigMap
       name: network-values
@@ -324,7 +324,7 @@ replacements:
           kind: NodeNetworkConfigurationPolicy
           name: worker-2
         fieldPaths:
-          - spec.desiredState.interfaces.7.ipv4.address.0.ip
+          - spec.desiredState.interfaces.6.ipv4.address.0.ip
   - source:
       kind: ConfigMap
       name: network-values
@@ -334,7 +334,7 @@ replacements:
           kind: NodeNetworkConfigurationPolicy
           name: worker-2
         fieldPaths:
-          - spec.desiredState.interfaces.7.ipv6.address.0.ip
+          - spec.desiredState.interfaces.6.ipv6.address.0.ip
   # BGP worker-3/node-6 IPs
   - source:
       kind: ConfigMap
@@ -345,7 +345,7 @@ replacements:
           kind: NodeNetworkConfigurationPolicy
           name: worker-3
         fieldPaths:
-          - spec.desiredState.interfaces.5.ipv4.address.0.ip
+          - spec.desiredState.interfaces.4.ipv4.address.0.ip
   - source:
       kind: ConfigMap
       name: network-values
@@ -355,7 +355,7 @@ replacements:
           kind: NodeNetworkConfigurationPolicy
           name: worker-3
         fieldPaths:
-          - spec.desiredState.interfaces.6.ipv4.address.0.ip
+          - spec.desiredState.interfaces.5.ipv4.address.0.ip
   - source:
       kind: ConfigMap
       name: network-values
@@ -365,7 +365,7 @@ replacements:
           kind: NodeNetworkConfigurationPolicy
           name: worker-3
         fieldPaths:
-          - spec.desiredState.interfaces.6.ipv6.address.0.ip
+          - spec.desiredState.interfaces.5.ipv6.address.0.ip
 
   # BGP values
   - source:
@@ -376,7 +376,7 @@ replacements:
       - select:
           kind: NodeNetworkConfigurationPolicy
         fieldPaths:
-          - spec.desiredState.interfaces.5.name
+          - spec.desiredState.interfaces.4.name
   - source:
       kind: ConfigMap
       name: network-values
@@ -386,17 +386,17 @@ replacements:
           kind: NodeNetworkConfigurationPolicy
           name: worker-0
         fieldPaths:
-          - spec.desiredState.interfaces.6.name
+          - spec.desiredState.interfaces.5.name
       - select:
           kind: NodeNetworkConfigurationPolicy
           name: worker-1
         fieldPaths:
-          - spec.desiredState.interfaces.6.name
+          - spec.desiredState.interfaces.5.name
       - select:
           kind: NodeNetworkConfigurationPolicy
           name: worker-2
         fieldPaths:
-          - spec.desiredState.interfaces.6.name
+          - spec.desiredState.interfaces.5.name
   - source:
       kind: ConfigMap
       name: network-values
@@ -406,22 +406,22 @@ replacements:
           kind: NodeNetworkConfigurationPolicy
           name: worker-0
         fieldPaths:
-          - spec.desiredState.interfaces.7.name
+          - spec.desiredState.interfaces.6.name
       - select:
           kind: NodeNetworkConfigurationPolicy
           name: worker-1
         fieldPaths:
-          - spec.desiredState.interfaces.7.name
+          - spec.desiredState.interfaces.6.name
       - select:
           kind: NodeNetworkConfigurationPolicy
           name: worker-2
         fieldPaths:
-          - spec.desiredState.interfaces.7.name
+          - spec.desiredState.interfaces.6.name
       - select:  # in case of worker-3, there is one less interfaces
           kind: NodeNetworkConfigurationPolicy
           name: worker-3
         fieldPaths:
-          - spec.desiredState.interfaces.6.name
+          - spec.desiredState.interfaces.5.name
   - source:
       kind: ConfigMap
       name: network-values
@@ -431,20 +431,20 @@ replacements:
           kind: NodeNetworkConfigurationPolicy
           name: worker-0
         fieldPaths:
+          - spec.desiredState.interfaces.4.ipv4.address.0.prefix-length
           - spec.desiredState.interfaces.5.ipv4.address.0.prefix-length
-          - spec.desiredState.interfaces.6.ipv4.address.0.prefix-length
       - select:
           kind: NodeNetworkConfigurationPolicy
           name: worker-1
         fieldPaths:
+          - spec.desiredState.interfaces.4.ipv4.address.0.prefix-length
           - spec.desiredState.interfaces.5.ipv4.address.0.prefix-length
-          - spec.desiredState.interfaces.6.ipv4.address.0.prefix-length
       - select:
           kind: NodeNetworkConfigurationPolicy
           name: worker-2
         fieldPaths:
+          - spec.desiredState.interfaces.4.ipv4.address.0.prefix-length
           - spec.desiredState.interfaces.5.ipv4.address.0.prefix-length
-          - spec.desiredState.interfaces.6.ipv4.address.0.prefix-length
   - source:
       kind: ConfigMap
       name: network-values
@@ -454,7 +454,7 @@ replacements:
           kind: NodeNetworkConfigurationPolicy
           name: worker-3
         fieldPaths:
-          - spec.desiredState.interfaces.5.ipv4.address.0.prefix-length
+          - spec.desiredState.interfaces.4.ipv4.address.0.prefix-length
 
   - source:
       kind: ConfigMap
@@ -465,22 +465,22 @@ replacements:
           kind: NodeNetworkConfigurationPolicy
           name: worker-0
         fieldPaths:
-          - spec.desiredState.interfaces.7.ipv4.address.0.prefix-length
+          - spec.desiredState.interfaces.6.ipv4.address.0.prefix-length
       - select:
           kind: NodeNetworkConfigurationPolicy
           name: worker-1
         fieldPaths:
-          - spec.desiredState.interfaces.7.ipv4.address.0.prefix-length
+          - spec.desiredState.interfaces.6.ipv4.address.0.prefix-length
       - select:
           kind: NodeNetworkConfigurationPolicy
           name: worker-2
         fieldPaths:
-          - spec.desiredState.interfaces.7.ipv4.address.0.prefix-length
+          - spec.desiredState.interfaces.6.ipv4.address.0.prefix-length
       - select:  # in case of worker-3, there is one less interfaces
           kind: NodeNetworkConfigurationPolicy
           name: worker-3
         fieldPaths:
-          - spec.desiredState.interfaces.6.ipv4.address.0.prefix-length
+          - spec.desiredState.interfaces.5.ipv4.address.0.prefix-length
   - source:
       kind: ConfigMap
       name: network-values
@@ -490,22 +490,22 @@ replacements:
           kind: NodeNetworkConfigurationPolicy
           name: worker-0
         fieldPaths:
-          - spec.desiredState.interfaces.7.ipv6.address.0.prefix-length
+          - spec.desiredState.interfaces.6.ipv6.address.0.prefix-length
       - select:
           kind: NodeNetworkConfigurationPolicy
           name: worker-1
         fieldPaths:
-          - spec.desiredState.interfaces.7.ipv6.address.0.prefix-length
+          - spec.desiredState.interfaces.6.ipv6.address.0.prefix-length
       - select:
           kind: NodeNetworkConfigurationPolicy
           name: worker-2
         fieldPaths:
-          - spec.desiredState.interfaces.7.ipv6.address.0.prefix-length
+          - spec.desiredState.interfaces.6.ipv6.address.0.prefix-length
       - select:  # in case of worker-3, there is one less interfaces
           kind: NodeNetworkConfigurationPolicy
           name: worker-3
         fieldPaths:
-          - spec.desiredState.interfaces.6.ipv6.address.0.prefix-length
+          - spec.desiredState.interfaces.5.ipv6.address.0.prefix-length
   # Overwrite worker-3 base routes
   - source:
       kind: ConfigMap

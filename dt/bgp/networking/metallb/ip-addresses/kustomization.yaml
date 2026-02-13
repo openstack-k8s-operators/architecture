@@ -1,0 +1,71 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+replacements:
+  # IPAddressPool addresses
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ctlplane.lb_addresses
+    targets:
+      - select:
+          kind: IPAddressPool
+          name: ctlplane
+        fieldPaths:
+          - spec.addresses
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.internalapi.lb_addresses
+    targets:
+      - select:
+          kind: IPAddressPool
+          name: internalapi
+        fieldPaths:
+          - spec.addresses
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storage.lb_addresses
+    targets:
+      - select:
+          kind: IPAddressPool
+          name: storage
+        fieldPaths:
+          - spec.addresses
+
+  # Loadbalancer address pools (duplicate for metallb.io group)
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ctlplane.lb_addresses
+    targets:
+      - select:
+          group: metallb.io
+          kind: IPAddressPool
+          name: ctlplane
+        fieldPaths:
+          - spec.addresses
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.internalapi.lb_addresses
+    targets:
+      - select:
+          group: metallb.io
+          kind: IPAddressPool
+          name: internalapi
+        fieldPaths:
+          - spec.addresses
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storage.lb_addresses
+    targets:
+      - select:
+          group: metallb.io
+          kind: IPAddressPool
+          name: storage
+        fieldPaths:
+          - spec.addresses
