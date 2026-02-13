@@ -9,5 +9,4 @@ spec:
     - ctlplane
     - internalapi
     - storage
-    - tenant
   peers: []

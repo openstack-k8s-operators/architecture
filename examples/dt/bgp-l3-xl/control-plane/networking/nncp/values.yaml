@@ -11,7 +11,6 @@ data:
   node_3:
     name: worker-0
     internalapi_ip: 172.17.0.5
-    tenant_ip: 172.19.0.5
     ctlplane_ip: 192.168.122.10
     storage_ip: 172.18.0.5
     bgp_ip:
@@ -62,7 +61,6 @@ data:
   node_4:
     name: worker-1
     internalapi_ip: 172.17.0.6
-    tenant_ip: 172.19.0.6
     ctlplane_ip: 192.168.122.11
     storage_ip: 172.18.0.6
     bgp_ip:
@@ -113,7 +111,6 @@ data:
   node_5:
     name: worker-2
     internalapi_ip: 172.17.0.7
-    tenant_ip: 172.19.0.7
     ctlplane_ip: 192.168.122.12
     storage_ip: 172.18.0.7
     bgp_ip:
@@ -164,7 +161,6 @@ data:
   node_6:
     name: worker-3
     internalapi_ip: 172.17.0.8
-    tenant_ip: 172.19.0.8
     ctlplane_ip: 192.168.122.13
     storage_ip: 172.18.0.8
     bgp_ip:
@@ -215,7 +211,6 @@ data:
   node_7:
     name: worker-4
     internalapi_ip: 172.17.0.9
-    tenant_ip: 172.19.0.9
     ctlplane_ip: 192.168.122.14
     storage_ip: 172.18.0.9
     bgp_ip:
@@ -266,7 +261,6 @@ data:
   node_8:
     name: worker-5
     internalapi_ip: 172.17.0.10
-    tenant_ip: 172.19.0.10
     ctlplane_ip: 192.168.122.15
     storage_ip: 172.18.0.10
     bgp_ip:
@@ -317,7 +311,6 @@ data:
   node_9:
     name: worker-6
     internalapi_ip: 172.17.0.11
-    tenant_ip: 172.19.0.11
     ctlplane_ip: 192.168.122.16
     storage_ip: 172.18.0.11
     bgp_ip:
@@ -368,7 +361,6 @@ data:
   node_10:
     name: worker-7
     internalapi_ip: 172.17.0.12
-    tenant_ip: 172.19.0.12
     ctlplane_ip: 192.168.122.17
     storage_ip: 172.18.0.12
     bgp_ip:
@@ -419,7 +411,6 @@ data:
   node_11:
     name: worker-8
     internalapi_ip: 172.17.0.13
-    tenant_ip: 172.19.0.13
     ctlplane_ip: 192.168.122.18
     storage_ip: 172.18.0.13
     bgp_ip:
@@ -471,7 +462,6 @@ data:
   node_12:
     name: worker-9
     internalapi_ip: 172.17.0.14
-    tenant_ip: 172.19.0.14
     ctlplane_ip: 192.168.122.19
     storage_ip: 172.18.0.14
     bgp_ip:
@@ -627,39 +617,6 @@ data:
           "range_end": "172.18.0.70"
         }
       }
-  tenant:
-    dnsDomain: tenant.example.com
-    subnets:
-      - allocationRanges:
-          - end: 172.19.0.250
-            start: 172.19.0.100
-        cidr: 172.19.0.0/24
-        name: subnet1
-        vlan: 22
-    mtu: 1500
-    prefix-length: 24
-    iface: tenant
-    vlan: 22
-    base_iface: enp7s0
-    lb_addresses:
-      - 172.19.0.80-172.19.0.90
-    net-attach-def: |
-      {
-        "cniVersion": "0.3.1",
-        "name": "tenant",
-        "type": "bridge",
-        "bridge": "tenant",
-        "isDefaultGateway": true,
-        "forceAddress": false,
-        "ipMasq": false,
-        "hairpinMode": true,
-        "ipam": {
-          "type": "whereabouts",
-          "range": "172.19.0.0/24",
-          "range_start": "172.19.0.30",
-          "range_end": "172.19.0.70"
-        }
-      }
   octavia:
     dnsDomain: octavia.openstack.lab
     mtu: 1500
@@ -684,17 +641,6 @@ data:
           ]
         }
       }
-  external:
-    dnsDomain: external.example.com
-    subnets:
-      - allocationRanges:
-          - end: 10.0.0.250
-            start: 10.0.0.100
-        cidr: 10.0.0.0/24
-        gateway: 10.0.0.1
-        name: subnet1
-    mtu: 1500
-
   bgp:
     prefix-length: 30
     prefix-length-worker-9: 24

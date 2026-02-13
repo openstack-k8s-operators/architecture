@@ -91,8 +91,6 @@ data:
       - defaultRoute: true
         name: CtlPlane
         subnetName: subnet1
-      - name: Tenant
-        subnetName: subnet1
       - name: BgpNet0
         subnetName: subnet0
       - name: BgpNet1
@@ -133,8 +131,6 @@ data:
           - defaultRoute: true
             fixedIP: 192.168.124.200
             name: CtlPlane
-            subnetName: subnet1
-          - name: Tenant
             subnetName: subnet1
           - name: Bgpnet0
             subnetName: subnet2
