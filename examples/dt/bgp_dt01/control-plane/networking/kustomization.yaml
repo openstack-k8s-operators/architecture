@@ -72,6 +72,16 @@ patches:
         path: /spec/ipAddressPools/-
         value: designateext
 
+  # tenant IPAddressPool removed
+  - target:
+      kind: IPAddressPool
+      name: tenant
+    patch: |-
+      kind: IPAddressPool
+      metadata:
+        name: tenant
+      $patch: delete
+
 replacements:
   # BGP peer IP addresses
   # node3

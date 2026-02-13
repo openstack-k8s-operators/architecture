@@ -32,15 +32,6 @@ spec:
           enabled: true
           autoconf: false
           dhcp: false
-      - description: tenant bridge
-        name: tenant
-        state: up
-        type: linux-bridge
-        mtu: 1500
-        ipv6:
-          enabled: true
-          autoconf: false
-          dhcp: false
       - description: ctlplane interface
         name: _replaced_
         state: up

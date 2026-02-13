@@ -24,11 +24,6 @@ spec:
         state: up
         type: linux-bridge
         mtu: 1500
-      - description: tenant bridge
-        name: tenant
-        state: up
-        type: linux-bridge
-        mtu: 1500
       - description: ctlplane interface
         name: _replaced_
         state: up

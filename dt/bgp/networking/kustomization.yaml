@@ -18,10 +18,9 @@ transformers:
         create: true
 
 components:
-  - ../../../lib/networking/metallb
-  - ../../../lib/networking/nad
+  - metallb
+  - nad
   - netconfig
-  - bgpmetallb
 
 resources:
   - ocp_networks_octavia_netattach.yaml
