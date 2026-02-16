@@ -177,6 +177,7 @@ data:
       [ovn]
       ovsdb_probe_interval = 60000
       ovn_emit_need_to_frag = true
+      ovs_create_tap = true
 
       [ml2]
       type_drivers = geneve,vxlan,vlan,flat,local
