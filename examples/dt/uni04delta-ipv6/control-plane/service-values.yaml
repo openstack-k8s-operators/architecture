@@ -108,6 +108,7 @@ data:
       igmp_snooping_enable = true
       [ovn]
       ovn_emit_need_to_frag = false
+      ovs_create_tap = true
       [ml2]
       type_drivers = geneve,vlan,flat,local
       tenant_network_types = vlan,flat
