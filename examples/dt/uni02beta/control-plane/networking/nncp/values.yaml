@@ -169,6 +169,30 @@ data:
           "range_end": "172.19.0.70"
         }
       }
+  octavia:
+    dnsDomain: octavia.openstack.lab
+    mtu: 1500
+    vlan: 23
+    base_iface: enp7s0
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "octavia",
+        "type": "bridge",
+        "bridge": "octbr",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "172.23.0.0/24",
+          "range_start": "172.23.0.30",
+          "range_end": "172.23.0.70",
+          "routes": [
+            {
+              "dst": "172.24.0.0/16",
+              "gw": "172.23.0.150"
+            }
+          ]
+        }
+      }
   external:
     dnsDomain: external.example.com
     subnets:
