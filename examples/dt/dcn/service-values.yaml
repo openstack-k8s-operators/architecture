@@ -9,6 +9,8 @@ metadata:
 data:
   # --- Fields required by lib/control-plane ---
   preserveJobs: false
+  notificationsBus:
+    cluster: rabbitmq
   tls:
     caBundleSecretName: ""
 
@@ -317,7 +319,8 @@ data:
       cell1:
         cellDatabaseInstance: openstack-cell1
         cellDatabaseAccount: nova-cell1
-        cellMessageBusInstance: rabbitmq-cell1
+        messagingBus:
+          cluster: rabbitmq-cell1
         conductorServiceTemplate:
           replicas: 1
         hasAPIAccess: true
@@ -336,7 +339,8 @@ data:
       cell2:
         cellDatabaseInstance: openstack-cell2
         cellDatabaseAccount: nova-cell2
-        cellMessageBusInstance: rabbitmq-cell2
+        messagingBus:
+          cluster: rabbitmq-cell2
         conductorServiceTemplate:
           replicas: 1
         hasAPIAccess: true
@@ -355,7 +359,8 @@ data:
       cell3:
         cellDatabaseInstance: openstack-cell3
         cellDatabaseAccount: nova-cell3
-        cellMessageBusInstance: rabbitmq-cell3
+        messagingBus:
+          cluster: rabbitmq-cell3
         conductorServiceTemplate:
           replicas: 1
         hasAPIAccess: true

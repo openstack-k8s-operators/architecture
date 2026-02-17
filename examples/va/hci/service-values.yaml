@@ -9,7 +9,8 @@ metadata:
 data:
   # --- Fields required by lib/control-plane ---
   preserveJobs: false
-  notificationsBusInstance: rabbitmq-notifications
+  notificationsBus:
+    cluster: rabbitmq-notifications
   tls:
     caBundleSecretName: ""
 
