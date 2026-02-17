@@ -10,6 +10,8 @@ metadata:
 data:
   # --- Fields required by lib/control-plane ---
   preserveJobs: false
+  notificationsBus:
+    cluster: rabbitmq
   tls:
     caBundleSecretName: ""
 
@@ -81,12 +83,14 @@ data:
       cell0:
         cellDatabaseInstance: openstack
         cellDatabaseAccount: nova-cell0
-        cellMessageBusInstance: rabbitmq
+        messagingBus:
+          cluster: rabbitmq
         hasAPIAccess: true
       cell1:
         cellDatabaseInstance: openstack-cell1
         cellDatabaseAccount: nova-cell1
-        cellMessageBusInstance: rabbitmq-cell1
+        messagingBus:
+          cluster: rabbitmq-cell1
         hasAPIAccess: true
         novaComputeTemplates:
           compute-ironic:

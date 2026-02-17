@@ -24,6 +24,7 @@ components:
   - ../../../../lib/control-plane/storage
   - ../../../../lib/control-plane/ovn-nic
   - ../../../../lib/control-plane/job-settings
+  - ../../../../lib/control-plane/messaging-bus
   - ../../../../lib/dataplane/nodeset
 
 resources:
@@ -38,17 +39,6 @@ patches:
 
 replacements:
   # Control plane custom service configs
-  - source:
-      kind: ConfigMap
-      name: service-values
-      fieldPath: data.notificationsBusInstance
-    targets:
-      - select:
-          kind: OpenStackControlPlane
-        fieldPaths:
-          - spec.notificationsBusInstance
-        options:
-          create: true
   - source:
       kind: ConfigMap
       name: service-values
