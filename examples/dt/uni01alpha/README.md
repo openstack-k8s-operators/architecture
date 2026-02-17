@@ -357,7 +357,8 @@ spec:
         cell1:
           cellDatabaseAccount: nova-cell1
           cellDatabaseInstance: openstack-cell1
-          cellMessageBusInstance: rabbitmq-cell1
+          messagingBus:
+            cluster: rabbitmq-cell1
           hasAPIAccess: true
           novaComputeTemplates:
             compute-ironic:
