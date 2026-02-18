@@ -24,6 +24,7 @@ resources:
   - nncp/values.yaml
   - metallb_bgppeers.yaml
   - ocp_networks_netattach.yaml
+  - designateext_metallb.yaml
 
 patches:
   # Add BGPPeer to BGPAdvertisement
@@ -63,6 +64,13 @@ patches:
       metadata:
         name: .*
       $patch: delete
+  # Add designateext to BGPAdvertisement
+  - target:
+      kind: BGPAdvertisement
+    patch: |-
+      - op: add
+        path: /spec/ipAddressPools/-
+        value: designateext
 
 replacements:
   # BGP peer IP addresses
@@ -151,3 +159,25 @@ replacements:
           name: bgpnet-worker-3
         fieldPaths:
           - spec.config
+  # Designate NAD
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.designate.net-attach-def
+    targets:
+      - select:
+          kind: NetworkAttachmentDefinition
+          name: designate
+        fieldPaths:
+          - spec.config
+  # DesignateExt LB addresses
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.designateext.lb_addresses
+    targets:
+      - select:
+          kind: IPAddressPool
+          name: designateext
+        fieldPaths:
+          - spec.addresses

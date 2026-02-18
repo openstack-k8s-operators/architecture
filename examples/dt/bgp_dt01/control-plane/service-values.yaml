@@ -67,5 +67,55 @@ data:
       [DEFAULT]
       vlan_transparent = true
       debug = true
+      dns_domain = example.org.
+      external_dns_driver = designate
       [ovs]
       igmp_snooping_enable = true
+      [designate]
+      url = https://designate-internal.openstack.svc:9001/v2
+      auth_type = password
+      auth_url = {{ .KeystoneInternalURL }}
+      username = {{ .ServiceUser }}
+      password = {{ .ServicePassword }}
+      project_name = service
+      project_domain_name = Default
+      user_domain_name = Default
+      allow_reverse_dns_lookup = True
+      ipv4_ptr_zone_prefix_size = 24
+      ipv6_ptr_zone_prefix_size = 116
+      ptr_zone_email = admin@example.org
+
+  designate-redis:
+    enabled: true
+    replicas: 1
+
+  designate:
+    enabled: true
+    nsRecords:
+      - hostname: ns1.example.org.
+        priority: 1
+      - hostname: ns2.example.org.
+        priority: 2
+    bind9Services:
+      services:
+        - metadata:
+            annotations:
+              metallb.universe.tf/address-pool: designateext
+              metallb.universe.tf/allow-shared-ip: designateext
+              metallb.universe.tf/LoadBalancerIPs: 172.34.0.80
+          spec:
+            type: LoadBalancer
+        - metadata:
+            annotations:
+              metallb.universe.tf/address-pool: designateext
+              metallb.universe.tf/allow-shared-ip: designateext
+              metallb.universe.tf/LoadBalancerIPs: 172.34.0.81
+          spec:
+            type: LoadBalancer
+        - metadata:
+            annotations:
+              metallb.universe.tf/address-pool: designateext
+              metallb.universe.tf/allow-shared-ip: designateext
+              metallb.universe.tf/LoadBalancerIPs: 172.34.0.82
+          spec:
+            type: LoadBalancer

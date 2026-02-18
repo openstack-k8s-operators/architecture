@@ -129,6 +129,10 @@ data:
         - destination: 172.24.0.0/16
           next-hop-address: 100.64.10.1
           next-hop-interface: enp8s0
+        # routes to designateext network
+        - destination: 172.34.0.0/16
+          next-hop-address: 100.64.10.1
+          next-hop-interface: enp8s0
 
   # networks
   ctlplane:
@@ -351,6 +355,27 @@ data:
         gateway: 10.0.0.1
         name: subnet1
     mtu: 1500
+
+  designate:
+    # only NAD is used for designate
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "designate",
+        "type": "macvlan",
+        "master": "designate",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "172.26.0.0/24",
+          "range_start": "172.26.0.30",
+          "range_end": "172.26.0.70"
+        }
+      }
+
+  designateext:
+    # only lb_addresses for the IPAddressPool are needed
+    lb_addresses:
+      - 172.34.0.80-172.34.0.90
 
   bgp:
     prefix-length: 30
@@ -581,6 +606,10 @@ data:
             - destination: 172.24.0.0/16
               next-hop-address: 100.64.10.1
               next-hop-interface: enp8s0
+            # routes to designateext network
+            - destination: 172.34.0.0/16
+              next-hop-address: 100.64.10.1
+              next-hop-interface: enp8s0
     net-attach-def:
       node6: |
         {
@@ -598,6 +627,9 @@ data:
               "gw": "100.64.10.1"
             }, {
               "dst": "172.24.0.0/16",
+              "gw": "100.64.10.1"
+            }, {
+              "dst": "172.34.0.0/16",
               "gw": "100.64.10.1"
             }]
           }
