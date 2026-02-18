@@ -38,7 +38,8 @@ class TestSchema():
             print('[OK]')
             for val in stage['values']:
                 f = val['src_file']
-                _path = source / f
+                # Allow src_file paths to traverse outside the stage path
+                _path = (source / f).resolve()
                 print(f'    Checking source file: {_path}', end='  ')
                 assert _path.is_file(), f'!! {_path} does not exist'
                 print('[OK]')

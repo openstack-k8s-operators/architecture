@@ -1,0 +1,30 @@
+---
+- name: Trust SKMO leaf CA in central region
+  hosts: localhost
+  gather_facts: false
+  vars:
+    skmo_values_file: "{{ playbook_dir }}/../../examples/va/multi-namespace-skmo/control-plane2/skmo-values.yaml"
+    central_namespace: openstack
+    leaf_namespace: openstack2
+    leaf_rootca_secret: rootca-internal
+  tasks:
+    - name: Load SKMO values
+      ansible.builtin.set_fact:
+        skmo_values: "{{ lookup('file', skmo_values_file) | from_yaml }}"
+
+    - name: Set central CA bundle secret name
+      ansible.builtin.set_fact:
+        central_ca_bundle_secret_name: "{{ skmo_values.data.centralCaBundleSecretName }}"
+
+    - name: Create central CA bundle secret trusting leaf region CA
+      ansible.builtin.shell: |
+        set -euo pipefail
+        tmpfile="$(mktemp)"
+        oc -n {{ leaf_namespace }} get secret {{ leaf_rootca_secret }} \
+          -o jsonpath='{.data.tls\\.crt}' | base64 -d > "${tmpfile}"
+        oc -n {{ central_namespace }} create secret generic {{ central_ca_bundle_secret_name }} \
+          --from-file=tls-ca-bundle.pem="${tmpfile}" \
+          --dry-run=client -o yaml | oc apply -f -
+        rm -f "${tmpfile}"
+      args:
+        executable: /bin/bash

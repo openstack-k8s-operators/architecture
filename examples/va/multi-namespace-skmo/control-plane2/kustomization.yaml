@@ -1,0 +1,105 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+components:
+  - ../../multi-namespace/control-plane2
+
+resources:
+  - skmo-values.yaml
+
+patches:
+  - target:
+      kind: ConfigMap
+      name: service-values
+    path: service-values.yaml
+  - target:
+      group: core.openstack.org
+      version: v1beta1
+      kind: OpenStackControlPlane
+      name: controlplane
+    patch: |-
+      - op: remove
+        path: /spec/keystone/template/override/service/internal/metadata
+      - op: remove
+        path: /spec/keystone/template/override/service/internal/spec
+
+replacements:
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.horizon.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.horizon.enabled
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.keystone.externalKeystoneAPI
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.keystone.template.externalKeystoneAPI
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: skmo-values
+      fieldPath: data.leafRegion
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.keystone.template.region
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: skmo-values
+      fieldPath: data.keystoneInternalURL
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.keystone.template.override.service.internal.endpointURL
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: skmo-values
+      fieldPath: data.keystonePublicURL
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.keystone.template.override.service.public.endpointURL
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.tls
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.tls
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.glance.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.glance.template.customServiceConfig
+        options:
+          create: true
