@@ -108,7 +108,7 @@ data:
       [DEFAULT]
       dns_domain = openstackgate.local
       vlan_transparent = true
-      service_plugins = ovn-router,qos,segments,trunk,port_forwarding
+      service_plugins = ovn-router,qos,segments,trunk,port_forwarding,placement
       dhcp_agent_notification = false
       agent_down_time = 600
       router_distributed = false
