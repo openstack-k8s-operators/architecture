@@ -11,6 +11,8 @@ data:
     name: default-spread-pods
   # --- Fields required by lib/control-plane ---
   preserveJobs: false
+  notificationsBus:
+    cluster: rabbitmq
   tls:
     caBundleSecretName: ""
 
@@ -422,7 +424,8 @@ data:
         #   name: azone-node-affinity
         cellDatabaseInstance: openstack-cell1
         cellDatabaseAccount: nova-cell1
-        cellMessageBusInstance: rabbitmq-cell1
+        messagingBus:
+          cluster: rabbitmq-cell1
         conductorServiceTemplate:
           replicas: 1
         hasAPIAccess: true
@@ -436,7 +439,8 @@ data:
         #     name: bzone-node-affinity
         #   cellDatabaseInstance: openstack-cell2
         #   cellDatabaseAccount: nova-cell2
-        #   cellMessageBusInstance: rabbitmq-cell2
+        #   messagingBus:
+        #     cluster: rabbitmq-cell2
         #   conductorServiceTemplate:
         #     replicas: 1
         #   hasAPIAccess: true
@@ -448,7 +452,8 @@ data:
         #     name: czone-node-affinity
         #   cellDatabaseInstance: openstack-cell3
         #   cellDatabaseAccount: nova-cell3
-        #   cellMessageBusInstance: rabbitmq-cell3
+        #   messagingBus:
+        #     cluster: rabbitmq-cell3
         #   conductorServiceTemplate:
         #     replicas: 1
         #   hasAPIAccess: true
