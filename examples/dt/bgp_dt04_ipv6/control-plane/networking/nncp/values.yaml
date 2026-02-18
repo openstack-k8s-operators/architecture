@@ -11,7 +11,6 @@ data:
   node_3:
     name: worker-0
     internalapi_ip: "2620:cf:cf:bbbb::10"
-    tenant_ip: "2620:cf:cf:dddd::10"
     ctlplane_ip: "2620:cf:cf:aaaa::10"
     storage_ip: "2620:cf:cf:cccc::10"
     bgp_ip:
@@ -35,7 +34,6 @@ data:
   node_4:
     name: worker-1
     internalapi_ip: "2620:cf:cf:bbbb::11"
-    tenant_ip: "2620:cf:cf:dddd::11"
     ctlplane_ip: "2620:cf:cf:aaaa::11"
     storage_ip: "2620:cf:cf:cccc::11"
     bgp_ip:
@@ -59,7 +57,6 @@ data:
   node_5:
     name: worker-2
     internalapi_ip: "2620:cf:cf:bbbb::12"
-    tenant_ip: "2620:cf:cf:dddd::12"
     ctlplane_ip: "2620:cf:cf:aaaa::12"
     storage_ip: "2620:cf:cf:cccc::12"
     bgp_ip:
@@ -84,7 +81,6 @@ data:
     name: worker-3
     node_name: worker-3
     internalapi_ip: "2620:cf:cf:dddd::13"
-    tenant_ip: "2620:cf:cf:eeee::13"
     ctlplane_ip: "2620:cf:cf:aaaa::13"
     bgp_ip:
       - 100.64.10.2
@@ -242,40 +238,6 @@ data:
           "range_end": "2620:cf:cf:cccc::70"
         }
       }
-
-  tenant:
-    dnsDomain: tenant.example.com
-    subnets:
-      - allocationRanges:
-          - end: "2620:cf:cf:dddd::250"
-            start: "2620:cf:cf:dddd::100"
-        cidr: "2620:cf:cf:dddd::0/64"
-        name: subnet1
-        vlan: 22
-    mtu: 1500
-    prefix-length: 64
-    iface: tenant
-    vlan: 22
-    base_iface: enp7s0
-    lb_addresses:
-      - "2620:cf:cf:eeee::80-2620:cf:cf:dddd::90"
-    net-attach-def: |
-      {
-        "cniVersion": "0.3.1",
-        "name": "tenant",
-        "type": "bridge",
-        "bridge": "tenant",
-        "isDefaultGateway": true,
-        "forceAddress": false,
-        "ipMasq": true,
-        "hairpinMode": true,
-        "ipam": {
-          "type": "whereabouts",
-          "range": "2620:cf:cf:dddd::0/64",
-          "range_start": "2620:cf:cf:dddd::30",
-          "range_end": "2620:cf:cf:dddd::70"
-        }
-      }
   octavia:  # TODO-edu - change to ipv6
     dnsDomain: octavia.openstack.lab
     mtu: 1500
@@ -300,18 +262,6 @@ data:
           ]
         }
       }
-
-  external:
-    dnsDomain: external.example.com
-    subnets:
-      - allocationRanges:
-          - end: "2620:cf:cf:cf::250"
-            start: "2620:cf:cf:cf::100"
-        cidr: "2620:cf:cf:cf::/64"
-        gateway: "2620:cf:cf:cf::1"
-        name: subnet1
-    mtu: 1500
-
   bgp:
     prefix-length: 126
     prefix-length-worker-3: 24
