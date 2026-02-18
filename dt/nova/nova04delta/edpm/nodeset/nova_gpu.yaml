@@ -89,4 +89,5 @@ spec:
               {{ '--update-bls-cmdline'
               if check_update_bls_cmdline.rc == 0
               else '' }}
+            - tuned-adm profile {{ edpm_tuned_profile }}
           when: (_blacklist_nvidia.changed or _load_vfio.changed)
