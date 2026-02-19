@@ -79,7 +79,7 @@ data:
     customServiceConfig: |
       [DEFAULT]
       vlan_transparent = true
-      service_plugins = qos,ovn-router,trunk,segments,log
+      service_plugins = qos,ovn-router,trunk,segments,log,taas,tapmirror
       agent_down_time = 600
       router_distributed = true
       router_scheduler_driver = neutron.scheduler.l3_agent_scheduler.ChanceScheduler
@@ -114,6 +114,8 @@ data:
       tenant_network_types = vlan,flat
       [ml2_type_vlan]
       network_vlan_ranges = datacentre:1000:2000
+      [service_providers]
+      service_provider = TAAS:TAAS:neutron_taas.services.taas.service_drivers.ovn.taas_ovn.TaasOvnDriver:default
     ml2MechanismDrivers:
       - ovn
       - baremetal

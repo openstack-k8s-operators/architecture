@@ -108,7 +108,7 @@ data:
       [DEFAULT]
       dns_domain = openstackgate.local
       vlan_transparent = true
-      service_plugins = ovn-router,qos,segments,trunk,port_forwarding,placement
+      service_plugins = ovn-router,qos,segments,trunk,port_forwarding,placement,taas,tapmirror
       dhcp_agent_notification = false
       agent_down_time = 600
       router_distributed = false
@@ -155,3 +155,5 @@ data:
       max_header_size = 38
       [ml2_type_vlan]
       network_vlan_ranges = tenant:1000:2000,datacentre:218:218
+      [service_providers]
+      service_provider = TAAS:TAAS:neutron_taas.services.taas.service_drivers.ovn.taas_ovn.TaasOvnDriver:default
