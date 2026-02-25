@@ -64,6 +64,24 @@ patches:
         name: .*
       $patch: delete
 
+  # tenant IPAddressPool removed
+  - target:
+      kind: IPAddressPool
+    patch: |-
+      kind: IPAddressPool
+      metadata:
+        name: tenant
+      $patch: delete
+
+  # tenant NAD removed
+  - target:
+      kind: NetworkAttachmentDefinition
+    patch: |-
+      kind: NetworkAttachmentDefinition
+      metadata:
+        name: tenant
+      $patch: delete
+
   # Add BGP IPv4 networks to NetConfig
   - target:
       kind: NetConfig

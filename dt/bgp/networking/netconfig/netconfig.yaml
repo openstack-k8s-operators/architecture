@@ -11,11 +11,6 @@ spec:
       subnets:
         - _replaced_
       mtu: 1500
-    - dnsDomain: _replaced_
-      name: tenant
-      subnets:
-        - _replaced_
-      mtu: 1500
     - dnsDomain: bgpnet0.example.com
       name: bgpnet0
       subnets:
