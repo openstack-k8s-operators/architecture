@@ -7,8 +7,14 @@ metadata:
   annotations:
     config.kubernetes.io/local-config: "true"
 data:
+  # --- Fields required by lib/control-plane ---
   preserveJobs: false
-  notificationsBusInstance: rabbitmq-notifications
+  notificationsBus:
+    cluster: rabbitmq-notifications
+  tls:
+    caBundleSecretName: ""
+
+  # --- Below are VA/DT-specific data ---
   cinderAPI:
     replicas: 3
   cinderBackup:
@@ -104,7 +110,7 @@ data:
           persistentVolumeClaim:
             resources:
               requests:
-                storage: 20G
+                storage: 10G
           replicas: 1
           scrapeInterval: 30s
         resourceSelector:
@@ -115,6 +121,8 @@ data:
       enabled: true
     ceilometer:
       enabled: true
+    cloudkitty:
+      enabled: false
   keystone:
     customServiceConfig: |
       [token]

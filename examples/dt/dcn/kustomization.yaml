@@ -7,7 +7,7 @@ components:
   - ../../../dt/dcn/edpm-post-ceph/nodeset
 
 resources:
-  - control-plane/nncp/values.yaml
+  - control-plane/networking/nncp/values.yaml
   - edpm-pre-ceph/nodeset/values.yaml
   - service-values.yaml
   - values.yaml

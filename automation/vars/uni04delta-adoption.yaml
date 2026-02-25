@@ -22,7 +22,7 @@ vas:
             oc -n metallb-system wait pod
             -l app=metallb -l component=speaker
             --for condition=Ready
-            --timeout=5min
+            --timeout=5m
         values:
           - name: network-values
             src_file: nncp/values.yaml

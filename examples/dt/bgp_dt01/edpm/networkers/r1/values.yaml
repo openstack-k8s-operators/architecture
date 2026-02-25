@@ -20,7 +20,7 @@ data:
       ansibleUser: cloud-admin
       ansiblePort: 22
       ansibleVars:
-        edpm_ovn_encap_ip: "{{ lookup('vars', 'bgpmainnet_ip') }}"
+        edpm_ovn_encap_ip: "{{ bgpmainnet_ip }}"
         edpm_ovn_bridge_mappings:
           - "datacentre:br-ex"
           - "octavia:br-octavia"
@@ -69,20 +69,17 @@ data:
             name: nic3
             use_dhcp: false
             addresses:
-            - ip_netmask: {{ lookup('vars', 'bgpnet0_ip') }}/30
+            - ip_netmask: {{ bgpnet0_ip }}/30
           - type: interface
             name: nic4
             use_dhcp: false
             addresses:
-            - ip_netmask: {{ lookup('vars', 'bgpnet1_ip') }}/30
+            - ip_netmask: {{ bgpnet1_ip }}/30
           - type: interface
             name: lo
             addresses:
-            - ip_netmask: {{ lookup('vars', 'bgpmainnet_ip') }}/32
-            - ip_netmask: {{ lookup('vars', 'bgpmainnetv6_ip') }}/128
-            - ip_netmask: {{ lookup('vars', 'internalapi_ip') }}/32
-            - ip_netmask: {{ lookup('vars', 'tenant_ip') }}/32
-            - ip_netmask: {{ lookup('vars', 'octavia_ip') }}/32
+            - ip_netmask: {{ bgpmainnet_ip }}/32
+            - ip_netmask: {{ bgpmainnetv6_ip }}/128
         edpm_enable_chassis_gw: true
         edpm_sshd_allowed_ranges:
           - 192.168.122.0/24
@@ -94,13 +91,7 @@ data:
       - defaultRoute: true
         name: CtlPlane
         subnetName: subnet1
-      - name: InternalApi
-        subnetName: subnet1
-      - name: Storage
-        subnetName: subnet1
       - name: Tenant
-        subnetName: subnet1
-      - name: Octavia
         subnetName: subnet1
       - name: BgpNet0
         subnetName: subnet0
@@ -143,13 +134,7 @@ data:
             fixedIP: 192.168.123.200
             name: CtlPlane
             subnetName: subnet1
-          - name: InternalApi
-            subnetName: subnet1
-          - name: Storage
-            subnetName: subnet1
           - name: Tenant
-            subnetName: subnet1
-          - name: Octavia
             subnetName: subnet1
           - name: Bgpnet0
             subnetName: subnet1

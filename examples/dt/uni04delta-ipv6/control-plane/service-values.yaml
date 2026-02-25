@@ -6,8 +6,14 @@ metadata:
   annotations:
     config.kubernetes.io/local-config: "true"
 data:
+  # --- Fields required by lib/control-plane ---
   preserveJobs: false
+  notificationsBus:
+    cluster: rabbitmq
+  tls:
+    caBundleSecretName: ""
 
+  # --- Below are VA/DT-specific data ---
   cinderBackup:
     customServiceConfig: |
       [DEFAULT]
@@ -104,6 +110,7 @@ data:
       igmp_snooping_enable = true
       [ovn]
       ovn_emit_need_to_frag = false
+      ovs_create_tap = true
       [ml2]
       type_drivers = geneve,vlan,flat,local
       tenant_network_types = vlan,flat
@@ -160,12 +167,14 @@ data:
       cell0:
         cellDatabaseInstance: openstack
         cellDatabaseAccount: nova-cell0
-        cellMessageBusInstance: rabbitmq
+        messagingBus:
+          cluster: rabbitmq
         hasAPIAccess: true
       cell1:
         cellDatabaseInstance: openstack-cell1
         cellDatabaseAccount: nova-cell1
-        cellMessageBusInstance: rabbitmq-cell1
+        messagingBus:
+          cluster: rabbitmq-cell1
         hasAPIAccess: true
         novaComputeTemplates:
           compute-ironic:

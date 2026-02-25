@@ -3,6 +3,7 @@
       jobs: &id001
       - noop
       - rhoso-architecture-validate-bgp-l3-xl
+      - rhoso-architecture-validate-bgp-l3-xl-adoption
       - rhoso-architecture-validate-bgp_dt01
       - rhoso-architecture-validate-bgp_dt04_ipv6
       - rhoso-architecture-validate-bmo01
@@ -26,6 +27,8 @@
       - rhoso-architecture-validate-ovs-dpdk
       - rhoso-architecture-validate-ovs-dpdk-sriov
       - rhoso-architecture-validate-ovs-dpdk-sriov-2nodesets
+      - rhoso-architecture-validate-ovs-dpdk-sriov-ipv6
+      - rhoso-architecture-validate-ovs-dpdk-sriov-ipv6-2nodesets
       - rhoso-architecture-validate-ovs-dpdk-sriov-networker
       - rhoso-architecture-validate-pidone
       - rhoso-architecture-validate-sriov

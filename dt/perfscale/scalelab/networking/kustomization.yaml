@@ -2,8 +2,16 @@
 apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component
 
+secretGenerator:
+  - name: octavia-ca-passphrase
+    literals:
+      - server-ca-passphrase=12345678
+    options:
+      disableNameSuffixHash: true
+
 resources:
   - externalapi.yaml
+  - octavia_netattach.yaml
 
 transformers:
   # Set namespace to OpenStack on all namespaced objects without a namespace
@@ -82,3 +90,14 @@ replacements:
           name: ctlplane
         fieldPaths:
           - spec.interfaces.0
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.octavia.net-attach-def
+    targets:
+      - select:
+          kind: NetworkAttachmentDefinition
+          name: octavia
+        fieldPaths:
+          - spec.config

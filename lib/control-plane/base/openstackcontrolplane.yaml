@@ -16,12 +16,6 @@ spec:
         replicas: 3
       barbicanKeystoneListener:
         replicas: 1
-  ceilometer:
-    template:
-      passwordSelector:
-        service: CeilometerPassword
-      secret: osp-secret
-      serviceUser: ceilometer
   cinder:
     uniquePodNames: true
     apiOverride:
@@ -198,14 +192,16 @@ spec:
         cell0:
           cellDatabaseAccount: nova-cell0
           cellDatabaseInstance: openstack
-          cellMessageBusInstance: rabbitmq
+          messagingBus:
+            cluster: rabbitmq
           conductorServiceTemplate:
             replicas: 1
           hasAPIAccess: true
         cell1:
           cellDatabaseAccount: nova-cell1
           cellDatabaseInstance: openstack-cell1
-          cellMessageBusInstance: rabbitmq-cell1
+          messagingBus:
+            cluster: rabbitmq-cell1
           conductorServiceTemplate:
             replicas: 1
           hasAPIAccess: true
@@ -255,6 +251,8 @@ spec:
         replicas: 3
       rabbitmq-cell1:
         replicas: 3
+  notificationsBus:
+    cluster: rabbitmq
   secret: osp-secret
   storageClass: _replaced_
   swift:
@@ -306,3 +304,4 @@ spec:
       logging:
         enabled: false
         port: 10514
+  tls: {}
