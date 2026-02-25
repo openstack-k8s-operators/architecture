@@ -106,7 +106,7 @@ vas:
             src_file: node-zone-labels.yaml
         build_output: topology.yaml
 
-      # allow 60m (not 30m) for larger control plane on more nodes
+      # allow 180m (not 30m) for larger control plane on more nodes
       - name: control-plane
         path: examples/dt/dz-storage/control-plane
         wait_conditions:
@@ -114,7 +114,7 @@ vas:
             oc -n openstack wait openstackcontrolplane
             controlplane
             --for condition=Ready
-            --timeout=60m
+            --timeout=180m
         values:
           - name: network-values
             src_file: networking/nncp/values.yaml

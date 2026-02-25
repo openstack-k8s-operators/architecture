@@ -26,19 +26,6 @@ resources:
   - ocp_networks_netattach.yaml
 
 patches:
-  # Add octavia network to NetConfig
-  - target:
-      kind: NetConfig
-      name: netconfig
-    patch: |-
-      - op: add
-        path: /spec/networks/-
-        value:
-          dnsDomain: octavia.example.com
-          name: octavia
-          subnets:
-            - _replaced_
-          mtu: 1500
   # Add BGPPeer to BGPAdvertisement
   - target:
       kind: BGPAdvertisement
@@ -78,16 +65,6 @@ patches:
       $patch: delete
 
 replacements:
-  # octavia NetConfig kustomizations
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.octavia.subnets
-    targets:
-      - select:
-          kind: NetConfig
-        fieldPaths:
-          - spec.networks.[name=octavia].subnets
   # BGP peer IP addresses
   # node3
   - source:

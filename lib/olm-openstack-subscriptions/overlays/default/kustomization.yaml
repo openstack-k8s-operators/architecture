@@ -109,6 +109,8 @@ replacements:
           labelSelector: category=openstack-subscription
         fieldPaths:
           - spec.startingCSV
+        options:
+          create: true
   - source:
       kind: ConfigMap
       name: olm-values

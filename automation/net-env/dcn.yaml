@@ -660,6 +660,19 @@ instances:
         skip_nm: false
         trunk_parent: ctlplane
         vlan_id: 21
+      storagemgmt:
+        interface_name: enp7s0.23
+        ip_v4: 172.20.0.10
+        is_trunk_parent: false
+        mac_addr: 52:54:00:05:23:40
+        mtu: 1500
+        netmask_v4: 255.255.255.0
+        network_name: storagemgmt
+        parent_interface: enp7s0
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 23
       tenant:
         interface_name: enp7s0.22
         ip_v4: 172.19.0.10
@@ -726,6 +739,19 @@ instances:
         skip_nm: false
         trunk_parent: ctlplane
         vlan_id: 21
+      storagemgmt:
+        interface_name: enp7s0.23
+        ip_v4: 172.20.0.11
+        is_trunk_parent: false
+        mac_addr: 52:54:00:76:3d:41
+        mtu: 1500
+        netmask_v4: 255.255.255.0
+        network_name: storagemgmt
+        parent_interface: enp7s0
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 23
       tenant:
         interface_name: enp7s0.22
         ip_v4: 172.19.0.11
@@ -792,6 +818,19 @@ instances:
         skip_nm: false
         trunk_parent: ctlplane
         vlan_id: 21
+      storagemgmt:
+        interface_name: enp7s0.23
+        ip_v4: 172.20.0.12
+        is_trunk_parent: false
+        mac_addr: 52:54:00:09:45:42
+        mtu: 1500
+        netmask_v4: 255.255.255.0
+        network_name: storagemgmt
+        parent_interface: enp7s0
+        prefix_length_v4: 24
+        skip_nm: false
+        trunk_parent: ctlplane
+        vlan_id: 23
       tenant:
         interface_name: enp7s0.22
         ip_v4: 172.19.0.12
