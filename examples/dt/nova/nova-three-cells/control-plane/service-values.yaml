@@ -65,3 +65,10 @@ data:
     templates:
       rabbitmq-cell2:
         replicas: 3
+        resources:
+          limits:
+            cpu: "2"
+            memory: 4Gi
+          requests:
+            cpu: "1"
+            memory: 4Gi

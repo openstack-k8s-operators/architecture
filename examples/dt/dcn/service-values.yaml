@@ -408,6 +408,13 @@ data:
             spec:
               type: LoadBalancer
         replicas: 3
+        resources:
+          limits:
+            cpu: "2"
+            memory: 4Gi
+          requests:
+            cpu: "1"
+            memory: 4Gi
       rabbitmq-cell3:
         override:
           service:
@@ -418,6 +425,13 @@ data:
             spec:
               type: LoadBalancer
         replicas: 3
+        resources:
+          limits:
+            cpu: "2"
+            memory: 4Gi
+          requests:
+            cpu: "1"
+            memory: 4Gi
   extraMounts:
     - name: v1
       region: r1
