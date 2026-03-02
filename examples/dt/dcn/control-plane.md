@@ -24,6 +24,25 @@ Edit the [control-plane/networking/nncp/values.yaml](control-plane/networking/nn
 vi control-plane/networking/nncp/values.yaml
 ```
 
+The example in `examples/dt/dcn/` assumes that Ceph will be
+the storage backend and that the storage management network
+will only be used by EDPM nodes as the
+[Ceph cluster network](https://docs.ceph.com/en/latest/rados/configuration/network-config-ref).
+Since no Ceph services run on OpenShift in such a configuration,
+the storage management network is not connected to OCP nodes and
+thus not included in the `NodeNetworkConfigurationPolicy` (NNCP)
+definition by default.
+
+It's possible to include the storage management network in the NNCP
+definition by doing the following:
+
+1. Uncomment the `nncp-storagemgmt` component in
+   [control-plane/networking/nncp/kustomization.yaml](control-plane/networking/nncp/kustomization.yaml)
+2. Uncomment `storagemgmt_ip` for each node in
+   [control-plane/networking/nncp/values.yaml](control-plane/networking/nncp/values.yaml)
+
+The above is not necessary if you are using Ceph.
+
 ## Apply node network configuration
 
 Generate the node network configuration
