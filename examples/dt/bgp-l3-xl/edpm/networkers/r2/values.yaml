@@ -145,9 +145,9 @@ data:
     services:
       - bootstrap
       - download-cache
-      - configure-network
       - install-os
       - configure-os
+      - configure-network
       - frr
       - validate-network
       - ssh-known-hosts
