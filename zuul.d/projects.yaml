@@ -48,5 +48,6 @@
       - rhoso-architecture-validate-uni07eta-adoption
       - rhoso-architecture-validate-uni09iota
       - rhoso-architecture-validate-uni09iota-adoption
+      - rhoso-architecture-validate-vhosts-compact
     github-gate:
       jobs: *id001
