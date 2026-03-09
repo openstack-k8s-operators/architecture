@@ -71,6 +71,18 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
+      fieldPath: data.rabbitmq.templates.rabbitmq-notifications
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.rabbitmq.templates.rabbitmq-notifications
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
       fieldPath: data.nova.template.cellTemplates.cell2
     targets:
       - select:
