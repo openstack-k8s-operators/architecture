@@ -1,0 +1,650 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+secretGenerator:
+  - name: octavia-ca-passphrase
+    literals:
+      - server-ca-passphrase=12345678
+    options:
+      disableNameSuffixHash: true
+
+transformers:
+  # Set namespace to OpenStack on all namespaced objects without a namespace
+  - |-
+    apiVersion: builtin
+    kind: NamespaceTransformer
+    metadata:
+      name: _ignored_
+      namespace: openstack
+    setRoleBindingSubjects: none
+    unsetOnly: true
+    fieldSpecs:
+      - path: metadata/name
+        kind: Namespace
+        create: true
+
+components:
+  - ../../lib/networking/metallb
+  - ../../lib/networking/netconfig
+  - ../../lib/networking/nad
+  - ../../lib/control-plane
+  - metallb
+
+resources:
+  - nad.yaml
+
+# Add storagemgmt, designate, designateext network templates
+patches:
+  - target:
+      version: v1beta1
+      kind: NetConfig
+      name: netconfig
+    patch: |-
+      - op: add
+        path: /spec/networks/-
+        value:
+          dnsDomain: _replaced_
+          name: storagemgmt
+          subnets:
+            - _replaced_
+          mtu: 1500
+      - op: add
+        path: /spec/networks/-
+        value:
+          dnsDomain: _replaced_
+          name: designate
+          subnets:
+            - _replaced_
+          mtu: 1500
+      - op: add
+        path: /spec/networks/-
+        value:
+          dnsDomain: _replaced_
+          name: designateext
+          subnets:
+            - _replaced_
+          mtu: 1500
+  # Enable designate
+  - target:
+      kind: OpenStackControlPlane
+      name: controlplane
+    patch: |-
+      - op: replace
+        path: /spec/designate/enabled
+        value: true
+  # Enable heat
+  - target:
+      kind: OpenStackControlPlane
+      name: controlplane
+    patch: |-
+      - op: replace
+        path: /spec/heat/enabled
+        value: true
+  # Enable ironic
+  - target:
+      kind: OpenStackControlPlane
+      name: controlplane
+    patch: |-
+      - op: replace
+        path: /spec/ironic/enabled
+        value: true
+  # Enable manila
+  - target:
+      kind: OpenStackControlPlane
+      name: controlplane
+    patch: |-
+      - op: replace
+        path: /spec/manila/enabled
+        value: true
+  # Enable octavia
+  - target:
+      kind: OpenStackControlPlane
+      name: controlplane
+    patch: |-
+      - op: replace
+        path: /spec/octavia/enabled
+        value: true
+  # Enable swift
+  - target:
+      kind: OpenStackControlPlane
+      name: controlplane
+    patch: |-
+      - op: replace
+        path: /spec/swift/enabled
+        value: true
+  # Enable telemetry
+  - target:
+      kind: OpenStackControlPlane
+      name: controlplane
+    patch: |-
+      - op: replace
+        path: /spec/telemetry/enabled
+        value: true
+  # Remove rabbitmq-cell1 (not needed since cells use shared cluster with vhost isolation)
+  - target:
+      kind: OpenStackControlPlane
+      name: controlplane
+    patch: |-
+      - op: remove
+        path: /spec/rabbitmq/templates/rabbitmq-cell1
+
+replacements:
+  #
+  # Top-level messagingBus
+  #
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.messagingBus
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.messagingBus
+        options:
+          create: true
+
+  #
+  # Per-service messagingBus (RPC with vhost/user)
+  #
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.barbican.messagingBus
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.barbican.template.messagingBus
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.cinder.messagingBus
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.cinder.template.messagingBus
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.designate.messagingBus
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.designate.template.messagingBus
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.heat.messagingBus
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.heat.template.messagingBus
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.ironic.messagingBus
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.ironic.template.messagingBus
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.manila.messagingBus
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.manila.template.messagingBus
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.manila.manilaShares.share1.replicas
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.manila.template.manilaShares.share1.replicas
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.neutron.messagingBus
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.neutron.template.messagingBus
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.nova.messagingBus
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.nova.template.messagingBus
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.messagingBus
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.messagingBus
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.watcher.messagingBus
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.watcher.template.messagingBus
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.telemetry.cloudkitty.messagingBus
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.telemetry.template.cloudkitty.messagingBus
+        options:
+          create: true
+
+  #
+  # Nova cell messagingBus overrides
+  #
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.nova.cell0.messagingBus
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.nova.template.cellTemplates.cell0.messagingBus
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.nova.cell1.messagingBus
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.nova.template.cellTemplates.cell1.messagingBus
+        options:
+          create: true
+
+  #
+  # Service enablements (create: true needed for fields not in base CR)
+  #
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.watcher.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.watcher.enabled
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.telemetry.metricStorage.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.telemetry.template.metricStorage.enabled
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.telemetry.ceilometer.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.telemetry.template.ceilometer.enabled
+        options:
+          create: true
+
+  #
+  # Glance config (Swift backend)
+  #
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.glance.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.glance.template.customServiceConfig
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.glance.default.replicas
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.glance.template.glanceAPIs.default.replicas
+        options:
+          create: true
+
+  #
+  # RabbitMQ notifications cluster
+  #
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.rabbitmq.templates.rabbitmq-notifications
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.rabbitmq.templates.rabbitmq-notifications
+        options:
+          create: true
+
+  #
+  # Storagemgmt network replacements
+  #
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storagemgmt.dnsDomain
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=storagemgmt].dnsDomain
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storagemgmt.mtu
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=storagemgmt].mtu
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storagemgmt.subnets
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=storagemgmt].subnets
+
+  #
+  # Designate network replacements
+  #
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.designate.dnsDomain
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=designate].dnsDomain
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.designate.mtu
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=designate].mtu
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.designate.subnets
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=designate].subnets
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.designateext.dnsDomain
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=designateext].dnsDomain
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.designateext.mtu
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=designateext].mtu
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.designateext.subnets
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=designateext].subnets
+
+  # Designate NAD replacements
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.designate.net-attach-def
+    targets:
+      - select:
+          kind: NetworkAttachmentDefinition
+          name: designate
+        fieldPaths:
+          - spec.config
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.designateext.net-attach-def
+    targets:
+      - select:
+          kind: NetworkAttachmentDefinition
+          name: designateext
+        fieldPaths:
+          - spec.config
+
+  # Octavia NAD replacement
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.octavia.net-attach-def
+    targets:
+      - select:
+          kind: NetworkAttachmentDefinition
+          name: octavia
+        fieldPaths:
+          - spec.config
+
+  #
+  # Octavia container images
+  #
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.amphoraImageContainerImage
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.amphoraImageContainerImage
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.apacheContainerImage
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.apacheContainerImage
+        options:
+          create: true
+
+  #
+  # Octavia networkAttachments
+  #
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.octaviaAPI.networkAttachments
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.octaviaAPI.networkAttachments
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.octaviaHousekeeping.networkAttachments
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.octaviaHousekeeping.networkAttachments
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.octaviaHealthManager.networkAttachments
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.octaviaHealthManager.networkAttachments
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.octaviaWorker.networkAttachments
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.octaviaWorker.networkAttachments
+        options:
+          create: true
+
+  #
+  # OVN controller nicMappings (for octavia bridge)
+  #
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.ovn.ovnController.nicMappings
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.ovn.template.ovnController.nicMappings
+        options:
+          create: true
+
+  #
+  # Designate Redis
+  #
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.designate-redis.replicas
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.redis.templates.designate-redis.replicas
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.designate-redis.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.redis.enabled
+        options:
+          create: true
+
+  #
+  # Designate service config
+  #
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.designate.nsRecords
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.designate.template.nsRecords
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.designate.bind9Services
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.designate.template.designateBackendbind9.bind9Services
+        options:
+          create: true

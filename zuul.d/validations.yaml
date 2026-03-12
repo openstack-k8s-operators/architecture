@@ -624,3 +624,19 @@
     parent: rhoso-architecture-base-job
     vars:
       cifmw_architecture_scenario: uni09iota-adoption
+- job:
+    files:
+    - automation/net-env/vhosts-compact.yaml
+    - dt/vhosts-compact
+    - examples/dt/vhosts-compact
+    - examples/dt/vhosts-compact/control-plane
+    - examples/dt/vhosts-compact/control-plane/nncp
+    - examples/dt/vhosts-compact/deployment
+    - examples/dt/vhosts-compact/edpm-pre-ceph/deployment
+    - examples/dt/vhosts-compact/edpm-pre-ceph/nodeset
+    - lib
+    name: rhoso-architecture-validate-vhosts-compact
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: vhosts-compact
+      cifmw_networking_env_def_file: automation/net-env/vhosts-compact.yaml
