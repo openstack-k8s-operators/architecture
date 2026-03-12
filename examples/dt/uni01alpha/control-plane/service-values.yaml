@@ -150,6 +150,7 @@ data:
       allow_automatic_l3agent_failover = true
       debug = true
       default_availability_zones = zone-1,zone-2
+      service_plugins = qos,ovn-router,trunk,segments,log,taas,tapmirror
 
       [agent]
       report_interval = 300
@@ -182,6 +183,10 @@ data:
       [ml2]
       type_drivers = geneve,vxlan,vlan,flat,local
       tenant_network_types = geneve,flat
+
+      [service_providers]
+      service_provider = TAAS:TAAS:neutron_taas.services.taas.service_drivers.ovn.taas_ovn.TaasOvnDriver:default
+
     ml2MechanismDrivers:
       - ovn
       - baremetal
