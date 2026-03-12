@@ -110,21 +110,6 @@ data:
           - name: tenant
             subnetName: subnet1
 
-      edpm-compute-1:
-        ansible:
-          ansibleHost: 192.168.122.101
-        hostName: edpm-compute-1
-        networks:
-          - defaultRoute: true
-            fixedIP: 192.168.122.101
-            name: ctlplane
-            subnetName: subnet1
-          - name: internalapi
-            subnetName: subnet1
-          - name: storage
-            subnetName: subnet1
-          - name: tenant
-            subnetName: subnet1
 
     services:
       - bootstrap
