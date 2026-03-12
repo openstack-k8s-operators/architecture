@@ -68,7 +68,17 @@ vas:
             src_file: nncp/values.yaml
         build_output: network2.yaml
 
-      - name: control-plane    # stage 5
+      - pre_stage_run:    # stage 5
+          - name: Apply cinder-lvm label on master-0
+            type: cr
+            definition:
+              metadata:
+                labels:
+                  openstack.org/cinder-lvm: ""
+            kind: Node
+            resource_name: master-0
+            state: patched
+        name: control-plane    # stage 5
         path: examples/va/multi-namespace-skmo/control-plane
         wait_conditions:
           # Just confirm the central OSCP CR exists in the API server.

@@ -41,3 +41,39 @@ replacements:
           - spec.barbican.template.barbicanKeystoneListener.customServiceConfig
         options:
           create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.cinderVolumes.lvm-iscsi.replicas
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.cinder.template.cinderVolumes.lvm-iscsi.replicas
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.cinderVolumes.lvm-iscsi.nodeSelector.openstack\.org/cinder-lvm
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.cinder.template.cinderVolumes.lvm-iscsi.nodeSelector.openstack\.org/cinder-lvm
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.cinderVolumes.lvm-iscsi.customServiceConfig
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.cinder.template.cinderVolumes.lvm-iscsi.customServiceConfig
+        options:
+          create: true
