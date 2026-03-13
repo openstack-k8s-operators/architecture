@@ -148,7 +148,10 @@ spec:
       replicas: 3
   manila:
     apiOverride:
-      route: {"haproxy.router.openshift.io/timeout": "60s"}
+      route:
+        metadata:
+          annotations:
+            haproxy.router.openshift.io/timeout: 60s
     enabled: false
     template:
       databaseInstance: openstack
