@@ -110,7 +110,7 @@ data:
           persistentVolumeClaim:
             resources:
               requests:
-                storage: 10G
+                storage: 10Gi
           replicas: 1
           scrapeInterval: 30s
         resourceSelector:
