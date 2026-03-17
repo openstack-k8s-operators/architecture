@@ -1,0 +1,29 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+transformers:
+  # Set namespace to OpenStack on all namespaced objects without a namespace
+  - |-
+    apiVersion: builtin
+    kind: NamespaceTransformer
+    metadata:
+      name: _ignored_
+      namespace: openstack
+    setRoleBindingSubjects: none
+    unsetOnly: true
+    fieldSpecs:
+      - path: metadata/name
+        kind: Namespace
+        create: true
+
+components:
+  - ../../../../../../../dt/nova/nova05epsilon/networking/nncp
+  # To expose storagemgmt VLAN on the SNO node, uncomment the patch and
+  # replacements block in dt/nova/nova05epsilon/networking/nncp/kustomization.yaml
+  # and uncomment node_0.storagemgmt_ip in values.yaml.
+  # Not required for CephHCI (Ceph uses the storage network for OSD traffic).
+
+
+resources:
+  - values.yaml

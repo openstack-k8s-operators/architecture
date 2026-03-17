@@ -1,0 +1,76 @@
+---
+apiVersion: v1
+data:
+    nodeset_name: gpu-computes-edpm
+    ceph_conf:
+        # Ceph config files as base64-encoded content.
+        # For multi-AZ, use az-prefixed filenames (e.g. az0.conf, az1.conf).
+        # Single-site uses plain filenames.
+        #
+        # CHANGEME_CEPH_KEYRING: base64-encoded Ceph client keyring.
+        #   Obtain with: base64 -w0 /etc/ceph/ceph.client.openstack.keyring
+        # CHANGEME_CEPH_CONF: base64-encoded Ceph configuration.
+        #   Obtain with: base64 -w0 /etc/ceph/ceph.conf
+        ceph.client.openstack.keyring: CHANGEME_CEPH_KEYRING
+        ceph.conf: CHANGEME_CEPH_CONF
+    nodeset:
+        services:
+            - bootstrap
+            - configure-network
+            - validate-network
+            - install-os
+            - ceph-hci-pre
+            - configure-os
+            - ssh-known-hosts
+            - run-os
+            - reboot-os
+            - install-certs
+            - ceph-client
+            - ovn
+            - neutron-metadata
+            - libvirt
+            - nova-custom-gpu-ceph
+            - telemetry
+    nova:
+        customDataplaneService:
+            name: nova-custom-gpu-ceph
+        ceph:
+            # CHANGEME_NOVA_CEPH_CONF: Nova compute Ceph config (INI format).
+            # Replace CHANGEME_CEPH_FSID below with the Ceph cluster FSID
+            # obtained with: ceph fsid
+            # Example:
+            #   [libvirt]
+            #   images_type=rbd
+            #   images_rbd_pool=vms
+            #   images_rbd_ceph_conf=/etc/ceph/ceph.conf
+            #   images_rbd_glance_store_name=default_backend
+            #   images_rbd_glance_copy_poll_interval=15
+            #   images_rbd_glance_copy_timeout=600
+            #   rbd_user=openstack
+            #   rbd_secret_uuid=CHANGEME_CEPH_FSID
+            conf: CHANGEME_NOVA_CEPH_CONF
+        name: ceph-nova
+        dataSources:
+            - configMapRef:
+              name: ceph-nova
+            - configMapRef:
+              name: cpu-pinning-nova
+            - configMapRef:
+              name: gpu-nova
+            - secretRef:
+              name: nova-cell1-compute-config
+            - secretRef:
+              name: nova-migration-ssh-key
+    neutron-metadata:
+        customDataplaneService:
+            name: neutron-metadata
+        dataSources:
+            - secretRef:
+              name: neutron-ovn-metadata-agent-neutron-config
+            - secretRef:
+              name: nova-cell1-metadata-neutron-config
+kind: ConfigMap
+metadata:
+    annotations:
+        config.kubernetes.io/local-config: 'true'
+    name: edpm-nodeset-values-post-ceph

@@ -1,0 +1,132 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+transformers:
+  # Set namespace to OpenStack on all namespaced objects without a namespace
+  - |-
+    apiVersion: builtin
+    kind: NamespaceTransformer
+    metadata:
+      name: _ignored_
+      namespace: openstack
+    setRoleBindingSubjects: none
+    unsetOnly: true
+    fieldSpecs:
+      - path: metadata/name
+        kind: Namespace
+        create: true
+
+components:
+  - ../../../../../lib/nncp
+
+patches:
+  # SNO: remove the extra nodes that lib/nncp defines for 3-node clusters
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: node-1
+    patch: |
+      $patch: delete
+      apiVersion: nmstate.io/v1
+      kind: NodeNetworkConfigurationPolicy
+      metadata:
+        name: node-1
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: node-2
+    patch: |
+      $patch: delete
+      apiVersion: nmstate.io/v1
+      kind: NodeNetworkConfigurationPolicy
+      metadata:
+        name: node-2
+  # SNO: remove worker scheduling label from nodeSelector
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: node-0
+    patch: |-
+      - op: remove
+        path: /spec/nodeSelector/node-role.kubernetes.io~1worker
+  # Optional: add storagemgmt VLAN interface to the SNO node.
+  # Uncomment this patch AND node_0.storagemgmt_ip in values.yaml.
+  # Not required for CephHCI (Ceph uses storage network for OSD traffic).
+  # - target:
+  #     kind: NodeNetworkConfigurationPolicy
+  #     name: node-0
+  #   patch: |-
+  #     - op: add
+  #       path: /spec/desiredState/interfaces/-
+  #       value:
+  #         description: storagemgmt vlan host interface
+  #         name: storagemgmt
+  #         state: up
+  #         type: vlan
+  #         mtu: _replaced_
+  #         ipv4:
+  #           address:
+  #           - ip: _replaced_
+  #             prefix-length: _replaced_
+  #           dhcp: false
+  #           enabled: true
+  #         ipv6:
+  #           enabled: false
+  #         vlan:
+  #           base-iface: _replaced_
+  #           id: _replaced_
+
+# Uncomment these replacements together with the storagemgmt patch above
+# replacements:
+#   - source:
+#       kind: ConfigMap
+#       name: network-values
+#       fieldPath: data.node_0.storagemgmt_ip
+#     targets:
+#       - select:
+#           kind: NodeNetworkConfigurationPolicy
+#           name: node-0
+#         fieldPaths:
+#           - spec.desiredState.interfaces.[name=storagemgmt].ipv4.address.0.ip
+#   - source:
+#       kind: ConfigMap
+#       name: network-values
+#       fieldPath: data.storagemgmt.base_iface
+#     targets:
+#       - select:
+#           kind: NodeNetworkConfigurationPolicy
+#         fieldPaths:
+#           - spec.desiredState.interfaces.[name=storagemgmt].vlan.base-iface
+#         options:
+#           create: true
+#   - source:
+#       kind: ConfigMap
+#       name: network-values
+#       fieldPath: data.storagemgmt.vlan
+#     targets:
+#       - select:
+#           kind: NodeNetworkConfigurationPolicy
+#         fieldPaths:
+#           - spec.desiredState.interfaces.[name=storagemgmt].vlan.id
+#         options:
+#           create: true
+#   - source:
+#       kind: ConfigMap
+#       name: network-values
+#       fieldPath: data.storagemgmt.mtu
+#     targets:
+#       - select:
+#           kind: NodeNetworkConfigurationPolicy
+#         fieldPaths:
+#           - spec.desiredState.interfaces.[name=storagemgmt].mtu
+#         options:
+#           create: true
+#   - source:
+#       kind: ConfigMap
+#       name: network-values
+#       fieldPath: data.storagemgmt.prefix-length
+#     targets:
+#       - select:
+#           kind: NodeNetworkConfigurationPolicy
+#         fieldPaths:
+#           - spec.desiredState.interfaces.[name=storagemgmt].ipv4.address.0.prefix-length
+#         options:
+#           create: true

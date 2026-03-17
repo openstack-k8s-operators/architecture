@@ -1,0 +1,30 @@
+---
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneService
+metadata:
+  name: neutron-metadata
+  namespace: openstack
+spec:
+  addCertMounts: false
+  caCerts: combined-ca-bundle
+  containerImageFields:
+    - EdpmNeutronMetadataAgentImage
+  dataSources:
+    - secretRef:
+        name: neutron-ovn-metadata-agent-neutron-config
+    - secretRef:
+        name: nova-cell1-metadata-neutron-config
+  edpmServiceType: neutron-metadata
+  playbook: osp.edpm.neutron_metadata
+  tlsCerts:
+    default:
+      contents:
+        - dnsnames
+        - ips
+      issuer: osp-rootca-issuer-ovn
+      keyUsages:
+        - digital signature
+        - key encipherment
+        - client auth
+      networks:
+        - ctlplane

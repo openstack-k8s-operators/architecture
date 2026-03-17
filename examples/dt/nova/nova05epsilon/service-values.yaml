@@ -1,0 +1,102 @@
+# local-config: referenced, but not emitted by kustomize
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: service-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+data:
+  # --- Fields required by lib/control-plane ---
+  # must match ./control-plane/service-values.yaml
+  preserveJobs: false
+  notificationsBus:
+    cluster: rabbitmq
+  tls:
+    caBundleSecretName: ""
+
+  # --- Below are VA/DT-specific data ---
+  neutron:
+    customServiceConfig: |
+      [ml2]
+      mechanism_drivers = ovn
+  ovn:
+    ovnController:
+      nicMappings:
+        datacentre: ospbr
+  glance:
+    customServiceConfig: |
+      [DEFAULT]
+      enabled_backends = default_backend:rbd
+      [glance_store]
+      default_backend = default_backend
+      [default_backend]
+      rbd_store_ceph_conf = /etc/ceph/ceph.conf
+      store_description = "Ceph RBD backend"
+      rbd_store_pool = images
+      rbd_store_user = openstack
+      rbd_thin_provisioning = True
+    default:
+      replicas: 1
+  swift:
+    enabled: false
+  telemetry:
+    enabled: true
+    template:
+      ceilometer:
+        enabled: true
+      logging:
+        enabled: false
+      metricStorage:
+        dashboardsEnabled: true
+        enabled: true
+        dataplaneNetwork: ctlplane
+        networkAttachments:
+          - ctlplane
+        monitoringStack:
+          alertingEnabled: true
+          scrapeInterval: 30s
+          storage:
+            persistent:
+              pvcStorageClass: local-storage
+              pvcStorageRequest: 20G
+              pvcStorageSelector: {}
+            retention: 24h
+            strategy: persistent
+  # Nova GPU PCI passthrough configuration
+  nova:
+    apiServiceTemplate:
+      customServiceConfig: |
+        [pci]
+        alias = { "vendor_id":"10de", "product_id":"20f1", "device_type":"type-PF", "name":"nvidia_a2" }
+        [filter_scheduler]
+        pci_in_placement = True
+    cell0:
+      conductorServiceTemplate:
+        customServiceConfig: |
+          [filter_scheduler]
+          pci_in_placement = True
+    cell1:
+      conductorServiceTemplate:
+        customServiceConfig: |
+          [filter_scheduler]
+          pci_in_placement = True
+    schedulerServiceTemplate:
+      customServiceConfig: |
+        [filter_scheduler]
+        pci_in_placement = True
+  extraMounts:
+    - name: v1
+      region: r1
+      extraVol:
+        - propagation:
+            - GlanceAPI
+          extraVolType: Ceph
+          volumes:
+            - name: ceph
+              secret:
+                secretName: ceph-conf-files
+          mounts:
+            - name: ceph
+              mountPath: /etc/ceph
+              readOnly: true

@@ -1,0 +1,288 @@
+# Network values for SNO + DCN spine-leaf topology.
+#
+# Site 2 (SNO control plane): subnet1
+# Site 4 (EDPM computes): subnet2
+#
+# Replace all CHANGEME values to match your environment.
+# All subnets must share a common routable address space.
+---
+apiVersion: v1
+data:
+    bridgeName: ospbr
+    ctlplane:
+        dnsDomain: ctlplane.example.com
+        endpoint_annotations:
+            metallb.universe.tf/address-pool: ctlplane
+            metallb.universe.tf/allow-shared-ip: ctlplane
+            metallb.universe.tf/loadBalancerIPs: CHANGEME_SNO_CTLPLANE_LB_IP
+        iface: CHANGEME_SNO_IFACE
+        lb_addresses:
+            - CHANGEME_SNO_CTLPLANE_LB_START-CHANGEME_SNO_CTLPLANE_LB_END
+        mtu: 1500
+        net-attach-def: |
+            {
+              "cniVersion": "0.3.1",
+              "name": "ctlplane",
+              "type": "macvlan",
+              "master": "ospbr",
+              "ipam": {
+                "type": "whereabouts",
+                "range": "CHANGEME_SNO_CTLPLANE_CIDR",
+                "range_start": "CHANGEME_SNO_CTLPLANE_NAD_START",
+                "range_end": "CHANGEME_SNO_CTLPLANE_NAD_END"
+              }
+            }
+        prefix-length: 24
+        subnets:
+            - allocationRanges:
+                  - end: CHANGEME_SNO_CTLPLANE_ALLOC1_END
+                    start: CHANGEME_SNO_CTLPLANE_ALLOC1_START
+                  - end: CHANGEME_SNO_CTLPLANE_ALLOC2_END
+                    start: CHANGEME_SNO_CTLPLANE_ALLOC2_START
+              cidr: CHANGEME_SNO_CTLPLANE_CIDR
+              gateway: CHANGEME_SNO_CTLPLANE_GW
+              name: subnet1
+              vlan: CHANGEME_SNO_CTLPLANE_VLAN
+            # CHANGEME: site4 EDPM computes -- replace CIDRs/gateway/VLAN
+            - allocationRanges:
+                  - end: CHANGEME_EDPM_CTLPLANE_END
+                    start: CHANGEME_EDPM_CTLPLANE_START
+              cidr: CHANGEME_EDPM_CTLPLANE_CIDR
+              gateway: CHANGEME_EDPM_CTLPLANE_GW
+              name: subnet2
+              vlan: CHANGEME_EDPM_CTLPLANE_VLAN
+    datacentre:
+        net-attach-def: |
+            {
+              "cniVersion": "0.3.1",
+              "name": "datacentre",
+              "type": "host-device",
+              "device": "CHANGEME_SNO_IFACE",
+              "ipam": {}
+            }
+    dns-resolver:
+        config:
+            search: []
+            server:
+                - CHANGEME_SNO_DNS_SERVER
+        options:
+            - key: server
+              values:
+                  - CHANGEME_SNO_DNS_SERVER
+    external:
+        dnsDomain: external.example.com
+        mtu: 1500
+        prefix-length: 24
+        subnets:
+            - allocationRanges:
+                  - end: CHANGEME_SNO_EXTERNAL_END
+                    start: CHANGEME_SNO_EXTERNAL_START
+              cidr: CHANGEME_SNO_EXTERNAL_CIDR
+              gateway: CHANGEME_SNO_EXTERNAL_GW
+              name: subnet1
+              vlan: CHANGEME_SNO_EXTERNAL_VLAN
+            # CHANGEME: site4 external subnet
+            - allocationRanges:
+                  - end: CHANGEME_EDPM_EXTERNAL_END
+                    start: CHANGEME_EDPM_EXTERNAL_START
+              cidr: CHANGEME_EDPM_EXTERNAL_CIDR
+              gateway: CHANGEME_EDPM_EXTERNAL_GW
+              name: subnet2
+              vlan: CHANGEME_EDPM_EXTERNAL_VLAN
+        vlan: CHANGEME_SNO_EXTERNAL_VLAN
+    internalapi:
+        base_iface: CHANGEME_SNO_IFACE
+        dnsDomain: internalapi.example.com
+        endpoint_annotations:
+            metallb.universe.tf/address-pool: internalapi
+            metallb.universe.tf/allow-shared-ip: internalapi
+            metallb.universe.tf/loadBalancerIPs: CHANGEME_SNO_INTAPI_LB_IP
+        iface: internalapi
+        lb_addresses:
+            - CHANGEME_SNO_INTAPI_LB_START-CHANGEME_SNO_INTAPI_LB_END
+        mtu: 1500
+        net-attach-def: |
+            {
+              "cniVersion": "0.3.1",
+              "name": "internalapi",
+              "type": "macvlan",
+              "master": "internalapi",
+              "ipam": {
+                "type": "whereabouts",
+                "range": "CHANGEME_SNO_INTAPI_CIDR",
+                "range_start": "CHANGEME_SNO_INTAPI_NAD_START",
+                "range_end": "CHANGEME_SNO_INTAPI_NAD_END"
+              }
+            }
+        prefix-length: 24
+        subnets:
+            - allocationRanges:
+                  - end: CHANGEME_SNO_INTAPI_END
+                    start: CHANGEME_SNO_INTAPI_START
+              cidr: CHANGEME_SNO_INTAPI_CIDR
+              name: subnet1
+              vlan: CHANGEME_SNO_INTAPI_VLAN
+            # CHANGEME: site4 internalapi subnet
+            - allocationRanges:
+                  - end: CHANGEME_EDPM_INTAPI_END
+                    start: CHANGEME_EDPM_INTAPI_START
+              cidr: CHANGEME_EDPM_INTAPI_CIDR
+              name: subnet2
+              vlan: CHANGEME_EDPM_INTAPI_VLAN
+        vlan: CHANGEME_SNO_INTAPI_VLAN
+    lbServiceType: LoadBalancer
+    # SNO: single OCP node only
+    node_0:
+        ctlplane_ip: CHANGEME_SNO_CTLPLANE_IP
+        internalapi_ip: CHANGEME_SNO_INTAPI_IP
+        name: CHANGEME_SNO_NODE_NAME
+        storage_ip: CHANGEME_SNO_STORAGE_IP
+        # storagemgmt_ip: CHANGEME_SNO_STGMGMT_IP
+        tenant_ip: CHANGEME_SNO_TENANT_IP
+    # SNO: node_1/node_2 are required by lib/nncp replacement sources
+    # even though the NNCP resources are deleted by $patch:delete.
+    node_1:
+        ctlplane_ip: _unused_
+        internalapi_ip: _unused_
+        name: node-1
+        storage_ip: _unused_
+        tenant_ip: _unused_
+    node_2:
+        ctlplane_ip: _unused_
+        internalapi_ip: _unused_
+        name: node-2
+        storage_ip: _unused_
+        tenant_ip: _unused_
+    rabbitmq:
+        endpoint_annotations:
+            metallb.universe.tf/address-pool: internalapi
+            metallb.universe.tf/loadBalancerIPs: CHANGEME_SNO_RABBITMQ_IP
+    rabbitmq-cell1:
+        endpoint_annotations:
+            metallb.universe.tf/address-pool: internalapi
+            metallb.universe.tf/loadBalancerIPs: CHANGEME_SNO_RABBITMQ_CELL1_IP
+    routes:
+        config: []
+    storage:
+        base_iface: CHANGEME_SNO_IFACE
+        dnsDomain: storage.example.com
+        endpoint_annotations:
+            metallb.universe.tf/address-pool: storage
+            metallb.universe.tf/allow-shared-ip: storage
+            metallb.universe.tf/loadBalancerIPs: CHANGEME_SNO_STORAGE_LB_IP
+        iface: storage
+        lb_addresses:
+            - CHANGEME_SNO_STORAGE_LB_START-CHANGEME_SNO_STORAGE_LB_END
+        mtu: 1500
+        net-attach-def: |
+            {
+              "cniVersion": "0.3.1",
+              "name": "storage",
+              "type": "macvlan",
+              "master": "storage",
+              "ipam": {
+                "type": "whereabouts",
+                "range": "CHANGEME_SNO_STORAGE_CIDR",
+                "range_start": "CHANGEME_SNO_STORAGE_NAD_START",
+                "range_end": "CHANGEME_SNO_STORAGE_NAD_END"
+              }
+            }
+        prefix-length: 24
+        subnets:
+            - allocationRanges:
+                  - end: CHANGEME_SNO_STORAGE_END
+                    start: CHANGEME_SNO_STORAGE_START
+              cidr: CHANGEME_SNO_STORAGE_CIDR
+              name: subnet1
+              vlan: CHANGEME_SNO_STORAGE_VLAN
+            # CHANGEME: site4 storage subnet
+            - allocationRanges:
+                  - end: CHANGEME_EDPM_STORAGE_END
+                    start: CHANGEME_EDPM_STORAGE_START
+              cidr: CHANGEME_EDPM_STORAGE_CIDR
+              name: subnet2
+              vlan: CHANGEME_EDPM_STORAGE_VLAN
+        vlan: CHANGEME_SNO_STORAGE_VLAN
+    storageClass: lvms-local-storage
+    storagemgmt:
+        base_iface: CHANGEME_SNO_IFACE
+        dnsDomain: storagemgmt.example.com
+        iface: storagemgmt
+        lb_addresses:
+            - CHANGEME_SNO_STGMGMT_LB_START-CHANGEME_SNO_STGMGMT_LB_END
+        mtu: 1500
+        net-attach-def: |
+            {
+              "cniVersion": "0.3.1",
+              "name": "storagemgmt",
+              "type": "macvlan",
+              "master": "storagemgmt",
+              "ipam": {
+                "type": "whereabouts",
+                "range": "CHANGEME_SNO_STGMGMT_CIDR",
+                "range_start": "CHANGEME_SNO_STGMGMT_NAD_START",
+                "range_end": "CHANGEME_SNO_STGMGMT_NAD_END"
+              }
+            }
+        prefix-length: 24
+        subnets:
+            - allocationRanges:
+                  - end: CHANGEME_SNO_STGMGMT_END
+                    start: CHANGEME_SNO_STGMGMT_START
+              cidr: CHANGEME_SNO_STGMGMT_CIDR
+              name: subnet1
+              vlan: CHANGEME_SNO_STGMGMT_VLAN
+            # CHANGEME: site4 storagemgmt subnet
+            - allocationRanges:
+                  - end: CHANGEME_EDPM_STGMGMT_END
+                    start: CHANGEME_EDPM_STGMGMT_START
+              cidr: CHANGEME_EDPM_STGMGMT_CIDR
+              name: subnet2
+              vlan: CHANGEME_EDPM_STGMGMT_VLAN
+        vlan: CHANGEME_SNO_STGMGMT_VLAN
+    tenant:
+        base_iface: CHANGEME_SNO_IFACE
+        dnsDomain: tenant.example.com
+        endpoint_annotations:
+            metallb.universe.tf/address-pool: tenant
+            metallb.universe.tf/allow-shared-ip: tenant
+            metallb.universe.tf/loadBalancerIPs: CHANGEME_SNO_TENANT_LB_IP
+        iface: tenant
+        lb_addresses:
+            - CHANGEME_SNO_TENANT_LB_START-CHANGEME_SNO_TENANT_LB_END
+        mtu: 1500
+        net-attach-def: |
+            {
+              "cniVersion": "0.3.1",
+              "name": "tenant",
+              "type": "macvlan",
+              "master": "tenant",
+              "ipam": {
+                "type": "whereabouts",
+                "range": "CHANGEME_SNO_TENANT_CIDR",
+                "range_start": "CHANGEME_SNO_TENANT_NAD_START",
+                "range_end": "CHANGEME_SNO_TENANT_NAD_END"
+              }
+            }
+        prefix-length: 24
+        subnets:
+            - allocationRanges:
+                  - end: CHANGEME_SNO_TENANT_END
+                    start: CHANGEME_SNO_TENANT_START
+              cidr: CHANGEME_SNO_TENANT_CIDR
+              name: subnet1
+              vlan: CHANGEME_SNO_TENANT_VLAN
+            # CHANGEME: site4 tenant subnet
+            - allocationRanges:
+                  - end: CHANGEME_EDPM_TENANT_END
+                    start: CHANGEME_EDPM_TENANT_START
+              cidr: CHANGEME_EDPM_TENANT_CIDR
+              name: subnet2
+              vlan: CHANGEME_EDPM_TENANT_VLAN
+        vlan: CHANGEME_SNO_TENANT_VLAN
+
+kind: ConfigMap
+metadata:
+    annotations:
+        config.kubernetes.io/local-config: 'true'
+    name: network-values
