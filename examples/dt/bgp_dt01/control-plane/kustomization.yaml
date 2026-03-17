@@ -8,6 +8,7 @@ components:
 resources:
   - networking/nncp/values.yaml
   - service-values.yaml
+  - neutron-ovn-extra-config.yaml
 
 transformers:
   # Set namespace to OpenStack on all namespaced objects without a namespace

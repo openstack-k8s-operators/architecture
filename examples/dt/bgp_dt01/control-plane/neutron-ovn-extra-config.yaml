@@ -1,0 +1,10 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: neutron-ovn-extra-config
+  namespace: openstack
+data:
+  99-neutron-ovn.conf: |
+    [agent]
+    extensions = metadata,ovn-bgp
