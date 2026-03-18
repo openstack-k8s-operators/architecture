@@ -52,6 +52,7 @@ data:
     glanceAPIs:
       default:
         replicas: 3
+        type: split
   manila:
     enabled: true
     manilaAPI:
