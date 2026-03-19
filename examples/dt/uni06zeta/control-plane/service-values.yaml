@@ -34,14 +34,13 @@ data:
   cinderBackup:
     customServiceConfig: |
       [DEFAULT]
-      backup_driver = cinder.backup.drivers.swift.SwiftBackupDriver
+      backup_driver = cinder.backup.drivers.s3.S3BackupDriver
       backup_compression_algorithm = zstd
       backup_s3_endpoint_url = https://swift-public-openstack.apps.ocp.openstack.lab/
       backup_s3_store_access_key = 401e5f2c73eb45d3b0256dc8dbe65cf5
       backup_s3_store_secret_key = 6032b0bbcced409d955568be27382c44
       backup_s3_store_bucket = volumebackups
       backup_s3_ca_cert_file = /etc/pki/tls/certs/ca-bundle.crt
-      backup_driver = cinder.backup.drivers.s3.S3BackupDriver
     replicas: 1
 
   glance:
