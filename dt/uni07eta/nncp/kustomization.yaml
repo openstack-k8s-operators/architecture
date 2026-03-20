@@ -119,7 +119,92 @@ patches:
             port:
               - name: octavia
 
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: master-0
+    patch: |-
+      - op: add
+        path: /spec/desiredState/interfaces/-
+        value:
+          description: Provider VLAN interface
+          name: ospbr-218
+          state: up
+          type: vlan
+          vlan:
+            base-iface: ospbr
+            id: _replaced_
+          ipv4:
+            enabled: false
+
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: master-1
+    patch: |-
+      - op: add
+        path: /spec/desiredState/interfaces/-
+        value:
+          description: Provider VLAN interface
+          name: ospbr-218
+          state: up
+          type: vlan
+          vlan:
+            base-iface: ospbr
+            id: _replaced_
+          ipv4:
+            enabled: false
+
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: master-2
+    patch: |-
+      - op: add
+        path: /spec/desiredState/interfaces/-
+        value:
+          description: Provider VLAN interface
+          name: ospbr-218
+          state: up
+          type: vlan
+          vlan:
+            base-iface: ospbr
+            id: _replaced_
+          ipv4:
+            enabled: false
+
 replacements:
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ospbr-218.vlan
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-0
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=ospbr-218].vlan.id
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ospbr-218.vlan
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-1
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=ospbr-218].vlan.id
+
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ospbr-218.vlan
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-2
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=ospbr-218].vlan.id
+
   - source:
       kind: ConfigMap
       name: network-values
