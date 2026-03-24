@@ -15,6 +15,32 @@ data:
   tls:
     caBundleSecretName: ""
 
+  # --- Top-level messagingBus (RPC default cluster) ---
+  messagingBus:
+    cluster: rabbitmq
+
+  # --- Per-service messagingBus (RPC with vhost/user isolation) ---
+  barbican:
+    messagingBus:
+      cluster: rabbitmq
+      vhost: barbican
+      user: barbican
+  cinder:
+    messagingBus:
+      cluster: rabbitmq
+      vhost: cinder
+      user: cinder
+  nova:
+    messagingBus:
+      cluster: rabbitmq
+      vhost: nova
+      user: nova
+    cell1:
+      messagingBus:
+        cluster: rabbitmq
+        vhost: nova-cell1
+        user: nova-cell1
+
   # --- Below are VA/DT-specific data ---
   cinderBackup:
     customServiceConfig: |
@@ -44,6 +70,10 @@ data:
     replicas: 1
 
   designate:
+    messagingBus:
+      cluster: rabbitmq
+      vhost: designate
+      user: designate
     enabled: true
     nsRecords:
       - hostname: ns1.example.org.
@@ -92,6 +122,10 @@ data:
           - s3glance
 
   manila:
+    messagingBus:
+      cluster: rabbitmq
+      vhost: manila
+      user: manila
     enabled: true
     customServiceConfig: |
       [DEFAULT]
@@ -109,6 +143,10 @@ data:
       cephfs_protocol_helper_type=NFS
 
   neutron:
+    messagingBus:
+      cluster: rabbitmq
+      vhost: neutron
+      user: neutron
     customServiceConfig: |
       [DEFAULT]
       vlan_transparent = true
