@@ -128,13 +128,9 @@ vas:
             src_file: ../../multi-namespace/control-plane2/networking/nncp/values.yaml
         build_output: ../control-plane2.yaml
         post_stage_run:
-          - name: Trust leaf region CA in central region
+          - name: Update central CA bundle with leaf region CAs and wait for reconciliation
             type: playbook
-            source: "skmo/trust-leaf-ca.yaml"
-            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
-          - name: Ensure central control plane uses custom CA bundle
-            type: playbook
-            source: "skmo/ensure-central-ca-bundle.yaml"
+            source: "skmo/update-central-ca-bundle.yaml"
             inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
           - name: Configure barbican-keystone-listener transport URL for leaf region
             type: playbook
