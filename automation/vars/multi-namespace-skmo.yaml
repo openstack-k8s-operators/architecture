@@ -82,10 +82,6 @@ vas:
             type: playbook
             source: "federation-pre-deploy.yml"
             inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
-          - name: Configure Keystone control plane for federation
-            type: playbook
-            source: "federation-controlplane-config.yml"
-            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
         name: control-plane    # stage 5
         path: examples/va/multi-namespace-skmo/control-plane
         wait_conditions:
@@ -103,6 +99,13 @@ vas:
           - name: network-values
             src_file: ../../multi-namespace/control-plane/networking/nncp/values.yaml
         build_output: ../control-plane.yaml
+        post_stage_run:
+          # Run after the OSCP is deployed so hook_controlplane_config can
+          # directly patch the existing OpenStackControlPlane CR.
+          - name: Configure Keystone control plane for federation
+            type: playbook
+            source: "federation-controlplane-config.yml"
+            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
 
       - pre_stage_run:    # stage 6
           - name: Prepare SKMO leaf prerequisites in regionZero
