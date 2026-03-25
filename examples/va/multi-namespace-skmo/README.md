@@ -8,7 +8,7 @@ characteristics:
 - Two OpenStack control planes deployed in separate namespaces:
   - **Central region** (`openstack` namespace, `regionOne`): hosts the
     Keystone identity service and the Horizon dashboard.  The horizon
-    dashboard provides a "single plane of glass" for the central and
+    dashboard provides a "single pane of glass" for the central and
     leaf regions.
   - **Leaf region** (`openstack2` namespace, `regionTwo`): all services
     authenticate against the central Keystone identity service 
@@ -51,9 +51,9 @@ characteristics:
    and CA bundle secret names. These **must** be customized before
    deployment.
 
-5. The two control planes are deployed in parallel (stages 5 and 6) to
-   reduce overall deployment time. The automation hooks handle the
-   inter-region setup (transport URLs, CA trust) automatically.
+5. The two control planes are deployed in parallel to reduce overall
+   deployment time. The automation hooks handle the inter-region setup
+   (transport URLs, CA trust) automatically.
 
 ## Customization
 
@@ -78,29 +78,12 @@ Before deploying, update the following files:
 
 ## Stages
 
-All stages must be executed in the order listed below. See
-`automation/vars/multi-namespace-skmo.yaml` for the automation
-configuration used in CI.
+All stages must be executed in the order listed below. Everything is required
+unless otherwise indicated. See
+[automation/vars/multi-namespace-skmo.yaml](../../../automation/vars/multi-namespace-skmo.yaml)
+for the automation configuration used in CI.
 
 1. [Install the OpenStack K8S operators and their dependencies](../../common/)
-2. Configure node network (`nncp`) for the central namespace
-3. Configure node network (`nncp`) for the leaf namespace
-4. Deploy networking (NAD, MetalLB, etc.) for the central namespace
-5. Deploy networking (NAD, MetalLB, etc.) for the leaf namespace
-6. **Deploy the central control plane** (`control-plane/`). The central
-   Keystone and Barbican services are configured here. The automation
-   waits only for the CR to exist, allowing the leaf control plane to
-   deploy in parallel.
-7. **Deploy the leaf control plane** (`control-plane2/`). Before
-   deployment, automation hooks:
-   - Register the leaf region and admin user in the central Keystone
-   - Create a cross-region RabbitMQ `TransportURL` for the leaf Barbican
-     keystone listener
-   - Copy the transport URL secret to the leaf namespace
-   - Add the central region's root CA to the leaf CA bundle
-
-   After deployment, automation hooks:
-   - Add the leaf region's root CA to the central CA bundle
-   - Configure the central control plane to use the custom CA bundle
-   - Patch the leaf control plane with the cross-region transport URL
-     for `barbican-keystone-listener`
+2. [Create the second namespace](namespace.md)
+3. [Configure networking and deploy the OpenStack control planes](control-plane.md)
+4. [Deploy the data planes](dataplane.md)
