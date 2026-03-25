@@ -78,7 +78,7 @@ vas:
             kind: Node
             resource_name: master-0
             state: patched
-          - name: Deploy Keycloak for Keystone federation
+          - name: Bootstrap Keycloak for Keystone federation
             type: playbook
             source: "federation-pre-deploy.yml"
             inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
