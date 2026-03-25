@@ -78,6 +78,14 @@ vas:
             kind: Node
             resource_name: master-0
             state: patched
+          - name: Deploy Keycloak for Keystone federation
+            type: playbook
+            source: "federation-pre-deploy.yml"
+            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
+          - name: Configure Keystone control plane for federation
+            type: playbook
+            source: "federation-controlplane-config.yml"
+            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
         name: control-plane    # stage 5
         path: examples/va/multi-namespace-skmo/control-plane
         wait_conditions:
@@ -128,6 +136,10 @@ vas:
           - name: Configure barbican-keystone-listener transport URL for leaf region
             type: playbook
             source: "skmo/configure-leaf-listener.yaml"
+            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
+          - name: Configure Keycloak realms and Keystone federation IdP
+            type: playbook
+            source: "federation-post-deploy.yml"
             inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
 
       - name: edpm-nodeset    # stage 7
