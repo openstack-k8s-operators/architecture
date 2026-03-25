@@ -13,3 +13,18 @@ data:
       customServiceConfig: |
         [keystone_notifications]
         pool_name = barbican-listener-regionOne
+  cinderVolumes:
+    lvm-iscsi:
+      replicas: 1
+      nodeSelector:
+        openstack.org/cinder-lvm: ""
+      customServiceConfig: |
+        [DEFAULT]
+        enabled_backends = lvm
+        [lvm]
+        volume_driver = cinder.volume.drivers.lvm.LVMVolumeDriver
+        volume_group = cinder-volumes
+        target_protocol = iscsi
+        target_helper = lioadm
+        volume_backend_name = lvm_iscsi
+        target_ip_address = 172.18.0.10
