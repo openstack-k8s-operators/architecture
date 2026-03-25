@@ -95,7 +95,3 @@ vas:
           - name: edpm-deployment-values-post-ceph
             src_file: values.yaml
         build_output: deployment-post-ceph.yaml
-        post_stage_run:
-          - name: Deploy Loki
-            type: playbook
-            source: "../../hooks/playbooks/deploy-loki-for-ck.yaml"
