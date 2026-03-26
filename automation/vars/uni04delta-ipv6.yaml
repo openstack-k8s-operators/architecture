@@ -15,7 +15,7 @@ vas:
             src_file: values.yaml
         build_output: nncp.yaml
 
-      - name: networking-configuration
+      - name: network-configuration
         path: examples/dt/uni04delta-ipv6/control-plane/networking
         wait_conditions:
           - >-

@@ -24,21 +24,9 @@ resources:
   - nncp/values.yaml
   - metallb_bgppeers.yaml
   - ocp_networks_netattach.yaml
+  - designateext_metallb.yaml
 
 patches:
-  # Add octavia network to NetConfig
-  - target:
-      kind: NetConfig
-      name: netconfig
-    patch: |-
-      - op: add
-        path: /spec/networks/-
-        value:
-          dnsDomain: octavia.example.com
-          name: octavia
-          subnets:
-            - _replaced_
-          mtu: 1500
   # Add BGPPeer to BGPAdvertisement
   - target:
       kind: BGPAdvertisement
@@ -76,18 +64,15 @@ patches:
       metadata:
         name: .*
       $patch: delete
+  # Add designateext to BGPAdvertisement
+  - target:
+      kind: BGPAdvertisement
+    patch: |-
+      - op: add
+        path: /spec/ipAddressPools/-
+        value: designateext
 
 replacements:
-  # octavia NetConfig kustomizations
-  - source:
-      kind: ConfigMap
-      name: network-values
-      fieldPath: data.octavia.subnets
-    targets:
-      - select:
-          kind: NetConfig
-        fieldPaths:
-          - spec.networks.[name=octavia].subnets
   # BGP peer IP addresses
   # node3
   - source:
@@ -174,3 +159,25 @@ replacements:
           name: bgpnet-worker-3
         fieldPaths:
           - spec.config
+  # Designate NAD
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.designate.net-attach-def
+    targets:
+      - select:
+          kind: NetworkAttachmentDefinition
+          name: designate
+        fieldPaths:
+          - spec.config
+  # DesignateExt LB addresses
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.designateext.lb_addresses
+    targets:
+      - select:
+          kind: IPAddressPool
+          name: designateext
+        fieldPaths:
+          - spec.addresses

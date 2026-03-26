@@ -16,7 +16,6 @@ replacements:
           - spec.cinder.template.cinderAPI.override.service.internal.metadata.annotations
           - spec.glance.template.glanceAPIs.default.override.service.internal.metadata.annotations
           - spec.heat.template.heatAPI.override.service.internal.metadata.annotations
-          - spec.heat.template.heatEngine.override.service.internal.metadata.annotations
           - spec.keystone.template.override.service.internal.metadata.annotations
           - spec.manila.template.manilaAPI.override.service.internal.metadata.annotations
           - spec.neutron.template.override.service.internal.metadata.annotations
@@ -79,7 +78,6 @@ replacements:
           - spec.cinder.template.cinderAPI.override.service.internal.spec.type
           - spec.glance.template.glanceAPIs.default.override.service.internal.spec.type
           - spec.heat.template.heatAPI.override.service.internal.spec.type
-          - spec.heat.template.heatEngine.override.service.internal.spec.type
           - spec.keystone.template.override.service.internal.spec.type
           - spec.manila.template.manilaAPI.override.service.internal.spec.type
           - spec.neutron.template.override.service.internal.spec.type

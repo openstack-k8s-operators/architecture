@@ -21,7 +21,6 @@ data:
       - install-certs
       - ceph-client
       - ovn
-      - neutron-ovn-igmp
       - neutron-metadata
       - neutron-sriov
       - libvirt

@@ -494,6 +494,7 @@ data:
               next-hop-address: "2620:cf::100:65:0:9"
               next-hop-interface: enp9s0
               metric: 201
+            # ctlplane routes
             - destination: "2620:cf:cf:aaaa::0/64"
               next-hop-address: "2620:cf:cf:aaad::1"
               next-hop-interface: enp7s0
@@ -520,6 +521,7 @@ data:
               next-hop-address: "2620:cf::100:65:1:9"
               next-hop-interface: enp9s0
               metric: 201
+            # ctlplane routes
             - destination: "2620:cf:cf:aaaa::0/64"
               next-hop-address: "2620:cf:cf:aaad::1"
               next-hop-interface: enp7s0
@@ -546,6 +548,7 @@ data:
               next-hop-address: "2620:cf::100:65:2:9"
               next-hop-interface: enp9s0
               metric: 201
+            # ctlplane routes
             - destination: "2620:cf:cf:aaaa::0/64"
               next-hop-address: "2620:cf:cf:aaad::1"
               next-hop-interface: enp7s0

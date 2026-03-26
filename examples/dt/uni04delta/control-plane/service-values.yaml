@@ -8,7 +8,14 @@ metadata:
     config.kubernetes.io/local-config: "true"
 
 data:
+  # --- Fields required by lib/control-plane ---
   preserveJobs: false
+  notificationsBus:
+    cluster: rabbitmq
+  tls:
+    caBundleSecretName: ""
+
+  # --- Below are VA/DT-specific data ---
   cinderBackup:
     customServiceConfig: |
       [DEFAULT]
@@ -70,20 +77,19 @@ data:
   glance:
     customServiceConfig: |
       [DEFAULT]
-      debug = True
-      enabled_backends = default_backend:rbd
-
+      debug=True
+      enabled_backends = default_backend:s3
       [glance_store]
       default_backend = default_backend
-
       [default_backend]
-      rbd_store_ceph_conf = /etc/ceph/ceph.conf
-      store_description = "RBD backend"
-      rbd_store_pool = images
-      rbd_store_user = openstack
+      s3_store_create_bucket_on_put = True
+      s3_store_bucket_url_format = "path"
+      s3_store_large_object_size = 0
     glanceAPIs:
       default:
         replicas: 3
+        customServiceConfigSecrets:
+          - s3glance
 
   manila:
     enabled: true
@@ -106,7 +112,7 @@ data:
     customServiceConfig: |
       [DEFAULT]
       vlan_transparent = true
-      service_plugins = qos,ovn-router,trunk,segments,log
+      service_plugins = qos,ovn-router,trunk,segments,log,taas,tapmirror
       agent_down_time = 600
       router_distributed = true
       router_scheduler_driver = neutron.scheduler.l3_agent_scheduler.ChanceScheduler
@@ -137,12 +143,15 @@ data:
       igmp_snooping_enable = true
       [ovn]
       ovn_emit_need_to_frag = true
+      ovs_create_tap = true
       [ml2]
       type_drivers = geneve,vlan,flat,local
       tenant_network_types = vlan,flat
       extension_drivers=qos,port_security,dns_domain_keywords
       [ml2_type_vlan]
       network_vlan_ranges = datacentre:1000:2000
+      [service_providers]
+      service_provider = TAAS:TAAS:neutron_taas.services.taas.service_drivers.ovn.taas_ovn.TaasOvnDriver:default
       [designate]
       url = https://designate-internal.openstack.svc:9001/v2
       auth_type = password

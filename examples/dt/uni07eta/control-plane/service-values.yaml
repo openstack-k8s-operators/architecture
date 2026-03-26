@@ -8,7 +8,14 @@ metadata:
     config.kubernetes.io/local-config: "true"
 
 data:
+  # --- Fields required by lib/control-plane ---
   preserveJobs: false
+  notificationsBus:
+    cluster: rabbitmq
+  tls:
+    caBundleSecretName: ""
+
+  # --- Below are VA/DT-specific data ---
   cinderVolumes:
     ontap-iscsi:
       customServiceConfig: |
@@ -105,6 +112,7 @@ data:
   neutron:
     customServiceConfig: |
       [DEFAULT]
+      service_plugins = qos,ovn-router,trunk,segments,port_forwarding,log,placement,taas,tapmirror
       vlan_transparent = true
       agent_down_time = 600
       router_distributed = true
@@ -143,4 +151,6 @@ data:
       [ml2]
       type_drivers = geneve,vxlan,vlan,flat,local
       tenant_network_types = geneve,flat,vlan
-      path_mtu = 1400
+
+      [service_providers]
+      service_provider = TAAS:TAAS:neutron_taas.services.taas.service_drivers.ovn.taas_ovn.TaasOvnDriver:default

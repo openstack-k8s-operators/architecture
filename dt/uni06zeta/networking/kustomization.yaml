@@ -22,6 +22,7 @@ components:
 
 resources:
   - nad.yaml
+  - ocp-networks-ospbr-218-netattach.yaml
 
 replacements:
   - source:
@@ -32,5 +33,16 @@ replacements:
       - select:
           kind: NetworkAttachmentDefinition
           name: octavia
+        fieldPaths:
+          - spec.config
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ospbr-218.net-attach-def
+    targets:
+      - select:
+          kind: NetworkAttachmentDefinition
+          name: ospbr-218
         fieldPaths:
           - spec.config

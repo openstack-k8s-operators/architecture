@@ -8,9 +8,14 @@ metadata:
     config.kubernetes.io/local-config: "true"
 
 data:
+  # --- Fields required by lib/control-plane ---
   preserveJobs: false
-  notificationsBusInstance: rabbitmq-notifications
+  notificationsBus:
+    cluster: rabbitmq-notifications
+  tls:
+    caBundleSecretName: ""
 
+  # --- Below are VA/DT-specific data ---
   cinderBackup:
     customServiceConfig: |
       [DEFAULT]
@@ -137,7 +142,8 @@ data:
         cell2:
           cellDatabaseAccount: nova-cell2
           cellDatabaseInstance: openstack-cell2
-          cellMessageBusInstance: rabbitmq-cell2
+          messagingBus:
+            cluster: rabbitmq-cell2
           conductorServiceTemplate:
             replicas: 1
           hasAPIAccess: true
@@ -146,6 +152,13 @@ data:
     templates:
       rabbitmq-cell2:
         replicas: 3
+        resources:
+          limits:
+            cpu: "2"
+            memory: 4Gi
+          requests:
+            cpu: "1"
+            memory: 4Gi
       rabbitmq-notifications:
         override:
           service:
@@ -156,6 +169,13 @@ data:
             spec:
               type: LoadBalancer
         replicas: 3
+        resources:
+          limits:
+            cpu: "2"
+            memory: 4Gi
+          requests:
+            cpu: "1"
+            memory: 4Gi
 
   swift:
     enabled: true

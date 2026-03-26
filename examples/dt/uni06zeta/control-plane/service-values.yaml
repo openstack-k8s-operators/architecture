@@ -8,7 +8,14 @@ metadata:
     config.kubernetes.io/local-config: "true"
 
 data:
+  # --- Fields required by lib/control-plane ---
   preserveJobs: false
+  notificationsBus:
+    cluster: rabbitmq
+  tls:
+    caBundleSecretName: ""
+
+  # --- Below are VA/DT-specific data ---
   cinderVolumes:
     lvm-nvme-tcp:
       replicas: 1
@@ -29,14 +36,13 @@ data:
   cinderBackup:
     customServiceConfig: |
       [DEFAULT]
-      backup_driver = cinder.backup.drivers.swift.SwiftBackupDriver
+      backup_driver = cinder.backup.drivers.s3.S3BackupDriver
       backup_compression_algorithm = zstd
       backup_s3_endpoint_url = https://swift-public-openstack.apps.ocp.openstack.lab/
       backup_s3_store_access_key = 401e5f2c73eb45d3b0256dc8dbe65cf5
       backup_s3_store_secret_key = 6032b0bbcced409d955568be27382c44
       backup_s3_store_bucket = volumebackups
       backup_s3_ca_cert_file = /etc/pki/tls/certs/ca-bundle.crt
-      backup_driver = cinder.backup.drivers.s3.S3BackupDriver
     replicas: 1
 
   glance:
@@ -103,7 +109,7 @@ data:
       [DEFAULT]
       dns_domain = openstackgate.local
       vlan_transparent = true
-      service_plugins = ovn-router,qos,segments,trunk,port_forwarding
+      service_plugins = ovn-router,qos,segments,trunk,port_forwarding,placement,taas,tapmirror
       dhcp_agent_notification = false
       agent_down_time = 600
       router_distributed = false
@@ -113,7 +119,6 @@ data:
       l3_ha = False
       max_l3_agents_per_router = 3
       debug = true
-      log_dir = /var/log/neutron
       control_exchange = neutron
       [agent]
       report_interval = 300
@@ -144,9 +149,10 @@ data:
       type_drivers = geneve,vlan,flat,local
       tenant_network_types = geneve,vlan
       extension_drivers = qos,port_security,dns_domain_ports
-      path_mtu = 1400
       [ml2_type_geneve]
       vni_ranges = 1:65536
       max_header_size = 38
       [ml2_type_vlan]
       network_vlan_ranges = tenant:1000:2000,datacentre:218:218
+      [service_providers]
+      service_provider = TAAS:TAAS:neutron_taas.services.taas.service_drivers.ovn.taas_ovn.TaasOvnDriver:default

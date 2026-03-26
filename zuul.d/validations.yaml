@@ -18,6 +18,16 @@
       cifmw_architecture_scenario: bgp-l3-xl
 - job:
     files:
+    - automation/mocks/bgp-l3-xl-adoption.yaml
+    - examples/dt/bgp-l3-xl/control-plane/networking
+    - examples/dt/bgp-l3-xl/control-plane/networking/nncp
+    - lib
+    name: rhoso-architecture-validate-bgp-l3-xl-adoption
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: bgp-l3-xl-adoption
+- job:
+    files:
     - automation/mocks/bgp_dt01.yaml
     - examples/dt/bgp_dt01/control-plane
     - examples/dt/bgp_dt01/control-plane/networking
@@ -74,7 +84,8 @@
     - automation/net-env/dcn.yaml
     - dt/dcn
     - examples/dt/dcn/control-plane
-    - examples/dt/dcn/control-plane/nncp
+    - examples/dt/dcn/control-plane/networking
+    - examples/dt/dcn/control-plane/networking/nncp
     - lib
     name: rhoso-architecture-validate-dcn
     parent: rhoso-architecture-base-job
@@ -337,6 +348,31 @@
       cifmw_architecture_scenario: ovs-dpdk-sriov-2nodesets
 - job:
     files:
+    - automation/mocks/ovs-dpdk-sriov-ipv6.yaml
+    - examples/va/nfv/ovs-dpdk-sriov-ipv6
+    - examples/va/nfv/ovs-dpdk-sriov-ipv6/nncp
+    - examples/va/nfv/ovs-dpdk-sriov/edpm/deployment
+    - examples/va/nfv/ovs-dpdk-sriov/edpm/nodeset
+    - lib
+    name: rhoso-architecture-validate-ovs-dpdk-sriov-ipv6
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: ovs-dpdk-sriov-ipv6
+- job:
+    files:
+    - automation/mocks/ovs-dpdk-sriov-ipv6-2nodesets.yaml
+    - examples/dt/nfv/nfv-ovs-dpdk-sriov-2nodesets/edpm/deployment
+    - examples/dt/nfv/nfv-ovs-dpdk-sriov-2nodesets/edpm/nodeset
+    - examples/dt/nfv/nfv-ovs-dpdk-sriov-2nodesets/edpm/nodeset2
+    - examples/dt/nfv/nfv-ovs-dpdk-sriov-ipv6-2nodesets
+    - examples/dt/nfv/nfv-ovs-dpdk-sriov-ipv6-2nodesets/nncp
+    - lib
+    name: rhoso-architecture-validate-ovs-dpdk-sriov-ipv6-2nodesets
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: ovs-dpdk-sriov-ipv6-2nodesets
+- job:
+    files:
     - automation/mocks/ovs-dpdk-sriov-networker.yaml
     - examples/dt/nfv/nfv-ovs-dpdk-sriov-networker
     - examples/dt/nfv/nfv-ovs-dpdk-sriov-networker/edpm/computes
@@ -588,3 +624,19 @@
     parent: rhoso-architecture-base-job
     vars:
       cifmw_architecture_scenario: uni09iota-adoption
+- job:
+    files:
+    - automation/net-env/vhosts-compact.yaml
+    - dt/vhosts-compact
+    - examples/dt/vhosts-compact
+    - examples/dt/vhosts-compact/control-plane
+    - examples/dt/vhosts-compact/control-plane/nncp
+    - examples/dt/vhosts-compact/deployment
+    - examples/dt/vhosts-compact/edpm-pre-ceph/deployment
+    - examples/dt/vhosts-compact/edpm-pre-ceph/nodeset
+    - lib
+    name: rhoso-architecture-validate-vhosts-compact
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: vhosts-compact
+      cifmw_networking_env_def_file: automation/net-env/vhosts-compact.yaml

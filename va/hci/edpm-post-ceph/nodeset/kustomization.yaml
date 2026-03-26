@@ -24,6 +24,7 @@ components:
   - ../../../../lib/control-plane/storage
   - ../../../../lib/control-plane/ovn-nic
   - ../../../../lib/control-plane/job-settings
+  - ../../../../lib/control-plane/messaging-bus
   - ../../../../lib/dataplane/nodeset
 
 resources:
@@ -38,17 +39,6 @@ patches:
 
 replacements:
   # Control plane custom service configs
-  - source:
-      kind: ConfigMap
-      name: service-values
-      fieldPath: data.notificationsBusInstance
-    targets:
-      - select:
-          kind: OpenStackControlPlane
-        fieldPaths:
-          - spec.notificationsBusInstance
-        options:
-          create: true
   - source:
       kind: ConfigMap
       name: service-values
@@ -286,6 +276,28 @@ replacements:
           kind: OpenStackControlPlane
         fieldPaths:
           - spec.telemetry.template.ceilometer.enabled
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.telemetry.cloudkitty
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.telemetry.template.cloudkitty
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storageClass
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.telemetry.template.metricStorage.customMonitoringStack.prometheusConfig.persistentVolumeClaim.storageClassName
         options:
           create: true
   - source:

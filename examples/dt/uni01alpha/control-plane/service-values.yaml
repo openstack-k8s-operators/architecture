@@ -8,7 +8,14 @@ metadata:
     config.kubernetes.io/local-config: "true"
 
 data:
+  # --- Fields required by lib/control-plane ---
   preserveJobs: false
+  notificationsBus:
+    cluster: rabbitmq
+  tls:
+    caBundleSecretName: ""
+
+  # --- Below are VA/DT-specific data ---
   cinderVolumes:
     lvm-iscsi:
       replicas: 1
@@ -76,12 +83,14 @@ data:
       cell0:
         cellDatabaseInstance: openstack
         cellDatabaseAccount: nova-cell0
-        cellMessageBusInstance: rabbitmq
+        messagingBus:
+          cluster: rabbitmq
         hasAPIAccess: true
       cell1:
         cellDatabaseInstance: openstack-cell1
         cellDatabaseAccount: nova-cell1
-        cellMessageBusInstance: rabbitmq-cell1
+        messagingBus:
+          cluster: rabbitmq-cell1
         hasAPIAccess: true
         novaComputeTemplates:
           compute-ironic:
@@ -145,6 +154,7 @@ data:
       allow_automatic_l3agent_failover = true
       debug = true
       default_availability_zones = zone-1,zone-2
+      service_plugins = qos,ovn-router,trunk,segments,log,taas,tapmirror
 
       [agent]
       report_interval = 300
@@ -172,10 +182,15 @@ data:
       [ovn]
       ovsdb_probe_interval = 60000
       ovn_emit_need_to_frag = true
+      ovs_create_tap = true
 
       [ml2]
       type_drivers = geneve,vxlan,vlan,flat,local
       tenant_network_types = geneve,flat
+
+      [service_providers]
+      service_provider = TAAS:TAAS:neutron_taas.services.taas.service_drivers.ovn.taas_ovn.TaasOvnDriver:default
+
     ml2MechanismDrivers:
       - ovn
       - baremetal

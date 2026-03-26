@@ -1,0 +1,111 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+resources:
+  - netconfig.yaml
+
+replacements:
+  # NetConfig dnsDomain
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ctlplane.dnsDomain
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=ctlplane].dnsDomain
+
+  # NetConfig MTU
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ctlplane.mtu
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=ctlplane].mtu
+
+  # NetConfig subnets
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ctlplane.subnets
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=ctlplane].subnets
+
+  # NetConfig dnsDomain
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.tenant.dnsDomain
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=tenant].dnsDomain
+
+  # NetConfig MTU
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.tenant.mtu
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=tenant].mtu
+
+  # NetConfig subnets
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.tenant.subnets
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=tenant].subnets
+
+  # BGP NetConfig subnets
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.bgp.subnets.bgpnet0
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=bgpnet0].subnets
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.bgp.subnets.bgpnet1
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=bgpnet1].subnets
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.bgp.subnets.bgpmainnet
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=bgpmainnet].subnets
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.bgp.subnets.bgpmainnetv6
+    targets:
+      - select:
+          kind: NetConfig
+        fieldPaths:
+          - spec.networks.[name=bgpmainnetv6].subnets
