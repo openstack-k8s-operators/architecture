@@ -10,24 +10,6 @@ patches:
       kind: ConfigMap
       name: service-values
     path: service-values.yaml
-  - target:
-      group: core.openstack.org
-      version: v1beta1
-      kind: OpenStackControlPlane
-      name: controlplane
-    patch: |-
-      - op: replace
-        path: /spec/rabbitmq/templates/rabbitmq/resources/requests/memory
-        value: 2Gi
-      - op: replace
-        path: /spec/rabbitmq/templates/rabbitmq/resources/limits/memory
-        value: 2Gi
-      - op: replace
-        path: /spec/rabbitmq/templates/rabbitmq-cell1/resources/requests/memory
-        value: 2Gi
-      - op: replace
-        path: /spec/rabbitmq/templates/rabbitmq-cell1/resources/limits/memory
-        value: 2Gi
 
 replacements:
   - source:

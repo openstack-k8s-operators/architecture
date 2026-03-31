@@ -23,18 +23,6 @@ patches:
         path: /spec/keystone/template/override/service/internal/metadata
       - op: remove
         path: /spec/keystone/template/override/service/internal/spec
-      - op: replace
-        path: /spec/rabbitmq/templates/rabbitmq/resources/requests/memory
-        value: 2Gi
-      - op: replace
-        path: /spec/rabbitmq/templates/rabbitmq/resources/limits/memory
-        value: 2Gi
-      - op: replace
-        path: /spec/rabbitmq/templates/rabbitmq-cell1/resources/requests/memory
-        value: 2Gi
-      - op: replace
-        path: /spec/rabbitmq/templates/rabbitmq-cell1/resources/limits/memory
-        value: 2Gi
 
 replacements:
   - source:
