@@ -108,6 +108,17 @@ vas:
             inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
 
       - pre_stage_run:    # stage 6
+          - name: Update container images for openstack2 namespace
+            # Run before deploying the leaf control plane so that:
+            #  - Fresh deploys start with the correct images (no restart).
+            #  - Re-runs wait for the OSCP to settle before continuing.
+            type: playbook
+            source: "../../playbooks/multi-namespace/ns2_update_containers.yaml"
+            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
+            extra_vars:
+              cifmw_update_containers_namespace: openstack2
+              cifmw_update_containers_metadata: controlplane
+              cifmw_update_containers: "true"
           - name: Prepare SKMO leaf prerequisites in regionZero
             type: playbook
             source: "skmo/prepare-leaf.yaml"
