@@ -64,15 +64,15 @@ data:
       openstack:
         replicas: 1
         secret: osp-secret
-        storageRequest: 5G
+        storageRequest: 5Gi
       openstack-cell1:
         replicas: 1
         secret: osp-secret
-        storageRequest: 5G
+        storageRequest: 5Gi
       openstack-cell3:
         replicas: 1
         secret: osp-secret
-        storageRequest: 5G
+        storageRequest: 5Gi
   glance:
     keystoneEndpoint: az0
     glanceAPIs:

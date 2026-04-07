@@ -341,7 +341,7 @@ spec:
         - ironic
         provisionNetwork: ironic
         replicas: 1
-        storageRequest: 10G
+        storageRequest: 10Gi
       ironicInspector:
         inspectionNetwork: ironic
         networkAttachments:

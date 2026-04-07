@@ -128,7 +128,7 @@ spec:
     templates:
       openstack-cell2:
         storageClass: lvms-local-storage
-        storageRequest: 5G
+        storageRequest: 5Gi
         secret: osp-secret
         replicas: 3
 ```

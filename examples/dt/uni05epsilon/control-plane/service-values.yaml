@@ -19,7 +19,7 @@ data:
   galera:
     templates:
       openstack-cell2:
-        storageRequest: 5G
+        storageRequest: 5Gi
         secret: osp-secret
         replicas: 3
 

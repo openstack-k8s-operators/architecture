@@ -94,7 +94,7 @@ data:
   galera:
     templates:
       openstack-cell2:
-        storageRequest: 5G
+        storageRequest: 5Gi
         secret: osp-secret
         replicas: 3
 
@@ -193,7 +193,7 @@ data:
           persistentVolumeClaim:
             resources:
               requests:
-                storage: 20G
+                storage: 20Gi
           replicas: 1
           scrapeInterval: 30s
         resourceSelector:

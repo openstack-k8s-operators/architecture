@@ -60,7 +60,7 @@ data:
           storage:
             persistent:
               pvcStorageClass: local-storage
-              pvcStorageRequest: 20G
+              pvcStorageRequest: 20Gi
               pvcStorageSelector: {}
             retention: 24h
             strategy: persistent
