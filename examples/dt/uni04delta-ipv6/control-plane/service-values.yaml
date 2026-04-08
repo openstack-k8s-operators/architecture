@@ -111,6 +111,7 @@ data:
       [ovn]
       ovn_emit_need_to_frag = false
       ovs_create_tap = true
+      mac_binding_age_threshold = 0
       [ml2]
       type_drivers = geneve,vlan,flat,local
       tenant_network_types = vlan,flat
