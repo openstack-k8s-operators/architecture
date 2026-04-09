@@ -154,7 +154,7 @@ data:
       allow_automatic_l3agent_failover = true
       debug = true
       default_availability_zones = zone-1,zone-2
-      service_plugins = qos,ovn-router,trunk,segments,log,taas,tapmirror
+      service_plugins = qos,ovn-router,trunk,segments,log,taas,tapmirror,firewall_v2
 
       [agent]
       report_interval = 300
@@ -190,6 +190,7 @@ data:
 
       [service_providers]
       service_provider = TAAS:TAAS:neutron_taas.services.taas.service_drivers.ovn.taas_ovn.TaasOvnDriver:default
+      service_provider = FIREWALL_V2:fwaas_db:neutron_fwaas.services.firewall.service_drivers.ovn.firewall_l3_driver.OVNFwaasDriver:default
 
     ml2MechanismDrivers:
       - ovn
