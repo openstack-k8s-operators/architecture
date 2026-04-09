@@ -139,7 +139,15 @@ vas:
             type: playbook
             source: "skmo/skupper-keystone-connector.yaml"
             inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
-          - name: 05 Create Skupper Listener for Keystone in leaf namespace
+          - name: 05 Set Application Credential enablement in skmo-values.yaml
+            # Writes cifmw_skmo_appcred_enabled into skmo-values.yaml before
+            # the kustomize build so the OSCP is created with AC enabled or
+            # disabled from the first apply — no reload required.
+            # Default is true; set cifmw_skmo_appcred_enabled=false to disable.
+            type: playbook
+            source: "skmo/configure-leaf-appcred.yaml"
+            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
+          - name: 06 Create Skupper Listener for Keystone in leaf namespace
             type: playbook
             source: "skmo/skupper-listener.yaml"
             inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
@@ -153,7 +161,7 @@ vas:
               cifmw_skupper_listener_port: 5000
               cifmw_skupper_listener_namespace: openstack2
               cifmw_skupper_listener_ignore_wait_errors: true
-          - name: 06 Prepare SKMO leaf prerequisites in regionZero
+          - name: 07 Prepare SKMO leaf prerequisites in regionZero
             type: playbook
             source: "skmo/prepare-leaf.yaml"
             inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"

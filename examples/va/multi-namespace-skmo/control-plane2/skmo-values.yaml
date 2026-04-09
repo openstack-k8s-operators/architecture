@@ -24,6 +24,13 @@ data:
   leafCaBundleSecretName: custom-ca-certs
   # Central region secret (must include leaf region CA)
   centralCaBundleSecretName: custom-ca-certs
+  # Application Credentials (near zero downtime password rotation).
+  # Rewritten at CI time by skmo/configure-leaf-appcred.yaml based on
+  # cifmw_skmo_appcred_enabled (default: true).  Set to false to disable AC
+  # for all leaf services.
+  # See examples/va/multi-namespace-skmo/application-credentials.md for details.
+  applicationCredentialEnabled: true
+
   # Leaf service users (created by operators in leaf region)
   serviceUserBarbican: regionTwo_barbican
   serviceUserCinder: regionTwo_cinder
