@@ -12,7 +12,11 @@ data:
   leafAdminUser: admin-two
   leafAdminProject: admin
   leafAdminPasswordKey: AdminPassword
-  # Central Keystone endpoints (use public endpoint for both)
+  # Central Keystone endpoints.
+  # keystoneInternalURL is rewritten at CI time by skupper-keystone-connector.yaml
+  # based on cifmw_skupper_keystone_enabled:
+  #   true  → https://keystone-regionone.openstack2.svc.cluster.local:5000 (Skupper tunnel)
+  #   false → same as keystonePublicURL (standard public routing)
   keystoneInternalURL: https://keystone-public-openstack.apps.ocp.openstack.lab
   keystonePublicURL: https://keystone-public-openstack.apps.ocp.openstack.lab
   # CA bundle secrets
