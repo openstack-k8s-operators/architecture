@@ -18,3 +18,4 @@ transformers:
 
 components:
   - ../../lib/control-plane
+  - rabbitmq-vhost
