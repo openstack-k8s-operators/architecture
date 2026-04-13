@@ -26,7 +26,7 @@ vi service-values.yaml
 
 Generate the node network configuration
 ```
-kustomize build nncp > nncp.yaml
+kustomize build networking/nncp > nncp.yaml
 ```
 Apply the NNCP CRs
 ```
