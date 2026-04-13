@@ -14,7 +14,7 @@ Change to the dt/nova/nova03gamma directory
 ```
 cd architecture/examples/dt/nova/nova03gamma/
 ```
-Edit the [nncp/values.yaml](nncp/values.yaml) and
+Edit the [networking/nncp/values.yaml](networking/nncp/values.yaml) and
 [service-values.yaml](service-values.yaml) files to suit 
 your environment.
 ```
