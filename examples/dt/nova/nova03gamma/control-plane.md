@@ -18,7 +18,7 @@ Edit the [networking/nncp/values.yaml](networking/nncp/values.yaml) and
 [service-values.yaml](service-values.yaml) files to suit 
 your environment.
 ```
-vi nncp/values.yaml
+vi networking/nncp/values.yaml
 vi service-values.yaml
 ```
 
