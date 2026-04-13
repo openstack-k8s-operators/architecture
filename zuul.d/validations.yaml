@@ -240,6 +240,18 @@
       cifmw_architecture_scenario: nova02beta
 - job:
     files:
+    - examples/dt/nova/nova03gamma/
+    - examples/dt/nova/nova03gamma/edpm/deployment
+    - examples/dt/nova/nova03gamma/edpm/nodeset
+    - examples/dt/nova/nova03gamma/networking
+    - examples/dt/nova/nova03gamma/networking/nncp/
+    - lib
+    name: rhoso-architecture-validate-nova03gamma
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: nova03gamma
+- job:
+    files:
     - automation/mocks/nova04delta.yaml
     - automation/net-env/nova04delta.yaml
     - examples/dt/nova/nova04delta/control-plane

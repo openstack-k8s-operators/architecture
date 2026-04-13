@@ -18,6 +18,7 @@
       - rhoso-architecture-validate-nova-three-cells
       - rhoso-architecture-validate-nova01alpha
       - rhoso-architecture-validate-nova02beta
+      - rhoso-architecture-validate-nova03gamma
       - rhoso-architecture-validate-nova04delta
       - rhoso-architecture-validate-nova04delta-adoption
       - rhoso-architecture-validate-nvidia-mdev
