@@ -10,3 +10,4 @@ components:
   - ovn-bridge
   - job-settings
   - tls
+  - messaging-bus

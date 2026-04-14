@@ -44,6 +44,16 @@ but may be adjusted for other storage arrays.
 
 ## Apply node network configuration
 
+In this example the storage array is accessed the following ways depending on the node type:
+
+- On OpenShift nodes, the storage network is used by the Glance, Cinder and Manila pods to connect to the main BGP network which has a route to the storage array.
+- On the EDPM nodes, there is no storage network and Nova services connect to the BGP network which has a route to the storage array.
+
+However, it is also valid to use the following variation:
+
+- On OpenShift nodes, the storage network is used by the Glance, Cinder and Manila pods to connect directly to the storage array.
+- On the EDPM nodes, a storage network is used by Nova services to directly connect to the storage array.
+
 Generate the node network configuration
 ```shell
 kustomize build networking/nncp > nncp.yaml

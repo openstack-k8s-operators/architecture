@@ -12,11 +12,13 @@
       - rhoso-architecture-validate-hci
       - rhoso-architecture-validate-hci-adoption
       - rhoso-architecture-validate-multi-namespace
+      - rhoso-architecture-validate-multi-namespace-skmo
       - rhoso-architecture-validate-nfv-ovs-dpdk-sriov-adoption
       - rhoso-architecture-validate-nfv-ovs-dpdk-sriov-hci
       - rhoso-architecture-validate-nova-three-cells
       - rhoso-architecture-validate-nova01alpha
       - rhoso-architecture-validate-nova02beta
+      - rhoso-architecture-validate-nova03gamma
       - rhoso-architecture-validate-nova04delta
       - rhoso-architecture-validate-nova04delta-adoption
       - rhoso-architecture-validate-nvidia-mdev
@@ -48,5 +50,6 @@
       - rhoso-architecture-validate-uni07eta-adoption
       - rhoso-architecture-validate-uni09iota
       - rhoso-architecture-validate-uni09iota-adoption
+      - rhoso-architecture-validate-vhosts-compact
     github-gate:
       jobs: *id001

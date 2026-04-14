@@ -18,6 +18,7 @@ transformers:
 
 components:
   - ../../../../lib/control-plane
+  - ../../../../lib/control-plane/messaging-bus
   - ../../../../lib/dataplane/nodeset
 
 patches:
@@ -389,17 +390,6 @@ replacements:
   #
   # Notifications
   #
-  - source:
-      kind: ConfigMap
-      name: service-values
-      fieldPath: data.notificationsBusInstance
-    targets:
-      - select:
-          kind: OpenStackControlPlane
-        fieldPaths:
-          - spec.notificationsBusInstance
-        options:
-          create: true
   - source:
       kind: ConfigMap
       name: service-values

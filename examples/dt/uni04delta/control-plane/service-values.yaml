@@ -10,8 +10,36 @@ metadata:
 data:
   # --- Fields required by lib/control-plane ---
   preserveJobs: false
+  notificationsBus:
+    cluster: rabbitmq
   tls:
     caBundleSecretName: ""
+
+  # --- Top-level messagingBus (RPC default cluster) ---
+  messagingBus:
+    cluster: rabbitmq
+
+  # --- Per-service messagingBus (RPC with vhost/user isolation) ---
+  barbican:
+    messagingBus:
+      cluster: rabbitmq
+      vhost: barbican
+      user: barbican
+  cinder:
+    messagingBus:
+      cluster: rabbitmq
+      vhost: cinder
+      user: cinder
+  nova:
+    messagingBus:
+      cluster: rabbitmq
+      vhost: nova
+      user: nova
+    cell1:
+      messagingBus:
+        cluster: rabbitmq
+        vhost: nova-cell1
+        user: nova-cell1
 
   # --- Below are VA/DT-specific data ---
   cinderBackup:
@@ -42,6 +70,10 @@ data:
     replicas: 1
 
   designate:
+    messagingBus:
+      cluster: rabbitmq
+      vhost: designate
+      user: designate
     enabled: true
     nsRecords:
       - hostname: ns1.example.org.
@@ -90,6 +122,10 @@ data:
           - s3glance
 
   manila:
+    messagingBus:
+      cluster: rabbitmq
+      vhost: manila
+      user: manila
     enabled: true
     customServiceConfig: |
       [DEFAULT]
@@ -107,10 +143,14 @@ data:
       cephfs_protocol_helper_type=NFS
 
   neutron:
+    messagingBus:
+      cluster: rabbitmq
+      vhost: neutron
+      user: neutron
     customServiceConfig: |
       [DEFAULT]
       vlan_transparent = true
-      service_plugins = qos,ovn-router,trunk,segments,log
+      service_plugins = qos,ovn-router,trunk,segments,log,taas,tapmirror
       agent_down_time = 600
       router_distributed = true
       router_scheduler_driver = neutron.scheduler.l3_agent_scheduler.ChanceScheduler
@@ -141,12 +181,15 @@ data:
       igmp_snooping_enable = true
       [ovn]
       ovn_emit_need_to_frag = true
+      ovs_create_tap = true
       [ml2]
       type_drivers = geneve,vlan,flat,local
       tenant_network_types = vlan,flat
       extension_drivers=qos,port_security,dns_domain_keywords
       [ml2_type_vlan]
       network_vlan_ranges = datacentre:1000:2000
+      [service_providers]
+      service_provider = TAAS:TAAS:neutron_taas.services.taas.service_drivers.ovn.taas_ovn.TaasOvnDriver:default
       [designate]
       url = https://designate-internal.openstack.svc:9001/v2
       auth_type = password

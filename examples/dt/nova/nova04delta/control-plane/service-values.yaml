@@ -9,6 +9,8 @@ metadata:
 data:
   # --- Fields required by lib/control-plane ---
   preserveJobs: false
+  notificationsBus:
+    cluster: rabbitmq
   tls:
     caBundleSecretName: ""
 
@@ -58,7 +60,7 @@ data:
           storage:
             persistent:
               pvcStorageClass: local-storage
-              pvcStorageRequest: 20G
+              pvcStorageRequest: 20Gi
               pvcStorageSelector: {}
             retention: 24h
             strategy: persistent

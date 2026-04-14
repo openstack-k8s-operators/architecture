@@ -1,0 +1,113 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+# Remove rabbitmq-cell1 (not needed since cells use shared cluster with vhost isolation)
+patches:
+  - target:
+      kind: OpenStackControlPlane
+      name: controlplane
+    patch: |-
+      - op: remove
+        path: /spec/rabbitmq/templates/rabbitmq-cell1
+
+replacements:
+  #
+  # Top-level messagingBus
+  #
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.messagingBus
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.messagingBus
+        options:
+          create: true
+
+  #
+  # Per-service messagingBus (RPC with vhost/user)
+  #
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.barbican.messagingBus
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.barbican.template.messagingBus
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.cinder.messagingBus
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.cinder.template.messagingBus
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.designate.messagingBus
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.designate.template.messagingBus
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.manila.messagingBus
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.manila.template.messagingBus
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.neutron.messagingBus
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.neutron.template.messagingBus
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.nova.messagingBus
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.nova.template.messagingBus
+        options:
+          create: true
+
+  #
+  # Nova cell messagingBus overrides
+  #
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.nova.cell1.messagingBus
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.nova.template.cellTemplates.cell1.messagingBus
+        options:
+          create: true

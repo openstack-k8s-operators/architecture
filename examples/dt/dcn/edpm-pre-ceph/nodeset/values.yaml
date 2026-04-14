@@ -80,6 +80,7 @@ data:
           {% endfor %}
         edpm_nodes_validation_validate_controllers_icmp: false
         edpm_nodes_validation_validate_gateway_icmp: false
+        edpm_nodes_validation_check_for_fqdn: false
         edpm_sshd_allowed_ranges:
           - 192.168.122.0/24
           - 192.168.133.0/24

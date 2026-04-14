@@ -9,7 +9,8 @@ metadata:
 data:
   # --- Fields required by lib/control-plane ---
   preserveJobs: false
-  notificationsBusInstance: rabbitmq-notifications
+  notificationsBus:
+    cluster: rabbitmq-notifications
   tls:
     caBundleSecretName: ""
 
@@ -109,7 +110,7 @@ data:
           persistentVolumeClaim:
             resources:
               requests:
-                storage: 10G
+                storage: 10Gi
           replicas: 1
           scrapeInterval: 30s
         resourceSelector:
@@ -140,5 +141,12 @@ data:
             spec:
               type: LoadBalancer
         replicas: 3
+        resources:
+          limits:
+            cpu: "2"
+            memory: 4Gi
+          requests:
+            cpu: "1"
+            memory: 4Gi
   watcher:
     enabled: true

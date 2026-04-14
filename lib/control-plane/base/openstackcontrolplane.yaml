@@ -50,7 +50,7 @@ spec:
           - designate
         replicas: 3
         storageClass: _replaced_
-        storageRequest: 10G
+        storageRequest: 10Gi
       designateCentral:
         replicas: 1
       designateMdns:
@@ -84,11 +84,11 @@ spec:
       openstack:
         replicas: 3
         secret: osp-secret
-        storageRequest: 5G
+        storageRequest: 5Gi
       openstack-cell1:
         replicas: 3
         secret: osp-secret
-        storageRequest: 5G
+        storageRequest: 5Gi
   glance:
     uniquePodNames: true
     apiOverrides:
@@ -104,7 +104,7 @@ spec:
             - storage
       storage:
         storageClass: _replaced_
-        storageRequest: 10G
+        storageRequest: 10Gi
   heat:
     apiOverride:
       route: {}
@@ -133,7 +133,7 @@ spec:
         replicas: 1
       ironicConductors:
         - replicas: 1
-          storageRequest: 10G
+          storageRequest: 10Gi
       ironicInspector:
         replicas: 1
       ironicNeutronAgent:
@@ -192,14 +192,16 @@ spec:
         cell0:
           cellDatabaseAccount: nova-cell0
           cellDatabaseInstance: openstack
-          cellMessageBusInstance: rabbitmq
+          messagingBus:
+            cluster: rabbitmq
           conductorServiceTemplate:
             replicas: 1
           hasAPIAccess: true
         cell1:
           cellDatabaseAccount: nova-cell1
           cellDatabaseInstance: openstack-cell1
-          cellMessageBusInstance: rabbitmq-cell1
+          messagingBus:
+            cluster: rabbitmq-cell1
           conductorServiceTemplate:
             replicas: 1
           hasAPIAccess: true
@@ -223,12 +225,12 @@ spec:
         ovndbcluster-nb:
           dbType: NB
           networkAttachment: internalapi
-          storageRequest: 10G
+          storageRequest: 10Gi
           replicas: 3
         ovndbcluster-sb:
           dbType: SB
           networkAttachment: internalapi
-          storageRequest: 10G
+          storageRequest: 10Gi
           replicas: 3
       ovnNorthd:
         logLevel: info
@@ -247,8 +249,24 @@ spec:
     templates:
       rabbitmq:
         replicas: 3
+        resources:
+          limits:
+            cpu: "2"
+            memory: 4Gi
+          requests:
+            cpu: "1"
+            memory: 4Gi
       rabbitmq-cell1:
         replicas: 3
+        resources:
+          limits:
+            cpu: "2"
+            memory: 4Gi
+          requests:
+            cpu: "1"
+            memory: 4Gi
+  notificationsBus:
+    cluster: rabbitmq
   secret: osp-secret
   storageClass: _replaced_
   swift:

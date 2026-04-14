@@ -182,6 +182,26 @@ data:
         }
       }
 
+  ospbr-218:
+    dnsDomain: ospbr-218.openstack.lab
+    mtu: 1500
+    vlan: 218
+    base_iface: ospbr
+    net-attach-def: |
+      {
+        "cniVersion": "0.3.1",
+        "name": "ospbr-218",
+        "type": "macvlan",
+        "master": "ospbr-218",
+        "mode": "bridge",
+        "ipam": {
+          "type": "whereabouts",
+          "range": "172.38.0.0/24",
+          "range_start": "172.38.0.10",
+          "range_end": "172.38.0.20"
+        }
+      }
+
   external:
     dnsDomain: external.openstack.lab
     subnets:

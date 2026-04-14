@@ -113,20 +113,36 @@ spec:
             - "/tmp/nvidia-sriov.pp"
           when: policy_file.changed
 
-        - name: Get the Nvidia Driver URL
+        - name: Load NVIDIA config from controller mount
           delegate_to: localhost
           ansible.builtin.set_fact:
-            nvidia_rpm_url: "{{ lookup('file', '/var/lib/openstack/configs/install-nvidia-sriov/nvidia_driver_url') | from_yaml }}"
-            nvidia_pci_address: "{{ lookup('file', '/var/lib/openstack/configs/install-nvidia-sriov/nvidia_pci_address') | from_yaml }}"
+            nvidia_rpm_url: "{{ lookup('file', '/var/lib/openstack/configs/install-nvidia-sriov/nvidia_driver_url') | from_yaml | trim }}"
+            nvidia_pci_address: "{{ lookup('file', '/var/lib/openstack/configs/install-nvidia-sriov/nvidia_pci_address') | trim }}"
 
         - name: Gather the package facts
           ansible.builtin.package_facts:
             manager: auto
 
+        - name: Download NVIDIA driver RPM from URL (skip SSL verify for internal servers)
+          become: true
+          ansible.builtin.get_url:
+            url: "{{ nvidia_rpm_url }}"
+            dest: "/tmp/{{ nvidia_rpm_url.split('/')[-1] }}"
+            validate_certs: false
+          when:
+            - nvidia_rpm_url not in ansible_facts.packages
+            - nvidia_rpm_url is match('^https?://')
+          register: _nvidia_rpm_download
+
+        - name: Set NVIDIA RPM install path (local file after download or original URL/path)
+          ansible.builtin.set_fact:
+            nvidia_rpm_install_path: "{{ ('/tmp/' + nvidia_rpm_url.split('/')[-1]) if nvidia_rpm_url is match('^https?://') else nvidia_rpm_url }}"
+          when: nvidia_rpm_url not in ansible_facts.packages
+
         - name: Install nvidia driver RPM either from path or URL
           become: true
           ansible.builtin.dnf:
-            name: "{{ nvidia_rpm_url }}"
+            name: "{{ nvidia_rpm_install_path }}"
             state: present
             disable_gpg_check: true
           when: nvidia_rpm_url not in ansible_facts.packages

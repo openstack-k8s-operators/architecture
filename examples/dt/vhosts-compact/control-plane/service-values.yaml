@@ -1,0 +1,183 @@
+# local-config: referenced, but not emitted by kustomize
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: service-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+data:
+  # --- Fields required by lib/control-plane ---
+  preserveJobs: false
+  notificationsBus:
+    cluster: rabbitmq-notifications
+  tls:
+    caBundleSecretName: ""
+
+  # --- Top-level messagingBus (RPC default cluster) ---
+  messagingBus:
+    cluster: rabbitmq
+
+  # --- Per-service messagingBus (RPC with vhost/user isolation) ---
+  barbican:
+    messagingBus:
+      cluster: rabbitmq
+      vhost: barbican
+      user: barbican
+  cinder:
+    messagingBus:
+      cluster: rabbitmq
+      vhost: cinder
+      user: cinder
+  designate:
+    messagingBus:
+      cluster: rabbitmq
+      vhost: designate
+      user: designate
+    nsRecords:
+      - hostname: ns1.example.org.
+        priority: 1
+      - hostname: ns2.example.org.
+        priority: 2
+    bind9Services:
+      services:
+        - metadata:
+            annotations:
+              metallb.universe.tf/address-pool: designateext
+              metallb.universe.tf/allow-shared-ip: designateext
+              metallb.universe.tf/LoadBalancerIPs: 172.34.0.80
+          spec:
+            type: LoadBalancer
+        - metadata:
+            annotations:
+              metallb.universe.tf/address-pool: designateext
+              metallb.universe.tf/allow-shared-ip: designateext
+              metallb.universe.tf/LoadBalancerIPs: 172.34.0.81
+          spec:
+            type: LoadBalancer
+        - metadata:
+            annotations:
+              metallb.universe.tf/address-pool: designateext
+              metallb.universe.tf/allow-shared-ip: designateext
+              metallb.universe.tf/LoadBalancerIPs: 172.34.0.82
+          spec:
+            type: LoadBalancer
+  glance:
+    customServiceConfig: |
+      [DEFAULT]
+      enabled_backends = default_backend:swift
+      [glance_store]
+      default_backend = default_backend
+      [default_backend]
+      swift_store_create_container_on_put = True
+      swift_store_auth_version = 3
+      swift_store_auth_address = {{ .KeystoneInternalURL }}
+      swift_store_endpoint_type = internalURL
+      swift_store_user = service:glance
+      swift_store_key = {{ .ServicePassword }}
+    default:
+      replicas: 3
+  heat:
+    messagingBus:
+      cluster: rabbitmq
+      vhost: heat
+      user: heat
+  ironic:
+    messagingBus:
+      cluster: rabbitmq
+      vhost: ironic
+      user: ironic
+  manila:
+    messagingBus:
+      cluster: rabbitmq
+      vhost: manila
+      user: manila
+    manilaShares:
+      share1:
+        replicas: 0
+  neutron:
+    messagingBus:
+      cluster: rabbitmq
+      vhost: neutron
+      user: neutron
+  nova:
+    messagingBus:
+      cluster: rabbitmq
+      vhost: nova
+      user: nova
+    cell0:
+      messagingBus:
+        cluster: rabbitmq
+        vhost: nova-cell0
+        user: nova-cell0
+    cell1:
+      messagingBus:
+        cluster: rabbitmq
+        vhost: nova-cell1
+        user: nova-cell1
+  octavia:
+    messagingBus:
+      cluster: rabbitmq
+      vhost: octavia
+      user: octavia
+    amphoraImageContainerImage: quay.io/gthiemonge/octavia-amphora-image
+    apacheContainerImage: registry.redhat.io/ubi9/httpd-24:latest
+    octaviaAPI:
+      networkAttachments:
+        - internalapi
+    octaviaHousekeeping:
+      networkAttachments:
+        - octavia
+    octaviaHealthManager:
+      networkAttachments:
+        - octavia
+    octaviaWorker:
+      networkAttachments:
+        - octavia
+  ovn:
+    ovnController:
+      nicMappings:
+        datacentre: ospbr
+        octavia: octbr
+  designate-redis:
+    enabled: true
+    replicas: 1
+  swift:
+    enabled: true
+  telemetry:
+    metricStorage:
+      enabled: true
+    ceilometer:
+      enabled: true
+    cloudkitty:
+      messagingBus:
+        cluster: rabbitmq
+        vhost: telemetry
+        user: telemetry
+  watcher:
+    enabled: true
+    messagingBus:
+      cluster: rabbitmq
+      vhost: watcher
+      user: watcher
+
+  # --- RabbitMQ notifications cluster ---
+  rabbitmq:
+    templates:
+      rabbitmq-notifications:
+        override:
+          service:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: internalapi
+                metallb.universe.tf/loadBalancerIPs: 172.17.0.88
+            spec:
+              type: LoadBalancer
+        replicas: 3
+        resources:
+          limits:
+            cpu: "2"
+            memory: 4Gi
+          requests:
+            cpu: "1"
+            memory: 4Gi

@@ -82,21 +82,24 @@ spec:
         cell0:
           cellDatabaseAccount: nova-cell0
           cellDatabaseInstance: openstack
-          cellMessageBusInstance: rabbitmq
+          messagingBus:
+            cluster: rabbitmq
           conductorServiceTemplate:
             replicas: 3
           hasAPIAccess: true
         cell1:
           cellDatabaseAccount: nova-cell1
           cellDatabaseInstance: openstack-cell1
-          cellMessageBusInstance: rabbitmq-cell1
+          messagingBus:
+            cluster: rabbitmq-cell1
           conductorServiceTemplate:
             replicas: 3
           hasAPIAccess: true
         cell2:
           cellDatabaseAccount: nova-cell2
           cellDatabaseInstance: openstack-cell2
-          cellMessageBusInstance: rabbitmq-cell2
+          messagingBus:
+            cluster: rabbitmq-cell2
           conductorServiceTemplate:
             replicas: 3
           hasAPIAccess: true
@@ -125,7 +128,7 @@ spec:
     templates:
       openstack-cell2:
         storageClass: lvms-local-storage
-        storageRequest: 5G
+        storageRequest: 5Gi
         secret: osp-secret
         replicas: 3
 ```

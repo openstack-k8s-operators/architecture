@@ -8,6 +8,8 @@ metadata:
 data:
   # --- Fields required by lib/control-plane ---
   preserveJobs: false
+  notificationsBus:
+    cluster: rabbitmq
   tls:
     caBundleSecretName: ""
 
@@ -80,7 +82,7 @@ data:
     customServiceConfig: |
       [DEFAULT]
       vlan_transparent = true
-      service_plugins = qos,ovn-router,trunk,segments,log
+      service_plugins = qos,ovn-router,trunk,segments,log,taas,tapmirror
       agent_down_time = 600
       router_distributed = true
       router_scheduler_driver = neutron.scheduler.l3_agent_scheduler.ChanceScheduler
@@ -109,11 +111,14 @@ data:
       igmp_snooping_enable = true
       [ovn]
       ovn_emit_need_to_frag = false
+      ovs_create_tap = true
       [ml2]
       type_drivers = geneve,vlan,flat,local
       tenant_network_types = vlan,flat
       [ml2_type_vlan]
       network_vlan_ranges = datacentre:1000:2000
+      [service_providers]
+      service_provider = TAAS:TAAS:neutron_taas.services.taas.service_drivers.ovn.taas_ovn.TaasOvnDriver:default
     ml2MechanismDrivers:
       - ovn
       - baremetal
@@ -165,12 +170,14 @@ data:
       cell0:
         cellDatabaseInstance: openstack
         cellDatabaseAccount: nova-cell0
-        cellMessageBusInstance: rabbitmq
+        messagingBus:
+          cluster: rabbitmq
         hasAPIAccess: true
       cell1:
         cellDatabaseInstance: openstack-cell1
         cellDatabaseAccount: nova-cell1
-        cellMessageBusInstance: rabbitmq-cell1
+        messagingBus:
+          cluster: rabbitmq-cell1
         hasAPIAccess: true
         novaComputeTemplates:
           compute-ironic:
