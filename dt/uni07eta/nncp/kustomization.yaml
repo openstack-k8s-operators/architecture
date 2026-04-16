@@ -129,9 +129,10 @@ patches:
           description: Provider VLAN interface
           name: ospbr-218
           state: up
+          mtu: 9000
           type: vlan
           vlan:
-            base-iface: ospbr
+            base-iface: _replaced_
             id: _replaced_
           ipv4:
             enabled: false
@@ -146,9 +147,10 @@ patches:
           description: Provider VLAN interface
           name: ospbr-218
           state: up
+          mtu: 9000
           type: vlan
           vlan:
-            base-iface: ospbr
+            base-iface: _replaced_
             id: _replaced_
           ipv4:
             enabled: false
@@ -163,9 +165,10 @@ patches:
           description: Provider VLAN interface
           name: ospbr-218
           state: up
+          mtu: 9000
           type: vlan
           vlan:
-            base-iface: ospbr
+            base-iface: _replaced_
             id: _replaced_
           ipv4:
             enabled: false
@@ -204,6 +207,72 @@ replacements:
           name: master-2
         fieldPaths:
           - spec.desiredState.interfaces.[name=ospbr-218].vlan.id
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ospbr-218.base_iface
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-0
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=ospbr-218].vlan.base-iface
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ospbr-218.base_iface
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-1
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=ospbr-218].vlan.base-iface
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ospbr-218.base_iface
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-2
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=ospbr-218].vlan.base-iface
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ospbr-218.mtu
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-0
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=ospbr-218].mtu
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ospbr-218.mtu
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-1
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=ospbr-218].mtu
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ospbr-218.mtu
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: master-2
+        fieldPaths:
+          - spec.desiredState.interfaces.[name=ospbr-218].mtu
 
   - source:
       kind: ConfigMap
