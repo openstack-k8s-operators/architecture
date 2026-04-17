@@ -28,7 +28,7 @@ jobs:
       - name: Run yamale
         run: yamale -s .ci/automation-schema.yaml automation/vars/
 
-  files_exist:
+  validate_automation:
     runs-on: ubuntu-latest
     needs:  # Ensure schema is valid before reading it
       - yamale
@@ -46,3 +46,6 @@ jobs:
 
       - name: Run file checker
         run: python3 .ci/validate-schema-paths.py
+
+      - name: Validate hook ordering
+        run: python3 .ci/validate-hook-ordering.py
