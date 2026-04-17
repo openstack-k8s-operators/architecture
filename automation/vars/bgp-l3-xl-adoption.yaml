@@ -3,7 +3,7 @@ vas:
   bgp-l3-xl-adoption:
     stages:
       - pre_stage_run:
-          - name: Apply taint on worker-9
+          - name: 01 Apply taint on worker-9
             type: cr
             definition:
               spec:
@@ -17,7 +17,7 @@ vas:
             kind: Node
             resource_name: worker-9
             state: patched
-          - name: Disable rp_filters on OCP nodes
+          - name: 02 Disable rp_filters on OCP nodes
             type: cr
             definition:
               spec:
