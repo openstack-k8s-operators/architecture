@@ -3,7 +3,7 @@ vas:
   bgp_dt04_ipv6:
     stages:
       - pre_stage_run:
-          - name: Apply taint on worker-3
+          - name: 01 Apply taint on worker-3
             type: cr
             definition:
               spec:
@@ -17,7 +17,7 @@ vas:
             kind: Node
             resource_name: worker-3.ocp.openstack.lab
             state: patched
-          - name: Disable rp_filters on OCP nodes
+          - name: 02 Disable rp_filters on OCP nodes
             type: cr
             definition:
               spec:
