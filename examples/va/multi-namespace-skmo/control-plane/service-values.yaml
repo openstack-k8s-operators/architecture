@@ -13,6 +13,18 @@ data:
       customServiceConfig: |
         [keystone_notifications]
         pool_name = barbican-listener-regionOne
+  cinderBackup:
+    customServiceConfig: |
+      [DEFAULT]
+      backup_driver = cinder.backup.drivers.swift.SwiftBackupDriver
+      backup_swift_auth = single_user
+      backup_swift_user = service:cinder
+      backup_swift_key = {{ .ServicePassword }}
+      backup_swift_tenant = service
+      backup_swift_auth_version = 3
+      backup_swift_project_domain = Default
+      backup_swift_user_domain = Default
+    replicas: 1
   cinderVolumes:
     lvm-iscsi:
       replicas: 1
@@ -28,3 +40,5 @@ data:
         target_helper = lioadm
         volume_backend_name = lvm_iscsi
         target_ip_address = 172.18.0.10
+  swift:
+    enabled: true
