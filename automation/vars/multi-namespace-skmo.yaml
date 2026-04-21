@@ -100,11 +100,11 @@ vas:
             src_file: ../../multi-namespace/control-plane/networking/nncp/values.yaml
         build_output: ../control-plane.yaml
         post_stage_run:
-          # Run after the OSCP is deployed so hook_controlplane_config can
-          # directly patch the existing OpenStackControlPlane CR.
+          # Run after the OSCP is deployed to update the CA bundle secret and
+          # patch the existing OpenStackControlPlane CR with caBundleSecretName.
           - name: Configure Keystone control plane for federation
             type: playbook
-            source: "federation-controlplane-config.yml"
+            source: "federation-controlplane-config-postdeploy.yml"
             inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
 
       - pre_stage_run:    # stage 6
