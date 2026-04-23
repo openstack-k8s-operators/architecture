@@ -35,7 +35,7 @@ the cluster network.
 * Skupper is installed and Sites are linked between the central and workload
   namespaces.  If you are also routing RabbitMQ traffic through Skupper (for
   `barbican-keystone-listener`), the Site link is already in place.  See the
-  [Skupper installation and site-link guide](../skupper-install.md) if you are
+  [Skupper installation and site-link guide](./skupper-install.md) if you are
   starting from scratch.
 * The central region `OpenStackControlPlane` (`controlplane` in namespace
   `openstack`) is deployed and `Ready`.
