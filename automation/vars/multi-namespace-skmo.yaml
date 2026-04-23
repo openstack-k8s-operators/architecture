@@ -112,6 +112,7 @@ vas:
             # Run before deploying the leaf control plane so that:
             #  - Fresh deploys start with the correct images (no restart).
             #  - Re-runs wait for the OSCP to settle before continuing.
+            # Numeric prefix required: run_hook sorts hooks alphabetically by name.
             type: playbook
             source: "../../playbooks/multi-namespace/ns2_update_containers.yaml"
             inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
@@ -119,7 +120,40 @@ vas:
               cifmw_update_containers_namespace: openstack2
               cifmw_update_containers_metadata: controlplane
               cifmw_update_containers: "true"
-          - name: 02 Prepare SKMO leaf prerequisites in regionZero
+          - name: 02 Install Skupper operator
+            type: playbook
+            source: "skmo/skupper-install.yaml"
+            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
+          - name: 03 Create and link Skupper Sites
+            type: playbook
+            source: "skmo/skupper-sites.yaml"
+            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
+          - name: 04 Create Skupper Connector for central Keystone internal endpoint
+            # Must run before the leaf OSCP is applied so that the Skupper
+            # virtual Service (keystone-regionone) exists when OpenStack
+            # services first try to authenticate.  The cert-manager Certificate
+            # is created here too; it will reconcile once the OSCP operator
+            # creates the rootca-internal Issuer during stage 6 deployment.
+            # Set cifmw_skupper_keystone_enabled=false to skip and revert
+            # keystoneInternalURL in skmo-values.yaml to the public URL.
+            type: playbook
+            source: "skmo/skupper-keystone-connector.yaml"
+            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
+          - name: 05 Create Skupper Listener for Keystone in leaf namespace
+            type: playbook
+            source: "skmo/skupper-listener.yaml"
+            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
+            extra_vars:
+              cifmw_skupper_listener_enabled: true
+              cifmw_skupper_listener_name: keystone-internal
+              cifmw_skupper_listener_cert_name: skupper-keystone-regionone
+              cifmw_skupper_listener_cert_secret: cert-skupper-keystone-regionone
+              cifmw_skupper_listener_routing_key: keystone-internal
+              cifmw_skupper_listener_host: keystone-regionone
+              cifmw_skupper_listener_port: 5000
+              cifmw_skupper_listener_namespace: openstack2
+              cifmw_skupper_listener_ignore_wait_errors: true
+          - name: 06 Prepare SKMO leaf prerequisites in regionZero
             type: playbook
             source: "skmo/prepare-leaf.yaml"
             inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
@@ -140,14 +174,41 @@ vas:
         build_output: ../control-plane2.yaml
         post_stage_run:
           - name: 01 Update central CA bundle with leaf region CAs and wait for reconciliation
+            # Numeric prefix required: run_hook sorts hooks alphabetically by name.
             type: playbook
             source: "skmo/update-central-ca-bundle.yaml"
             inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
-          - name: 02 Configure barbican-keystone-listener transport URL for leaf region
+          - name: 02 Create Skupper Connector for central RabbitMQ
+            type: playbook
+            source: "skmo/skupper-connector.yaml"
+            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
+          - name: 03 Create Skupper Listener for RabbitMQ in leaf namespace
+            type: playbook
+            source: "skmo/skupper-listener.yaml"
+            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
+            extra_vars:
+              cifmw_skupper_listener_name: rabbitmq-keystone
+              cifmw_skupper_listener_cert_name: skupper-rabbitmq-regionone
+              cifmw_skupper_listener_cert_secret: cert-skupper-rabbitmq-regionone
+              cifmw_skupper_listener_routing_key: rabbit-keystone
+              cifmw_skupper_listener_host: rabbitmq-regionone
+              cifmw_skupper_listener_port: 5671
+              cifmw_skupper_listener_namespace: openstack2
+              cifmw_skupper_listener_ignore_wait_errors: false
+          - name: 04 Configure barbican-keystone-listener to use Skupper
             type: playbook
             source: "skmo/configure-leaf-listener.yaml"
             inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
-          - name: 03 Configure Keycloak realms and Keystone federation IdP
+          - name: 05 Patch leaf OSCP internal Keystone endpoint and expose to EDPM
+            # Rewrites the leaf OSCP internal Keystone override to the Skupper
+            # virtual service URL and creates a MetalLB LoadBalancer Service +
+            # DNSData CR so EDPM compute nodes can resolve the Skupper Keystone
+            # hostname.  Skipped automatically when cifmw_skupper_keystone_enabled
+            # is false (set in skupper-keystone-connector.yaml pre-stage hook).
+            type: playbook
+            source: "skmo/configure-leaf-keystone-internal.yaml"
+            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
+          - name: 06 Configure Keycloak realms and Keystone federation IdP
             type: playbook
             source: "federation-post-deploy.yml"
             inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
