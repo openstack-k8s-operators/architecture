@@ -18,6 +18,12 @@ patches:
       version: v1beta1
       kind: OpenStackControlPlane
       name: controlplane
+    path: application-credentials.yaml
+  - target:
+      group: core.openstack.org
+      version: v1beta1
+      kind: OpenStackControlPlane
+      name: controlplane
     patch: |-
       - op: remove
         path: /spec/keystone/template/override/service/internal/metadata
@@ -59,6 +65,18 @@ replacements:
           - spec.keystone.template.externalKeystoneAPI
         options:
           create: true
+  - source:
+      kind: ConfigMap
+      name: skmo-values
+      fieldPath: data.applicationCredentialEnabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.applicationCredential.enabled
+        options:
+          create: true
+
   - source:
       kind: ConfigMap
       name: skmo-values

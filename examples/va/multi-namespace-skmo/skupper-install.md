@@ -199,4 +199,39 @@ kubectl get link -n openstack2
 Once the Link is Ready you can proceed to create Skupper Connectors and
 Listeners for individual services.  See:
 
-* [Routing SKMO Keystone traffic through Skupper](multi-namespace-skmo/skupper-keystone-internal.md)
+* [Routing SKMO Keystone traffic through Skupper](./skupper-keystone-internal.md)
+
+## RabbitMQ Connector — CRD pitfall
+
+When creating a Skupper Connector for the central RabbitMQ service you need
+to discover the TLS Secret name from the RabbitMQ CR.  There are two
+RabbitMQ CRDs in a typical OpenStack on OpenShift cluster and they are
+**not interchangeable**:
+
+| CRD | Group | Used by |
+|-----|-------|---------|
+| `RabbitMq` | `rabbitmq.openstack.org/v1beta1` | OpenStack infra-operator |
+| `RabbitmqCluster` | `rabbitmq.com/v1beta1` | Community RabbitMQ operator |
+
+The OpenStack infra-operator uses `rabbitmq.openstack.org/v1beta1`.  Query
+this CR to retrieve the TLS secret name:
+
+```bash
+oc -n openstack get rabbitmq rabbitmq-cell1 \
+  -o jsonpath='{.spec.tls.secretName}'
+```
+
+Querying `rabbitmq.com/v1beta1` (RabbitmqCluster) will return no results in
+an OpenStack on OpenShift deployment and the Connector will be created without
+TLS credentials, causing silent authentication failures.
+
+Note also that `spec.tls.secretName` is not populated immediately — it is
+written by the operator only after TLS setup completes.  Wait for it to be
+non-empty before creating the Connector:
+
+```bash
+until oc -n openstack get rabbitmq rabbitmq-cell1 \
+    -o jsonpath='{.spec.tls.secretName}' | grep -q .; do
+  echo "Waiting for RabbitMQ TLS secret name..."; sleep 5
+done
+```

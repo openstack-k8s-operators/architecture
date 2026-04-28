@@ -35,7 +35,7 @@ the cluster network.
 * Skupper is installed and Sites are linked between the central and workload
   namespaces.  If you are also routing RabbitMQ traffic through Skupper (for
   `barbican-keystone-listener`), the Site link is already in place.  See the
-  [Skupper installation and site-link guide](../skupper-install.md) if you are
+  [Skupper installation and site-link guide](./skupper-install.md) if you are
   starting from scratch.
 * The central region `OpenStackControlPlane` (`controlplane` in namespace
   `openstack`) is deployed and `Ready`.
@@ -411,3 +411,15 @@ for end-user consumption.
 * The public Keystone endpoint (used by end users and the Keystone service
   catalog) continues to be secured by the central region's external TLS
   certificate as before.
+
+---
+
+## Next steps — Application Credentials
+
+Once Skupper Keystone routing is in place, the leaf region's service users can
+be switched from plain-password authentication to Keystone Application
+Credentials, enabling **near zero downtime password rotation**.
+
+See [application-credentials.md](application-credentials.md) for the full
+documentation.  AC is enabled by default via
+`control-plane2/application-credentials.yaml` included in `kustomization.yaml`.

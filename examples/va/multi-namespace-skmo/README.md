@@ -87,3 +87,22 @@ for the automation configuration used in CI.
 2. [Create the second namespace](namespace.md)
 3. [Configure networking and deploy the OpenStack control planes](control-plane.md)
 4. [Deploy the data planes](dataplane.md)
+
+## Cross-region Skupper networking
+
+This deployment uses [Red Hat Service Interconnect](https://www.redhat.com/en/technologies/cloud-computing/service-interconnect)
+(upstream: [Skupper](https://skupper.io/)) to route cross-region service traffic
+over a secure mTLS application network tunnel, keeping service-to-service
+communication off the public network.
+
+**Documentation:**
+
+- [Skupper installation and site-link guide](./skupper-install.md) — Install
+  the Skupper operator and establish the site link between the central and
+  leaf namespaces
+- [Routing SKMO Keystone traffic through Skupper](./skupper-keystone-internal.md) —
+  Expose the central Keystone internal endpoint to the leaf region via Skupper
+  so that all service authentication traffic stays on the cluster network
+- [Application Credentials](./application-credentials.md) — Enable near-zero
+  downtime password rotation for leaf region service users (requires Skupper
+  Keystone routing)
