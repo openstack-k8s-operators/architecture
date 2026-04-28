@@ -1,0 +1,144 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+transformers:
+  # Set namespace to OpenStack on all namespaced objects without a namespace
+  - |-
+    apiVersion: builtin
+    kind: NamespaceTransformer
+    metadata:
+      name: _ignored_
+      namespace: openstack
+    setRoleBindingSubjects: none
+    unsetOnly: true
+    fieldSpecs:
+      - path: metadata/name
+        kind: Namespace
+        create: true
+
+components:
+  - ../../control-plane/
+  - ../../../../../lib/dataplane/nodeset
+
+resources:
+  - ceph_secret.yaml
+  - nova_gpu_ceph.yaml
+  - neutron_metadata.yaml
+
+patches:
+  - target:
+      kind: OpenStackDataPlaneNodeSet
+      name: .*
+    path: extra_mounts.yaml
+
+replacements:
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values-post-ceph
+      fieldPath: data.nodeset_name
+    targets:
+      - select:
+          kind: OpenStackDataPlaneNodeSet
+        fieldPaths:
+          - metadata.name
+        options:
+          create: true
+  # Ceph config files (DCN convention: ceph_conf dict -> Secret data)
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values-post-ceph
+      fieldPath: data.ceph_conf
+    targets:
+      - select:
+          kind: Secret
+          name: ceph-conf-files
+        fieldPaths:
+          - data
+        options:
+          create: true
+  # Nova Ceph conf
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values-post-ceph
+      fieldPath: data.nova.ceph.conf
+    targets:
+      - select:
+          kind: ConfigMap
+          name: ceph-nova
+        fieldPaths:
+          - data.03-ceph-nova\.conf
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values-post-ceph
+      fieldPath: data.nova.name
+    targets:
+      - select:
+          kind: ConfigMap
+          name: ceph-nova
+        fieldPaths:
+          - metadata.name
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values-post-ceph
+      fieldPath: data.nova.dataSources
+    targets:
+      - select:
+          kind: OpenStackDataPlaneService
+          name: nova-custom-gpu-ceph
+        fieldPaths:
+          - spec.dataSources
+        options:
+          create: true
+  # Dataplane services override
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values-post-ceph
+      fieldPath: data.nodeset.services
+    targets:
+      - select:
+          kind: OpenStackDataPlaneNodeSet
+        fieldPaths:
+          - spec.services
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values-post-ceph
+      fieldPath: data.nova.customDataplaneService.name
+    targets:
+      - select:
+          kind: OpenStackDataPlaneService
+          name: nova-custom-gpu-ceph
+        fieldPaths:
+          - metadata.name
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values-post-ceph
+      fieldPath: data.neutron-metadata.dataSources
+    targets:
+      - select:
+          kind: OpenStackDataPlaneService
+          name: neutron-metadata
+        fieldPaths:
+          - spec.dataSources
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values-post-ceph
+      fieldPath: data.neutron-metadata.customDataplaneService.name
+    targets:
+      - select:
+          kind: OpenStackDataPlaneService
+          name: neutron-metadata
+        fieldPaths:
+          - metadata.name
+        options:
+          create: true
