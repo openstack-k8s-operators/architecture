@@ -27,6 +27,9 @@ The upstream repository lives at
 | Path | Description |
 |---|---|
 | `lib/` | Base templates common to all VAs and DTs. |
+| `lib/control-plane/` | Control plane components (base, dns, storage, ovn-bridge, etc.). |
+| `lib/dataplane/` | Data plane components (nodesets, deployments). |
+| `lib/networking/` | Network configurations (metallb, nad, netconfig, nncp). |
 | `va/` | VA-specific templates. |
 | `dt/` | DT-specific templates. |
 | `examples/va/` | User-environment VA templates. Users are expected to modify these. |
@@ -37,6 +40,12 @@ The upstream repository lives at
 | `.ci/` | Yamale schema (`automation-schema.yaml`) and validation script. |
 
 ## Critical rules
+
+### Kustomize patterns
+
+Templates use the kustomize components and overlays pattern for reusability.
+Values-based customization is done through YAML files. Remote builds via
+GitHub URLs are supported for referencing specific branches or tags.
 
 ### Three-layer structure
 
@@ -213,3 +222,14 @@ automation files in this repo.
 
 When making changes here, consider whether corresponding updates are needed
 in the ci-framework scenario files or the ci-framework-jobs variable packs.
+
+To test a scenario locally with CI-Framework:
+
+```bash
+git clone https://github.com/openstack-k8s-operators/ci-framework.git
+cd ci-framework
+make run_ctx_architecture_test \
+    SCENARIO_NAME=your_scenario \
+    ARCH_REPO=../architecture \
+    NET_ENV_FILE=./ci/playbooks/files/networking-env-definition.yml
+```
