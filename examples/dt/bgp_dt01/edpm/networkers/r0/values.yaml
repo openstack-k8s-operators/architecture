@@ -24,10 +24,15 @@ data:
         edpm_ovn_bridge_mappings:
           - "datacentre:br-ex"
           - "octavia:br-octavia"
-        edpm_ovn_bgp_agent_expose_tenant_networks: true
         edpm_frr_bgp_ipv4_src_network: bgpmainnet
         edpm_frr_bgp_ipv6_src_network: bgpmainnetv6
         edpm_frr_bgp_neighbor_password: f00barZ
+        edpm_frr_ovn_vrf_learn: ovnvrf10
+        edpm_frr_ovn_vrf_advertise: ovnvrf42
+        bgp_bridges:
+          - br-bgp-0
+          - br-bgp-1
+        edpm_neutron_ovn_agent_bgp_peer_bridges: "{{ bgp_bridges | join(',') }}"
         timesync_ntp_servers:
           - hostname: pool.ntp.org
         # conntrack is necessary for some tobiko tests
@@ -46,10 +51,6 @@ data:
           {% set min_viable_mtu = mtu_list | max %}
           network_config:
           - type: ovs_bridge
-            name: {{ neutron_physical_bridge_name }}
-            use_dhcp: false
-            use_dhcpv6: true  # needed to enable IPv6 on bridges
-          - type: ovs_bridge
             name: br-octavia
             use_dhcp: false
             use_dhcpv6: true  # needed to enable IPv6 on bridges
@@ -65,16 +66,30 @@ data:
             domain: {{ dns_search_domains }}
             addresses:
               - ip_netmask: {{ ctlplane_ip }}/{{ ctlplane_cidr }}
-          - type: interface
-            name: nic3
+          - type: ovs_bridge
+            name: {{ bgp_bridges[0] }}
             use_dhcp: false
+            use_dhcpv6: true  # needed to enable IPv6 on bridges
             addresses:
-            - ip_netmask: {{ bgpnet0_ip }}/30
-          - type: interface
-            name: nic4
+              - ip_netmask: {{ bgpnet0_ip }}/30
+            defroute: false
+            members:
+              - type: interface
+                name: nic3
+                # force the MAC address of the bridge to this interface
+                primary: true
+          - type: ovs_bridge
+            name: {{ bgp_bridges[1] }}
             use_dhcp: false
+            use_dhcpv6: true  # needed to enable IPv6 on bridges
             addresses:
-            - ip_netmask: {{ bgpnet1_ip }}/30
+              - ip_netmask: {{ bgpnet1_ip }}/30
+            defroute: false
+            members:
+              - type: interface
+                name: nic4
+                # force the MAC address of the bridge to this interface
+                primary: true
           - type: interface
             name: lo
             addresses:
@@ -85,8 +100,6 @@ data:
           - 192.168.122.0/24
         edpm_sshd_configure_firewall: true
         gather_facts: false
-        neutron_physical_bridge_name: br-ex
-        neutron_public_interface_name: eth1
     networks:
       - defaultRoute: true
         name: CtlPlane
@@ -121,9 +134,6 @@ data:
         ansible:
           ansibleHost: 192.168.122.200
           ansibleVars:
-            edpm_ovn_bgp_agent_local_ovn_peer_ips:
-              - 100.64.0.5
-              - 100.65.0.5
             edpm_frr_bgp_peers:
               - 100.64.0.5
               - 100.65.0.5
@@ -157,8 +167,7 @@ data:
       - reboot-os
       - install-certs
       - ovn
-      - neutron-metadata
-      - ovn-bgp-agent
+      - neutron-ovn
   nova:
     migration:
       ssh_keys:

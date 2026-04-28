@@ -83,7 +83,7 @@ network).
 | Octavia          | (default)        | Must have          |
 | Heat             | (default)        | Must have          |
 | frr              | dataplane        | Must have          |
-| ovn-bgp-agent    | dataplane        | Must have          |
+| neutron-ovn      | dataplane        | Must have          |
 
 ## Considerations/Constraints
 

@@ -67,6 +67,7 @@ data:
   neutron:
     customServiceConfig: |
       [DEFAULT]
+      service_plugins = qos,ovn-router,trunk,segments,port_forwarding,log,placement,ovn-bgp
       vlan_transparent = true
       debug = true
       dns_domain = example.org.
