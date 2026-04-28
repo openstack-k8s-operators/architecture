@@ -29,6 +29,13 @@ This is a collection of CR templates that represent a validated Red Hat OpenStac
 
 5. Between stages 3 and 4, _it is assumed that the user installs Ceph on the 3 OSP compute nodes._  OpenStack K8S CRDs do not provide a way to install Ceph via any sort of combination of CRs.
 
+## Variants
+
+The steps in [Configuring and deploying the pre-Ceph dataplane](dataplane-pre-ceph.md)
+assume that the compute nodes have been pre-provisioned.  If you wish to
+provision these nodes with Ironic using a custom `edpm-hardened-uefi` qcow2
+image, see the [HCI-Ironic variant](../hci-ironic/README.md).
+
 ## Stages
 
 All stages must be executed in the order listed below. Everything is required unless otherwise indicated.
