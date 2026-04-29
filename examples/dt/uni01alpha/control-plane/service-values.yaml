@@ -183,10 +183,14 @@ data:
       ovsdb_probe_interval = 60000
       ovn_emit_need_to_frag = true
       ovs_create_tap = true
+      logical_switch_per_vlan_segment = true
 
       [ml2]
       type_drivers = geneve,vxlan,vlan,flat,local
       tenant_network_types = geneve,flat
+
+      [ml2_type_vlan]
+      network_vlan_ranges = seg1:100:110,seg2:100:110
 
       [service_providers]
       service_provider = TAAS:TAAS:neutron_taas.services.taas.service_drivers.ovn.taas_ovn.TaasOvnDriver:default

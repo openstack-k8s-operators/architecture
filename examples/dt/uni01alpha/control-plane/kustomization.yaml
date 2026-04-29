@@ -8,3 +8,4 @@ components:
 resources:
   - networking/nncp/values.yaml
   - service-values.yaml
+  - neutron-ovn-extra-config.yaml
