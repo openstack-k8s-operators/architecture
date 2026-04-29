@@ -42,7 +42,7 @@ data:
         name: subnet1
     prefix-length: 24
     iface: enp6s0
-    mtu: 1500
+    mtu: 9000
     lb_addresses:
       - 192.168.122.80-192.168.122.90
     endpoint_annotations:
@@ -184,9 +184,9 @@ data:
 
   ospbr-218:
     dnsDomain: ospbr-218.openstack.lab
-    mtu: 1500
+    mtu: 9000
     vlan: 218
-    base_iface: ospbr
+    base_iface: enp6s0
     net-attach-def: |
       {
         "cniVersion": "0.3.1",
@@ -194,6 +194,7 @@ data:
         "type": "macvlan",
         "master": "ospbr-218",
         "mode": "bridge",
+        "mtu": 9000,
         "ipam": {
           "type": "whereabouts",
           "range": "172.38.0.0/24",
@@ -220,6 +221,7 @@ data:
         "name": "datacentre",
         "type": "bridge",
         "bridge": "ospbr",
+        "mtu": 9004,
         "ipam": {}
       }
 

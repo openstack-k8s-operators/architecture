@@ -106,7 +106,7 @@ data:
   ovn:
     ovnController:
       nicMappings:
-        datacentre: ocpbr
+        datacentre: ospbr
         octavia: octbr
 
   neutron:
@@ -119,6 +119,7 @@ data:
       router_scheduler_driver = neutron.scheduler.l3_agent_scheduler.ChanceScheduler
       allow_automatic_l3agent_failover = true
       debug = true
+      global_physnet_mtu = 9000
 
       [agent]
       report_interval = 300
@@ -151,6 +152,10 @@ data:
       [ml2]
       type_drivers = geneve,vxlan,vlan,flat,local
       tenant_network_types = geneve,flat,vlan
+      path_mtu = 9000
+
+      [ml2_type_vlan]
+      network_vlan_ranges = tenant:1000:2000,datacentre:218:218
 
       [service_providers]
       service_provider = TAAS:TAAS:neutron_taas.services.taas.service_drivers.ovn.taas_ovn.TaasOvnDriver:default
