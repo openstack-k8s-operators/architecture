@@ -68,6 +68,10 @@ data:
           {% endfor %}
         neutron_physical_bridge_name: br-ex
         neutron_public_interface_name: eth0
+        edpm_ovn_bridge_mappings:
+          - datacentre:br-ex
+          - seg1:br-ex-100
+          - seg2:br-ex-101
 
         edpm_nodes_validation_validate_controllers_icmp: false
         edpm_nodes_validation_validate_gateway_icmp: false
@@ -133,7 +137,7 @@ data:
       - reboot-os
       - install-certs
       - ovn
-      - neutron-metadata
+      - neutron-ovn
       - libvirt
       - nova
       - telemetry
