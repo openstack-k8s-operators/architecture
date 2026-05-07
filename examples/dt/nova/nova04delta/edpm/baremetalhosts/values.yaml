@@ -21,6 +21,7 @@ data:
     bootMACAddress: CHANGEME
     rootDeviceHints:
       deviceName: /dev/vda
+    preprovisioningNetworkDataName: OPTIONAL
     preprovisioningNetworkData:
-      nmstate: |
+      networkData: |
         CHANGEME
