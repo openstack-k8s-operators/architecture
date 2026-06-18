@@ -204,6 +204,10 @@ spec:
             cluster: rabbitmq-cell1
           conductorServiceTemplate:
             replicas: 1
+          noVNCProxyServiceTemplate:
+            enabled: true
+            networkAttachments:
+              - ctlplane
           hasAPIAccess: true
   octavia:
     enabled: false
