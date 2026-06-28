@@ -184,6 +184,13 @@ data:
 
   ospbr-218:
     dnsDomain: ospbr-218.openstack.lab
+    subnets:
+      - allocationRanges:
+          - end: 172.38.0.250
+            start: 172.38.0.100
+        cidr: 172.38.0.0/24
+        name: subnet1
+        vlan: 218
     mtu: 9000
     vlan: 218
     base_iface: ospbr
