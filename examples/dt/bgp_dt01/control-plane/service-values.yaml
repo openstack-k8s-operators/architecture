@@ -34,7 +34,10 @@ data:
     enabled: true
 
   octavia:
-    enabled: true
+    # octavia is disabled due to limitation with Native OVN BGP:
+    # with this feature, only one provider network can be configured, while
+    # octavia needs its own provider network.
+    enabled: false
     amphoraImageContainerImage: quay.io/gthiemonge/octavia-amphora-image
     apacheContainerImage: registry.redhat.io/ubi9/httpd-24:latest
     octaviaAPI:
@@ -67,32 +70,34 @@ data:
   neutron:
     customServiceConfig: |
       [DEFAULT]
+      service_plugins = qos,ovn-router,trunk,segments,port_forwarding,log,placement,evpn
       vlan_transparent = true
       debug = true
       dns_domain = example.org.
-      external_dns_driver = designate
+      # external_dns_driver = designate
       [ovs]
       igmp_snooping_enable = true
-      [designate]
-      url = https://designate-internal.openstack.svc:9001/v2
-      auth_type = password
-      auth_url = {{ .KeystoneInternalURL }}
-      username = {{ .ServiceUser }}
-      password = {{ .ServicePassword }}
-      project_name = service
-      project_domain_name = Default
-      user_domain_name = Default
-      allow_reverse_dns_lookup = True
-      ipv4_ptr_zone_prefix_size = 24
-      ipv6_ptr_zone_prefix_size = 116
-      ptr_zone_email = admin@example.org
+      # [designate]
+      # url = https://designate-internal.openstack.svc:9001/v2
+      # auth_type = password
+      # auth_url = {{ .KeystoneInternalURL }}
+      # username = {{ .ServiceUser }}
+      # password = {{ .ServicePassword }}
+      # project_name = service
+      # project_domain_name = Default
+      # user_domain_name = Default
+      # allow_reverse_dns_lookup = True
+      # ipv4_ptr_zone_prefix_size = 24
+      # ipv6_ptr_zone_prefix_size = 116
+      # ptr_zone_email = admin@example.org
 
   designate-redis:
-    enabled: true
+    enabled: false
     replicas: 1
 
+  # designate disabled due to OSPRH-26878
   designate:
-    enabled: true
+    enabled: false
     nsRecords:
       - hostname: ns1.example.org.
         priority: 1
