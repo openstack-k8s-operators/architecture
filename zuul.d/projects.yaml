@@ -6,6 +6,7 @@
       - rhoso-architecture-validate-bgp-l3-xl-adoption
       - rhoso-architecture-validate-bgp_dt01
       - rhoso-architecture-validate-bgp_dt04_ipv6
+      - rhoso-architecture-validate-bgp_dt05
       - rhoso-architecture-validate-bmo01
       - rhoso-architecture-validate-dcn
       - rhoso-architecture-validate-dt-sharded

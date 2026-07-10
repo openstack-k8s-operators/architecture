@@ -64,6 +64,24 @@
       cifmw_architecture_scenario: bgp_dt04_ipv6
 - job:
     files:
+    - automation/mocks/bgp_dt05.yaml
+    - examples/dt/bgp_dt05/control-plane
+    - examples/dt/bgp_dt05/control-plane/networking
+    - examples/dt/bgp_dt05/control-plane/networking/nncp
+    - examples/dt/bgp_dt05/edpm/computes/r0
+    - examples/dt/bgp_dt05/edpm/computes/r1
+    - examples/dt/bgp_dt05/edpm/computes/r2
+    - examples/dt/bgp_dt05/edpm/deployment
+    - examples/dt/bgp_dt05/edpm/networkers/r0
+    - examples/dt/bgp_dt05/edpm/networkers/r1
+    - examples/dt/bgp_dt05/edpm/networkers/r2
+    - lib
+    name: rhoso-architecture-validate-bgp_dt05
+    parent: rhoso-architecture-base-job
+    vars:
+      cifmw_architecture_scenario: bgp_dt05
+- job:
+    files:
     - automation/mocks/bmo01.yaml
     - automation/net-env/bmo01.yaml
     - dt/bmo01
