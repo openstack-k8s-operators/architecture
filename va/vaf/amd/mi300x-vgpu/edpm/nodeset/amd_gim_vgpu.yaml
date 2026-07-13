@@ -1,0 +1,118 @@
+---
+# nova-extra-config: Nova [pci] drop-in config for AMD Instinct MI300X GIM SR-IOV VFs.
+# See examples/va/vaf/amd/mi300x-vgpu/edpm/nodeset/values.yaml for the template.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nova-extra-config
+data:
+  03-gpu-nova.conf: _replaced_
+  25-cpu-pinning-nova.conf: _replaced_
+---
+# vfio-pci-bind: AMD GIM SR-IOV binding service:
+# blacklists amdgpu, loads gim and vfio-pci modules, sets vf_num per PF.
+# GIM driver manages the MI300X PF and creates SR-IOV VFs.
+# NOTE: in FR6, edpm_accel_drivers covers the most of this custom service steps.
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneService
+metadata:
+  name: vfio-pci-bind
+spec:
+  playbookContents: |
+    - name: Bind vfio-pci to AMD MI300X GIM SR-IOV VFs
+      hosts: all
+      tasks:
+        - name: Blacklist amdgpu kernel module
+          become: true
+          ansible.builtin.copy:
+            dest: "/etc/modprobe.d/blacklist-amdgpu.conf"
+            mode: "0644"
+            content: |-
+              blacklist amdgpu
+            force: false
+          register: _blacklist_amdgpu
+
+        - name: Ensure vfio and vfio-pci modules are loaded at boot
+          become: true
+          ansible.builtin.copy:
+            dest: /etc/modules-load.d/vfio.conf
+            mode: "0644"
+            content: |
+              vfio
+              vfio-pci
+            force: false
+          register: _load_vfio
+
+        - name: Ensure GIM module is loaded at boot
+          become: true
+          ansible.builtin.copy:
+            dest: /etc/modules-load.d/gim.conf
+            mode: "0644"
+            content: |
+              gim
+            force: false
+          register: _load_gim
+
+        # CHANGEME 8 VFs per PF, CPX mode - adjust vf_num as needed for your vGPU slicing configuration
+        - name: Set GIM vf_num
+          become: true
+          ansible.builtin.copy:
+            dest: /etc/modprobe.d/gim.conf
+            mode: "0644"
+            content: |
+              options gim vf_num=8
+            force: false
+          register: _gim_options
+
+        - name: Check if grub2-mkconfig has --update-bls-cmdline option
+          ansible.builtin.shell:
+            cmd: grub2-mkconfig --help | grep '\-\-update-bls-cmdline'
+          ignore_errors: true
+          register: check_update_bls_cmdline
+          changed_when: false
+
+        - name: Regenerate initramfs
+          become: true
+          ansible.builtin.command: "{{ item }}"
+          loop:
+            - 'dracut --force'
+            - >-
+              grub2-mkconfig -o /boot/grub2/grub.cfg
+              {{ '--update-bls-cmdline'
+              if check_update_bls_cmdline.rc == 0
+              else '' }}
+            - tuned-adm profile {{ edpm_tuned_profile }}
+            - 'dracut --force'
+          when: >-
+            _blacklist_amdgpu.changed or _load_vfio.changed
+            or _load_gim.changed or _gim_options.changed
+---
+# install-amd-gim: AMD GIM pre-built RPM installer via edpm_accel_drivers.
+# Configure delivery method in ansibleVars (values.yaml):
+#
+#   URL (single RPM):
+#     edpm_accel_drivers_nvidia_custom_url: "http://CHANGEME/gim.rpm"
+#
+#   Repo (dnf install by package name):
+#     edpm_accel_drivers_nvidia_repo_url: "http://CHANGEME/gim-repo"
+#     edpm_accel_drivers_nvidia_repo_gpgkey: ""   # or GPG key URL
+#     edpm_accel_drivers_nvidia_package_name: gim  # default set below
+#
+# Ref: https://github.com/amd/MxGPU-Virtualization
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneService
+metadata:
+  name: install-amd-gim
+spec:
+  playbookContents: |
+    - name: Install AMD GIM driver
+      hosts: "{{ edpm_override_hosts | default('all', true) }}"
+      strategy: linear
+      gather_facts: true
+      any_errors_fatal: "{{ edpm_any_errors_fatal | default(true) }}"
+      max_fail_percentage: "{{ edpm_max_fail_percentage | default(0) }}"
+      environment: "{{ edpm_playbook_environment | default({}) }}"
+      tasks:
+        - name: Deploy AMD GIM accelerator driver via edpm_accel_drivers role
+          ansible.builtin.import_role:
+            name: osp.edpm.edpm_accel_drivers

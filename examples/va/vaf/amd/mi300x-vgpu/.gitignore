@@ -1,0 +1,5 @@
+nncp.yaml
+networking.yaml
+control-plane.yaml
+nodeset.yaml
+deployment.yaml
