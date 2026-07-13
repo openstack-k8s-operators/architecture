@@ -1,0 +1,65 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+transformers:
+  # Set namespace to openstack on all namespaced objects without a namespace
+  - |-
+    apiVersion: builtin
+    kind: NamespaceTransformer
+    metadata:
+      name: _ignored_
+      namespace: openstack
+    setRoleBindingSubjects: none
+    unsetOnly: true
+    fieldSpecs:
+    - path: metadata/name
+      kind: Namespace
+      create: true
+
+components:
+  - ../../../../../../lib/dataplane/nodeset
+
+resources:
+  - amd_gim_vgpu.yaml
+
+replacements:
+  # GPU PCI device spec
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values
+      fieldPath: data.nova.pci.conf
+    targets:
+      - select:
+          kind: ConfigMap
+          name: nova-extra-config
+        fieldPaths:
+          - data.03-gpu-nova\.conf
+        options:
+          create: true
+  # Optional CPU pinning
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values
+      fieldPath: data.nova.compute.conf
+    targets:
+      - select:
+          kind: ConfigMap
+          name: nova-extra-config
+        fieldPaths:
+          - data.25-cpu-pinning-nova\.conf
+        options:
+          create: true
+  # preProvisioned flag
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values
+      fieldPath: data.preProvisioned
+    targets:
+      - select:
+          kind: OpenStackDataPlaneNodeSet
+          name: openstack-edpm
+        fieldPaths:
+          - spec.preProvisioned
+        options:
+          create: true
