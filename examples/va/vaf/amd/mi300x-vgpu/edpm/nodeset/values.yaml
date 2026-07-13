@@ -1,0 +1,229 @@
+# yamllint disable rule:line-length
+# local-config: referenced, but not emitted by kustomize
+#
+# For GIM driver installation (install-amd-gim service),
+# uncomment a delivery method and add install-amd-gim to services above.
+# Ignore nvidia-specific variables names - it works for AMD as well in FR5.
+#
+# Option A — single RPM from URL:
+#   edpm_accel_drivers_nvidia_custom_url: "http://CHANGEME/gim.rpm"
+#
+# Option B — DNF repo:
+#   edpm_accel_drivers_nvidia_repo_url: "http://CHANGEME/gim-repo"
+#   edpm_accel_drivers_nvidia_repo_gpgkey: ""   # CHANGEME or leave empty to skip
+#   edpm_accel_drivers_gim_package_name: gim    # adjust to the actual RPM name
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: edpm-nodeset-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+data:
+  preProvisioned: "true"
+
+  ssh_keys:
+    # base64-encoded (base64 -w0 < ~/.ssh/id_rsa_edpm)
+    authorized: CHANGEME
+    # base64-encoded private key for Ansible access
+    private: CHANGEME2
+    # base64-encoded public key
+    public: CHANGEME3
+
+  nodeset:
+    ansible:
+      ansibleUser: cloud-admin
+      ansiblePort: 22
+      ansibleVars:
+        # OCP domain - OCP-managed DNS domain (must match NetConfig dnsDomain).
+        fqdn_internal_api: edpm-compute-0.internalapi.amd-mi300x-vgpu.test  # CHANGEME
+
+        # CHANGEME credentials - see https://access.redhat.com/solutions/253273
+        # edpm_bootstrap_command: |
+        #   subscription-manager register --username <subscription_manager_username> \
+        #     --password <subscription_manager_password>
+        #   subscription-manager release --set=9.6
+        #   subscription-manager repos --disable=*
+        #   subscription-manager repos \
+        #     --enable=rhel-9-for-x86_64-baseos-eus-rpms \
+        #     --enable=rhel-9-for-x86_64-appstream-eus-rpms \
+        #     --enable=rhel-9-for-x86_64-highavailability-eus-rpms \
+        #     --enable=fast-datapath-for-rhel-9-x86_64-rpms \
+        #     --enable=rhoso-18.0-for-rhel-9-x86_64-rpms \
+        #     --enable=rhceph-9-tools-for-rhel-9-x86_64-rpms
+
+        timesync_ntp_servers:
+          - hostname: pool.ntp.org
+
+        # CHANGEME - adjust hugepages for your workload.
+        # NOTE: additional parameters were used in the reference deployment during validation:
+        # pcie=realloc=off pci=realloc=off nokaslr norandmaps mitigations=off pcie_aspm=off
+        # processor.max_cstate=0 quiet transparent_hugepage=always tsc=nowatchdog
+        # nmi_watchdog=0 nowatchdog pci=bfsort numa_balancing=disable rd.auto=1
+        edpm_kernel_args: "default_hugepagesz=1GB hugepagesz=1G hugepages=64 amd_iommu=on iommu=pt modprobe.blacklist=amdgpu vfio-pci.ids=1002:74b5 rd.driver.pre=vfio-pci"
+
+        edpm_tuned_profile: cpu-partitioning-powersave
+        # CHANGEME — adjust for your CPU topology.
+        # GIM SR-IOV VF assignment does not require CPU pinning.
+        # edpm_tuned_isolated_cores: "4-23,28-47"
+
+        # Reboot timeout: AMD host with GIM VFs takes longer to POST and boot.
+        # The validated lab required 20 min — increase if SSH is not ready in time.
+        edpm_reboot_strategy: auto
+        edpm_reboot_timeout_reboot: 1200
+        edpm_reboot_post_reboot_delay: 360
+
+        edpm_ovn_bridge_mappings:
+          - datacentre:br-ex
+          - internet:br-internet
+
+        # Map logical NIC names (nic1, nic2) to physical MAC addresses.
+        # Run `ip -o link` on the EDPM host to find the correct MACs.
+        edpm_network_config_os_net_config_mappings:
+          edpm-compute-0:
+            nic1: 00:00:00:00:00:01  # CHANGEME — external access NIC MAC
+            nic2: 00:00:00:00:00:02  # CHANGEME — trunk NIC MAC (VLANs: ctlplane, internalapi, storage, tenant)
+
+        # Two OVS bridges:
+        #   br-internet (nic1) — external access network, direct IP.
+        #   br-ex (nic2) — trunk: ctlplane VLAN + isolated OpenStack VLANs.
+        # CHANGEME - adjust IP, CIDR, gateway, VLAN IDs, and domain to match your environment.
+        edpm_network_config_template: |
+          ---
+          {% set mtu_list = [ctlplane_mtu] %}
+          {% for network in nodeset_networks %}
+          {% set _ = mtu_list.append(lookup('vars', networks_lower[network] ~ '_mtu')) %}
+          {%- endfor %}
+          {% set min_viable_mtu = mtu_list | max %}
+          network_config:
+          - type: ovs_bridge
+            name: {{ neutron_public_interface_name }}
+            mtu: {{ min_viable_mtu }}
+            use_dhcp: false
+            addresses:
+            - ip_netmask: 192.168.0.100/24  # CHANGEME — external IP/CIDR
+            routes:
+              - ip_netmask: 0.0.0.0/0
+                default: True
+                next_hop: 192.168.0.1  # CHANGEME — gateway for external access network
+            members:
+            - type: interface
+              name: nic1
+              mtu: {{ min_viable_mtu }}
+              primary: true
+          - type: ovs_bridge
+            name: {{ neutron_physical_bridge_name }}
+            mtu: {{ min_viable_mtu }}
+            use_dhcp: false
+            members:
+            - type: interface
+              name: nic2
+              mtu: {{ min_viable_mtu }}
+              primary: true
+            - type: vlan
+              mtu: {{ min_viable_mtu }}
+              vlan_id: 10  # CHANGEME — ctlplane VLAN ID
+              addresses:
+              - ip_netmask: {{ ctlplane_ip }}/{{ ctlplane_cidr }}
+              dns_servers: {{ ctlplane_dns_nameservers }}
+              domain: {{ dns_search_domains }}
+              routes: {{ ctlplane_host_routes }}
+          {% for network in nodeset_networks %}
+            - type: vlan
+              mtu: {{ lookup('vars', networks_lower[network] ~ '_mtu') }}
+              vlan_id: {{ lookup('vars', networks_lower[network] ~ '_vlan_id') }}
+              addresses:
+              - ip_netmask:
+                  {{ lookup('vars', networks_lower[network] ~ '_ip') }}/{{ lookup('vars', networks_lower[network] ~ '_cidr') }}
+              routes: {{ lookup('vars', networks_lower[network] ~ '_host_routes') }}
+          {% endfor %}
+
+        neutron_physical_bridge_name: br-ex
+        neutron_public_interface_name: br-internet
+        edpm_nodes_validation_validate_controllers_icmp: false
+        edpm_nodes_validation_validate_gateway_icmp: false
+        edpm_sshd_configure_firewall: true
+        edpm_network_config_update: true
+        edpm_network_config_nmstate: true
+        edpm_sshd_allowed_ranges:
+          - 192.168.122.0/24  # CHANGEME
+        gather_facts: false
+
+    networks:
+      - defaultRoute: false
+        name: ctlplane
+        subnetName: subnet1
+      - name: internalapi
+        subnetName: subnet1
+      - name: storage
+        subnetName: subnet1
+      - name: tenant
+        subnetName: subnet1
+
+    nodes:
+      edpm-compute-0:
+        ansible:
+          ansibleHost: 192.168.0.100  # CHANGEME
+        # Real OS hostname — must match `hostname -f` on the node. Becomes the host=<hostname> in nova.conf.
+        # It may be in OCP domain as well.
+        hostName: edpm-compute-0.example.com  # CHANGEME
+        networks:
+          - defaultRoute: false
+            name: ctlplane
+            subnetName: subnet1
+            fixedIP: 192.168.122.100  # CHANGEME
+          - name: internalapi
+            subnetName: subnet1
+          - name: storage
+            subnetName: subnet1
+          - name: tenant
+            subnetName: subnet1
+
+    services:
+      # To install the GIM driver automatically, uncomment install-amd-gim and
+      # configure edpm_accel_drivers_* vars (GIM driver section below).
+      # It must run before bootstrap so gim.ko is in the initramfs after dracut.
+      # - install-amd-gim
+      - vfio-pci-bind
+      - bootstrap
+      - download-cache
+      - configure-network
+      - validate-network
+      - install-os
+      - configure-os
+      - ssh-known-hosts
+      - run-os
+      - reboot-os
+      - install-certs
+      - libvirt
+      - ovn
+      - neutron-ovn
+      - nova
+      - neutron-metadata
+      - telemetry
+
+  nova:
+    compute:
+      # GIM SR-IOV VF assignment does not require CPU pinning.
+      # CHANGEME - adjust if your workload needs dedicated CPU cores.
+      conf: ""
+      # conf: |
+      #   [DEFAULT]
+      #   reserved_host_memory_mb = 4096
+      #   [compute]
+      #   cpu_shared_set = 0-3,24-27    # CHANGEME
+      #   cpu_dedicated_set = 8-23,32-47  # CHANGEME
+    migration:
+      ssh_keys:
+        private: CHANGEME4
+        public: CHANGEME5
+
+    pci:
+      conf: |
+        # AMD Instinct MI300X — vGPU via GIM SR-IOV VF.
+        # To list VF BDF addresses, use: lspci -nn | grep "MI300X VF"
+        [pci]
+        report_in_placement = True
+        device_spec = {"vendor_id": "1002", "product_id": "74b5", "address": "CHANGEME:XX:*", "device_type": "type-VF"}
+        device_spec = {"vendor_id": "1002", "product_id": "74b5", "address": "CHANGEME:YY:*", "device_type": "type-VF"}
+        alias = {"name": "mi300x-vf", "vendor_id": "1002", "product_id": "74b5", "device_type": "type-VF", "numa_policy": "preferred"}
