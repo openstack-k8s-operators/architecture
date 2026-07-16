@@ -84,24 +84,28 @@ data:
       customServiceConfig: |
         [controller_worker]
         loadbalancer_topology=ACTIVE_STANDBY
+        volume_driver=volume_cinder_driver
     octaviaHousekeeping:
       networkAttachments:
         - octavia
       customServiceConfig: |
         [controller_worker]
         loadbalancer_topology=ACTIVE_STANDBY
+        volume_driver=volume_cinder_driver
     octaviaHealthManager:
       networkAttachments:
         - octavia
       customServiceConfig: |
         [controller_worker]
         loadbalancer_topology=ACTIVE_STANDBY
+        volume_driver=volume_cinder_driver
     octaviaWorker:
       networkAttachments:
         - octavia
       customServiceConfig: |
         [controller_worker]
         loadbalancer_topology=ACTIVE_STANDBY
+        volume_driver=volume_cinder_driver
 
   ovn:
     ovnController:
