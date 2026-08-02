@@ -159,7 +159,7 @@ data:
           - destination: 192.168.122.0/24
             nexthop: 192.168.123.1
           - destination: 192.168.124.0/24
-            nexthop: 192.168.123.1ØØ
+            nexthop: 192.168.123.1
       - allocationRanges:
           - end: 192.168.124.120
             start: 192.168.124.100
