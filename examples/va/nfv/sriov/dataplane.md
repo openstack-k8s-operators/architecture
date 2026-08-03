@@ -14,6 +14,12 @@ Change to the nfv/sriov/edpm directory
 ```
 cd architecture/examples/va/nfv/sriov/edpm
 ```
+
+Modify the [baremetalset-password.env](../../../../va/nfv/sriov/edpm/nodeset/baremetalset-password.env) with a secure root password for bare-metal provisioning:
+```
+NodeRootPassword=YourSecurePasswordHere
+```
+
 Edit the [nodeset/values.yaml](nodeset/values.yaml) and [deployment/values.yaml](deployment/values.yaml) files to suit 
 your environment.
 ```
