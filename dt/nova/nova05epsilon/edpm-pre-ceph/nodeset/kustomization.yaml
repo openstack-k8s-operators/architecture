@@ -20,8 +20,8 @@ transformers:
 secretGenerator:
   - name: baremetalset-password-secret
     behavior: create
-    literals:
-      - NodeRootPassword=redhat
+    envs:
+      - baremetalset-password.env
     options:
       disableNameSuffixHash: true
 
@@ -90,19 +90,6 @@ replacements:
           kind: OpenStackDataPlaneNodeSet
         fieldPaths:
           - spec.baremetalSetTemplate
-        options:
-          create: true
-  # BMO root password for provisioned host
-  - source:
-      kind: ConfigMap
-      name: edpm-nodeset-values
-      fieldPath: data.root_password
-    targets:
-      - select:
-          kind: Secret
-          name: baremetalset-password-secret
-        fieldPaths:
-          - data.NodeRootPassword
         options:
           create: true
   # BMO networkData for provisioned host
