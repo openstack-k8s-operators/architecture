@@ -17,26 +17,20 @@ transformers:
       kind: Namespace
       create: true
 
+secretGenerator:
+  - name: baremetalset-password-secret
+    behavior: create
+    envs:
+      - baremetalset-password.env
+    options:
+      disableNameSuffixHash: true
+
 components:
   - ../../../../../lib/dataplane/networker-nodeset
 
 resources:
-  - baremetalset-password-secret.yaml
 
 replacements:
-  - source:
-      kind: ConfigMap
-      name: networker-nodeset-values
-      fieldPath: data.root_password
-    targets:
-      - select:
-          kind: Secret
-          name: baremetalset-password-secret
-        fieldPaths:
-          - data.NodeRootPassword
-        options:
-          create: true
-
   - source:
       kind: ConfigMap
       name: networker-nodeset-values
