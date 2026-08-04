@@ -1,0 +1,55 @@
+# local-config: referenced, but not emitted by kustomize
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: service-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+data:
+  preserveJobs: false
+  notificationsBus:
+    cluster: rabbitmq
+  tls:
+    caBundleSecretName: ""
+
+  nova:
+    # The alias must match the device_spec alias in edpm/nodeset/values.yaml.
+    apiServiceTemplate:
+      customServiceConfig: |
+        [filter_scheduler]
+        pci_in_placement = True
+        [pci]
+        alias = {"name": "mi300x-vf", "vendor_id": "1002", "product_id": "74b5", "device_type": "type-VF", "numa_policy": "preferred"}
+    schedulerServiceTemplate:
+      customServiceConfig: |
+        [filter_scheduler]
+        pci_in_placement = True
+
+  neutron:
+    customServiceConfig: |
+      [ml2]
+      mechanism_drivers = ovn
+
+  ovn:
+    ovnController:
+      nicMappings:
+        datacentre: enp1s0  # CHANGEME — physical NIC name for OVN external traffic
+
+  glance:
+    default:
+      replicas: 3
+    customServiceConfig: |
+      [DEFAULT]
+      enabled_backends = default_backend:swift
+      [glance_store]
+      default_backend = default_backend
+      [default_backend]
+      swift_store_create_container_on_put = True
+      swift_store_auth_version = 3
+      swift_store_auth_address = {{ .KeystoneInternalURL }}
+      swift_store_endpoint_type = internalURL
+      swift_store_user = service:glance
+      swift_store_key = {{ .ServicePassword }}
+  swift:
+    enabled: true
