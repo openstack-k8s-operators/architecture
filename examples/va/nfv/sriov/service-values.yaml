@@ -42,6 +42,22 @@ data:
       replicas: 1
   swift:
     enabled: true
+  telemetry:
+    enabled: true
+    template:
+      ceilometer:
+        enabled: true
+      metricStorage:
+        dashboardsEnabled: true
+        enabled: true
+        monitoringStack:
+          alertingEnabled: true
+          scrapeInterval: 30s
+          storage:
+            strategy: persistent
+            retention: 24h
+            persistent:
+              pvcStorageRequest: 20G
   nova:
     schedulerServiceTemplate:
       customServiceConfig: |
