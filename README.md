@@ -1,6 +1,6 @@
 # OpenStack K8S Operators Architectures
 
-This repository contains templates used a a part of the validated architecture
+This repository contains templates used as part of the validated architecture
 (VA) and deployment topology (DT) effort.
 
 Validated architectures and deployment topologies are represented as kustomize
