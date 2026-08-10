@@ -114,3 +114,81 @@ replacements:
           - spec.nova.template.schedulerServiceTemplate.customServiceConfig
         options:
           create: true
+  # Telemetry metric storage for NFV deployments
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.telemetry.template.metricStorage.enabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.telemetry.template.metricStorage.enabled
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.telemetry.template.metricStorage.dashboardsEnabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.telemetry.template.metricStorage.dashboardsEnabled
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.telemetry.template.metricStorage.monitoringStack.alertingEnabled
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.telemetry.template.metricStorage.monitoringStack.alertingEnabled
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.telemetry.template.metricStorage.monitoringStack.scrapeInterval
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.telemetry.template.metricStorage.monitoringStack.scrapeInterval
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.telemetry.template.metricStorage.monitoringStack.storage.strategy
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.telemetry.template.metricStorage.monitoringStack.storage.strategy
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.telemetry.template.metricStorage.monitoringStack.storage.retention
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.telemetry.template.metricStorage.monitoringStack.storage.retention
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.telemetry.template.metricStorage.monitoringStack.storage.persistent.pvcStorageRequest
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.telemetry.template.metricStorage.monitoringStack.storage.persistent.pvcStorageRequest
+        options:
+          create: true
