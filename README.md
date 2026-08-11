@@ -1,6 +1,6 @@
 # OpenStack K8S Operators Architectures
 
-This repository contains templates used a a part of the validated architecture
+This repository contains templates used as part of the validated architecture
 (VA) and deployment topology (DT) effort.
 
 Validated architectures and deployment topologies are represented as kustomize
@@ -29,7 +29,7 @@ The architecture layout is made up of three main layers:
    specific to a given VA or DT.
 3. User-environment templates and values in `examples/va/*` and `examples/dt/*`
    directories that are specific to a given VA or DT. These user-environment
-   templates are expected to be modified to match the users unique environment.
+   templates are expected to be modified to match the users' unique environment.
 
 ## Validated Architectures
 
