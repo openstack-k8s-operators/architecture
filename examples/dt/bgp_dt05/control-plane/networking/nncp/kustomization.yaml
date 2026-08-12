@@ -1,0 +1,724 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+transformers:
+  # Set namespace to OpenStack on all namespaced objects without a namespace
+  - |-
+    apiVersion: builtin
+    kind: NamespaceTransformer
+    metadata:
+      name: _ignored_
+      namespace: openstack
+    setRoleBindingSubjects: none
+    unsetOnly: true
+    fieldSpecs:
+    - path: metadata/name
+      kind: Namespace
+      create: true
+
+components:
+  - ../../../../../../lib/nncp-l3
+
+resources:
+  - values.yaml
+  - ocp_worker_nodes_nncp.yaml
+
+patches:
+  # Add BGP, octavia and designate interfaces
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+    patch: |-
+      - op: add
+        path: /spec/desiredState/interfaces/-
+        value:
+          description: BGP interface 1
+          ipv4:
+            address:
+            - ip: _replaced_
+              prefix-length: _replaced_
+            enabled: true
+            dhcp: false
+          ipv6:
+            enabled: false
+          mtu: 1500
+          name: _replaced_
+          state: up
+          type: ethernet
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+      name: "node-[3-5]"  # node-6 does not need a second BGP interface
+    patch: |-
+      - op: add
+        path: /spec/desiredState/interfaces/-
+        value:
+          description: BGP interface 2
+          ipv4:
+            address:
+            - ip: _replaced_
+              prefix-length: _replaced_
+            enabled: true
+            dhcp: false
+          ipv6:
+            enabled: false
+          mtu: 1500
+          name: _replaced_
+          state: up
+          type: ethernet
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+    patch: |-
+      - op: add
+        path: /spec/desiredState/interfaces/-
+        value:
+          description: loopback interface
+          ipv4:
+            address:
+              - ip: _replaced_
+                prefix-length: _replaced_
+            enabled: true
+            dhcp: false
+          ipv6:
+            address:
+              - ip: _replaced_
+                prefix-length: _replaced_
+            enabled: true
+            dhcp: false
+          name: _replaced_
+          mtu: 65536
+          state: up
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+    patch: |-
+      - op: add
+        path: /spec/desiredState/interfaces/-
+        value:
+          description: Octavia bridge
+          mtu: 1500
+          name: octavia
+          type: linux-bridge
+          state: up
+          ipv4:
+            address:
+              - ip: _replaced_
+                prefix-length: _replaced_
+            enabled: true
+  - target:
+      kind: NodeNetworkConfigurationPolicy
+    patch: |-
+      - op: add
+        path: /spec/desiredState/interfaces/-
+        value:
+          description: Designate bridge
+          mtu: 1500
+          name: designate
+          type: linux-bridge
+          state: up
+          ipv4:
+            address:
+              - ip: _replaced_
+                prefix-length: _replaced_
+            enabled: true
+
+replacements:
+  # Node names (workers)
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_3.name
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: node-3
+        fieldPaths:
+          - metadata.name
+          - spec.nodeSelector.[kubernetes.io/hostname]
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_4.name
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: node-4
+        fieldPaths:
+          - metadata.name
+          - spec.nodeSelector.[kubernetes.io/hostname]
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_5.name
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: node-5
+        fieldPaths:
+          - metadata.name
+          - spec.nodeSelector.[kubernetes.io/hostname]
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_6.name
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: node-6
+        fieldPaths:
+          - metadata.name
+          - spec.nodeSelector.[kubernetes.io/hostname]
+
+  # configure ctlplane interfaces
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ctlplane.iface
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+        fieldPaths:
+          - spec.desiredState.interfaces.[type=ethernet].name
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_3.ctlplane_ip
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-0
+        fieldPaths:
+          - spec.desiredState.interfaces.2.ipv4.address.0.ip
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_4.ctlplane_ip
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-1
+        fieldPaths:
+          - spec.desiredState.interfaces.2.ipv4.address.0.ip
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_5.ctlplane_ip
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-2
+        fieldPaths:
+          - spec.desiredState.interfaces.2.ipv4.address.0.ip
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_6.ctlplane_ip
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-3
+        fieldPaths:
+          - spec.desiredState.interfaces.2.ipv4.address.0.ip
+
+  # ctlplane prefix-lengths
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.ctlplane.prefix-length
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+        fieldPaths:
+          - spec.desiredState.interfaces.2.ipv4.address.0.prefix-length
+
+  # BGP worker-0/node-3 IPs
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_3.bgp_ip.0
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-0
+        fieldPaths:
+          - spec.desiredState.interfaces.4.ipv4.address.0.ip
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_3.bgp_ip.1
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-0
+        fieldPaths:
+          - spec.desiredState.interfaces.5.ipv4.address.0.ip
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_3.loopback_ip
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-0
+        fieldPaths:
+          - spec.desiredState.interfaces.6.ipv4.address.0.ip
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_3.loopback_ipv6
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-0
+        fieldPaths:
+          - spec.desiredState.interfaces.6.ipv6.address.0.ip
+  # BGP worker-1/node-4 IPs
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_4.bgp_ip.0
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-1
+        fieldPaths:
+          - spec.desiredState.interfaces.4.ipv4.address.0.ip
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_4.bgp_ip.1
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-1
+        fieldPaths:
+          - spec.desiredState.interfaces.5.ipv4.address.0.ip
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_4.loopback_ip
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-1
+        fieldPaths:
+          - spec.desiredState.interfaces.6.ipv4.address.0.ip
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_4.loopback_ipv6
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-1
+        fieldPaths:
+          - spec.desiredState.interfaces.6.ipv6.address.0.ip
+  # BGP worker-2/node-5 IPs
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_5.bgp_ip.0
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-2
+        fieldPaths:
+          - spec.desiredState.interfaces.4.ipv4.address.0.ip
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_5.bgp_ip.1
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-2
+        fieldPaths:
+          - spec.desiredState.interfaces.5.ipv4.address.0.ip
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_5.loopback_ip
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-2
+        fieldPaths:
+          - spec.desiredState.interfaces.6.ipv4.address.0.ip
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_5.loopback_ipv6
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-2
+        fieldPaths:
+          - spec.desiredState.interfaces.6.ipv6.address.0.ip
+  # BGP worker-3/node-6 IPs
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_6.bgp_ip.0
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-3
+        fieldPaths:
+          - spec.desiredState.interfaces.4.ipv4.address.0.ip
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_6.loopback_ip
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-3
+        fieldPaths:
+          - spec.desiredState.interfaces.5.ipv4.address.0.ip
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_6.loopback_ipv6
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-3
+        fieldPaths:
+          - spec.desiredState.interfaces.5.ipv6.address.0.ip
+
+  # BGP values
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.bgp.ifaces.0
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+        fieldPaths:
+          - spec.desiredState.interfaces.4.name
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.bgp.ifaces.1
+    targets:  # target all nodes except worker-3 (regexs do not seem to work on select.name value)
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-0
+        fieldPaths:
+          - spec.desiredState.interfaces.5.name
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-1
+        fieldPaths:
+          - spec.desiredState.interfaces.5.name
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-2
+        fieldPaths:
+          - spec.desiredState.interfaces.5.name
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.loopback.iface
+    targets:  # regexs do not seem to work on select.name value
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-0
+        fieldPaths:
+          - spec.desiredState.interfaces.6.name
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-1
+        fieldPaths:
+          - spec.desiredState.interfaces.6.name
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-2
+        fieldPaths:
+          - spec.desiredState.interfaces.6.name
+      - select:  # in case of worker-3, there is one less interfaces
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-3
+        fieldPaths:
+          - spec.desiredState.interfaces.5.name
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.bgp.prefix-length
+    targets:  # regexs do not seem to work on select.name value
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-0
+        fieldPaths:
+          - spec.desiredState.interfaces.4.ipv4.address.0.prefix-length
+          - spec.desiredState.interfaces.5.ipv4.address.0.prefix-length
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-1
+        fieldPaths:
+          - spec.desiredState.interfaces.4.ipv4.address.0.prefix-length
+          - spec.desiredState.interfaces.5.ipv4.address.0.prefix-length
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-2
+        fieldPaths:
+          - spec.desiredState.interfaces.4.ipv4.address.0.prefix-length
+          - spec.desiredState.interfaces.5.ipv4.address.0.prefix-length
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.bgp.prefix-length-worker-3
+    targets:
+      - select:  # in case of worker-3, there is one less interfaces
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-3
+        fieldPaths:
+          - spec.desiredState.interfaces.4.ipv4.address.0.prefix-length
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.loopback.prefix-length
+    targets:  # regexs do not seem to work on select.name value
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-0
+        fieldPaths:
+          - spec.desiredState.interfaces.6.ipv4.address.0.prefix-length
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-1
+        fieldPaths:
+          - spec.desiredState.interfaces.6.ipv4.address.0.prefix-length
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-2
+        fieldPaths:
+          - spec.desiredState.interfaces.6.ipv4.address.0.prefix-length
+      - select:  # in case of worker-3, there is one less interfaces
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-3
+        fieldPaths:
+          - spec.desiredState.interfaces.5.ipv4.address.0.prefix-length
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.loopback.prefix-length-ipv6
+    targets:  # regexs do not seem to work on select.name value
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-0
+        fieldPaths:
+          - spec.desiredState.interfaces.6.ipv6.address.0.prefix-length
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-1
+        fieldPaths:
+          - spec.desiredState.interfaces.6.ipv6.address.0.prefix-length
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-2
+        fieldPaths:
+          - spec.desiredState.interfaces.6.ipv6.address.0.prefix-length
+      - select:  # in case of worker-3, there is one less interfaces
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-3
+        fieldPaths:
+          - spec.desiredState.interfaces.5.ipv6.address.0.prefix-length
+  # Overwrite worker-3 base routes
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_6.routes
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-3
+        fieldPaths:
+          - spec.desiredState.routes
+
+  # NEW L3 ROUTES
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_3.routes
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-0
+        fieldPaths:
+          - spec.desiredState.routes
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_4.routes
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-1
+        fieldPaths:
+          - spec.desiredState.routes
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_5.routes
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-2
+        fieldPaths:
+          - spec.desiredState.routes
+
+  # internalapi bridge gateway IP and prefix-length
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.internalapi.gateway
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+        fieldPaths:
+          - spec.desiredState.interfaces.0.ipv4.address.0.ip
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.internalapi.prefix-length
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+        fieldPaths:
+          - spec.desiredState.interfaces.0.ipv4.address.0.prefix-length
+
+  # storage bridge gateway IP and prefix-length
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storage.gateway
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+        fieldPaths:
+          - spec.desiredState.interfaces.1.ipv4.address.0.ip
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.storage.prefix-length
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+        fieldPaths:
+          - spec.desiredState.interfaces.1.ipv4.address.0.prefix-length
+
+  # octavia bridge gateway IP and prefix-length
+  # octavia is at index 7 for workers 0-2 (which have 2 BGP ifaces) and index 6 for worker-3
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.octavia.gateway
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-0
+        fieldPaths:
+          - spec.desiredState.interfaces.7.ipv4.address.0.ip
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-1
+        fieldPaths:
+          - spec.desiredState.interfaces.7.ipv4.address.0.ip
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-2
+        fieldPaths:
+          - spec.desiredState.interfaces.7.ipv4.address.0.ip
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-3
+        fieldPaths:
+          - spec.desiredState.interfaces.6.ipv4.address.0.ip
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.octavia.prefix-length
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-0
+        fieldPaths:
+          - spec.desiredState.interfaces.7.ipv4.address.0.prefix-length
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-1
+        fieldPaths:
+          - spec.desiredState.interfaces.7.ipv4.address.0.prefix-length
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-2
+        fieldPaths:
+          - spec.desiredState.interfaces.7.ipv4.address.0.prefix-length
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-3
+        fieldPaths:
+          - spec.desiredState.interfaces.6.ipv4.address.0.prefix-length
+
+  # designate bridge gateway IP and prefix-length
+  # designate is at index 8 for workers 0-2 and index 7 for worker-3
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.designate.gateway
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-0
+        fieldPaths:
+          - spec.desiredState.interfaces.8.ipv4.address.0.ip
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-1
+        fieldPaths:
+          - spec.desiredState.interfaces.8.ipv4.address.0.ip
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-2
+        fieldPaths:
+          - spec.desiredState.interfaces.8.ipv4.address.0.ip
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-3
+        fieldPaths:
+          - spec.desiredState.interfaces.7.ipv4.address.0.ip
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.designate.prefix-length
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-0
+        fieldPaths:
+          - spec.desiredState.interfaces.8.ipv4.address.0.prefix-length
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-1
+        fieldPaths:
+          - spec.desiredState.interfaces.8.ipv4.address.0.prefix-length
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-2
+        fieldPaths:
+          - spec.desiredState.interfaces.8.ipv4.address.0.prefix-length
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-3
+        fieldPaths:
+          - spec.desiredState.interfaces.7.ipv4.address.0.prefix-length

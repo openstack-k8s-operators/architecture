@@ -1,0 +1,192 @@
+# yamllint disable rule:line-length
+# local-config: referenced, but not emitted by kustomize
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: edpm-nodeset-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+data:
+  ssh_keys:
+    # Authorized keys that will have access to the dataplane computes via SSH
+    authorized: CHANGEME
+    # The private key that will have access to the dataplane computes via SSH
+    private: CHANGEME2
+    # The public key that will have access to the dataplane computes via SSH
+    public: CHANGEME3
+  nodeset:
+    ansible:
+      ansibleUser: cloud-admin
+      ansiblePort: 22
+      ansibleVars:
+        edpm_ovn_encap_ip: "{{ bgpmainnet_ip }}"
+        edpm_ovn_bridge_mappings:
+          - "datacentre:br-ex"
+          # commented out due to OSPRH-30907 - "octavia:br-octavia"
+        edpm_frr_bgp_asn: 65000
+        edpm_frr_bgp_ipv4_src_network: bgpmainnet
+        edpm_frr_bgp_ipv6_src_network: bgpmainnetv6
+        edpm_frr_bgp_neighbor_password: f00barZ
+        edpm_frr_bgp_uplinks_scope: internal
+        edpm_frr_bgp_l2vpn: true
+        edpm_frr_bgp_l2vpn_uplink_activate: true
+        # TODO: empty list is a required workaround — edpm_frr role default
+        # peers create an empty evpn-peer group (frr.conf.j2 never emits
+        # neighbor entries from edpm_frr_bgp_l2vpn_peers). Fix in edpm_frr:
+        # emit neighbors from that list and/or default it to [].
+        edpm_frr_bgp_l2vpn_peers: []
+        bgp_bridges:
+          - br-bgp-0
+          - br-bgp-1
+        edpm_neutron_ovn_agent_bgp_peer_bridges: "{{ bgp_bridges | join(',') }}"
+        edpm_neutron_ovn_agent_agent_extensions: "metadata,ovn-evpn"
+        edpm_neutron_ovn_agent_ovn_evpn_bgp_as: 65000
+        edpm_neutron_ovn_agent_ovn_evpn_bgp_local_interface: br-bgp-0
+        edpm_neutron_ovn_agent_ovn_evpn_child_vxlan_port: 60010
+        timesync_ntp_servers:
+          - hostname: pool.ntp.org
+        # conntrack is necessary for some tobiko tests
+        edpm_bootstrap_command: |
+          dnf -y install conntrack-tools
+        edpm_network_config_hide_sensitive_logs: false
+        edpm_network_config_os_net_config_mappings:
+          edpm-r2-compute-0:
+            nic2: 6a:fe:54:3f:8a:02  # CHANGEME
+        edpm_network_config_template: |
+          ---
+          {% set mtu_list = [ctlplane_mtu] %}
+          {% for network in nodeset_networks %}
+          {% set _ = mtu_list.append(lookup('vars', networks_lower[network] ~ '_mtu')) %}
+          {%- endfor %}
+          {% set min_viable_mtu = mtu_list | max %}
+          network_config:
+          - type: ovs_bridge
+            name: {{ neutron_physical_bridge_name }}
+            use_dhcp: false
+            use_dhcpv6: true  # needed to enable IPv6 on bridges
+          # commented out due to OSPRH-30907
+          # - type: ovs_bridge
+          #   name: br-octavia
+          #   use_dhcp: false
+          #   use_dhcpv6: true  # needed to enable IPv6 on bridges
+          - type: interface
+            name: nic1
+            use_dhcp: true
+            defroute: false
+          - type: interface
+            name: nic2
+            use_dhcp: false
+            defroute: false
+            dns_servers: {{ ctlplane_dns_nameservers }}
+            domain: {{ dns_search_domains }}
+            addresses:
+              - ip_netmask: {{ ctlplane_ip }}/{{ ctlplane_cidr }}
+          - type: ovs_bridge
+            name: {{ bgp_bridges[0] }}
+            use_dhcp: false
+            use_dhcpv6: true  # needed to enable IPv6 on bridges
+            addresses:
+              - ip_netmask: {{ bgpnet0_ip }}/30
+            defroute: false
+            members:
+              - type: interface
+                name: nic3
+                # force the MAC address of the bridge to this interface
+                primary: true
+          - type: ovs_bridge
+            name: {{ bgp_bridges[1] }}
+            use_dhcp: false
+            use_dhcpv6: true  # needed to enable IPv6 on bridges
+            addresses:
+              - ip_netmask: {{ bgpnet1_ip }}/30
+            defroute: false
+            members:
+              - type: interface
+                name: nic4
+                # force the MAC address of the bridge to this interface
+                primary: true
+          - type: interface
+            name: lo
+            addresses:
+            - ip_netmask: {{ bgpmainnet_ip }}/32
+            - ip_netmask: {{ bgpmainnetv6_ip }}/128
+        edpm_sshd_allowed_ranges:
+          - 192.168.122.0/24
+        edpm_sshd_configure_firewall: true
+        gather_facts: false
+        neutron_physical_bridge_name: br-ex
+    networks:
+      - defaultRoute: true
+        name: CtlPlane
+        subnetName: subnet1
+      - name: BgpNet0
+        subnetName: subnet0
+      - name: BgpNet1
+        subnetName: subnet0
+      - name: BgpMainNet
+        subnetName: subnet0
+      - name: BgpMainNetV6
+        subnetName: subnet0
+      - name: BgpNet0
+        subnetName: subnet1
+      - name: BgpNet1
+        subnetName: subnet1
+      - name: BgpMainNet
+        subnetName: subnet1
+      - name: BgpMainNetV6
+        subnetName: subnet1
+      - name: BgpNet0
+        subnetName: subnet2
+      - name: BgpNet1
+        subnetName: subnet2
+      - name: BgpMainNet
+        subnetName: subnet2
+      - name: BgpMainNetV6
+        subnetName: subnet2
+    nodes:
+      edpm-r2-compute-0:
+        hostName: edpm-r2-compute-0
+        ansible:
+          ansibleHost: 192.168.124.100
+          ansibleVars:
+            edpm_frr_bgp_peers:
+              - 100.64.2.1
+              - 100.65.2.1
+        networks:
+          - defaultRoute: true
+            fixedIP: 192.168.124.100
+            name: CtlPlane
+            subnetName: subnet1
+          - name: Bgpnet0
+            subnetName: subnet2
+            fixedIP: 100.64.2.2
+          - name: Bgpnet1
+            subnetName: subnet2
+            fixedIP: 100.65.2.2
+          - name: Bgpmainnet
+            subnetName: subnet1
+            fixedIP: 99.99.2.2
+          - name: BgpmainnetV6
+            subnetName: subnet1
+            fixedIP: f00d:f00d:f00d:f00d:f00d:f00d:f00d:0033
+    services:
+      - bootstrap
+      - download-cache
+      - install-os
+      - configure-os
+      - configure-network
+      - frr
+      - validate-network
+      - run-os
+      - reboot-os
+      - install-certs
+      - ovn
+      - neutron-ovn
+      - libvirt
+      - nova
+  nova:
+    migration:
+      ssh_keys:
+        private: CHANGEME4
+        public: CHANGEME5
