@@ -24,10 +24,6 @@ spec:
       apiTimeout: 600
       cinderAPI:
         replicas: 3
-      customServiceConfig: |
-        # Debug logs by default, jobs can override as needed.
-        [DEFAULT]
-        debug = true
       cinderBackup:
         networkAttachments:
           - storage
