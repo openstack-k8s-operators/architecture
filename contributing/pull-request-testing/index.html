@@ -878,10 +878,10 @@ valid.</p>
 <p>The <code>test-my_pr_branch.yml</code> file contains parameters that identifies the remote
 git repository and branch name to deploy.</p>
 <p><strong>test-my_pr_branch.yml</strong></p>
-<div class="highlight"><pre><span></span><code><span class="nt">remote_base_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/home/zuul/src/github.com/openstack-k8s-operators&quot;</span>
+<div class="highlight"><pre><span></span><code><span class="nt">remote_base_dir</span><span class="p">:</span><span class="w"> </span><span class="s">"/home/zuul/src/github.com/openstack-k8s-operators"</span>
 <span class="nt">cifmw_reproducer_repositories</span><span class="p">:</span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://github.com/&lt;FORKED_ORGANIZATION&gt;/architecture&quot;</span>
-<span class="w">  </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">remote_base_dir</span><span class="nv"> </span><span class="s">}}/architecture&quot;</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="s">"https://github.com/&lt;FORKED_ORGANIZATION&gt;/architecture"</span>
+<span class="w">  </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">remote_base_dir</span><span class="nv"> </span><span class="s">}}/architecture"</span>
 <span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;BRANCH_TO_DEPLOY&gt;</span>
 </code></pre></div>
 <p>Once your environment has been deployed, provide any relevant output showing
