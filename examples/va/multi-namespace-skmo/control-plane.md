@@ -109,10 +109,46 @@ oc -n openstack wait keystoneapi keystone --for condition=Ready --timeout=60m
 oc -n openstack wait pod openstackclient --for condition=Ready --timeout=10m
 ```
 
-Create the leaf credentials secret in the leaf namespace
-```
+Create the leaf credentials secret in the leaf namespace. Generate a unique
+Barbican simple_crypto KEK per cluster and add it to the env file before
+creating the secret. On reruns, reuse the existing KEK from `osp-secret` so
+Barbican encrypted data remains readable:
+```shell
+set -euo pipefail
+
+base_secrets="../../../lib/control-plane/base/osp-secrets.env"
+if [ ! -r "${base_secrets}" ]; then
+  echo "Base secrets file not found or not readable: ${base_secrets}" >&2
+  exit 1
+fi
+if [ ! -s "${base_secrets}" ]; then
+  echo "Base secrets file is empty: ${base_secrets}" >&2
+  exit 1
+fi
+
+tmp="$(mktemp)"
+chmod 600 "${tmp}"
+trap 'rm -f "${tmp}"' EXIT
+
+if existing_kek="$(oc -n openstack2 get secret osp-secret \
+  -o jsonpath='{.data.BarbicanSimpleCryptoKEK}' 2>/dev/null)" && \
+  [ -n "${existing_kek}" ]; then
+  printf 'BarbicanSimpleCryptoKEK=%s\n' "$(echo "${existing_kek}" | base64 -d)" >> "${tmp}"
+else
+  python3 -c 'from cryptography.fernet import Fernet; print("BarbicanSimpleCryptoKEK=" + Fernet.generate_key().decode())' >> "${tmp}"
+fi
+
+if ! grep -v '^BarbicanSimpleCryptoKEK=' "${base_secrets}" >> "${tmp}"; then
+  echo "Failed to read base secrets from ${base_secrets}" >&2
+  exit 1
+fi
+if ! grep -q '^AdminPassword=' "${tmp}"; then
+  echo "Base secrets were not merged; refusing to create osp-secret" >&2
+  exit 1
+fi
+
 oc -n openstack2 create secret generic osp-secret \
-  --from-env-file=architecture/lib/control-plane/base/osp-secrets.env \
+  --from-env-file="${tmp}" \
   --dry-run=client -o yaml | oc apply -f -
 ```
 
