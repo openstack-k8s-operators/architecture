@@ -108,7 +108,7 @@ data:
       [placement]
       region_name = regionOne
       [ovs]
-      igmp_snooping_enable = true
+      igmp_snooping_enable = false
       [ovn]
       ovn_emit_need_to_frag = false
       ovs_create_tap = true

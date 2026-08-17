@@ -177,7 +177,7 @@ data:
       policy_file = /etc/neutron/policy.yaml
 
       [ovs]
-      igmp_snooping_enable = true
+      igmp_snooping_enable = false
 
       [ovn]
       ovsdb_probe_interval = 60000
