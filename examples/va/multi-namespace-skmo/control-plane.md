@@ -109,10 +109,17 @@ oc -n openstack wait keystoneapi keystone --for condition=Ready --timeout=60m
 oc -n openstack wait pod openstackclient --for condition=Ready --timeout=10m
 ```
 
-Create the leaf credentials secret in the leaf namespace
+Create the leaf credentials secret in the leaf namespace. Generate a unique
+Barbican simple_crypto KEK per cluster and add it to the env file before
+creating the secret:
 ```
+python3 -c 'from cryptography.fernet import Fernet; print("BarbicanSimpleCryptoKEK=" + Fernet.generate_key().decode())' \
+  >> /tmp/osp-secrets-leaf.env
+grep -v '^BarbicanSimpleCryptoKEK=' architecture/lib/control-plane/base/osp-secrets.env \
+  >> /tmp/osp-secrets-leaf.env
+
 oc -n openstack2 create secret generic osp-secret \
-  --from-env-file=architecture/lib/control-plane/base/osp-secrets.env \
+  --from-env-file=/tmp/osp-secrets-leaf.env \
   --dry-run=client -o yaml | oc apply -f -
 ```
 
