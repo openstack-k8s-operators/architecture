@@ -154,7 +154,7 @@ data:
       allow_automatic_l3agent_failover = true
       debug = true
       default_availability_zones = zone-1,zone-2
-      service_plugins = qos,ovn-router,trunk,segments,log,taas,tapmirror,firewall_v2
+      service_plugins = qos,ovn-router,trunk,segments,log,taas,tapmirror,firewall_v2,pvlan
 
       [agent]
       report_interval = 300
