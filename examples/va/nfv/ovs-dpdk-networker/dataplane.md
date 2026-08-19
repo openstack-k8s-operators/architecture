@@ -14,6 +14,12 @@ Change to the nfv/ovs-dpdk-networker/networker directory
 ```
 cd architecture/examples/va/nfv/ovs-dpdk-networker/networker
 ```
+
+Modify the [baremetalset-password.env](../../../../va/nfv/ovs-dpdk-networker/networker/nodeset/baremetalset-password.env) with a secure root password for bare-metal provisioning:
+```
+NodeRootPassword=YourSecurePasswordHere
+```
+
 Edit the [nodeset/values.yaml](networker/nodeset/values.yaml) file to suit
 your environment.
 ```
