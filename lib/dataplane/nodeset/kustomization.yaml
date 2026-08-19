@@ -10,8 +10,8 @@ resources:
 secretGenerator:
   - name: libvirt-secret
     behavior: create
-    literals:
-      - LibvirtPassword=12345678
+    envs:
+      - libvirt-secret.env
     options:
       disableNameSuffixHash: true
 
