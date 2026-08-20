@@ -129,6 +129,11 @@ data:
         - destination: 172.34.0.0/16
           next-hop-address: 100.64.10.1
           next-hop-interface: enp8s0
+        # routes to tenant networks advertised via BGP-EVPN (tempest
+        # project_network_cidr); router-0 is the EVPN VTEP that reaches them
+        - destination: 10.100.0.0/16
+          next-hop-address: 100.64.10.1
+          next-hop-interface: enp8s0
 
   # networks
   ctlplane:
@@ -587,6 +592,9 @@ data:
               "gw": "100.64.10.1"
             }, {
               "dst": "172.34.0.0/16",
+              "gw": "100.64.10.1"
+            }, {
+              "dst": "10.100.0.0/16",
               "gw": "100.64.10.1"
             }]
           }
