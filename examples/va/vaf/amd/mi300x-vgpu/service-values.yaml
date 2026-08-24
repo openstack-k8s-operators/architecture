@@ -21,6 +21,16 @@ data:
         pci_in_placement = True
         [pci]
         alias = {"name": "mi300x-vf", "vendor_id": "1002", "product_id": "74b5", "device_type": "type-VF", "numa_policy": "preferred"}
+    cell0:
+      conductorServiceTemplate:
+        customServiceConfig: |
+          [filter_scheduler]
+          pci_in_placement = True
+    cell1:
+      conductorServiceTemplate:
+        customServiceConfig: |
+          [filter_scheduler]
+          pci_in_placement = True
     schedulerServiceTemplate:
       customServiceConfig: |
         [filter_scheduler]
