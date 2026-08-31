@@ -6,11 +6,12 @@ metadata:
   labels:
     osp/net: bgpnet-worker-3
     osp/net-attach-def-type: bgp
----
-apiVersion: k8s.cni.cncf.io/v1
-kind: NetworkAttachmentDefinition
-metadata:
-  name: designate
-  labels:
-    osp/net: designate
-    osp/net-attach-def-type: standard
+# designate NAD not needed until OSPRH-26878 is fixed
+# ---
+# apiVersion: k8s.cni.cncf.io/v1
+# kind: NetworkAttachmentDefinition
+# metadata:
+#   name: designate
+#   labels:
+#     osp/net: designate
+#     osp/net-attach-def-type: standard
