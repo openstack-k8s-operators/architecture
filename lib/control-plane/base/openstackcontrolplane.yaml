@@ -36,9 +36,6 @@ spec:
   designate:
     enabled: false
     template:
-      customServiceConfig: |
-        [DEFAULT]
-        debug = true
       designateAPI:
         replicas: 3
       designateBackendbind9:
