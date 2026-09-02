@@ -9,7 +9,6 @@ metadata:
   annotations:
     config.kubernetes.io/local-config: "true"
 data:
-  root_password: _replaced_
   preProvisioned: false
   baremetalSetTemplate:
     ctlplaneInterface: eno2  # CHANGEME
