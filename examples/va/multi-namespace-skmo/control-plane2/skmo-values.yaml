@@ -13,10 +13,12 @@ data:
   leafAdminProject: admin
   leafAdminPasswordKey: AdminPassword
   # Central Keystone endpoints.
-  # keystoneInternalURL is rewritten at CI time by skupper-keystone-connector.yaml
-  # based on cifmw_skupper_keystone_enabled:
-  #   true  → https://keystone-regionone.openstack2.svc.cluster.local:5000 (Skupper tunnel)
-  #   false → same as keystonePublicURL (standard public routing)
+  # Default: both URLs point at the central public route so the leaf OSCP can
+  # deploy before Skupper Keystone routing is in place.  CI automation creates
+  # the Skupper Connector and Listener in post_stage_run (after the leaf OSCP
+  # is Ready), then configure-leaf-keystone-internal.yaml patches the internal
+  # endpoint to the Skupper virtual service.
+  # Set cifmw_skupper_keystone_enabled=false to keep the public internal URL.
   keystoneInternalURL: https://keystone-public-openstack.apps.ocp.openstack.lab
   keystonePublicURL: https://keystone-public-openstack.apps.ocp.openstack.lab
   # CA bundle secrets
