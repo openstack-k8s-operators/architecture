@@ -151,7 +151,6 @@ data:
       - reboot-os
       - install-certs
       - ovn
-      - neutron-metadata
       - ovn-bgp-agent
   nova:
     migration:
