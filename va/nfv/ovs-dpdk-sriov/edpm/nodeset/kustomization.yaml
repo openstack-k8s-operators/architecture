@@ -17,27 +17,21 @@ transformers:
       kind: Namespace
       create: true
 
+secretGenerator:
+  - name: baremetalset-password-secret
+    behavior: create
+    envs:
+      - baremetalset-password.env
+    options:
+      disableNameSuffixHash: true
+
 components:
   - ../../../../../lib/dataplane/nodeset
 
 resources:
-  - baremetalset-password-secret.yaml
   - nova_ovs_dpdk_sriov.yaml
 
 replacements:
-  - source:
-      kind: ConfigMap
-      name: edpm-nodeset-values
-      fieldPath: data.root_password
-    targets:
-      - select:
-          kind: Secret
-          name: baremetalset-password-secret
-        fieldPaths:
-          - data.NodeRootPassword
-        options:
-          create: true
-
   # Nova compute CPU pinning customization
   - source:
       kind: ConfigMap
