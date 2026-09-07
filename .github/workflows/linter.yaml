@@ -61,3 +61,21 @@ jobs:
           sha256sum zuul.d/* > checksum;
           ./create-zuul-jobs.py;
           sha256sum -c checksum || (git diff && exit 1) && exit 0;
+
+  check-bmc-secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7
+
+      - name: Check for hardcoded BMC credentials
+        run: |
+          if grep -r "password=password" --include="bmc-secret.env" .; then
+            echo "ERROR: Found hardcoded 'password=password' in bmc-secret.env file(s)"
+            exit 1
+          fi
+          if grep -r "username=admin" --include="bmc-secret.env" .; then
+            echo "ERROR: Found hardcoded 'username=admin' in bmc-secret.env file(s)"
+            exit 1
+          fi
+          echo "BMC credentials check passed"
