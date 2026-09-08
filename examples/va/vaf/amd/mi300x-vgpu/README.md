@@ -84,7 +84,7 @@ Then use this `lvms-vg1` name instead of `CHANGEME_STORAGE_CLASS`.
 
 ## Stages
 
-1. [Install the OpenStack K8S operators and their dependencies](../../common/)
+1. [Install the OpenStack K8S operators and their dependencies](../../../../common/)
 2. [Configure networking and deploy the OpenStack control plane](control-plane.md)
 3. [Configure and deploy the dataplane](dataplane.md)
 4. Create flavor and VM instance
