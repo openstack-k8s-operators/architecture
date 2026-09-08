@@ -20,6 +20,7 @@ data:
       ansibleUser: cloud-admin
       ansiblePort: 22
       ansibleVars:
+        ansible_ssh_retries: 3
         timesync_ntp_servers:
           - hostname: pool.ntp.org
         edpm_network_config_hide_sensitive_logs: false
