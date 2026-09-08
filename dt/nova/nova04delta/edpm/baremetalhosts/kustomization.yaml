@@ -99,6 +99,21 @@ replacements:
         options:
           create: true
 
+  # preprovisioningNetworkDataName — CI overrides via stage_4 values
+  # to point at the deploy_bmh-created secret instead of the default.
+  - source:
+      kind: ConfigMap
+      name: baremetalhost-values
+      fieldPath: data.edpm-compute-0.preprovisioningNetworkDataName
+    targets:
+      - select:
+          kind: BareMetalHost
+          name: edpm-compute-0
+        fieldPaths:
+          - spec.preprovisioningNetworkDataName
+        options:
+          create: true
+
   # preprovisioningNetworkData
   - source:
       kind: ConfigMap

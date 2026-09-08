@@ -25,3 +25,4 @@ spec:
   bootMode: UEFI
   rootDeviceHints: {}
   online: true
+  preprovisioningNetworkDataName: edpm-compute-0-preprovision-network-data
