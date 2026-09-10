@@ -128,18 +128,7 @@ vas:
             type: playbook
             source: "skmo/skupper-sites.yaml"
             inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
-          - name: 04 Create Skupper Connector for central Keystone internal endpoint
-            # Must run before the leaf OSCP is applied so that the Skupper
-            # virtual Service (keystone-regionone) exists when OpenStack
-            # services first try to authenticate.  The cert-manager Certificate
-            # is created here too; it will reconcile once the OSCP operator
-            # creates the rootca-internal Issuer during stage 6 deployment.
-            # Set cifmw_skupper_keystone_enabled=false to skip and revert
-            # keystoneInternalURL in skmo-values.yaml to the public URL.
-            type: playbook
-            source: "skmo/skupper-keystone-connector.yaml"
-            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
-          - name: 05 Set Application Credential enablement in skmo-values.yaml
+          - name: 04 Set Application Credential enablement in skmo-values.yaml
             # Writes cifmw_skmo_appcred_enabled into skmo-values.yaml before
             # the kustomize build so the OSCP is created with AC enabled or
             # disabled from the first apply — no reload required.
@@ -147,21 +136,12 @@ vas:
             type: playbook
             source: "skmo/configure-leaf-appcred.yaml"
             inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
-          - name: 06 Create Skupper Listener for Keystone in leaf namespace
-            type: playbook
-            source: "skmo/skupper-listener.yaml"
-            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
-            extra_vars:
-              cifmw_skupper_listener_enabled: true
-              cifmw_skupper_listener_name: keystone-internal
-              cifmw_skupper_listener_cert_name: skupper-keystone-regionone
-              cifmw_skupper_listener_cert_secret: cert-skupper-keystone-regionone
-              cifmw_skupper_listener_routing_key: keystone-internal
-              cifmw_skupper_listener_host: keystone-regionone
-              cifmw_skupper_listener_port: 5000
-              cifmw_skupper_listener_namespace: openstack2
-              cifmw_skupper_listener_ignore_wait_errors: true
-          - name: 07 Prepare SKMO leaf prerequisites in regionZero
+          - name: 05 Prepare SKMO leaf prerequisites in regionZero
+            # Leaf OSCP is built with the public Keystone internal URL from
+            # skmo-values.yaml (default).  Skupper Keystone Connector and
+            # Listener are created in post_stage_run after rootca-internal
+            # exists, then configure-leaf-keystone-internal.yaml patches the
+            # internal endpoint to the Skupper virtual service.
             type: playbook
             source: "skmo/prepare-leaf.yaml"
             inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
@@ -207,16 +187,38 @@ vas:
             type: playbook
             source: "skmo/configure-leaf-listener.yaml"
             inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
-          - name: 05 Patch leaf OSCP internal Keystone endpoint and expose to EDPM
+          - name: 05 Create Skupper Connector for central Keystone internal endpoint
+            # Run after the leaf OSCP is Ready so rootca-internal exists and
+            # the Listener TLS certificate can be issued before the Listener CR
+            # is created.  Set cifmw_skupper_keystone_enabled=false to skip all
+            # Skupper Keystone routing (leaf keeps the public internal URL).
+            type: playbook
+            source: "skmo/skupper-keystone-connector.yaml"
+            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
+          - name: 06 Create Skupper Listener for Keystone in leaf namespace
+            type: playbook
+            source: "skmo/skupper-listener.yaml"
+            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
+            extra_vars:
+              cifmw_skupper_listener_enabled: true
+              cifmw_skupper_listener_name: keystone-internal
+              cifmw_skupper_listener_cert_name: skupper-keystone-regionone
+              cifmw_skupper_listener_cert_secret: cert-skupper-keystone-regionone
+              cifmw_skupper_listener_routing_key: keystone-internal
+              cifmw_skupper_listener_host: keystone-regionone
+              cifmw_skupper_listener_port: 5000
+              cifmw_skupper_listener_namespace: openstack2
+              cifmw_skupper_listener_ignore_wait_errors: false
+          - name: 07 Patch leaf OSCP internal Keystone endpoint and expose to EDPM
             # Rewrites the leaf OSCP internal Keystone override to the Skupper
             # virtual service URL and creates a MetalLB LoadBalancer Service +
             # DNSData CR so EDPM compute nodes can resolve the Skupper Keystone
             # hostname.  Skipped automatically when cifmw_skupper_keystone_enabled
-            # is false (set in skupper-keystone-connector.yaml pre-stage hook).
+            # is false.
             type: playbook
             source: "skmo/configure-leaf-keystone-internal.yaml"
             inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
-          - name: 06 Configure Keycloak realms and Keystone federation IdP
+          - name: 08 Configure Keycloak realms and Keystone federation IdP
             type: playbook
             source: "federation-post-deploy.yml"
             inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"

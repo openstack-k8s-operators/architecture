@@ -39,16 +39,14 @@ the cluster network.
   starting from scratch.
 * The central region `OpenStackControlPlane` (`controlplane` in namespace
   `openstack`) is deployed and `Ready`.
-* The workload region `OpenStackControlPlane` has **not yet been applied**, or
-  you are deploying it fresh.  Steps 1–3 below must complete before the
-  workload OSCP is first created, so that `keystoneInternalURL` is correct from
-  day one and no rolling restart is required.  If the workload OSCP already
-  exists, see the note at the end of Step 4.  Step 5 (EDPM DNS) can be
-  performed at any time after Step 3.
+* Choose a deployment path (see [Deployment paths](#deployment-paths) below).
+  **Greenfield workload regions must use Option B** (public bootstrap, then
+  Skupper, then patch).  Option A is only viable when `rootca-internal`
+  already exists in the workload namespace.
 * `cert-manager` is running in the cluster.  The `rootca-internal` `Issuer` in
-  the workload namespace is created by the OSCP operator during deployment;
-  cert-manager will reconcile the Listener certificate automatically once it
-  appears.
+  the workload namespace is created by the openstack-operator when the
+  workload OSCP is deployed; cert-manager can issue the Listener certificate
+  only after that Issuer exists.
 * If the workload region includes EDPM compute nodes, MetalLB must be
   configured with an address pool for the workload region's internalapi network
   (e.g. `internalapi2`), and a `DNSMasq` LoadBalancer Service must be serving
@@ -56,7 +54,55 @@ the cluster network.
 
 ---
 
+## Deployment paths
+
+Two paths reach the same **steady-state** configuration (Skupper internal URL
+on the leaf OSCP).  They differ in **order of operations** and whether a second
+OSCP reconcile is required.
+
+| | Option A | Option B (recommended) |
+|---|---|---|
+| **When to use** | Workload OSCP (or `rootca-internal`) **already** exists; you add Skupper before changing URLs | **Greenfield** deploy, CI automation, or any case where cert timing is uncertain |
+| **Leaf OSCP first apply** | `keystoneInternalURL` = Skupper virtual service | `keystoneInternalURL` = central **public** URL (`skmo-values.yaml` default) |
+| **Steps 1–3 timing** | Before first OSCP apply | After leaf OSCP is `Ready` |
+| **Extra OSCP reconcile** | No (if cert + Listener are ready first) | Yes — patch internal URL after Skupper (Step 4 / hook 07) |
+| **CI hooks** | Not used | `automation/vars/multi-namespace-skmo.yaml` hooks 05–07 |
+
+### Option A and the `rootca-internal` dependency
+
+The Listener TLS `Certificate` (Step 2) is issued by the workload namespace's
+`rootca-internal` `Issuer`.  That Issuer is created when the workload
+`OpenStackControlPlane` is deployed — it does **not** exist on a greenfield
+workload namespace.
+
+Option A therefore has a dependency cycle on first deploy:
+
+1. Option A asks you to complete Steps 1–3 (including a **Ready** Listener
+   certificate) **before** applying the workload OSCP.
+2. Step 2 cannot reach `Ready` until `rootca-internal` exists.
+3. `rootca-internal` is created only when the workload OSCP is applied.
+
+**Option A is not supported for a greenfield workload region** unless you
+bootstrap `rootca-internal` independently (not the normal operator flow).
+Use **Option B** for first-time SKMO deploys and for CI.
+
+Option A remains valid when the workload OSCP has **already** been deployed
+once (for example migrating from the public-internal URL to Skupper): the
+Issuer exists, Steps 1–3 can complete, then you set `keystoneInternalURL` to
+the Skupper URL before the next OSCP reconcile — or patch as in Step 4.
+
+To disable Skupper Keystone routing entirely, set
+`cifmw_skupper_keystone_enabled: false` in the job/scenario.  Hooks 05, 06,
+and 07 all honor that flag (the Keystone Listener hook skips when the flag is
+false).
+
+---
+
 ## Procedure
+
+The step order below matches a **manual Option B** run.  For Option A on an
+existing workload namespace, perform Steps 1–3 first, then apply or update
+the OSCP as described in Step 4.
 
 ### Step 1 — Create a Skupper Connector for Keystone in the central namespace
 
@@ -139,10 +185,11 @@ oc -n openstack2 wait certificate skupper-keystone-regionone \
 ```
 
 > **Note:** If the workload OSCP has not yet been deployed, `rootca-internal`
-> will not exist yet and cert-manager cannot issue the certificate immediately.
-> Apply the `Certificate` CR anyway — cert-manager will reconcile it
-> automatically once the Issuer is created during OSCP deployment.  Continue
-> to Step 3 without waiting.
+> does not exist and cert-manager **cannot** issue this certificate.  On a
+> greenfield workload region you must use **Option B**: deploy the workload
+> OSCP first (Step 4), wait for `Ready`, then return here for Steps 2–3.
+> Option A before first OSCP apply is only possible if `rootca-internal` was
+> created by other means.
 
 ---
 
@@ -166,71 +213,60 @@ spec:
   tlsCredentials: cert-skupper-keystone-regionone
 ```
 
-The Skupper controller creates the virtual `Service` immediately regardless of
-whether the TLS certificate has been issued yet.  The Listener will transition
-to `Configured: True` once the matching Connector is active and the TLS
-credentials are available.
+The Skupper controller creates the virtual `Service` once the Listener reaches
+`Configured: True`.  That requires the matching Connector to be active and the
+TLS credentials secret to exist when the Listener is reconciled.
+
+Wait before proceeding to Step 4:
+
+```bash
+oc -n openstack2 wait listener keystone-internal \
+  --for=jsonpath='{.status.conditions[?(@.type=="Configured")].status}'=True \
+  --timeout=5m
+```
 
 ---
 
-### Step 4 — Set keystoneInternalURL before deploying the workload OSCP
+### Step 4 — Deploy or patch the workload OSCP Keystone internal endpoint
 
-The recommended approach is to set `keystoneInternalURL` to the Skupper virtual
-Service endpoint in your kustomize values **before** applying the workload
-`OpenStackControlPlane`.  This ensures the OSCP is created with the correct
-endpoint from the first apply and no rolling restart is required.
-
-In your workload region kustomize overlay (e.g.
-`control-plane2/skmo-values.yaml` or equivalent), set:
-
-```yaml
-keystoneInternalURL: https://keystone-regionone.openstack2.svc.cluster.local:5000
-keystonePublicURL: https://keystone-public-openstack.apps.ocp.openstack.lab   # unchanged
-```
-
-The virtual Service `keystone-regionone.openstack2.svc.cluster.local` was
-created in Step 3 and will be reachable from within the workload namespace as
-soon as the Skupper mTLS link is established.
-
-Now apply the workload OSCP as normal:
+**Option B (deploy OSCP first — required for greenfield, used by CI):** apply
+the workload `OpenStackControlPlane` with both `keystoneInternalURL` and
+`keystonePublicURL` set to the central public Keystone route (the default in
+`control-plane2/skmo-values.yaml`).  Wait for `Ready`, complete Steps 1–3
+above, then patch the internal override:
 
 ```bash
-oc apply -k examples/va/multi-namespace-skmo/control-plane2/
+INTERNAL_URL="https://keystone-regionone.openstack2.svc.cluster.local:5000"
+
+oc -n openstack2 patch osctlplane controlplane --type=merge -p "{
+  \"spec\": {
+    \"keystone\": {
+      \"template\": {
+        \"override\": {
+          \"service\": {
+            \"internal\": {
+              \"endpointURL\": \"${INTERNAL_URL}\"
+            }
+          }
+        }
+      }
+    }
+  }
+}"
 ```
 
-Wait for the workload control plane to reach `Ready`:
+The OSCP performs a rolling restart of affected services; allow up to 30 minutes
+for it to return to `Ready`.  The CI hook `configure-leaf-keystone-internal.yaml`
+performs this patch and wait automatically.
 
-```bash
-oc -n openstack2 wait osctlplane controlplane \
-  --for condition=Ready --timeout=60m
-```
-
-> **If the workload OSCP already exists** (i.e. it was previously deployed
-> pointing at the public Keystone URL), you can patch it after completing
-> Steps 1–3:
->
-> ```bash
-> INTERNAL_URL="https://keystone-regionone.openstack2.svc.cluster.local:5000"
->
-> oc -n openstack2 patch osctlplane controlplane --type=merge -p "{
->   \"spec\": {
->     \"keystone\": {
->       \"template\": {
->         \"override\": {
->           \"service\": {
->             \"internal\": {
->               \"endpointURL\": \"${INTERNAL_URL}\"
->             }
->           }
->         }
->       }
->     }
->   }
-> }"
-> ```
->
-> The OSCP will perform a rolling restart of the affected services; allow up to
-> 30 minutes for it to return to `Ready`.
+**Option A (Skupper before OSCP URL change — existing workload only):** only
+when `rootca-internal` already exists in the workload namespace, complete
+Steps 1–3 (including a `Ready` Listener certificate), then set
+`keystoneInternalURL` to the Skupper virtual Service endpoint in kustomize
+values **before** applying or reconciling the workload `OpenStackControlPlane`.
+This avoids the post-Skupper rolling restart that Option B performs via the
+patch below.  **Do not use this path on a greenfield workload region** — see
+[Option A and the `rootca-internal` dependency](#option-a-and-the-rootca-internal-dependency).
 
 ---
 
@@ -336,6 +372,13 @@ Confirm that the OSCP is using the virtual endpoint:
 oc -n openstack2 get osctlplane controlplane \
   -o jsonpath='{.spec.keystone.template.override.service.internal.endpointURL}'
 ```
+
+This URL is the same after **both** Option A and Option B; it does not show
+which path was used.  To confirm **Option B**, check that hook 07 ran after
+the initial deploy (for example
+`post_stage_6_run_07_patch_leaf_oscp_internal_ke.log` shows `changed` on the
+patch task) and that hooks 05–07 ran only after the leaf OSCP wait in
+`ansible-deploy-architecture.log`.
 
 Optionally, confirm that Skupper reports both sides `Ready`:
 
