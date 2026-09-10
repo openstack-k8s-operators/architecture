@@ -8,7 +8,6 @@ metadata:
   annotations:
     config.kubernetes.io/local-config: "true"
 data:
-  root_password: cmVkaGF0Cg==
   preProvisioned: true
   ssh_keys:
     # Authorized keys that will have access to the dataplane computes via SSH
