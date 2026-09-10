@@ -17,6 +17,11 @@ Change to the `nfv/nfv-ovs-dpdk-sriov-networker/edpm directory:
 cd examples/dt/nfv/nfv-ovs-dpdk-sriov-networker
 ```
 
+Modify the [baremetalset-password.env](../../../../va/nfv/ovs-dpdk-sriov/edpm/nodeset/baremetalset-password.env) and [baremetalset-password.env](../../../../va/nfv/ovs-dpdk-sriov/edpm/networker-nodeset/baremetalset-password.env) with a secure root password for bare-metal provisioning:
+```
+NodeRootPassword=YourSecurePasswordHere
+```
+
 Edit the [edpm/computes/values.yaml](edpm/computes/values.yaml), 
 [edpm/networkers/values.yaml](edpm/networkers/values.yaml) and
 [edpm/deployment/values.yaml](edpm/deployment/values.yaml) files to suit your
