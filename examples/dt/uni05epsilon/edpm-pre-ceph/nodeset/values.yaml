@@ -78,6 +78,10 @@ data:
           - ceph_mon
           - ceph_mgr
           - ceph_osd
+          - ceph_rgw
+          - ceph_nfs
+          - ceph_rgw_frontend
+          - ceph_nfs_frontend
         storage_mtu: 1500
         storage_mgmt_mtu: 1500
         storage_mgmt_vlan_id: 23
