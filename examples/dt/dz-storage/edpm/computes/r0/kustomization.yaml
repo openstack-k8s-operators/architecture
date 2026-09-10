@@ -11,6 +11,7 @@ resources:
   - values.yaml
   - nova-extra-config-az0.yaml
   - nova-custom-az0.yaml
+  - neutron-metadata-az0.yaml
 
 patches:
   - target:

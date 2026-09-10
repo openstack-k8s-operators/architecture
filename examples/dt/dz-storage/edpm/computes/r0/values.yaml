@@ -179,7 +179,7 @@ data:
       - reboot-os
       - install-certs
       - ovn
-      - neutron-metadata
+      - neutron-metadata-az0
       - ovn-bgp-agent
       - libvirt
       - nova-custom-az0
