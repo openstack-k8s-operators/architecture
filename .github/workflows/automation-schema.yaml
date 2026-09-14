@@ -10,6 +10,9 @@ on:  # yamllint disable-line rule:truthy
       - "automation/vars/*.yaml"
       - "automation/vars/*.yml"
 
+permissions:
+  contents: read
+
 jobs:
   yamale:
     runs-on: ubuntu-latest

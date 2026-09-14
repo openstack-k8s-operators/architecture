@@ -4,8 +4,13 @@ on:  # yamllint disable-line rule:truthy
   repository_dispatch:
     types: [trigger-sync]
 
+permissions:
+  contents: read
+
 jobs:
   trigger-sync:
+    permissions:
+      contents: write
     uses: openstack-k8s-operators/ci-framework/.github/workflows/sync_branches_reusable_workflow.yml@main
     with:
       source-branch: ${{ github.event.client_payload.source-branch }}
