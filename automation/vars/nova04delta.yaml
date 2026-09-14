@@ -58,7 +58,7 @@ vas:
         wait_conditions:
           - >-
             oc -n openstack wait baremetalhosts.metal3.io edpm-compute-0
-            --for=jsonpath='{.status.provisioning.state}'=available
+            --for=jsonpath='{.status.provisioning.state}'=provisioned
             --timeout=20m
           - >-
             oc -n openstack wait osctlplane controlplane
