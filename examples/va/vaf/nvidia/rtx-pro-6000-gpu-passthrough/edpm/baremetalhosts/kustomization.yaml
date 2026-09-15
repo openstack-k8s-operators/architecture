@@ -1,0 +1,46 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../../../../../dt/nova/nova04delta/edpm/baremetalhosts
+
+resources:
+  - values.yaml
+
+# BMC credentials stay inside this VA overlay (edit bmc-secret.env here, plaintext).
+# The nova04delta component already generates a `bmc-secret` Secret, so instead of a
+# second generator on the same name, we generate a local-config-only helper
+# `bmc-secret-va` from the .env and copy its data into the component's `bmc-secret`
+# via replacements. The helper itself is never emitted.
+secretGenerator:
+  - name: bmc-secret-va
+    behavior: create
+    envs:
+      - bmc-secret.env
+    options:
+      disableNameSuffixHash: true
+      annotations:
+        config.kubernetes.io/local-config: "true"
+
+replacements:
+  - source:
+      kind: Secret
+      name: bmc-secret-va
+      fieldPath: data.username
+    targets:
+      - select:
+          kind: Secret
+          name: bmc-secret
+        fieldPaths:
+          - data.username
+  - source:
+      kind: Secret
+      name: bmc-secret-va
+      fieldPath: data.password
+    targets:
+      - select:
+          kind: Secret
+          name: bmc-secret
+        fieldPaths:
+          - data.password

@@ -1,0 +1,54 @@
+# yamllint disable rule:line-length
+# local-config: referenced, but not emitted by kustomize
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: baremetalhost-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+data:
+  metal3_inspection: disabled
+  edpm-compute-0:
+    online: true
+    labels:
+      app: openstack
+      nodeset: edpm
+      nodeName: edpm-compute-0
+      gpu: "true"
+      gpu_vendor: nvidia
+      gpu_model: rtx-pro-6000
+    bmc:
+      address: CHANGEME  # e.g. idrac-virtualmedia://<idrac-ip>/redfish/v1/Systems/System.Embedded.1
+      credentialsName: bmc-secret
+    bootMACAddress: CHANGEME  # MAC of the boot NIC
+    rootDeviceHints:
+      deviceName: /dev/sda  # CHANGEME — e.g. /dev/disk/by-path/pci-0000:41:00.0-nvme-1
+    preprovisioningNetworkDataName: edpm-compute-0-preprovision-network-data
+    preprovisioningNetworkData:
+      nmstate: |
+        interfaces:
+          - name: nic1
+            type: ethernet
+            state: up
+            identifier: mac-address
+            mac-address: "CHANGEME"  # boot NIC MAC (same as bootMACAddress)
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: CHANGEME  # provisioning IP for this host
+                  prefix-length: 24
+              auto-gateway: false
+              auto-dns: false
+            ipv6:
+              enabled: false
+        routes:
+          config:
+            - destination: 0.0.0.0/0
+              next-hop-address: CHANGEME  # provisioning gateway
+              next-hop-interface: nic1
+        dns-resolver:
+          config:
+            server:
+              - CHANGEME  # DNS server
