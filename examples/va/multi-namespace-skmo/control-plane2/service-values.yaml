@@ -32,7 +32,7 @@ data:
       swift_store_auth_version = 3
       swift_store_auth_address = {{ .KeystoneInternalURL }}
       swift_store_endpoint_type = internalURL
-      swift_store_user = service:glance
+      swift_store_user = service:{{ .ServiceUser }}
       swift_store_key = {{ .ServicePassword }}
       swift_store_region = regionTwo
   cinderBackup:

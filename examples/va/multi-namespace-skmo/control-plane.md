@@ -165,17 +165,20 @@ oc -n openstack rsh openstackclient \
   openstack endpoint create --region regionTwo identity internal <keystoneInternalURL>
 ```
 
-Create the leaf admin project and user in the central Keystone. Replace
-`<leafAdminPassword>` with the value of the `leafAdminPasswordKey` entry from
-`osp-secret` in the `openstack2` namespace:
+Create the leaf admin user in the central Keystone. Replace the placeholders
+from `control-plane2/skmo-values.yaml` (`leafAdminUser`, `leafAdminProject`;
+defaults: `admin-two`, `admin`). Replace `<leafAdminPassword>` with the value
+of the `leafAdminPasswordKey` entry from `osp-secret` in the `openstack2`
+namespace:
 ```
-oc -n openstack rsh openstackclient openstack project create leafadmin
+oc -n openstack rsh openstackclient \
+  openstack user create --domain Default --password <leafAdminPassword> <leafAdminUser>
 
 oc -n openstack rsh openstackclient \
-  openstack user create --domain Default --password <leafAdminPassword> leafadmin
+  openstack role add --project <leafAdminProject> --user <leafAdminUser> admin
 
 oc -n openstack rsh openstackclient \
-  openstack role add --project leafadmin --user leafadmin admin
+  openstack role add --system all --user <leafAdminUser> --user-domain Default admin
 ```
 
 Add the central region's root CA certificates to the leaf CA bundle secret so
