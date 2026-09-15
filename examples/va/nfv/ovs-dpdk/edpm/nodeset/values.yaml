@@ -47,7 +47,7 @@ data:
         edpm_ovn_bridge_mappings: ['dpdk2:br-link2', 'dpdk1:br-link1']
         # edpm_network_config
         # These vars are edpm_network_config role vars
-        edpm_network_config_hide_sensitive_logs: false
+        edpm_network_config_hide_sensitive_logs: false   # CHANGEME: set to true or remove for production deployments
         edpm_network_config_os_net_config_mappings:
           # Need to provide nic mapping based on system uuid or system product name
           # here used systetm uuid

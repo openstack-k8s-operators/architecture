@@ -22,7 +22,7 @@ data:
       ansibleVars:
         timesync_ntp_servers:
           - hostname: pool.ntp.org
-        edpm_network_config_hide_sensitive_logs: false
+        edpm_network_config_hide_sensitive_logs: false   # CHANGEME: set to true or remove for production deployments
         edpm_network_config_os_net_config_mappings:
           edpm-compute-0:
             nic2: 6a:fe:54:3f:8a:02  # CHANGEME - should connect to same network as control plane enp6s0

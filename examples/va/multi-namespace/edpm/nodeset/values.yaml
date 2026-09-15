@@ -26,7 +26,7 @@ data:
       ansibleVars:
         timesync_ntp_servers:
           - hostname: pool.ntp.org
-        edpm_network_config_hide_sensitive_logs: false
+        edpm_network_config_hide_sensitive_logs: false   # CHANGEME: set to true or remove for production deployments
         edpm_network_config_template: |
           ---
           {% set mtu_list = [ctlplane_mtu] %}
