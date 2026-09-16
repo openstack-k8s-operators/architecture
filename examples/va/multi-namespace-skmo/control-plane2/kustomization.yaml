@@ -94,6 +94,127 @@ replacements:
   - source:
       kind: ConfigMap
       name: skmo-values
+      fieldPath: data.leafAdminUser
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.keystone.template.adminUser
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: skmo-values
+      fieldPath: data.leafAdminProject
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.keystone.template.adminProject
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: skmo-values
+      fieldPath: data.leafAdminPasswordKey
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.keystone.template.passwordSelectors.admin
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: skmo-values
+      fieldPath: data.serviceUserBarbican
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.barbican.template.serviceUser
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: skmo-values
+      fieldPath: data.serviceUserCinder
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.cinder.template.serviceUser
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: skmo-values
+      fieldPath: data.serviceUserGlance
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.glance.template.serviceUser
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: skmo-values
+      fieldPath: data.serviceUserNeutron
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.neutron.template.serviceUser
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: skmo-values
+      fieldPath: data.serviceUserNova
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.nova.template.serviceUser
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: skmo-values
+      fieldPath: data.serviceUserOctavia
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.serviceUser
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: skmo-values
+      fieldPath: data.serviceUserPlacement
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.placement.template.serviceUser
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: skmo-values
+      fieldPath: data.serviceUserSwift
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.swift.template.swiftProxy.serviceUser
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: skmo-values
       fieldPath: data.keystoneInternalURL
     targets:
       - select:
