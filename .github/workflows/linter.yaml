@@ -10,6 +10,9 @@ on:  # yamllint disable-line rule:truthy
       - "**.yml"
       - test-kustomizations.sh
 
+permissions:
+  contents: read
+
 jobs:
   yaml-lint:
     runs-on: ubuntu-latest
