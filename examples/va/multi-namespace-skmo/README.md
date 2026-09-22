@@ -73,8 +73,13 @@ Before deploying, update the following files:
   - `leafRegion`: The region name for the leaf control plane (e.g. `regionTwo`)
   - `keystoneInternalURL` / `keystonePublicURL`: The central Keystone
     endpoint URLs reachable from the leaf region
-  - `leafAdminUser` / `leafAdminProject`: Admin credentials for the leaf
-    region in the central Keystone
+  - `leafAdminUser` / `leafAdminProject` / `leafAdminPasswordKey`: Leaf admin
+    identity in the central Keystone (`admin-two` / `admin` / `AdminPassword`
+    by default). Wired into the leaf OSCP `KeystoneAPI` via kustomize
+    replacements (`adminUser`, `adminProject`, `passwordSelectors.admin`).
+  - `serviceUser*`: Leaf service user names in central Keystone (e.g.
+    `regionTwo_nova`). Wired into each service's `serviceUser` field so leaf
+    `osp-secret` passwords do not collide with the central region's users.
 
 ## Stages
 

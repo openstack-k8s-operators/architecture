@@ -39,4 +39,6 @@ data:
   serviceUserGlance: regionTwo_glance
   serviceUserNeutron: regionTwo_neutron
   serviceUserNova: regionTwo_nova
+  serviceUserOctavia: regionTwo_octavia
   serviceUserPlacement: regionTwo_placement
+  serviceUserSwift: regionTwo_swift
