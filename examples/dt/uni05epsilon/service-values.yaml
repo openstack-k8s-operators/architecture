@@ -102,7 +102,7 @@ data:
     customServiceConfig: |
       [DEFAULT]
       debug = True
-      enabled_backends = primary:cinder,secondary:rbd,tertiary:swift
+      enabled_backends = primary:cinder,secondary:rbd,tertiary:s3
       [glance_store]
       default_backend = primary
       [primary]
@@ -119,12 +119,8 @@ data:
       rbd_store_pool = images
       rbd_store_user = openstack
       [tertiary]
-      swift_store_create_container_on_put = True
-      swift_store_auth_version = 3
-      swift_store_auth_address = {{ .KeystoneInternalURL }}
-      swift_store_endpoint_type = internalURL
-      swift_store_user = service:glance
-      swift_store_key = {{ .ServicePassword }}
+      s3_store_create_bucket_on_put = True
+      s3_store_bucket_url_format = "path"
       [oslo_concurrency]
       lock_path = /var/lib/glance/tmp
     databaseInstance: openstack
@@ -132,6 +128,8 @@ data:
       default:
         replicas: 3
         type: split
+        customServiceConfigSecrets:
+          - s3glance
 
   heat:
     enabled: true
@@ -178,7 +176,7 @@ data:
             memory: 4Gi
 
   swift:
-    enabled: true
+    enabled: false
 
   telemetry:
     enabled: true
