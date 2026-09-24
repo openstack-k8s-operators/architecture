@@ -448,8 +448,6 @@ data:
         cellDatabaseAccount: nova-cell0
         hasAPIAccess: true
       cell1:
-        topologyRef:
-          name: azone-node-affinity
         cellDatabaseInstance: openstack-cell1
         cellDatabaseAccount: nova-cell1
         messagingBus:
@@ -461,8 +459,6 @@ data:
           enabled: true
           replicas: 3
       cell2:
-        topologyRef:
-          name: bzone-node-affinity
         cellDatabaseInstance: openstack-cell2
         cellDatabaseAccount: nova-cell2
         messagingBus:
@@ -474,8 +470,6 @@ data:
           enabled: true
           replicas: 3
       cell3:
-        topologyRef:
-          name: czone-node-affinity
         cellDatabaseInstance: openstack-cell3
         cellDatabaseAccount: nova-cell3
         messagingBus:
@@ -508,8 +502,6 @@ data:
             spec:
               type: LoadBalancer
         replicas: 3
-        topologyRef:
-          name: azone-node-affinity
       rabbitmq-cell2:
         override:
           service:
@@ -520,8 +512,6 @@ data:
             spec:
               type: LoadBalancer
         replicas: 3
-        topologyRef:
-          name: bzone-node-affinity
       rabbitmq-cell3:
         override:
           service:
@@ -532,8 +522,6 @@ data:
             spec:
               type: LoadBalancer
         replicas: 3
-        topologyRef:
-          name: czone-node-affinity
   galera:
     templates:
       openstack:
