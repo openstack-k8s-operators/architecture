@@ -14,6 +14,12 @@ Change to the nfv/ovs-dpdk/edpm directory
 ```
 cd architecture/examples/va/nfv/ovs-dpdk/edpm
 ```
+
+Modify the [baremetalset-password.env](../../../../va/nfv/ovs-dpdk/edpm/nodeset/baremetalset-password.env) with a secure root password for bare-metal provisioning:
+```
+NodeRootPassword=YourSecurePasswordHere
+```
+
 Edit the [nodeset/values.yaml](edpm/nodeset/values.yaml) and [deployment/values.yaml](edpm/deployment/values.yaml) files to suit
 your environment.
 ```
