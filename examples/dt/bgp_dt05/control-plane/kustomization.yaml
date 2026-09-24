@@ -146,6 +146,20 @@ replacements:
         options:
           create: true
 
+  # Route the Octavia management network through the Networker nodes
+  # via a VLAN provider network instead of the default in-cluster flat network.
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.octavia.lbMgmtNetwork
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.octavia.template.lbMgmtNetwork
+        options:
+          create: true
+
   # configure designate
   - source:
       kind: ConfigMap
