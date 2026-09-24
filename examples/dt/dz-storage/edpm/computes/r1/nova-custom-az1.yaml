@@ -14,7 +14,7 @@ spec:
     - secretRef:
         name: nova-migration-ssh-key
     - secretRef:
-        name: nova-cell1-compute-config
+        name: nova-cell2-compute-config
   tlsCerts:
     default:
       contents:
