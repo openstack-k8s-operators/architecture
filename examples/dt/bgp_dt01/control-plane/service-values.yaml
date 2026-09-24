@@ -34,10 +34,26 @@ data:
     enabled: true
 
   octavia:
-    # octavia is disabled due to limitation with Native OVN BGP:
-    # with this feature, only one provider network can be configured, while
-    # octavia needs its own provider network.
+    # With Native OVN BGP the controllers are the OVN gateway
+    # chassis, so a flat in-cluster management network binds Octavia's router
+    # ports to the controllers instead of the Networker nodes. The fix is to give
+    # Octavia its own VLAN provider network routed through the Networkers
+    # (lbMgmtNetwork below + "octavia:br-octavia" on the networker nodesets).
+    #
+    # Kept DISABLED on purpose: this VLAN provider-network approach is still
+    # pending lab validation. Once validated, flip to "enabled: true" (the rest
+    # of the plumbing below is already staged).
     enabled: false
+    # Octavia management network settings, staged for when octavia is enabled.
+    # Routes the provider network out over VLAN 23 to the Networker nodes
+    # (physnet "octavia" -> br-octavia on the networkers) instead of the default
+    # in-cluster flat network. Requires octavia-operator support for
+    # providerNetworkType (openstack-k8s-operators/octavia-operator).
+    lbMgmtNetwork:
+      manageLbMgmtNetworks: true
+      providerNetworkType: vlan
+      providerPhysicalNetwork: octavia
+      providerSegmentationID: 23
     amphoraImageContainerImage: quay.io/gthiemonge/octavia-amphora-image
     apacheContainerImage: registry.redhat.io/ubi9/httpd-24:latest
     octaviaAPI:
