@@ -1,0 +1,90 @@
+# yamllint disable rule:line-length
+# CRC BGP component job - networker nodeset values
+# 1 networker on its own leaf (AS 64514)
+# Single BGP link to spine via ctlplane
+# Acts as OVN gateway chassis (edpm_enable_chassis_gw: true)
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: edpm-nodeset-values
+  annotations:
+    config.kubernetes.io/local-config: "true"
+data:
+  ssh_keys:
+    authorized: CHANGEME
+    private: CHANGEME2
+    public: CHANGEME3
+  nodeset:
+    ansible:
+      ansibleUser: cloud-admin
+      ansiblePort: 22
+      ansibleVars:
+        edpm_ovn_bgp_agent_expose_tenant_networks: true
+        edpm_frr_bgp_ipv4_src_network: ctlplane
+        edpm_frr_bgp_peers:
+          - 192.168.122.12
+        edpm_enable_chassis_gw: true
+        timesync_ntp_servers:
+          - hostname: pool.ntp.org
+        edpm_bootstrap_command: |
+          dnf -y install conntrack-tools
+        edpm_network_config_hide_sensitive_logs: false
+        edpm_sshd_allowed_ranges:
+          - 192.168.122.0/24
+        edpm_sshd_configure_firewall: true
+        gather_facts: false
+        neutron_physical_bridge_name: br-ex
+        neutron_public_interface_name: eth1
+    networks:
+      - defaultRoute: true
+        name: CtlPlane
+        subnetName: subnet1
+      - name: InternalApi
+        subnetName: subnet1
+      - name: Storage
+        subnetName: subnet1
+      - name: Tenant
+        subnetName: subnet1
+      - name: StorageMgmt
+        subnetName: subnet1
+    nodes:
+      edpm-networker-0:
+        hostName: edpm-networker-0
+        ansible:
+          ansibleHost: 192.168.122.102
+          ansibleVars:
+            edpm_frr_bgp_asn: 64514
+            edpm_ovn_bgp_agent_bgp_as: 64514
+        networks:
+          - defaultRoute: true
+            fixedIP: 192.168.122.102
+            name: CtlPlane
+            subnetName: subnet1
+          - name: InternalApi
+            subnetName: subnet1
+          - name: Storage
+            subnetName: subnet1
+          - name: Tenant
+            subnetName: subnet1
+          - name: StorageMgmt
+            subnetName: subnet1
+    services:
+      - bootstrap
+      - configure-network
+      - frr
+      - validate-network
+      - install-os
+      - configure-os
+      - ssh-known-hosts
+      - run-os
+      - reboot-os
+      - install-certs
+      - ovn
+      - neutron-metadata
+      - ovn-bgp-agent
+  nova:
+    migration:
+      ssh_keys:
+        private: CHANGEME4
+        public: CHANGEME5
