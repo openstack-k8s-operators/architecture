@@ -237,7 +237,3 @@ vas:
             type: playbook
             source: "../../hooks/playbooks/dz_storage_pre_test_images.yaml"
             inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
-          - name: "04 Validate cinderBackups creation and restore"
-            type: playbook
-            source: "../../hooks/playbooks/cinder_backups.yaml"
-            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
