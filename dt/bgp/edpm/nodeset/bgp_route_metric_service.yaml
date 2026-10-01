@@ -1,0 +1,51 @@
+---
+# bgp-route-metric: workaround for RHEL-127907 (BGP ECMP broken by unequal
+# connected-route metrics). os-net-config cannot set NetworkManager
+# ipv4/ipv6.route-metric, and NM auto-assigns a different metric per BGP uplink
+# (e.g. 800, 801), so FRR imports the connected routes with unequal IGP cost and
+# installs only one nexthop instead of ECMP. This service pins a fixed
+# route-metric on each BGP peer uplink connection, re-applying it every time
+# os-net-config regenerates the NM profiles (it runs after configure-network and
+# before frr). Remove once the FRR fix lands.
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneService
+metadata:
+  name: bgp-route-metric
+spec:
+  playbookContents: |
+    - name: Equalize BGP uplink route-metrics for ECMP (RHEL-127907)
+      hosts: all
+      become: true
+      gather_facts: false
+      vars:
+        bgp_route_metric: 800
+      tasks:
+        - name: Pin a fixed route-metric on each BGP peer uplink connection
+          ansible.builtin.shell: |
+            set -euo pipefail
+            peer="{{ item }}"
+            case "$peer" in *:*) fam=ipv6 ;; *) fam=ipv4 ;; esac
+            route=$(ip -o route get "$peer" 2>/dev/null || true)
+            if [ -z "$route" ] || printf '%s' "$route" | grep -q ' via '; then
+              echo "SKIP: peer $peer is not directly connected"
+              exit 0
+            fi
+            dev=$(printf '%s' "$route" | sed -n 's/.* dev \([^ ]*\).*/\1/p' | head -1)
+            conn=$(nmcli -g GENERAL.CONNECTION device show "$dev" 2>/dev/null | head -1)
+            if [ -z "$dev" ] || [ -z "$conn" ]; then
+              echo "SKIP: could not resolve device/connection for peer $peer"
+              exit 0
+            fi
+            current=$(nmcli -g "${fam}.route-metric" connection show "$conn")
+            if [ "$current" != "{{ bgp_route_metric }}" ]; then
+              nmcli connection modify "$conn" "${fam}.route-metric" {{ bgp_route_metric }}
+              nmcli connection up "$conn"
+              echo "CHANGED: $conn ($dev) ${fam}.route-metric={{ bgp_route_metric }}"
+            else
+              echo "OK: $conn already ${fam}.route-metric={{ bgp_route_metric }}"
+            fi
+          args:
+            executable: /bin/bash
+          register: _bgp_metric
+          changed_when: "'CHANGED:' in _bgp_metric.stdout"
+          loop: "{{ edpm_frr_bgp_peers | default([]) }}"
