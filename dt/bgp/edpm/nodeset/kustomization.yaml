@@ -20,6 +20,10 @@ transformers:
 components:
   - ../../../../lib/dataplane/nodeset
 
+resources:
+  # RHEL-127907 workaround: pins BGP uplink route-metrics so FRR keeps ECMP.
+  - bgp_route_metric_service.yaml
+
 patches:
   - target:
       kind: OpenStackDataPlaneNodeSet

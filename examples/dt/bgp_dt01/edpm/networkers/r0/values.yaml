@@ -167,6 +167,7 @@ data:
       - install-os
       - configure-os
       - configure-network
+      - bgp-route-metric
       - frr
       - validate-network
       - ssh-known-hosts
