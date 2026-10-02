@@ -1,0 +1,33 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+components:
+  - ../../../../../dt/bgp/networking
+
+transformers:
+  # Set namespace to OpenStack on all namespaced objects without a namespace
+  - |-
+    apiVersion: builtin
+    kind: NamespaceTransformer
+    metadata:
+      name: _ignored_
+      namespace: openstack
+    setRoleBindingSubjects: none
+    unsetOnly: true
+    fieldSpecs:
+      - path: metadata/name
+        kind: Namespace
+        create: true
+
+resources:
+  - metallb_bgppeers.yaml
+
+patches:
+  # Add BGPPeer to BGPAdvertisement
+  - target:
+      kind: BGPAdvertisement
+    patch: |-
+      - op: add
+        path: /spec/peers/-
+        value: bgp-peer-spine
