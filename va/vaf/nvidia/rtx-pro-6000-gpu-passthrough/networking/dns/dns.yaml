@@ -1,0 +1,19 @@
+---
+apiVersion: operator.openshift.io/v1
+kind: DNS
+metadata:
+  name: default
+spec:
+  cache:
+    negativeTTL: 0s
+    positiveTTL: 0s
+  logLevel: Normal
+  nodePlacement: {}
+  operatorLogLevel: Normal
+  upstreamResolvers:
+    policy: Sequential
+    protocolStrategy: ""
+    transportConfig: {}
+    upstreams:
+      - port: 53
+        type: SystemResolvConf
