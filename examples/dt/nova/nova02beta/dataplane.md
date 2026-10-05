@@ -14,6 +14,12 @@ Change to the nova/nova02beta/edpm directory
 ```
 cd architecture/examples/dt/nova/nova02beta/edpm/
 ```
+
+Modify the [baremetalset-password.env](../../../../dt/nova/nova02beta/edpm/nodeset/baremetalset-password.env) and [baremetalset-password.env](../../../../dt/nova/nova02beta/edpm/nodeset2/baremetalset-password.env) with a secure root password for bare-metal provisioning:
+```
+NodeRootPassword=YourSecurePasswordHere
+```
+
 Edit the [nodeset/values.yaml](edpm/nodeset/values.yaml), the [nodeset2/values.yaml](edpm/nodeset2/values.yaml), 
 and [deployment/values.yaml](edpm/deployment/values.yaml) files to suit 
 your environment.

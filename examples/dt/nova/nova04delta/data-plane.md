@@ -14,6 +14,12 @@ Change to the nova/nova04delta directory
 ```
 cd architecture/examples/dt/nova/nova04delta
 ```
+
+Modify the [baremetalset-password.env](../../../../dt/nova/nova04delta/edpm/nodeset/baremetalset-password.env) with a secure root password for bare-metal provisioning:
+```
+NodeRootPassword=YourSecurePasswordHere
+```
+
 Edit the [edpm/nodeset/values.yaml](edpm/nodeset/values.yaml)
 file to suit your environment.
 ```
