@@ -23,7 +23,8 @@ data:
         edpm_ovn_encap_ip: "{{ bgpmainnet_ip }}"
         edpm_ovn_bridge_mappings:
           - "datacentre:br-ex"
-          # commented out due to OSPRH-30907 - "octavia:br-octavia"
+          # Octavia management network routed through the Networkers
+          - "octavia:br-octavia"
         edpm_frr_bgp_ipv4_src_network: bgpmainnet
         edpm_frr_bgp_ipv6_src_network: bgpmainnetv6
         edpm_frr_bgp_neighbor_password: f00barZ
@@ -55,11 +56,11 @@ data:
             name: {{ neutron_physical_bridge_name }}
             use_dhcp: false
             use_dhcpv6: true  # needed to enable IPv6 on bridges
-          # commented out due to OSPRH-30907
-          # - type: ovs_bridge
-          #   name: br-octavia
-          #   use_dhcp: false
-          #   use_dhcpv6: true  # needed to enable IPv6 on bridges
+          # Octavia management network bridge (octavia:br-octavia)
+          - type: ovs_bridge
+            name: br-octavia
+            use_dhcp: false
+            use_dhcpv6: true  # needed to enable IPv6 on bridges
           - type: interface
             name: nic1
             use_dhcp: true
