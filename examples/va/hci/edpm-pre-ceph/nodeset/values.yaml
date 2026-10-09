@@ -37,34 +37,76 @@ data:
           {% set _ = mtu_list.append(lookup('vars', networks_lower[network] ~ '_mtu')) %}
           {%- endfor %}
           {% set min_viable_mtu = mtu_list | max %}
-          network_config:
-          - type: interface
-            name: nic1
-            use_dhcp: true
-            mtu: {{ min_viable_mtu }}
-          - type: ovs_bridge
-            name: {{ neutron_physical_bridge_name }}
-            mtu: {{ min_viable_mtu }}
-            use_dhcp: false
-            dns_servers: {{ ctlplane_dns_nameservers }}
-            domain: {{ dns_search_domains }}
-            addresses:
-            - ip_netmask: {{ ctlplane_ip }}/{{ ctlplane_cidr }}
-            routes: {{ ctlplane_host_routes }}
-            members:
-            - type: interface
-              name: nic2
+
+          dns-resolver:
+            config:
+              search: {{ [dns_search_domains] | flatten }}
+              server: {{ ctlplane_dns_nameservers if ctlplane_dns_nameservers is sequence and ctlplane_dns_nameservers is not string else [ctlplane_dns_nameservers] }}
+
+          interfaces:
+            - name: enp5s0
+              type: ethernet
+              state: up
               mtu: {{ min_viable_mtu }}
-              # force the MAC address of the bridge to this interface
-              primary: true
+              ipv4:
+                enabled: true
+                dhcp: true
+
+            - name: enp6s0
+              type: ethernet
+              state: up
+              mtu: {{ min_viable_mtu }}
+
+            - name: {{ neutron_physical_bridge_name }}
+              type: ovs-interface
+              state: up
+              mtu: {{ min_viable_mtu }}
+              ipv4:
+                enabled: true
+                dhcp: false
+                address:
+                  - ip: {{ ctlplane_ip }}
+                    prefix-length: {{ ctlplane_cidr }}
+
+            - name: {{ neutron_physical_bridge_name }}
+              type: ovs-bridge
+              state: up
+              bridge:
+                options:
+                  fail-mode: standalone
+                port:
+                  - name: enp6s0
+                  - name: {{ neutron_physical_bridge_name }}
+
           {% for network in nodeset_networks %}
-            - type: vlan
+            - name: {{ neutron_physical_bridge_name }}.{{ lookup('vars', networks_lower[network] ~ '_vlan_id') }}
+              type: vlan
+              state: up
               mtu: {{ lookup('vars', networks_lower[network] ~ '_mtu') }}
-              vlan_id: {{ lookup('vars', networks_lower[network] ~ '_vlan_id') }}
-              addresses:
-              - ip_netmask:
-                  {{ lookup('vars', networks_lower[network] ~ '_ip') }}/{{ lookup('vars', networks_lower[network] ~ '_cidr') }}
-              routes: {{ lookup('vars', networks_lower[network] ~ '_host_routes') }}
+              vlan:
+                base-iface: {{ neutron_physical_bridge_name }}
+                id: {{ lookup('vars', networks_lower[network] ~ '_vlan_id') }}
+              ipv4:
+                enabled: true
+                dhcp: false
+                address:
+                  - ip: {{ lookup('vars', networks_lower[network] ~ '_ip') }}
+                    prefix-length: {{ lookup('vars', networks_lower[network] ~ '_cidr') }}
+          {% endfor %}
+
+          routes:
+            config:
+          {% for route in ctlplane_host_routes %}
+              - destination: {{ route.destination | default(route.ip_netmask) }}
+                next-hop-address: {{ route.nexthop | default(route.next_hop) }}
+                next-hop-interface: {{ neutron_physical_bridge_name }}
+          {% endfor %}
+          {% for network in nodeset_networks %}
+            {% for route in lookup('vars', networks_lower[network] ~ '_host_routes', default=[]) %}
+              - destination: {{ route.destination | default(route.ip_netmask) }}
+                next-hop-address: {{ route.nexthop | default(route.next_hop) }}
+                next-hop-interface: {{ neutron_physical_bridge_name }}.{{ lookup('vars', networks_lower[network] ~ '_vlan_id') }}
+            {% endfor %}
           {% endfor %}
         edpm_nodes_validation_validate_controllers_icmp: false
         edpm_nodes_validation_validate_gateway_icmp: false
@@ -165,7 +207,7 @@ data:
       - install-certs
       - ceph-client
       - ovn
-      - neutron-metadata
+      - neutron-ovn
       - libvirt
   nova:
     migration:
