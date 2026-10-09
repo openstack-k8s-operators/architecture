@@ -52,6 +52,9 @@ vas:
             kind: Provisioning
             resource_name: provisioning-configuration
             state: patched
+          - name: Inject real BMC credentials into bmc-secret.env
+            type: playbook
+            source: bmo01_inject_bmc_secret.yml
         name: baremetalhosts-configuration
         path: examples/dt/bmo01/dataplane/baremetalhosts
         wait_conditions:
