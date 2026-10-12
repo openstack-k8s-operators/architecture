@@ -15,6 +15,12 @@ Change to the perfscale/scalelab/edpm directory
 ```
 cd architecture/examples/dt/perfscale/scalelab/edpm
 ```
+
+Modify the [baremetalset-password.env](../../../../dt/perfscale/scalelab/edpm/nodeset/baremetalset-password.env) with a secure root password for bare-metal provisioning:
+```
+NodeRootPassword=YourSecurePasswordHere
+```
+
 Edit the [nodeset/values.yaml](edpm/nodeset/values.yaml) file to suit your environment.
 ```
 vi nodeset/values.yaml
