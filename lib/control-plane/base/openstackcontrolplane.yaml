@@ -165,8 +165,6 @@ spec:
       route: {}
     template:
       databaseInstance: openstack
-      networkAttachments:
-        - internalapi
       secret: osp-secret
       replicas: 3
   nova:
