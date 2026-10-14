@@ -11,8 +11,9 @@ should be enabled on those spine and leaf routers.
 ## Purpose
 
 This IPv6 BGP DT (DT04) tests the following BGP configuration:
-* Kernel routing (instead of OVN routing)
-* OVN NB DB driver (instead of OVN SB DB driver)
+* Neutron API configured with ovn-bgp service_plugin at controlplane
+* FRR running on dataplane nodes
+* OVN Agent configured with ovn-bgp extension at dataplane
 * IPv6 configured at controlplane
 
 The OCP cluster consists on the following nodes:
@@ -79,10 +80,9 @@ network).
 | ---------------- | ---------------- | ------------------ |
 | Glance           | Swift            | Must have          |
 | Swift            | (default)        | Must have          |
-| Octavia          | (default)        | Must have          |
 | Heat             | (default)        | Must have          |
 | frr              | dataplane        | Must have          |
-| ovn-bgp-agent    | dataplane        | Must have          |
+| neutron-ovn      | dataplane        | Must have          |
 
 ## Considerations/Constraints
 

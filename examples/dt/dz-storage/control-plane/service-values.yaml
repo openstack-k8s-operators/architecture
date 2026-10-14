@@ -399,6 +399,9 @@ data:
     enabled: false
 
   octavia:
+    # octavia is disabled due to limitation with Native OVN BGP:
+    # with this feature, only one provider network can be configured, while
+    # octavia needs its own provider network.
     enabled: false
     amphoraImageContainerImage: quay.io/gthiemonge/octavia-amphora-image
     apacheContainerImage: registry.redhat.io/ubi9/httpd-24:latest
@@ -430,6 +433,7 @@ data:
   neutron:
     customServiceConfig: |
       [DEFAULT]
+      service_plugins = qos,ovn-router,trunk,segments,port_forwarding,log,placement,ovn-bgp
       vlan_transparent = true
       debug = true
       [ovs]
