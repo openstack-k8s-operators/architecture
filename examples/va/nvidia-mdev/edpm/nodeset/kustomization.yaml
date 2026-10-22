@@ -84,3 +84,43 @@ replacements:
           - data.nvidia_mdev_driver_url
         options:
           create: true
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values
+      fieldPath: data.nova.mdev.nvidia_mdev_driver_install_method
+    targets:
+      - select:
+          kind: ConfigMap
+          name: nvidia-url
+        fieldPaths:
+          - data.nvidia_mdev_driver_install_method
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values
+      fieldPath: data.nova.mdev.nvidia_mdev_driver_checksum
+    targets:
+      - select:
+          kind: ConfigMap
+          name: nvidia-url
+        fieldPaths:
+          - data.nvidia_mdev_driver_checksum
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values
+      fieldPath: data.nova.mdev.nvidia_mdev_driver_accept_license
+    targets:
+      - select:
+          kind: ConfigMap
+          name: nvidia-url
+        fieldPaths:
+          - data.nvidia_mdev_driver_accept_license
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values
+      fieldPath: data.nova.mdev.nvidia_mdev_expected_types
+    targets:
+      - select:
+          kind: ConfigMap
+          name: nvidia-url
+        fieldPaths:
+          - data.nvidia_mdev_expected_types
