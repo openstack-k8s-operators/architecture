@@ -17,6 +17,14 @@ transformers:
         kind: Namespace
         create: true
 
+secretGenerator:
+  - name: baremetalset-password-secret
+    behavior: create
+    envs:
+      - baremetalset-password.env
+    options:
+      disableNameSuffixHash: true
+
 components:
   - ../../../../../lib/dataplane/nodeset
 
@@ -27,17 +35,3 @@ patches:
     patch: |
       - op: remove
         path: /data/authorized_keys
-
-replacements:
-  - source:
-      kind: ConfigMap
-      name: edpm-nodeset-values
-      fieldPath: data.root_password
-    targets:
-      - select:
-          kind: Secret
-          name: baremetalset-password-secret
-        fieldPaths:
-          - data.NodeRootPassword
-        options:
-          create: true
