@@ -11,3 +11,19 @@ components:
 resources:
   - nncp/values.yaml
   - service-values.yaml
+
+replacements:
+  # Carry ovnController external-ids into the control-plane CR so the
+  # enable-chassis-as-gateway toggle (service-values) takes effect. Default
+  # keeps OCP workers gateway-capable; EVPN overlays override it to false.
+  - source:
+      kind: ConfigMap
+      name: service-values
+      fieldPath: data.ovn.ovnController.external-ids
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.ovn.template.ovnController.external-ids
+        options:
+          create: true
