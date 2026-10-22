@@ -2,19 +2,22 @@
 apiVersion: dataplane.openstack.org/v1beta1
 kind: OpenStackDataPlaneService
 metadata:
-  name: neutron-metadata-az0
+  name: neutron-ovn-az1
 spec:
   addCertMounts: false
   caCerts: combined-ca-bundle
   containerImageFields:
-    - EdpmNeutronMetadataAgentImage
+    - EdpmNeutronOvnAgentImage
   dataSources:
+    # neutron-ovn-agent-neutron-config is generated automatically by
+    # neutron-operator (the NeutronAPI controller) when the control plane is
+    # deployed. It holds the ovn-agent [ovn] NB/SB connection config.
     - secretRef:
-        name: neutron-ovn-metadata-agent-neutron-config
+        name: neutron-ovn-agent-neutron-config
     - secretRef:
-        name: nova-cell1-metadata-neutron-config
-  edpmServiceType: neutron-metadata
-  playbook: osp.edpm.neutron_metadata
+        name: nova-cell2-metadata-neutron-config
+  edpmServiceType: neutron-ovn
+  playbook: osp.edpm.neutron_ovn
   tlsCerts:
     default:
       contents:
