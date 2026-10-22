@@ -492,6 +492,18 @@ replacements:
   - source:
       kind: ConfigMap
       name: service-values
+      fieldPath: data.ironic.ironicInspector.replicas
+    targets:
+      - select:
+          kind: OpenStackControlPlane
+        fieldPaths:
+          - spec.ironic.template.ironicInspector.replicas
+        options:
+          create: true
+
+  - source:
+      kind: ConfigMap
+      name: service-values
       fieldPath: data.nova.cellTemplates
     targets:
       - select:
