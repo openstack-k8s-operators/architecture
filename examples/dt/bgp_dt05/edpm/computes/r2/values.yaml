@@ -23,7 +23,7 @@ data:
         edpm_ovn_encap_ip: "{{ bgpmainnet_ip }}"
         edpm_ovn_bridge_mappings:
           - "datacentre:br-ex"
-          # commented out due to OSPRH-30907 - "octavia:br-octavia"
+          # octavia:br-octavia mapping is only required on the networkers, where the octavia router GW ports are scheduled
         edpm_frr_bgp_asn: 65000
         edpm_frr_bgp_ipv4_src_network: bgpmainnet
         edpm_frr_bgp_ipv6_src_network: bgpmainnetv6

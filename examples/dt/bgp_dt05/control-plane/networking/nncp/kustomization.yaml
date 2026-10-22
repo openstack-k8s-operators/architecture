@@ -89,20 +89,25 @@ patches:
           state: up
   - target:
       kind: NodeNetworkConfigurationPolicy
+      name: "node-[3-5]"  # worker-3 (tester) reaches octavia mgmt via BGP
     patch: |-
       - op: add
         path: /spec/desiredState/interfaces/-
         value:
-          description: Octavia bridge
+          description: Octavia vlan host interface
           mtu: 1500
           name: octavia
-          type: linux-bridge
+          type: vlan
           state: up
+          vlan:
+            base-iface: _replaced_
+            id: _replaced_
           ipv4:
             address:
               - ip: _replaced_
                 prefix-length: _replaced_
             enabled: true
+            dhcp: false
   - target:
       kind: NodeNetworkConfigurationPolicy
     patch: |-
@@ -615,33 +620,39 @@ replacements:
         fieldPaths:
           - spec.desiredState.interfaces.1.ipv4.address.0.prefix-length
 
-  # octavia bridge gateway IP and prefix-length
-  # octavia is at index 7 for workers 0-2 (which have 2 BGP ifaces) and index 6 for worker-3
+  # octavia vlan host IP and prefix-length. Workers 0-2 only; worker-3 (tester)
+  # has no octavia interface and reaches octavia mgmt via BGP.
+  # octavia is at index 7 (workers 0-2 have 2 BGP ifaces).
   - source:
       kind: ConfigMap
       name: network-values
-      fieldPath: data.octavia.gateway
+      fieldPath: data.node_3.octavia_ip
     targets:
       - select:
           kind: NodeNetworkConfigurationPolicy
           name: worker-0
         fieldPaths:
           - spec.desiredState.interfaces.7.ipv4.address.0.ip
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_4.octavia_ip
+    targets:
       - select:
           kind: NodeNetworkConfigurationPolicy
           name: worker-1
         fieldPaths:
           - spec.desiredState.interfaces.7.ipv4.address.0.ip
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.node_5.octavia_ip
+    targets:
       - select:
           kind: NodeNetworkConfigurationPolicy
           name: worker-2
         fieldPaths:
           - spec.desiredState.interfaces.7.ipv4.address.0.ip
-      - select:
-          kind: NodeNetworkConfigurationPolicy
-          name: worker-3
-        fieldPaths:
-          - spec.desiredState.interfaces.6.ipv4.address.0.ip
 
   - source:
       kind: ConfigMap
@@ -663,14 +674,52 @@ replacements:
           name: worker-2
         fieldPaths:
           - spec.desiredState.interfaces.7.ipv4.address.0.prefix-length
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.octavia.base_iface
+    targets:
       - select:
           kind: NodeNetworkConfigurationPolicy
-          name: worker-3
+          name: worker-0
         fieldPaths:
-          - spec.desiredState.interfaces.6.ipv4.address.0.prefix-length
+          - spec.desiredState.interfaces.7.vlan.base-iface
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-1
+        fieldPaths:
+          - spec.desiredState.interfaces.7.vlan.base-iface
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-2
+        fieldPaths:
+          - spec.desiredState.interfaces.7.vlan.base-iface
+
+  - source:
+      kind: ConfigMap
+      name: network-values
+      fieldPath: data.octavia.vlan
+    targets:
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-0
+        fieldPaths:
+          - spec.desiredState.interfaces.7.vlan.id
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-1
+        fieldPaths:
+          - spec.desiredState.interfaces.7.vlan.id
+      - select:
+          kind: NodeNetworkConfigurationPolicy
+          name: worker-2
+        fieldPaths:
+          - spec.desiredState.interfaces.7.vlan.id
 
   # designate bridge gateway IP and prefix-length
-  # designate is at index 8 for workers 0-2 and index 7 for worker-3
+  # designate is at index 8 for workers 0-2 and index 6 for worker-3
+  # (worker-3 has no octavia interface)
   - source:
       kind: ConfigMap
       name: network-values
@@ -695,7 +744,7 @@ replacements:
           kind: NodeNetworkConfigurationPolicy
           name: worker-3
         fieldPaths:
-          - spec.desiredState.interfaces.7.ipv4.address.0.ip
+          - spec.desiredState.interfaces.6.ipv4.address.0.ip
 
   - source:
       kind: ConfigMap
@@ -721,4 +770,4 @@ replacements:
           kind: NodeNetworkConfigurationPolicy
           name: worker-3
         fieldPaths:
-          - spec.desiredState.interfaces.7.ipv4.address.0.prefix-length
+          - spec.desiredState.interfaces.6.ipv4.address.0.prefix-length

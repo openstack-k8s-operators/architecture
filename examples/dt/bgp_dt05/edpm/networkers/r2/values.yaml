@@ -71,10 +71,13 @@ data:
             name: br-octavia
             use_dhcp: false
             use_dhcpv6: true  # needed to enable IPv6 on bridges
-          - type: interface
-            name: nic1
-            use_dhcp: true
-            defroute: false
+            # nic1 is the dedicated octavia uplink; OVN tags VLAN 23 on the
+            # br-octavia localnet, so nic1 is a plain trunk member (no IP/VLAN)
+            members:
+              - type: interface
+                name: nic1
+                # force the MAC address of the bridge to this interface
+                primary: true
           - type: interface
             name: nic2
             use_dhcp: false
