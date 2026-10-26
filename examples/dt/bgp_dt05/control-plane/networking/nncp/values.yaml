@@ -13,6 +13,7 @@ data:
     internalapi_ip: 172.17.0.5
     ctlplane_ip: 192.168.122.10
     storage_ip: 172.18.0.5
+    octavia_ip: 172.23.0.20
     bgp_ip:
       - 100.64.0.10
       - 100.65.0.10
@@ -31,20 +32,17 @@ data:
           next-hop-address: 100.65.0.9
           next-hop-interface: enp9s0
           weight: 200
-        # routes to octavia mgmt network
+        # octavia mgmt network reached via the VLAN-23 provider gateway on the
+        # Networker nodes (OVN router), not via BGP
         - destination: 172.24.0.0/16
-          next-hop-address: 100.64.0.9
-          next-hop-interface: enp8s0
-          weight: 200
-        - destination: 172.24.0.0/16
-          next-hop-address: 100.65.0.9
-          next-hop-interface: enp9s0
-          weight: 200
+          next-hop-address: 172.23.0.1
+          next-hop-interface: octavia
   node_4:
     name: worker-1
     internalapi_ip: 172.17.0.6
     ctlplane_ip: 192.168.122.11
     storage_ip: 172.18.0.6
+    octavia_ip: 172.23.0.21
     bgp_ip:
       - 100.64.1.10
       - 100.65.1.10
@@ -63,20 +61,17 @@ data:
           next-hop-address: 100.65.1.9
           next-hop-interface: enp9s0
           weight: 200
-        # routes to octavia mgmt network
+        # octavia mgmt network reached via the VLAN-23 provider gateway on the
+        # Networker nodes (OVN router), not via BGP
         - destination: 172.24.0.0/16
-          next-hop-address: 100.64.1.9
-          next-hop-interface: enp8s0
-          weight: 200
-        - destination: 172.24.0.0/16
-          next-hop-address: 100.65.1.9
-          next-hop-interface: enp9s0
-          weight: 200
+          next-hop-address: 172.23.0.1
+          next-hop-interface: octavia
   node_5:
     name: worker-2
     internalapi_ip: 172.17.0.7
     ctlplane_ip: 192.168.122.12
     storage_ip: 172.18.0.7
+    octavia_ip: 172.23.0.22
     bgp_ip:
       - 100.64.2.10
       - 100.65.2.10
@@ -95,15 +90,11 @@ data:
           next-hop-address: 100.65.2.9
           next-hop-interface: enp9s0
           weight: 200
-        # routes to octavia mgmt network
+        # octavia mgmt network reached via the VLAN-23 provider gateway on the
+        # Networker nodes (OVN router), not via BGP
         - destination: 172.24.0.0/16
-          next-hop-address: 100.64.2.9
-          next-hop-interface: enp8s0
-          weight: 200
-        - destination: 172.24.0.0/16
-          next-hop-address: 100.65.2.9
-          next-hop-interface: enp9s0
-          weight: 200
+          next-hop-address: 172.23.0.1
+          next-hop-interface: octavia
   node_6:
     name: worker-3
     internalapi_ip: 172.17.0.8
@@ -291,18 +282,18 @@ data:
     prefix-length: 24
     gateway: 172.23.0.1
     vlan: 23
-    base_iface: enp7s0
+    # dedicated octavia NIC on the workers; the host "octavia" interface is a
+    # VLAN-23 sub-interface of this NIC (see nncp kustomization patch) and is
+    # the macvlan master for the octavia net-attach-def below
+    base_iface: enp6s0
     net-attach-def: |
       {
         "cniVersion": "0.3.1",
         "name": "octavia",
-        "type": "bridge",
+        "type": "macvlan",
+        "master": "octavia",
         "isDefaultGateway": true,
         "isGateway": true,
-        "forceAddress": false,
-        "ipMasq": false,
-        "hairpinMode": true,
-        "bridge": "octavia",
         "ipam": {
           "type": "whereabouts",
           "range": "172.23.0.0/24",
