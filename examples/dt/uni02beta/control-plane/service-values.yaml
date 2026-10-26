@@ -32,9 +32,10 @@ data:
         nas_secure_file_operations=false
         nas_secure_file_permissions=false
         volume_backend_name=ontap
-        volume_driver=cinder.volume.drivers.netapp.c1ommon.NetAppDriver
+        volume_driver=cinder.volume.drivers.netapp.common.NetAppDriver
         netapp_server_hostname=_replaced_  # CHANGEME
         netapp_server_port=80
+        netapp_transport_type=http
         netapp_storage_protocol=nfs
         netapp_storage_family=ontap_cluster
       networkAttachments:
