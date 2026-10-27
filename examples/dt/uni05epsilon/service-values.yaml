@@ -55,6 +55,7 @@ data:
         volume_driver=cinder.volume.drivers.netapp.common.NetAppDriver
         netapp_server_hostname=_replaced_
         netapp_server_port=80
+        netapp_transport_type=http
         netapp_storage_protocol=iscsi
         netapp_storage_family=ontap_cluster
         consistencygroup_support=True
