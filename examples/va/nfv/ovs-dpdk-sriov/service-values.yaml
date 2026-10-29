@@ -40,6 +40,13 @@ data:
     ovnController:
       nicMappings:
         datacentre: ospbr
+      # Whether the OCP worker chassis may act as OVN gateway chassis. The
+      # operator default is true; it is set explicitly here so the value is
+      # carried into the CR by the replacement below and can be overridden
+      # (e.g. EVPN topologies set this to false so only the EDPM computes are
+      # gateway chassis).
+      external-ids:
+        enable-chassis-as-gateway: true
 
   glance:
     customServiceConfig: |
