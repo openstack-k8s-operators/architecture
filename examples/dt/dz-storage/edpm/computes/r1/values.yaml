@@ -31,7 +31,7 @@ data:
           - br-bgp-0
           - br-bgp-1
         edpm_neutron_ovn_agent_bgp_peer_bridges: "{{ bgp_bridges | join(',') }}"
-        edpm_neutron_ovn_agent_agent_extensions: "ovn-bgp"
+        edpm_neutron_ovn_agent_agent_extensions: "metadata,ovn-bgp"
         timesync_ntp_servers:
           - hostname: pool.ntp.org
         # conntrack is necessary for some tobiko tests
@@ -193,8 +193,7 @@ data:
       - reboot-os
       - install-certs
       - ovn
-      - neutron-metadata-az1
-      - neutron-ovn
+      - neutron-ovn-az1
       - libvirt
       - nova-custom-az1
   nova:
