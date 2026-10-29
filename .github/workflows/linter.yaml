@@ -9,6 +9,7 @@ on:  # yamllint disable-line rule:truthy
       - "**.yaml"
       - "**.yml"
       - test-kustomizations.sh
+      - .ci/test-nvidia-mdev.py
 
 permissions:
   contents: read
@@ -44,6 +45,12 @@ jobs:
         run: |
           kustomize version
           ./test-kustomizations.sh examples/
+
+      - name: Install NVIDIA validation test dependencies
+        run: python3 -m pip install pyyaml ansible-core
+
+      - name: Check NVIDIA configuration and installer decisions
+        run: python3 .ci/test-nvidia-mdev.py
 
   test-zuul:
     runs-on: ubuntu-latest
