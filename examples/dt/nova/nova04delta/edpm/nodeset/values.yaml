@@ -168,6 +168,7 @@ data:
       - nova-custom-gpu
       - neutron-metadata
       - telemetry
+      - telemetry-power-monitoring
   nova:
     # Mapped in dt/nova/nova04delta/edpm/nodeset/kustomization.yaml to cpu-pinning-nova ConfigMap
     compute:
