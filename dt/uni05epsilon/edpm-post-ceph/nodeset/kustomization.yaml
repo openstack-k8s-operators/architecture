@@ -325,7 +325,7 @@ replacements:
         fieldPaths:
           - spec.swift.enabled
         options:
-          create: true
+          create: false
 
   #
   # Telemetry
