@@ -46,3 +46,25 @@ The following VAs are available.
 The following DTs are available.
 
 - [Nova with GPU Passthrough (VFIO)](examples/dt/nova/nova04delta/) [untested]
+
+## Cinder and Glance pod names (`uniquePodNames`)
+
+The base control-plane template sets `spec.cinder.uniquePodNames: true` and
+`spec.glance.uniquePodNames: true`. That prefixes Cinder/Glance CR and pod
+names with a short hash derived from the OpenStackControlPlane UID (for
+example `cinder-a4403-api-0` instead of `cinder-api-0`).
+
+Do not hardcode `cinder-api-0` / `glance-default-*-api-0` in automation or
+docs that target these templates. Discover names at runtime:
+
+```bash
+CINDER_NAME=$(oc get cinder -n openstack -o jsonpath='{.items[0].metadata.name}')
+oc exec -t ${CINDER_NAME}-api-0 -c cinder-api -- ...
+
+GLANCE_POD=$(oc get pods -n openstack -o name \
+  | grep -E 'glance(-[a-z0-9]+)?-default-external-api-[0-9]+$' | head -n1)
+oc rsh -c glance-api ${GLANCE_POD#pod/}
+```
+
+See the RHOSO docs on
+[resolving hostname conflicts](https://docs.redhat.com/en/documentation/red_hat_openstack_services_on_openshift/18.0/html/configuring_persistent_storage/con_resolving-hostname-conflicts_block-storage).
