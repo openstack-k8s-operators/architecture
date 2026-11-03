@@ -71,6 +71,7 @@ data:
           rescuing_network = provisioning
           inspection_network = provisioning
     ironicInspector:
+      replicas: 1
       customServiceConfig: |
         [capabilities]
         boot_mode = true
