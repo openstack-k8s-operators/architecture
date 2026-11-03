@@ -157,3 +157,11 @@ data:
         device_spec = {"vendor_id":"8086", "product_id":"1572", "address": "0000:19:00.3", "physical_network":"sriov-phy4", "trusted":"true"}
     mdev:
       nvidia_mdev_driver_url: http://example.nvidia.com/path/to/driver/example-rhel-host-driver-xyz.rpm
+      # Keep rpm for prebuilt packages; choose run to build for the booted kernel.
+      nvidia_mdev_driver_install_method: rpm
+      # Optional get_url checksum, e.g. sha256:<approved-installer-digest>.
+      nvidia_mdev_driver_checksum: ""
+      # Explicit license acknowledgement is required for unattended run installs.
+      nvidia_mdev_driver_accept_license: "false"
+      # JSON list of required mdev profiles; an empty list requires any NVIDIA profile.
+      nvidia_mdev_expected_types: "[]"

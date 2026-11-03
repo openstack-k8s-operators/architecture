@@ -27,8 +27,16 @@ oc apply -f compute-provider-service.yaml
 
 ## Update post deployment configration and apply
 In order to finish Nvidia Driver installation the EDPM Nodes will need a final
-reboot. This will require a new deployment that will run ```reboot-os``` on the
-relevant EDPM Nodes.
+reboot. The example deployment runs `reboot-os`, followed by `validate-nvidia`,
+before applying `compute-provider` configuration to the relevant EDPM nodes.
+
+Keep `validate-nvidia` immediately after the reboot, including when customizing
+`servicesOverride` in CI. It loads the NVIDIA/vGPU modules without force options,
+starts the vGPU services, checks `nvidia-smi -L`, and requires the configured mdev
+profiles (or at least one NVIDIA profile when no list is configured). It applies
+to both RPM and `.run` installations and fails the deployment before Nova provider
+configuration or guest tests if the driver cannot operate after reboot. Compiling
+a kernel interface is not by itself proof of supported vGPU operation.
 
 If applying the ```provider.yaml``` configuration via OSPDS from the previous
 optional step, then include the service ```compute-provider``` to the list of
