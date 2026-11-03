@@ -18,3 +18,23 @@ transformers:
 
 components:
   - ../../../lib/dataplane
+
+resources:
+  - resources/nova-extra-config.yaml
+
+replacements:
+  #
+  # Nova
+  #
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values
+      fieldPath: data.nova-extra-config
+    targets:
+      - select:
+          kind: ConfigMap
+          name: nova-extra-config
+        fieldPaths:
+          - data.55-nova-extra\.conf
+        options:
+          create: true
