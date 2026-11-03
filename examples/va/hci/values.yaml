@@ -21,7 +21,7 @@ data:
       - install-certs
       - ceph-client
       - ovn
-      - neutron-metadata
+      - neutron-ovn
       - libvirt
       - nova-custom-ceph
       - telemetry
