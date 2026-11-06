@@ -57,7 +57,9 @@ characteristics:
 
 ## Customization
 
-Before deploying, update the following files:
+Before deploying, update the following files. Also create the
+[`octavia-ca-passphrase` Secret](../../common/README.md#octavia-ca-passphrase)
+in both `openstack` and `openstack2` before applying either control plane.
 
 ### Central region (`control-plane/`)
 

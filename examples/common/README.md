@@ -43,6 +43,33 @@ oc create secret generic osp-secret \
 > **WARNING**: The `CHANGEME_REQUIRED` sentinel values are placeholders.
 > Replace every value with a securely generated password before deploying.
 
+## Octavia CA passphrase
+
+When Octavia is enabled, the control plane requires a Secret named
+`octavia-ca-passphrase` with the `server-ca-passphrase` key. The examples do
+not include a default passphrase. Generate a unique value for each deployment
+and create the Secret in the control-plane namespace before applying the
+control plane:
+
+```bash
+umask 077
+passphrase_file="$(mktemp)"
+openssl rand -base64 48 | tr -d '\n' > "${passphrase_file}"
+oc create secret generic octavia-ca-passphrase \
+  --from-file=server-ca-passphrase="${passphrase_file}" \
+  -n openstack
+rm -f "${passphrase_file}"
+```
+
+The SKMO scenario uses two control-plane namespaces; create a separate Secret
+in `openstack2` as well. Deployment automation must provision this Secret
+before the control-plane stage.
+
+For an existing deployment, reuse its current passphrase. Changing it can
+prevent Octavia from decrypting the existing CA private key. If the value is
+lost, follow the operator's CA recovery or rotation procedure instead of
+overwriting the Secret.
+
 ## OLM
 The [olm](olm) directory contains a kustomization which will generate
 Namespace, OperatorGroup, and Subscription CRs. Creating these CRs
