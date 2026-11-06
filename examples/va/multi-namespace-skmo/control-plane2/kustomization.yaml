@@ -9,7 +9,6 @@ components:
 resources:
   - skmo-values.yaml
   - networking/octavia-netattach.yaml
-  - octavia-ca-passphrase.yaml
 
 patches:
   - target:
