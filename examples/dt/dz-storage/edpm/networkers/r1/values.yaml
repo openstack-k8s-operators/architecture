@@ -32,6 +32,14 @@ data:
           - br-bgp-1
         edpm_neutron_ovn_agent_bgp_peer_bridges: "{{ bgp_bridges | join(',') }}"
         edpm_neutron_ovn_agent_agent_extensions: "ovn-bgp"
+        # The ovn service replaces this whole external_id on every dataplane
+        # run. If the BGP bridges are left out, that write drops them and
+        # ovn-controller deletes the br-int <-> br-bgp-{0,1} patch ports,
+        # leaving the neutron-ovn-agent BGP steering flows on stale ofports.
+        edpm_ovn_bridge_mappings:
+          - "br-bgp-0:br-bgp-0"
+          - "br-bgp-1:br-bgp-1"
+          - "datacentre:br-ex"
         timesync_ntp_servers:
           - hostname: pool.ntp.org
         # conntrack is necessary for some tobiko tests
