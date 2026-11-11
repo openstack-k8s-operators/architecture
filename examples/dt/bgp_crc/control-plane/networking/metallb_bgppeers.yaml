@@ -1,0 +1,12 @@
+# Single BGPPeer from CRC to FRR router (spine) over link-test network.
+# CRC is the only OCP node (single-node deployment).
+---
+apiVersion: metallb.io/v1beta2
+kind: BGPPeer
+metadata:
+  name: bgp-peer-spine
+  namespace: metallb-system
+spec:
+  myASN: 64998
+  peerASN: 64999
+  peerAddress: 172.30.0.1
