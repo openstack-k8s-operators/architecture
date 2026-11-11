@@ -1,6 +1,6 @@
 # Note: The OSPDS shown below is not an official procedure for installing
 # Nvidia drivers, it is only an example of how to leverage OSPDS to customize
-# the installtion process.
+# the installation process.
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -22,6 +22,10 @@ metadata:
   name: nvidia-url
 data:
   nvidia_mdev_driver_url: _replaced_
+  nvidia_mdev_driver_install_method: rpm
+  nvidia_mdev_driver_checksum: ""
+  nvidia_mdev_driver_accept_license: "false"
+  nvidia_mdev_expected_types: "[]"
 ---
 apiVersion: dataplane.openstack.org/v1beta1
 kind: OpenStackDataPlaneService
@@ -62,9 +66,42 @@ spec:
   playbookContents: |
     - name: Install Nvidia Driver
       hosts: all
+      become: true
       tasks:
+        - name: Read the Nvidia installation configuration
+          delegate_to: localhost
+          become: false
+          ansible.builtin.set_fact:
+            nvidia_driver_url: "{{ lookup('file', '/var/lib/openstack/configs/install-nvidia/nvidia_mdev_driver_url') | trim }}"
+            nvidia_install_method: "{{ lookup('file', '/var/lib/openstack/configs/install-nvidia/nvidia_mdev_driver_install_method') | trim }}"
+            nvidia_driver_checksum: "{{ lookup('file', '/var/lib/openstack/configs/install-nvidia/nvidia_mdev_driver_checksum') | trim }}"
+            nvidia_accept_license: "{{ lookup('file', '/var/lib/openstack/configs/install-nvidia/nvidia_mdev_driver_accept_license') | bool }}"
+        - name: Validate the installation method
+          ansible.builtin.assert:
+            that:
+              - nvidia_install_method in ['rpm', 'run']
+              - nvidia_install_method != 'run' or nvidia_accept_license
+            fail_msg: >-
+              Choose rpm or run. For run, explicitly acknowledge NVIDIA's license
+              by setting nvidia_mdev_driver_accept_license to the string "true".
+        - name: Gather the package facts
+          ansible.builtin.package_facts:
+            manager: auto
+        - name: Check for a previous run installation
+          ansible.builtin.stat:
+            path: /var/lib/nvidia-mdev/run-install.json
+          register: _nvidia_run_marker
+        - name: Prevent mixing installation methods
+          ansible.builtin.assert:
+            that:
+              - nvidia_install_method != 'run' or 'NVIDIA-vGPU-rhel' not in ansible_facts.packages
+              - nvidia_install_method != 'rpm' or not _nvidia_run_marker.stat.exists
+            fail_msg: >-
+              Use fresh computes or explicitly uninstall the previous NVIDIA
+              installation before changing between rpm and run. Do not install
+              a run driver over the NVIDIA-vGPU-rhel RPM. After uninstalling a
+              run driver, remove its /var/lib/nvidia-mdev/run-install.json marker.
         - name: Blacklist nouveau
-          become: true
           ansible.builtin.copy:
             dest: "/etc/modprobe.d/blacklist-nouveau.conf"
             mode: "0644"
@@ -73,35 +110,228 @@ spec:
               options nouveau modeset=0
             force: false
           register: _blacklist_nouveau
-        - name: Get the Nvidia Driver URL
-          delegate_to: localhost
-          ansible.builtin.set_fact:
-            nvidia_rpm_url: "{{ lookup('file', '/var/lib/openstack/configs/install-nvidia/nvidia_mdev_driver_url') | from_yaml }}"
-        - name: Gather the package facts
-          ansible.builtin.package_facts:
-            manager: auto
         - name: Install nvidia driver RPM either from path or URL
-          become: true
           ansible.builtin.dnf:
-            name: "{{ nvidia_rpm_url }}"
+            name: "{{ nvidia_driver_url }}"
             state: present
             disable_gpg_check: true
-          when: nvidia_rpm_url not in ansible_facts.packages
-          register: _nvidia_driver_install
+          when: nvidia_install_method == 'rpm'
+          register: _nvidia_rpm_install
+        - name: Build and install the driver for the running kernel
+          when: nvidia_install_method == 'run'
+          block:
+            - name: Validate the run installer URL
+              ansible.builtin.assert:
+                that:
+                  - nvidia_driver_url is match('^https://')
+                fail_msg: Use an HTTPS URL for the NVIDIA vGPU host run installer.
+            - name: Get the running kernel
+              ansible.builtin.command: uname -r
+              changed_when: false
+              register: _nvidia_kernel
+            - name: Check whether nouveau is loaded
+              ansible.builtin.command: lsmod
+              changed_when: false
+              register: _nvidia_lsmod
+            - name: Prepare initramfs before requesting a nouveau reboot
+              ansible.builtin.command: dracut --force
+              changed_when: true
+              when: _nvidia_lsmod.stdout is search('(?m)^nouveau\s')
+            - name: Require nouveau to be unloaded before installation
+              ansible.builtin.assert:
+                that:
+                  - _nvidia_lsmod.stdout is not search('(?m)^nouveau\s')
+                fail_msg: >-
+                  The nouveau blacklist has been applied and initramfs rebuilt.
+                  Reboot before retrying the run driver installation. Do not
+                  unload nouveau from an active compute.
+            - name: Create the installer cache and state directory
+              ansible.builtin.file:
+                path: /var/lib/nvidia-mdev
+                state: directory
+                owner: root
+                group: root
+                mode: "0700"
+            - name: Download the NVIDIA vGPU host installer
+              ansible.builtin.get_url:
+                url: "{{ nvidia_driver_url }}"
+                dest: /var/lib/nvidia-mdev/host-driver.run
+                owner: root
+                group: root
+                mode: "0600"
+                checksum: "{{ nvidia_driver_checksum | default(omit, true) }}"
+            - name: Calculate the installer identity
+              ansible.builtin.stat:
+                path: /var/lib/nvidia-mdev/host-driver.run
+                checksum_algorithm: sha256
+              register: _nvidia_run_file
+            - name: Read the previous run installation state
+              ansible.builtin.slurp:
+                src: /var/lib/nvidia-mdev/run-install.json
+              when: _nvidia_run_marker.stat.exists
+              register: _nvidia_run_state_file
+            - name: Decode the previous run installation state
+              ansible.builtin.set_fact:
+                _nvidia_run_state: "{{ (_nvidia_run_state_file.content | b64decode | from_json) if _nvidia_run_marker.stat.exists else {} }}"
+            - name: Inspect the installed modules for the running kernel
+              ansible.builtin.command:
+                argv:
+                  - modinfo
+                  - -k
+                  - "{{ _nvidia_kernel.stdout }}"
+                  - -F
+                  - version
+                  - "{{ item }}"
+              loop:
+                - nvidia
+                - nvidia-vgpu-vfio
+              changed_when: false
+              failed_when: false
+              register: _nvidia_run_modules
+            - name: Decide whether the driver needs rebuilding
+              ansible.builtin.set_fact:
+                _nvidia_run_required: >-
+                  {{ _nvidia_run_state.get('kernel', '') != _nvidia_kernel.stdout
+                     or _nvidia_run_state.get('installer_sha256', '') != _nvidia_run_file.stat.checksum
+                     or _nvidia_run_modules.results | selectattr('rc', 'ne', 0) | list | length > 0
+                     or _nvidia_run_modules.results | map(attribute='stdout') | unique | list
+                        != [_nvidia_run_state.get('driver_version', '')] }}
+            - name: Install build prerequisites for the booted kernel
+              ansible.builtin.dnf:
+                name:
+                  - "kernel-devel-{{ _nvidia_kernel.stdout }}"
+                  - gcc
+                  - make
+                  - binutils
+                  - elfutils-libelf-devel
+                state: present
+              when: _nvidia_run_required
+            - name: Compile and install the NVIDIA kernel interface
+              when: _nvidia_run_required
+              block:
+                - name: Run the NVIDIA installer without precompiled interfaces
+                  ansible.builtin.command:
+                    argv:
+                      - /bin/sh
+                      - /var/lib/nvidia-mdev/host-driver.run
+                      - --silent
+                      - --no-precompiled-interface
+                      - --no-dkms
+                      - "--kernel-source-path=/lib/modules/{{ _nvidia_kernel.stdout }}/build"
+                  changed_when: true
+              rescue:
+                - name: Collect the installer failure details
+                  ansible.builtin.command: tail -n 100 /var/log/nvidia-installer.log
+                  changed_when: false
+                  failed_when: false
+                  register: _nvidia_installer_log
+                - name: Report the failed kernel interface build
+                  ansible.builtin.fail:
+                    msg: >-
+                      NVIDIA run installation failed for {{ _nvidia_kernel.stdout }}.
+                      Installer log: {{ _nvidia_installer_log.stdout }}
         - name: Check if grub2-mkconfig has --update-bls-cmdline option
-          ansible.builtin.shell:
-            cmd: grub2-mkconfig --help | grep '\-\-update-bls-cmdline'
-          ignore_errors: true
+          ansible.builtin.command: grub2-mkconfig --help
+          failed_when: false
           register: check_update_bls_cmdline
           changed_when: false
         - name: Regenerate initramfs
-          become: true
           ansible.builtin.command: "{{ item }}"
           loop:
             - 'dracut --force'
             - >-
               grub2-mkconfig -o /boot/grub2/grub.cfg
               {{ '--update-bls-cmdline'
-              if check_update_bls_cmdline.rc == 0
+              if '--update-bls-cmdline' in check_update_bls_cmdline.stdout
               else '' }}
-          when: _blacklist_nouveau.changed or _nvidia_driver_install.changed
+          changed_when: true
+          when: _blacklist_nouveau.changed or _nvidia_rpm_install.changed or (_nvidia_run_required | default(false))
+        - name: Record the built module version
+          ansible.builtin.command:
+            argv:
+              - modinfo
+              - -k
+              - "{{ _nvidia_kernel.stdout }}"
+              - -F
+              - version
+              - nvidia
+          changed_when: false
+          when: nvidia_install_method == 'run' and _nvidia_run_required
+          register: _nvidia_run_version
+        - name: Save the successful run installation state
+          ansible.builtin.copy:
+            dest: /var/lib/nvidia-mdev/run-install.json
+            owner: root
+            group: root
+            mode: "0600"
+            content: >-
+              {{ {'kernel': _nvidia_kernel.stdout,
+                  'installer_sha256': _nvidia_run_file.stat.checksum,
+                  'driver_version': _nvidia_run_version.stdout} | to_nice_json }}
+          when: nvidia_install_method == 'run' and _nvidia_run_required
+---
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneService
+metadata:
+  name: validate-nvidia
+  namespace: openstack
+spec:
+  edpmServiceType: validate-nvidia
+  dataSources:
+    - configMapRef:
+        name: nvidia-url
+  playbookContents: |
+    - name: Validate Nvidia after reboot
+      hosts: all
+      become: true
+      tasks:
+        - name: Load the NVIDIA vGPU kernel modules
+          ansible.builtin.command:
+            argv:
+              - modprobe
+              - "{{ item }}"
+          loop:
+            - nvidia
+            - nvidia-vgpu-vfio
+          changed_when: false
+        - name: Start the NVIDIA vGPU configuration service
+          ansible.builtin.systemd_service:
+            name: nvidia-vgpud
+            state: started
+        - name: Ensure the NVIDIA vGPU manager is running
+          ansible.builtin.systemd_service:
+            name: nvidia-vgpu-mgr
+            state: started
+            enabled: true
+        - name: Verify communication with the NVIDIA driver
+          ansible.builtin.command: nvidia-smi -L
+          changed_when: false
+        - name: Verify that the vGPU manager remains active
+          ansible.builtin.command: systemctl is-active nvidia-vgpu-mgr
+          changed_when: false
+        - name: Discover the supported NVIDIA mediated device types
+          ansible.builtin.find:
+            paths: /sys/class/mdev_bus
+            patterns: nvidia-*
+            file_type: directory
+            recurse: true
+            follow: true
+            depth: 3
+          register: _nvidia_mdev_types
+        - name: Read the expected mediated device types
+          delegate_to: localhost
+          become: false
+          ansible.builtin.set_fact:
+            nvidia_expected_types: "{{ lookup('file', '/var/lib/openstack/configs/validate-nvidia/nvidia_mdev_expected_types') | from_yaml }}"
+        - name: Require NVIDIA mediated device support
+          ansible.builtin.assert:
+            that:
+              - nvidia_expected_types is sequence
+              - nvidia_expected_types is not string
+              - nvidia_expected_types is not mapping
+              - _nvidia_mdev_types.matched > 0
+              - nvidia_expected_types | difference(_nvidia_mdev_types.files | map(attribute='path') | map('basename') | list) | length == 0
+            fail_msg: >-
+              NVIDIA mediated device profiles are missing. Expected types:
+              {{ nvidia_expected_types }}. Discovered paths:
+              {{ _nvidia_mdev_types.files | map(attribute='path') | list }}.
