@@ -6,6 +6,13 @@ metadata:
 data:
   03-ceph-nova.conf: _replaced_
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nova-extra-config
+data:
+  25-nova-extra.conf: _replaced_
+---
 apiVersion: dataplane.openstack.org/v1beta1
 kind: OpenStackDataPlaneService
 metadata:
@@ -15,6 +22,8 @@ spec:
   dataSources:
     - configMapRef:
         name: ceph-nova
+    - configMapRef:
+        name: nova-extra-config
     - secretRef:
         name: nova-cell1-compute-config
     - secretRef:
