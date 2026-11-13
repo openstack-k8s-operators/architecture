@@ -31,3 +31,8 @@ data:
   nova:
     ceph:
       conf: CHANGEME_NOVA_CEPH_CONF
+    # Mounted from ConfigMap nova-extra-config as 25-nova-extra.conf.
+    # [DEFAULT] keeps the key present for deploys that do not set extra Nova config.
+    compute:
+      conf: |
+        [DEFAULT]

@@ -221,6 +221,21 @@ replacements:
           - data.03-ceph-nova\.conf
         options:
           create: true
+  # Whitebox and other extra Nova compute settings. Kept separate from
+  # ceph-nova so the Ceph client can replace 03-ceph-nova.conf without
+  # touching this file.
+  - source:
+      kind: ConfigMap
+      name: edpm-nodeset-values-post-ceph
+      fieldPath: data.nova.compute.conf
+    targets:
+      - select:
+          kind: ConfigMap
+          name: nova-extra-config
+        fieldPaths:
+          - data.25-nova-extra\.conf
+        options:
+          create: true
   # Dataplane services override (overrides ../../../lib/dataplane which
   # is using edpm-nodeset-values ConfigMap)
   - source:
