@@ -8,3 +8,14 @@ components:
 resources:
   - ../networking/nncp
   - service-values.yaml
+
+patches:
+  # This scaledown build has no business regenerating osp-secret, applying it here
+  # would overwrite the control-plane's already set secret.
+  - patch: |-
+      $patch: delete
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: osp-secret
+        namespace: openstack
