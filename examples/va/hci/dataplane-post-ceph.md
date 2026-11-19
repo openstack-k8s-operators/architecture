@@ -38,6 +38,18 @@ data:
         images_rbd_glance_copy_timeout=600
         rbd_user=openstack
         rbd_secret_uuid=$FSID
+    # Mounted as /etc/nova/nova.conf.d/25-nova-extra.conf from ConfigMap
+    # nova-extra-config. Kept separate from nova.ceph.conf because the
+    # Ceph client replaces 03-ceph-nova.conf during deploy.
+    # data.nova.compute.conf must always be present. [DEFAULT] alone is
+    # enough when no extra compute settings are required.
+    compute:
+      conf: |
+        [DEFAULT]
+        # [compute]
+        # cpu_dedicated_set = 8-23,32-47
+        # [libvirt]
+        # cpu_mode = custom
 
 ```
 Where the values of the three variables above can be retrieved by
