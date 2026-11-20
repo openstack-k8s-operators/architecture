@@ -1,8 +1,0 @@
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: octavia-ca-passphrase
-type: Opaque
-stringData:
-  server-ca-passphrase: "12345678"
