@@ -76,6 +76,9 @@ data:
           - 192.168.122.0/24
         edpm_sshd_configure_firewall: true
         gather_facts: false
+        # conntrack is necessary for some tobiko tests
+        edpm_bootstrap_command: |
+          dnf -y install conntrack-tools
         neutron_physical_bridge_name: br-ex
         neutron_public_interface_name: eth0
         storage_mtu: 9000
