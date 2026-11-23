@@ -5,6 +5,13 @@ metadata:
   name: ceph-nova
 data:
   03-ceph-nova.conf: _replaced_
+  04-nova-virtiofs.conf: |
+    [DEFAULT]
+    reserved_host_memory_mb = 0
+    ram_allocation_ratio = 1.0
+    mem_stats_period_s = 0
+    [libvirt]
+    file_backed_memory = 4096
 
 ---
 apiVersion: dataplane.openstack.org/v1beta1
