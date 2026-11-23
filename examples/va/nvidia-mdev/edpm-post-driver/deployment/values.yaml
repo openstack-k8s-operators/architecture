@@ -12,6 +12,7 @@ data:
     name: edpm-deployment-post-driver
   servicesOverride:
     - reboot-os
+    - validate-nvidia
     - compute-provider
   ansibleExtraVars:
     edpm_reboot_strategy: force
