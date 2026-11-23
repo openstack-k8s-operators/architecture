@@ -13,6 +13,8 @@ _BASE_TRIGGER_FILES = [
 def create_job(name, data):
     j_name = 'rhoso-architecture-validate-{}'.format(name)
     _paths = [p['path'] for p in data['stages']] + _BASE_TRIGGER_FILES
+    # Shared inputs the stage paths do not cover, e.g. a base VA this one builds on
+    _paths += data.get('trigger_files', [])
     for i in ['va', 'dt']:
         if os.path.exists(os.path.join(i, name)):
             _paths.append(os.path.join(i, name))

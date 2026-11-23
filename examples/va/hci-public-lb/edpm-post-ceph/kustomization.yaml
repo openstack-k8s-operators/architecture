@@ -1,0 +1,21 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# The hci post-ceph step, which re-applies the control plane, with the same overlay.
+resources:
+  - ../../hci
+
+components:
+  - ../overlay
+
+patches:
+  # Patching on top of the built hci makes kustomize re-emit the bool set by the
+  # post-ceph replacements as the string 'true', which the webhook rejects.
+  # Mirrors watcher.enabled in hci/service-values.yaml.
+  - target:
+      kind: OpenStackControlPlane
+    patch: |-
+      - op: replace
+        path: /spec/watcher/enabled
+        value: true

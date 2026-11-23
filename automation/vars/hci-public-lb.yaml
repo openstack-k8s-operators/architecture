@@ -1,0 +1,135 @@
+---
+vas:
+  hci-public-lb:
+    # Inputs of the control-plane stages that no stage path covers: the shared overlay
+    # and the hci kustomization and values they build on.
+    trigger_files:
+      - examples/va/hci-public-lb/overlay
+      - examples/va/hci/control-plane
+      - examples/va/hci/kustomization.yaml
+      - examples/va/hci/service-values.yaml
+      - examples/va/hci/values.yaml
+    stages:
+      - name: nncp-configuration
+        path: examples/va/hci-public-lb/networking/nncp
+        wait_conditions:
+          - >-
+            oc -n openstack wait nncp
+            -l osp/nncm-config-type=standard
+            --for jsonpath='{.status.conditions[0].reason}'=SuccessfullyConfigured
+            --timeout=5m
+        values:
+          - name: network-values
+            src_file: values.yaml
+        build_output: nncp.yaml
+
+      - name: network-configuration
+        path: examples/va/hci-public-lb/networking
+        wait_conditions:
+          - >-
+            oc -n metallb-system wait pod
+            -l app=metallb -l component=speaker
+            --for condition=Ready
+            --timeout=5m
+        values:
+          - name: network-values
+            src_file: nncp/values.yaml
+        build_output: network.yaml
+
+      - name: control-plane
+        path: examples/va/hci-public-lb/control-plane
+        pre_stage_run:
+          # Both read at reconcile time, so they must exist before the CR is applied.
+          - name: 01 Create the BYO certificate for the public endpoints
+            type: playbook
+            source: public_endpoints_byo_cert.yml
+          - name: 02 Register the public endpoint hostnames in DNS
+            type: playbook
+            source: public_endpoints_dns.yml
+            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
+            extra_vars:
+              # The hooks run on controller-0; the cifmw dnsmasq runs on the hypervisor,
+              # which is the ocpbm network gateway.
+              cifmw_public_endpoints_dns_address: 192.168.111.1
+        wait_conditions:
+          - >-
+            oc -n openstack wait osctlplane controlplane --for condition=Ready
+            --timeout=60m
+        values:
+          # The values files live with the hci control-plane overlay this one builds on.
+          - name: service-values
+            src_file: ../../hci/control-plane/service-values.yaml
+          - name: network-values
+            src_file: ../../hci/control-plane/networking/nncp/values.yaml
+        build_output: ../control-plane.yaml
+        post_stage_run:
+          # Off-subnet clients need replies to leave through the publicapi gateway.
+          - name: 03 Apply the policy routing for the public endpoints
+            type: playbook
+            source: public_endpoints_policy_routing.yml
+
+      - name: edpm-pre-ceph-nodeset
+        path: examples/va/hci/edpm-pre-ceph/nodeset
+        wait_conditions:
+          - >-
+            oc -n openstack wait
+            osdpns openstack-edpm --for condition=SetupReady
+            --timeout=10m
+        values:
+          - name: edpm-nodeset-values
+            src_file: values.yaml
+        build_output: nodeset-pre-ceph.yaml
+
+      - name: edpm-pre-ceph-deployment
+        path: examples/va/hci/edpm-pre-ceph/deployment
+        wait_conditions:
+          - >-
+            oc -n openstack wait
+            osdpns openstack-edpm --for condition=Ready
+            --timeout=30m
+        values:
+          - name: edpm-deployment-values
+            src_file: values.yaml
+        build_output: deployment-pre-ceph.yaml
+        post_stage_run:
+          - name: Deploy Ceph
+            type: playbook
+            source: "../../hooks/playbooks/ceph.yml"
+            inventory: "${HOME}/ci-framework-data/artifacts/zuul_inventory.yml"
+
+      - name: edpm-post-ceph-nodeset
+        # Re-applies the control plane (Ceph settings), so it must carry the same
+        # public endpoints overlay or the apply removes it.
+        path: examples/va/hci-public-lb/edpm-post-ceph
+        wait_conditions:
+          - >-
+            oc -n openstack wait
+            osdpns openstack-edpm --for condition=SetupReady
+            --timeout=10m
+        values:
+          - name: service-values
+            src_file: ../../hci/service-values.yaml
+          - name: edpm-nodeset-values-post-ceph
+            src_file: ../../hci/values.yaml
+        build_output: nodeset-post-ceph.yaml
+
+      - name: edpm-post-ceph-deployment
+        path: examples/va/hci/deployment
+        wait_conditions:
+          - >-
+            oc -n openstack wait
+            osdpns openstack-edpm --for condition=Ready
+            --timeout=80m
+        values:
+          - name: edpm-deployment-values-post-ceph
+            src_file: values.yaml
+        build_output: deployment-post-ceph.yaml
+        post_stage_run:
+          - name: 01 Deploy Loki
+            type: playbook
+            source: "../../hooks/playbooks/deploy-loki-for-ck.yaml"
+          # heat, manila, aodh and watcher are enabled by the post-ceph stage, so their
+          # public Services only exist now: refresh the rules (idempotent).
+          - name: 02 Refresh the policy routing for the public endpoints
+            type: playbook
+            source: public_endpoints_policy_routing.yml
