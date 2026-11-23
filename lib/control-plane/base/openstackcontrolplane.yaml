@@ -186,7 +186,7 @@ spec:
           messagingBus:
             cluster: rabbitmq
           conductorServiceTemplate:
-            replicas: 1
+            replicas: 3
           hasAPIAccess: true
         cell1:
           cellDatabaseAccount: nova-cell1
@@ -194,7 +194,7 @@ spec:
           messagingBus:
             cluster: rabbitmq-cell1
           conductorServiceTemplate:
-            replicas: 1
+            replicas: 3
           hasAPIAccess: true
   octavia:
     enabled: false
