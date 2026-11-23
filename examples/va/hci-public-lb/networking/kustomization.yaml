@@ -6,7 +6,7 @@ kind: Kustomization
 # ../../hci/control-plane/networking, with the publicapi component.
 components:
   - ../../../../va/hci/networking
-  - components/metallb-publicapi
+  - ../../../../va/hci-public-lb/networking/metallb-publicapi
 
 resources:
   - nncp/values.yaml

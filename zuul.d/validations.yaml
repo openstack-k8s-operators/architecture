@@ -215,6 +215,7 @@
     - examples/va/hci/service-values.yaml
     - examples/va/hci/values.yaml
     - lib
+    - va/hci-public-lb
     name: rhoso-architecture-validate-hci-public-lb
     parent: rhoso-architecture-base-job
     vars:

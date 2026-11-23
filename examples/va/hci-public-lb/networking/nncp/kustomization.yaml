@@ -21,7 +21,7 @@ transformers:
 
 components:
   - ../../../../../lib/nncp-single-nic
-  - ../components/nncp-publicapi
+  - ../../../../../va/hci-public-lb/networking/nncp-publicapi
 
 resources:
   - values.yaml
