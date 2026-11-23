@@ -202,6 +202,7 @@
       cifmw_architecture_scenario: hci-ironic
 - job:
     files:
+    - automation/net-env/hci-public-lb.yaml
     - examples/va/hci-public-lb/control-plane
     - examples/va/hci-public-lb/edpm-post-ceph
     - examples/va/hci-public-lb/networking
@@ -220,6 +221,7 @@
     parent: rhoso-architecture-base-job
     vars:
       cifmw_architecture_scenario: hci-public-lb
+      cifmw_networking_env_def_file: automation/net-env/hci-public-lb.yaml
 - job:
     files:
     - automation/net-env/multi-namespace.yaml
