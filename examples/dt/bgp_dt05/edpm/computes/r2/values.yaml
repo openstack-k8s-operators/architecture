@@ -31,6 +31,8 @@ data:
         edpm_frr_bgp_uplinks_scope: internal
         edpm_frr_bgp_l2vpn: true
         edpm_frr_bgp_l2vpn_uplink_activate: true
+        edpm_frr_ovn_bind: true
+        edpm_frr_watchfrr: true
         # TODO: empty list is a required workaround — edpm_frr role default
         # peers create an empty evpn-peer group (frr.conf.j2 never emits
         # neighbor entries from edpm_frr_bgp_l2vpn_peers). Fix in edpm_frr:
