@@ -36,3 +36,4 @@ _stage:
 ---
 _architecture:
   stages: list(include('_stage'), min=1)
+  trigger_files: list(str(), required=False)

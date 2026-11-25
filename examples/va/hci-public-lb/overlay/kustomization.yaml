@@ -1,0 +1,325 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+# Shared by the control-plane and edpm-post-ceph stages: both apply an
+# OpenStackControlPlane, and the later apply would otherwise remove what the
+# earlier one set (client-side apply deletes fields absent from the manifest).
+
+patches:
+  - target:
+      kind: OpenStackControlPlane
+    patch: |-
+      apiVersion: core.openstack.org/v1beta1
+      kind: OpenStackControlPlane
+      metadata:
+        name: unused
+      spec:
+        # Every API service gets a MetalLB LoadBalancer public endpoint on one shared
+        # VIP, served on <service>.public.openstack.lab:<director port>, with a
+        # bring-your-own certificate: one secret covering every hostname as a SAN,
+        # issued by a CA that is trusted through the CA bundle. Both secrets are
+        # created before this CR is applied, by the ci-framework hook
+        # public_endpoints_byo_cert.yml.
+        tls:
+          caBundleSecretName: byo-ca-bundle
+        placement:
+          template:
+            tls:
+              api:
+                public:
+                  secretName: public-byo-cert
+            override:
+              service:
+                public:
+                  metadata:
+                    annotations:
+                      metallb.universe.tf/address-pool: publicapi
+                      metallb.universe.tf/allow-shared-ip: public-endpoints
+                      metallb.universe.tf/loadBalancerIPs: 172.21.0.85
+                  spec:
+                    type: LoadBalancer
+                  endpointURL: https://placement.public.openstack.lab:13778
+        barbican:
+          template:
+            barbicanAPI:
+              tls:
+                api:
+                  public:
+                    secretName: public-byo-cert
+              override:
+                service:
+                  public:
+                    metadata:
+                      annotations:
+                        metallb.universe.tf/address-pool: publicapi
+                        metallb.universe.tf/allow-shared-ip: public-endpoints
+                        metallb.universe.tf/loadBalancerIPs: 172.21.0.85
+                    spec:
+                      type: LoadBalancer
+                    endpointURL: https://barbican.public.openstack.lab:13311
+        cinder:
+          template:
+            cinderAPI:
+              tls:
+                api:
+                  public:
+                    secretName: public-byo-cert
+              override:
+                service:
+                  public:
+                    metadata:
+                      annotations:
+                        metallb.universe.tf/address-pool: publicapi
+                        metallb.universe.tf/allow-shared-ip: public-endpoints
+                        metallb.universe.tf/loadBalancerIPs: 172.21.0.85
+                    spec:
+                      type: LoadBalancer
+                    endpointURL: https://cinder.public.openstack.lab:13776
+        glance:
+          template:
+            glanceAPIs:
+              default:
+                tls:
+                  api:
+                    public:
+                      secretName: public-byo-cert
+                override:
+                  service:
+                    public:
+                      metadata:
+                        annotations:
+                          metallb.universe.tf/address-pool: publicapi
+                          metallb.universe.tf/allow-shared-ip: public-endpoints
+                          metallb.universe.tf/loadBalancerIPs: 172.21.0.85
+                      spec:
+                        type: LoadBalancer
+                      endpointURL: https://glance.public.openstack.lab:13292
+        keystone:
+          template:
+            tls:
+              api:
+                public:
+                  secretName: public-byo-cert
+            override:
+              service:
+                public:
+                  metadata:
+                    annotations:
+                      metallb.universe.tf/address-pool: publicapi
+                      metallb.universe.tf/allow-shared-ip: public-endpoints
+                      metallb.universe.tf/loadBalancerIPs: 172.21.0.85
+                  spec:
+                    type: LoadBalancer
+                  endpointURL: https://keystone.public.openstack.lab:13000
+        neutron:
+          template:
+            tls:
+              api:
+                public:
+                  secretName: public-byo-cert
+            override:
+              service:
+                public:
+                  metadata:
+                    annotations:
+                      metallb.universe.tf/address-pool: publicapi
+                      metallb.universe.tf/allow-shared-ip: public-endpoints
+                      metallb.universe.tf/loadBalancerIPs: 172.21.0.85
+                  spec:
+                    type: LoadBalancer
+                  endpointURL: https://neutron.public.openstack.lab:13696
+        nova:
+          template:
+            cellTemplates:
+              cell1:
+                # The console proxy has no httpd vhost and terminates TLS itself; the
+                # endpoint hostname still lands in its certificate SAN.
+                noVNCProxyServiceTemplate:
+                  enabled: true
+                  tls:
+                    service:
+                      secretName: public-byo-cert
+                  override:
+                    service:
+                      metadata:
+                        annotations:
+                          metallb.universe.tf/address-pool: publicapi
+                          metallb.universe.tf/allow-shared-ip: public-endpoints
+                          metallb.universe.tf/loadBalancerIPs: 172.21.0.85
+                      spec:
+                        type: LoadBalancer
+                      endpointURL: https://novncproxy.public.openstack.lab:13080
+            apiServiceTemplate:
+              tls:
+                api:
+                  public:
+                    secretName: public-byo-cert
+              override:
+                service:
+                  public:
+                    metadata:
+                      annotations:
+                        metallb.universe.tf/address-pool: publicapi
+                        metallb.universe.tf/allow-shared-ip: public-endpoints
+                        metallb.universe.tf/loadBalancerIPs: 172.21.0.85
+                    spec:
+                      type: LoadBalancer
+                    endpointURL: https://nova.public.openstack.lab:13774
+        horizon:
+          template:
+            tls:
+              secretName: public-byo-cert
+            override:
+              service:
+                metadata:
+                  annotations:
+                    metallb.universe.tf/address-pool: publicapi
+                    metallb.universe.tf/allow-shared-ip: public-endpoints
+                    metallb.universe.tf/loadBalancerIPs: 172.21.0.85
+                spec:
+                  type: LoadBalancer
+                endpointURL: https://horizon.public.openstack.lab
+        heat:
+          template:
+            heatAPI:
+              tls:
+                api:
+                  public:
+                    secretName: public-byo-cert
+              override:
+                service:
+                  public:
+                    metadata:
+                      annotations:
+                        metallb.universe.tf/address-pool: publicapi
+                        metallb.universe.tf/allow-shared-ip: public-endpoints
+                        metallb.universe.tf/loadBalancerIPs: 172.21.0.85
+                    spec:
+                      type: LoadBalancer
+                    endpointURL: https://heat.public.openstack.lab:13004
+            heatCfnAPI:
+              tls:
+                api:
+                  public:
+                    secretName: public-byo-cert
+              override:
+                service:
+                  public:
+                    metadata:
+                      annotations:
+                        metallb.universe.tf/address-pool: publicapi
+                        metallb.universe.tf/allow-shared-ip: public-endpoints
+                        metallb.universe.tf/loadBalancerIPs: 172.21.0.85
+                    spec:
+                      type: LoadBalancer
+                    endpointURL: https://heat-cfn.public.openstack.lab:13005
+        manila:
+          template:
+            manilaAPI:
+              tls:
+                api:
+                  public:
+                    secretName: public-byo-cert
+              override:
+                service:
+                  public:
+                    metadata:
+                      annotations:
+                        metallb.universe.tf/address-pool: publicapi
+                        metallb.universe.tf/allow-shared-ip: public-endpoints
+                        metallb.universe.tf/loadBalancerIPs: 172.21.0.85
+                    spec:
+                      type: LoadBalancer
+                    endpointURL: https://manila.public.openstack.lab:13786
+        telemetry:
+          template:
+            autoscaling:
+              aodh:
+                tls:
+                  api:
+                    public:
+                      secretName: public-byo-cert
+                override:
+                  service:
+                    public:
+                      metadata:
+                        annotations:
+                          metallb.universe.tf/address-pool: publicapi
+                          metallb.universe.tf/allow-shared-ip: public-endpoints
+                          metallb.universe.tf/loadBalancerIPs: 172.21.0.85
+                      spec:
+                        type: LoadBalancer
+                      endpointURL: https://aodh.public.openstack.lab:13042
+        watcher:
+          template:
+            apiServiceTemplate:
+              tls:
+                api:
+                  public:
+                    secretName: public-byo-cert
+              override:
+                service:
+                  public:
+                    metadata:
+                      annotations:
+                        metallb.universe.tf/address-pool: publicapi
+                        metallb.universe.tf/allow-shared-ip: public-endpoints
+                        metallb.universe.tf/loadBalancerIPs: 172.21.0.85
+                    spec:
+                      type: LoadBalancer
+                    endpointURL: https://watcher.public.openstack.lab:13322
+  # Any patch on top of hci/control-plane makes kustomize re-emit the bools set by
+  # lib/control-plane/job-settings as the string 'false', which the
+  # OpenStackControlPlane webhook rejects. Re-set them with typed values.
+  - target:
+      kind: OpenStackControlPlane
+    patch: |-
+      - op: replace
+        path: /spec/barbican/template/preserveJobs
+        value: false
+      - op: replace
+        path: /spec/cinder/template/preserveJobs
+        value: false
+      - op: replace
+        path: /spec/designate/template/preserveJobs
+        value: false
+      - op: replace
+        path: /spec/glance/template/preserveJobs
+        value: false
+      - op: replace
+        path: /spec/heat/template/preserveJobs
+        value: false
+      - op: replace
+        path: /spec/horizon/template/preserveJobs
+        value: false
+      - op: replace
+        path: /spec/ironic/template/ironicInspector/preserveJobs
+        value: false
+      - op: replace
+        path: /spec/ironic/template/preserveJobs
+        value: false
+      - op: replace
+        path: /spec/keystone/template/preserveJobs
+        value: false
+      - op: replace
+        path: /spec/manila/template/preserveJobs
+        value: false
+      - op: replace
+        path: /spec/neutron/template/preserveJobs
+        value: false
+      - op: replace
+        path: /spec/nova/template/preserveJobs
+        value: false
+      - op: replace
+        path: /spec/octavia/template/octaviaAPI/preserveJobs
+        value: false
+      - op: replace
+        path: /spec/octavia/template/preserveJobs
+        value: false
+      - op: replace
+        path: /spec/placement/template/preserveJobs
+        value: false
+      - op: replace
+        path: /spec/telemetry/template/autoscaling/aodh/preserveJobs
+        value: false

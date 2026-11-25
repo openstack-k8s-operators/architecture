@@ -1,0 +1,19 @@
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  namespace: metallb-system
+  name: publicapi
+spec:
+  addresses: []
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  namespace: metallb-system
+  name: publicapi
+spec:
+  ipAddressPools:
+    - publicapi
+  interfaces:
+    - _replaced_
