@@ -14,7 +14,6 @@ metadata:
     config.kubernetes.io/local-config: "true"
 data:
   nodeset_name: gpu-computes-edpm
-  root_password: cmVkaGF0Cg==
   preProvisioned: false
   baremetalHostsNetworkData:
     edpm-compute-0:

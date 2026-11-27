@@ -18,6 +18,11 @@ Change to the nova05epsilon directory
 cd architecture/examples/dt/nova/nova05epsilon
 ```
 
+Modify the [baremetalset-password.env](../../../../dt/nova/nova05epsilon/edpm-pre-ceph/nodeset/baremetalset-password.env) with a secure root password for bare-metal provisioning:
+```
+NodeRootPassword=YourSecurePasswordHere
+```
+
 Edit the [edpm-pre-ceph/nodeset/values.yaml](edpm-pre-ceph/nodeset/values.yaml)
 file to suit your environment.
 
