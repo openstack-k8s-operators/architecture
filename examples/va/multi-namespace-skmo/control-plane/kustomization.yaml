@@ -8,7 +8,6 @@ components:
 
 resources:
   - networking/octavia-netattach.yaml
-  - octavia-ca-passphrase.yaml
 
 patches:
   - target:
